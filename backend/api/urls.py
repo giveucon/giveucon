@@ -1,10 +1,7 @@
 from django.urls import path, include
-from .views import *
+from .views import account_views, test_views
 
 urlpatterns = [
-    # Hello world!
-    path('hello/', hello),
-
     # Login
     path('account/login/', include('rest_auth.urls')),
     path('account/registration/', include('rest_auth.registration.urls')),
@@ -12,6 +9,11 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
 
     # Social Login
-    path('account/login/kakao/', kakao_login, name='kakao_login'),
-    path('account/login/kakao/callback/', kakao_callback, name='kakao_callback'),
+    # account_views.py
+    path('account/login/kakao/', account_views.kakao_login, name='kakao_login'),
+    path('account/login/kakao/callback/', account_views.kakao_callback, name='kakao_callback'),
+    
+    # Test
+    # test_views.py
+    path('test/hello/', test_views.hello),
 ]

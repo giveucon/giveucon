@@ -2,21 +2,16 @@ import json, os, requests, urllib
 from rest_auth.registration.views import SocialLoginView                   
 from allauth.socialaccount.providers.kakao import views as kakao_views     
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from django.shortcuts import redirect , render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import User  
+from ..models import User
 
-# giveucon/accounts
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 
 # Get secrets from JSON file
 with open(os.path.join(BASE_DIR, 'giveucon\secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
-
-
-# Hello world!
-def hello(request):
-    return HttpResponse('hello')
 
 # Request authentication code
 def kakao_login(request):
