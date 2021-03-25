@@ -3,9 +3,10 @@ from .views import account_views, test_views
 
 urlpatterns = [
     # Login
+    # account_views.py
     path('account/login/', include('rest_auth.urls')),
-    path('account/registration/', include('rest_auth.registration.urls')),
     path('account/login/', include('allauth.urls')),
+    path('account/registration/', include('rest_auth.registration.urls')),
     path('', include('django.contrib.auth.urls')),
 
     # Social Login
