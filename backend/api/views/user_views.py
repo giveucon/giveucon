@@ -1,7 +1,8 @@
 from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import permission_classes
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from ..models import *
 from ..serializers import *
 
@@ -50,6 +51,7 @@ class UserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@permission_classes([AllowAny])
 class CurrentUserDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
