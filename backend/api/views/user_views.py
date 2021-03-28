@@ -2,12 +2,8 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import *
-from .serializers import *
-
-
-def hello(request):
-    return HttpResponse('hello')
+from ..models import *
+from ..serializers import *
 
 
 class UserList(APIView):
@@ -53,3 +49,14 @@ class UserDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CurrentUserDetail(APIView):
+    """
+    Retrieve, update or delete a snippet instance.
+    """
+    def get(self, request, format=None):
+        try:
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            raise Http404
