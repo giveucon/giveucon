@@ -1,8 +1,9 @@
 from django.http import Http404
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from ..models import *
 from ..serializers import *
 
@@ -51,14 +52,11 @@ class UserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@permission_classes([AllowAny])
+@permission_classes([permissions.AllowAny,])
 class CurrentUserDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
     """
     def get(self, request, format=None):
-        try:
-            serializer = UserSerializer(request.user)
-            return Response(serializer.data)
-        except User.DoesNotExist:
-            raise Http404
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

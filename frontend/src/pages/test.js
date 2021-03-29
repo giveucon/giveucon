@@ -12,17 +12,17 @@ import Typography from '@material-ui/core/Typography';
 Test.getInitialProps = async () => {
   let response = null;
   try {
-    response = await Axios.get('http://localhost:8000/api/current-user/')
+    response = await Axios.get('http://127.0.0.1:8000/api/current-user/')
     console.log(response);
   } catch (error) {
     console.error(error);
   }
 
-  const data = response;
+  const data = response.request.data;
   console.log(`Data: ${data}`);
 
   return {
-      data
+    props: { data },
   };
 }
 
@@ -31,26 +31,26 @@ const Title = Styled.h1`
   font-size: 50px;
 `
 
-function Test({data}) {
+function Test({props}) {
   return (
     <Container maxWidth="sm">
       <Title>/test</Title>
       <Box my={4}>
         <Typography variant="h4" component="h1" gutterBottom>
-          User: {data}
+          User: {props.data}
         </Typography>
       </Box>
       <Grid container justify="center">
         <div style={{ margin: 20 }}>
           <Grid item xs={12} align="center">
-          <Button variant="outlined" onClick={() => Router.push('http://localhost:8000/accounts/kakao/login')}>Login</Button>
+          <Button variant="outlined" onClick={() => Router.push('http://127.0.0.1:8000/accounts/kakao/login')}>Login</Button>
           </Grid>
         </div>
       </Grid>
       <Grid container justify="center">
         <div style={{ margin: 20 }}>
           <Grid item xs={12} align="center">
-          <Button variant="outlined" onClick={() => Router.push('http://localhost:8000/accounts/logout')}>Logout</Button>
+          <Button variant="outlined" onClick={() => Router.push('http://127.0.0.1:8000/accounts/logout')}>Logout</Button>
           </Grid>
         </div>
       </Grid>
