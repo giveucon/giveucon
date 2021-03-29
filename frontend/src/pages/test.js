@@ -12,13 +12,13 @@ import Typography from '@material-ui/core/Typography';
 Test.getInitialProps = async () => {
   let response = null;
   try {
-    response = await Axios.get('http://127.0.0.1:8000/api/current-user/')
+    response = await Axios.get('http://127.0.0.1:8000/accounts/user', { withCredentials: true } );
     console.log(response);
   } catch (error) {
     console.error(error);
   }
 
-  const data = response.request.data;
+  const data = response?.request.data;
   console.log(`Data: ${data}`);
 
   return {
