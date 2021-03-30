@@ -1,8 +1,6 @@
-from rest_framework import routers
+from django.urls import path, include
+from .views import KakaoLoginView
 
-from .views import ProfileViewSet
-
-router = routers.DefaultRouter()
-router.register(r'', ProfileViewSet)
-
-urlpatterns = router.urls
+urlpatterns = [
+  path("social/login/kakao/", KakaoLoginView.as_view(), name = "kakao"),
+]

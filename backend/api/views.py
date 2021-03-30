@@ -1,26 +1,10 @@
-from rest_framework import viewsets
-from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
+from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from django.conf import settings
 
-from .models import Profile
-from .serializers import ProfileSerializer
-
-class IsOwnerOrReadOnly(BasePermission):
-    
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.owner == request.user
-
-class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in permissions.SAFE_METHODS
-
-class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    lookup_field = 'slug'
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+class KakaoLoginView(SocialLoginView):
+  authentication_classes = [] # disable authentication, make sure to override `allowed origins` in settings.py in production!
+  adapter_class = KakaoOAuth2Adapter
+  callback_url = "http://localhost:3000"  # frontend application url
+  client_class = OAuth2Client

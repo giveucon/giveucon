@@ -44,6 +44,11 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+          <script>
+            Kakao.init('a12940a709e7b194967dffacd43249a4');
+            console.log(Kakao.isInitialized());
+          </script>
         </Head>
         <body>
           <Main />
