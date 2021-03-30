@@ -1,8 +1,10 @@
 from rest_framework import serializers
-from .models import User, Article
+from django.conf import settings
+from .models import Profile
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
-        model = User
-        exclude = ("password", )
-        
+        model = Profile
+        fields = ['id', 'owner', 'username', 'full_name', 'date', 'avatar', 'bio', 'snippet', 'slug', 'dark_mode']

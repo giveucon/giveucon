@@ -15,15 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_jwt.views import obtain_jwt_token
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
+    path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
-    path('accounts/', include('dj_rest_auth.urls')),
-    path('account/registration/', include('dj_rest_auth.registration.urls')),
-    path('accounts/', include('allauth.urls')),
-    # path('token-auth/', obtain_jwt_token),
-    # path('', include('django.contrib.auth.urls')),
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),
+    path('api/users/', include('users.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

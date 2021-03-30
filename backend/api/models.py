@@ -1,21 +1,44 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
 
-class User(AbstractUser):
+class Profile(models.Model):
+    date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='profile', unique=True, on_delete=models.CASCADE)
+    username = models.CharField(max_length=150, blank=True, unique=True)
+    full_name = models.CharField(max_length=200)
+    avatar = models.ImageField(default='')
+    bio = models.TextField(max_length=600)
+    slug = models.SlugField(blank=True)
     #location
     dark_mode = models.BooleanField(default=False)
     #public_key
     #private_key
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return self.owner.username
+
+    def save(self, *args, **kwargs):
+        self.username = self.owner.username.replace('.', '-')
+
+        if not self.slug.strip():
+            self.slug = pytils.translit.slugify(self.username)
+        return super(Profile, self).save(*args, **kwargs)
+
+    def snippet(self):
+        return self.bio[:100] + '...'
+
 
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     content = models.TextField(blank=True, null=False)
     at = models.DateTimeField(null=False, default=timezone.now, editable=False)
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='article'
@@ -25,7 +48,7 @@ class Store(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
     #location
-    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
+    owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE, related_name='store')
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
@@ -67,13 +90,13 @@ class Image(models.Model):
 
 class Friend(models.Model):
     from_user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='friend_from'
     )
     to_user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='friend_to'
@@ -141,7 +164,7 @@ class Review(models.Model):
 class UserMenuItem(models.Model):
     order = models.PositiveIntegerField(null=False)
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='user_menu_item'
@@ -190,7 +213,7 @@ class ProductReview(models.Model):
 class Coupon(models.Model):
     until = models.DateTimeField(null=False)
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='coupon'
@@ -206,7 +229,7 @@ class Stamp(models.Model):
     max_count = models.PositiveIntegerField(null=False)
     count = models.PositiveIntegerField(null=False, default=0)
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='stamp'
@@ -268,7 +291,7 @@ class FavoriteStore(models.Model):
         related_name='favorite_store'
     )
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='favorite_store'
@@ -284,7 +307,7 @@ class FavoriteProduct(models.Model):
         related_name='favorite_product'
     )
     user = models.ForeignKey(
-        User,
+        Profile,
         null=False,
         on_delete=models.CASCADE,
         related_name='favorite_product'
