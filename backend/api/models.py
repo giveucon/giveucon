@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        verbose_name = "Custom User"
+        verbose_name = "User"
 
 
 

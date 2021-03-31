@@ -16,6 +16,7 @@ from .secrets import DJANGO_BASE_URL, DJANGO_DEBUG, DJANGO_JWT_SECRET_KEY, DJANG
 import os
 # import json, os, sys
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -121,11 +122,12 @@ REST_AUTH_SERIALIZERS = {
 # set up the authentication classes
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
+        # "rest_framework.permissions.AllowAny",
         "rest_framework.permissions.IsAuthenticated",
     ),
 
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "dj_rest_auth.utils.JWTCookieAuthentication",
     ),

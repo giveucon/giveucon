@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 import { signIn, signOut, useSession } from "next-auth/client";
 import Styled from 'styled-components'
 import Box from '@material-ui/core/Box';
@@ -13,8 +14,17 @@ const Title = Styled.h1`
   font-size: 50px;
 `
 
-function Test() {
+Home.getInitialProps = async () => {
+  const { data: users } = await axios.get(
+    "http://localhost:8000/api/users"
+  );
+  console.log(data);
+  return { users };
+};
+
+function Home() {
   const [session, loading] = useSession();
+
   return (
     <Container maxWidth="sm">
       <>
@@ -25,17 +35,17 @@ function Test() {
         {!loading && !session && (
           <>
             Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+            <Button onClick={() => signIn('kakao')}>Sign in</Button>
             <pre>{!session && "User is not logged in"}</pre>
           </>
         )}
         {!loading && session && (
           <>
             Signed in as {session.user.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
+            <Button onClick={() => signOut()}>Sign out</Button>
             {
               session.accessToken && (
-                <pre>User has access token</pre>
+                <pre>User has access token {session.accessToken}</pre>
               )
             }
           </>
@@ -45,4 +55,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default Home;

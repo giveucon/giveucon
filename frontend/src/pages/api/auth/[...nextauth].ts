@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { InitOptions } from "next-auth";
 import Providers from "next-auth/providers";
 import axios from "axios";
-
 import { AuthenticatedUser } from "../../../../types";
+
 
 const settings: InitOptions = {
   providers: [
