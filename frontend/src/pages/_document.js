@@ -2,7 +2,7 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components'
 import { ServerStyleSheets } from '@material-ui/styles';
-import theme from '../styles/theme';
+import lightTheme from '../styles/lightTheme';
 
 class MyDocument extends Document {
   static async getInitialProps (ctx) {
@@ -38,7 +38,7 @@ class MyDocument extends Document {
           {/* PWA primary color */}
           <meta
             name="theme-color"
-            content={theme.palette.primary.main}
+            content={lightTheme.palette.primary.main}
           />
           <link
             rel="stylesheet"

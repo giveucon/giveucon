@@ -13,15 +13,6 @@ const Title = Styled.h1`
   color: green;
   font-size: 50px;
 `
-/*
-Home.getInitialProps = async () => {
-  const { data: users } = await axios.get(
-    "http://localhost:8000/api/users"
-  );
-  console.log(data);
-  return { users };
-};
-*/
 
 function Home() {
   const [session, loading] = useSession();
