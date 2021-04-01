@@ -27,7 +27,7 @@ function Home() {
         {!loading && !session && (
           <>
             Not signed in <br />
-            <Button onClick={() => signIn('kakao')}>Sign in</Button>
+            <Button onClick={() => signIn()}>Sign in</Button>
             <pre>{!session && "User is not logged in"}</pre>
           </>
         )}

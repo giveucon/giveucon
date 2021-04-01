@@ -38,8 +38,9 @@ const settings = {
           console.log(error);
           return false;
         }
+        user.accessToken = accessToken;
       }
-      return false;
+      return false; 
     },
     
     async jwt(token, user, account, profile, isNewUser) {
@@ -64,4 +65,4 @@ const settings = {
 
 export default (req, res) =>
   NextAuth(req, res, settings);
-  
+
