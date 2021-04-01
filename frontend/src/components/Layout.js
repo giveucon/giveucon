@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import BottomNavBar from './BottomNavBar'
+import BottomNav from './BottomNav'
 
 
 export default function Layout({ children, title }) {
@@ -16,7 +16,7 @@ export default function Layout({ children, title }) {
         {children}
         </Container>
       </Box>
-      <BottomNavBar />
+      <BottomNav />
     </>
   );
 };
