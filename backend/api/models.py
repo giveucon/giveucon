@@ -6,6 +6,11 @@ class Account(AbstractUser):
     pass
 
 class User(models.Model):
+    email = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    user_name = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    first_name = models.CharField(max_length=255, blank=False, null=False)
+    last_name = models.CharField(max_length=255, blank=False, null=False)
+    #location
     dark_mode = models.BooleanField(default=False)
 
 class AccountUser(models.Model):
