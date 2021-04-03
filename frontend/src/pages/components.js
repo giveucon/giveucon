@@ -4,12 +4,16 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
-
 import Layout from '../components/Layout';
+import MenuItem from '@material-ui/core/MenuItem';
 import Section from '../components/Section';
+import ProductTile from '../components/ProductTile';
+import UserListItem from '../components/UserListItem';
+import UserProfileBox from '../components/UserProfileBox';
+import MenuIcon from '@material-ui/icons/Menu';
 
 
 function OverviewBox({ title, children }) {
@@ -77,7 +81,102 @@ export default function Index() {
           <Typography variant="h4">Section Body</Typography>
         </Section>
       </OverviewBox>
+      
 
+      <OverviewBox title="ProductTile">
+        <ProductTile
+          name="ProductTile"
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          onClick={() => alert( 'Tapped' )}
+        />
+      </OverviewBox>
+
+      <OverviewBox title="ProductTile - with Section">
+        <Section
+          title="Product List"
+          titlePrefix={<IconButton><MenuIcon /></IconButton>}
+          titleSuffix={<><Button>Edit</Button></>}
+        >
+          <Grid container>
+            <Grid item sm={6}>
+              <ProductTile
+                name="ProductTileProductTile"
+                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                onClick={() => alert( 'Tapped' )}
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <ProductTile
+                name="ProductTile"
+                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                onClick={() => alert( 'Tapped' )}
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <ProductTile
+                name="ProductTile"
+                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                onClick={() => alert( 'Tapped' )}
+                menuItems={
+                  <MenuItem>Menu Item</MenuItem>
+                }
+              />
+            </Grid>
+          </Grid>
+        </Section>
+      </OverviewBox>
+
+
+      <OverviewBox title="UserListItem">
+        <UserListItem
+          name="UserListItem"
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          onClick={() => alert( 'Tapped' )}
+        />
+      </OverviewBox>
+
+      <OverviewBox title="UserListItem - with Section">
+        <Section
+          title="User List"
+          titlePrefix={<IconButton><MenuIcon /></IconButton>}
+          titleSuffix={<Button>Edit</Button>}
+        >
+          <List>
+            <UserListItem
+              name="UsernameUsernameUsernameUsernameUsername"
+              content="asdfasdf"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+            />
+            <UserListItem
+              name="Username"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+            />
+            <UserListItem
+              name="Username"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              menuItems={
+                <MenuItem>Menu Item</MenuItem>
+              }
+            />
+          </List>
+        </Section>
+      </OverviewBox>
+
+      <OverviewBox title="UserProfileBox">
+        <UserProfileBox
+          name="Username"
+          subtitle="Subtitle"
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          actions={
+            <IconButton><MenuIcon /></IconButton>
+          }
+        >
+          <Typography variant="h4">Children</Typography>
+        </UserProfileBox>
+      </OverviewBox>
 
     </Container>
     </Layout>

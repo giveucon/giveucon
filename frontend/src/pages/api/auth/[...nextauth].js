@@ -16,13 +16,12 @@ const settings = {
       if (account.provider === "kakao") {
         // extract these two tokens
         const { accessToken } = account;
-        console.log("19 accessToken: " + accessToken);
     
         // make a POST request to the DRF backend
         try {
           const response = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            "http://127.0.0.1:8000/api/social/login/kakao/",
+            "http://localhost:8000/api/social/login/kakao/",
             {
               access_token: accessToken, // note the differences in key and value variable names
             },
@@ -30,7 +29,6 @@ const settings = {
     
           // extract the returned token from the DRF backend and add it to the `user` object
           const { access_token } = response.data;
-          console.log("33 accessToken: " + access_token);
           user.accessToken = access_token;
     
           return true; // return true if everything went well
@@ -49,7 +47,6 @@ const settings = {
     
         // reform the `token` object from the access token we appended to the `user` object
         token.accessToken = accessToken;
-        console.log("51 token.accessToken: " + token.accessToken);
       }
     
       return token;
@@ -57,7 +54,6 @@ const settings = {
     
     async session(session, user) {
       session.accessToken = user.accessToken;
-      console.log("59 session.accessToken: " + session.accessToken);
       return session;
     },
   },
