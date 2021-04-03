@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     top: 'auto',
     bottom: 0,
+    zIndex: theme.zIndex.drawer + 1,
   },
   bottomNavBar: {
     backgroundColor: theme.palette.background.default,

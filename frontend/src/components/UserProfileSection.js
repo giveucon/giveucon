@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +12,10 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
     avatar: {
+      width: theme.spacing(15),
+      height: theme.spacing(15),
+    },
+    avatarIconButton: {
       width: theme.spacing(15),
       height: theme.spacing(15),
       zIndex: theme.zIndex.drawer + 1,
@@ -23,13 +28,15 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function UserProfileBox({ actions=null, children, image=null, name=null, subtitle=null }) {
+export default function UserProfileSection({ actions=null, children, image=null, name=null, onClick=null, subtitle=null }) {
   const classes = useStyles();
 
   return (
-    <Box margin={1} className={classes.root}>
+    <Box margin={2} className={classes.root}>
       <Box display="flex" justifyContent="center" position="relative" >
-        <Avatar alt={name} className={classes.avatar} src={image} />
+        <IconButton className={classes.avatarIconButton}>
+          <Avatar alt={name} className={classes.avatar} src={image} />
+        </IconButton>
       </Box>
       <Box position="relative" top={-55}>
         <Card className={classes.card}>
@@ -45,7 +52,7 @@ export default function UserProfileBox({ actions=null, children, image=null, nam
             </Box>
           </Box>
           <Divider />
-          <Box display={children ? 'block' : "none"}>
+          <Box display={children ? 'block' : "none"} padding={2}>
             {children}
           </Box>
         </Card>

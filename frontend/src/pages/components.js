@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Section from '../components/Section';
 import ProductTile from '../components/ProductTile';
 import UserListItem from '../components/UserListItem';
-import UserProfileBox from '../components/UserProfileBox';
+import UserProfileSection from '../components/UserProfileSection';
 import MenuIcon from '@material-ui/icons/Menu';
 
 
@@ -78,7 +78,7 @@ export default function Index() {
           titlePrefix={<IconButton><MenuIcon /></IconButton>}
           titleSuffix={<><Button>Button 1</Button><Button>Button 2</Button></>}
         >
-          <Typography variant="h4">Section Body</Typography>
+          <Typography variant="h4">Children</Typography>
         </Section>
       </OverviewBox>
       
@@ -128,11 +128,13 @@ export default function Index() {
 
 
       <OverviewBox title="UserListItem">
-        <UserListItem
-          name="UserListItem"
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-          onClick={() => alert( 'Tapped' )}
-        />
+        <List>
+          <UserListItem
+            name="UserListItem"
+            image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+            onClick={() => alert( 'Tapped' )}
+          />
+        </List>
       </OverviewBox>
 
       <OverviewBox title="UserListItem - with Section">
@@ -165,8 +167,8 @@ export default function Index() {
         </Section>
       </OverviewBox>
 
-      <OverviewBox title="UserProfileBox">
-        <UserProfileBox
+      <OverviewBox title="UserProfileSection">
+        <UserProfileSection
           name="Username"
           subtitle="Subtitle"
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -175,7 +177,7 @@ export default function Index() {
           }
         >
           <Typography variant="h4">Children</Typography>
-        </UserProfileBox>
+        </UserProfileSection>
       </OverviewBox>
 
     </Container>
