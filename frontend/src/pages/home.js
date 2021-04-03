@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from 'react';
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
 import Styled from 'styled-components'
 import Box from '@material-ui/core/Box';
@@ -15,34 +16,37 @@ const Title = Styled.h1`
   font-size: 50px;
 `
 
+const fetchData = async (session) => await axios.get(
+  `http://localhost:8000/api/users`, {
+    headers: {
+      'Authorization': "Bearer " + session?.accessToken,
+      'Content-Type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
+  .then(res => ({
+    error: false,
+    data: res.data,
+  }))
+  .catch((error) => ({
+    error: true,
+    data: ["failed", "failed"],
+  }),
+);
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context)
+  const session = await getSession(context);
+  console.log(session);
+  const data = await fetchData(session);
 
-  try {
-    const res = await axios.get(
-      `http://localhost:8000/api/users`, {
-        headers: {
-          'Authorization': "Bearer " + session?.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    const result = res.data;
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
   return {
-    props: { session }
-  }
+    props: data,
+  };
 }
 
-function Home() {
+function Home({ data }) {
   const [session, loading] = useSession();
-
-
+  console.log(data);
   return (
     <Container maxWidth="sm">
       <>
@@ -68,6 +72,9 @@ function Home() {
             }
           </>
         )}
+        {data.map((item) => (
+            <Typography>{item.username}</Typography>
+        ))}
       </>
     </Container>
   );

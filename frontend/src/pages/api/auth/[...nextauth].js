@@ -30,30 +30,26 @@ const settings = {
           // extract the returned token from the DRF backend and add it to the `user` object
           const { access_token } = response.data;
           user.accessToken = access_token;
-    
+          console.log(user.accessToken);
           return true; // return true if everything went well
         } catch (error) {
           console.log(error);
           return false;
         }
-        user.accessToken = accessToken;
       }
       return false; 
     },
     
     async jwt(token, user, account, profile, isNewUser) {
-      if (user) {
-        const { accessToken } = user;
-    
-        // reform the `token` object from the access token we appended to the `user` object
-        token.accessToken = accessToken;
+      if (account?.accessToken) {
+        token.accessToken = user.accessToken
       }
     
       return token;
     },
     
-    async session(session, user) {
-      session.accessToken = user.accessToken;
+    async session(session, token) {
+      session.accessToken = token.accessToken;
       return session;
     },
   },
