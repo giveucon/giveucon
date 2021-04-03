@@ -21,7 +21,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path("api/rest-auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path('api/rest-auth/register/', include('dj_rest_auth.registration.urls')),
+    path('api/all-auth/', include('allauth.urls')),
     path("api/", include("api.urls")),  # our own views
 ]
 

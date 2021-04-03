@@ -86,7 +86,7 @@ REST_USE_JWT = True # use JSON Web Tokens
 # JWT_AUTH_REFRESH_COOKIE = "nextjsdrf-refresh-token"
 # JWT_AUTH_SAMESITE = "none"
 
-#SOCIALACCOUNT_AUTO_SIGNUP = False
+#SOCIALACCOUNT_AUTO_SIGNUP = False # seems to be not working
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -205,3 +205,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_REQUIRED = False
+
