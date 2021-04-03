@@ -85,7 +85,8 @@ REST_USE_JWT = True # use JSON Web Tokens
 # JWT_AUTH_COOKIE = "nextjsdrf-access-token"
 # JWT_AUTH_REFRESH_COOKIE = "nextjsdrf-refresh-token"
 # JWT_AUTH_SAMESITE = "none"
-SOCIALACCOUNT_AUTO_SIGNUP = False
+
+#SOCIALACCOUNT_AUTO_SIGNUP = False
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
