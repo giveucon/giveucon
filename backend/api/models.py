@@ -9,7 +9,6 @@ class UserManager(BaseUserManager):
         """
           Creates a custom user with the given fields
         """
-
         user = self.model(
             username = username,
             email = self.normalize_email(email),
@@ -20,11 +19,10 @@ class UserManager(BaseUserManager):
 
         return user
 
-  
     def create_superuser(self, username, email, password):
         user = self.create_user(
-            username,
-            email,
+            username = username,
+            email = self.normalize_email(email),
             password = password
         )
 
@@ -34,33 +32,28 @@ class UserManager(BaseUserManager):
 
         return user
 
-
 class User(AbstractBaseUser, PermissionsMixin):
-    userId    = models.CharField(max_length = 16, default = uuid4, primary_key = True, editable = False)
-    username  = models.CharField(max_length = 16, unique = True, null = False, blank = False)
-    email     = models.EmailField(max_length = 100, unique = True, null = False, blank = False)
+
+    objects = UserManager()
+
+    userId       = models.CharField(max_length = 16, default = uuid4, primary_key = True, editable = False)
+    username     = models.CharField(max_length = 16, unique = True, null = False, blank = False)
+    email        = models.EmailField(max_length = 100, unique = False, null = False, blank = False)
+
+    is_active    = models.BooleanField(default = True)
+    is_staff     = models.BooleanField(default = False)
+    is_superuser = models.BooleanField(default = False)
+  
+    created_on   = models.DateTimeField(auto_now_add = True)
+    updated_at   = models.DateTimeField(auto_now = True)
+
     #location
-    dark_mode = models.BooleanField(default=False)
+    dark_mode    = models.BooleanField(default = False)
     #public_key
     #private_key
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
-
-    active       = models.BooleanField(default = True)
-  
-    is_staff     = models.BooleanField(default = False)
-    is_superuser = models.BooleanField(default = False)
-  
-    created_on   = models.DateTimeField(auto_now_add = True, blank = True, null = True)
-    updated_at   = models.DateTimeField(auto_now = True)
-
-    objects = UserManager()
-
-    class Meta:
-        verbose_name = "User"
-
-
 
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)

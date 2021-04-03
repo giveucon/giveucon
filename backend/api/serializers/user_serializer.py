@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import User
+from ..models import User
 from django.conf import settings
 
 
@@ -10,7 +10,15 @@ class UserSerializer(ModelSerializer):
             "userId",
             "username",
             "email",
-            "password",
+
+            "is_active",
+            "is_staff",
+            "is_superuser",
+        
+            "created_on",
+            "updated_at",
+
+            "dark_mode",
         ]
 
     def create(self, validated_data):
