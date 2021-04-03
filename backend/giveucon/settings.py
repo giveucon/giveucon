@@ -105,7 +105,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True, 
     'UPDATE_LAST_LOGIN': True,
-    "USER_ID_FIELD": "userId",  # for the custom user model
     "USER_ID_CLAIM": "user_id",
     "SIGNING_KEY": DJANGO_JWT_SECRET_KEY
 }
@@ -113,12 +112,8 @@ SIMPLE_JWT = {
 CORS_ORIGIN_ALLOW_ALL = True # only for dev environment!, this should be changed before you push to production
 
 # custom user model, because we do not want to use the Django provided user model
-AUTH_USER_MODEL = "api.User"
+AUTH_USER_MODEL = "api.Account"
 # We need to specify the exact serializer as well for dj-rest-auth, otherwise it will end up shooting itself
-# in the foot and me in the head
-REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'api.serializers.UserSerializer'
-}
 
 # set up the authentication classes
 REST_FRAMEWORK = {
