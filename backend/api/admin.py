@@ -1,17 +1,10 @@
 from django.contrib import admin
-from .models import User
+from django.apps import apps
 
+models = apps.get_models()
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'username',
-        'email',
-        'created_on',
-    )
-
-    list_display_links = (
-        'username',
-        'email',
-    )
+for model in models:
+    try:
+        admin.site.register(model)
+    except admin.sites.AlreadyRegistered:
+        pass
