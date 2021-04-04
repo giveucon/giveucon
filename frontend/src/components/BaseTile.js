@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
       maxWidth: '100%',
     },
+    actions: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
     media: {
       paddingTop: '100%', // 1:1,
       // paddingTop: '56.25%', // 16:9,
@@ -29,10 +32,13 @@ export default function BaseTile({ actions=null, contents=null, image=null, imag
             title={imageTitle ? imageTitle : "Image"}
           />
         </CardActionArea>
-        <Box display={contents ? 'block' : "none"} padding={1}>
+        <Box display={contents ? 'block' : "none"}>
           {contents}
         </Box>
-        <Box display={actions ? 'flex' : "none"} justifyContent="flex-end">
+        <Box
+          className={classes.actions}
+          display={actions ? 'flex' : "none"}
+          justifyContent="flex-end">
           {actions}
         </Box>
       </Card>

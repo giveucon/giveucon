@@ -38,7 +38,7 @@ export default function ProductTile({ image=null, onClick=null, menuItems=null, 
         image={image}
         imageTitle={name}
         contents={
-          <Box paddingX={1}>
+          <Box padding={2}>
             <Typography variant="body1">{name}</Typography>
           </Box>
         }

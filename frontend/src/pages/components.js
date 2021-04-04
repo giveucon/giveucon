@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Section from '../components/Section';
 import ProductTile from '../components/ProductTile';
 import UserListItem from '../components/UserListItem';
+import UserProfileBox from '../components/UserProfileBox';
 import UserProfileSection from '../components/UserProfileSection';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -165,6 +166,14 @@ export default function Index() {
             />
           </List>
         </Section>
+      </OverviewBox>
+
+      <OverviewBox title="UserProfileBox">
+        <UserProfileBox
+          name="Username"
+          subtitle="Subtitle"
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+        />
       </OverviewBox>
 
       <OverviewBox title="UserProfileSection">
