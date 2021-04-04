@@ -36,6 +36,7 @@ const fetchData = async (session) => await axios.get(
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  console.log("home.js : session");
   console.log(session);
   const data = await fetchData(session);
 
@@ -68,6 +69,11 @@ function Home({ data }) {
             {
               session.accessToken && (
                 <pre>User has access token {session.accessToken}</pre>
+              )
+            }
+            {
+              session.refreshToken && (
+                <pre>User has refresh token {session.refreshToken}</pre>
               )
             }
           </>
