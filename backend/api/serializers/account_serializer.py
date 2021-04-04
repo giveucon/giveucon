@@ -1,8 +1,8 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import User
+from ..models import Account
 from django.conf import settings
 
-class UserSerializer(ModelSerializer):
+class AccountSerializer(ModelSerializer):
     class Meta:
-        model = User
+        model = Account
         fields = '__all__'

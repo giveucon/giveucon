@@ -154,3 +154,5 @@ Thumbs.db #thumbnail cache on Windows
 
 # Visual Studio Code
 .vscode/
+
+migrations/
