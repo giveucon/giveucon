@@ -7,8 +7,8 @@ from ..models import User
 from ..models import AccountUser
 from ..serializers import UserSerializer
 
-class CurrentUserDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+class SelfUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all() # is this queryset needed? or properly used?
     serializer_class = UserSerializer
     def retrieve(self, request, *args, **kwargs):
         user = get_object_or_404(AccountUser, account=request.user).user

@@ -46,6 +46,8 @@ class Store(models.Model):
     description = models.TextField(blank=True, null=False)
     #location
     owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
+    private_key = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)

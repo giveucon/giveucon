@@ -9,7 +9,7 @@ urlpatterns = [
 
     # User views
     path('users/', UserListView.as_view()),
-    path('users/current', CurrentUserDetailView.as_view()),
+    path('users/self', SelfUserDetailView.as_view()),
     path('users/<int:pk>/', UserDetailView.as_view()),
 
     # Store views
