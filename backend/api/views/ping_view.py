@@ -3,7 +3,6 @@ from rest_framework import status, permissions
 from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 
-
 @permission_classes([permissions.AllowAny,])
 class PingView(APIView):
     """
