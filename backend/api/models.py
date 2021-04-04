@@ -3,7 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 class Account(AbstractUser):
-    pass
+    #Specify verbose_name
+    class Meta:
+        verbose_name = 'account'
+        verbose_name_plural = 'accounts'
 
 class User(models.Model):
     email = models.CharField(max_length=255, blank=False, null=False, unique=True)

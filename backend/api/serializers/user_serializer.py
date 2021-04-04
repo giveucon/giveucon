@@ -6,4 +6,4 @@ from django.conf import settings
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['__all__']
+        fields = '__all__'
