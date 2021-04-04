@@ -5,10 +5,59 @@ import axios from "axios";
 
 const settings = {
   providers: [
+/*
     Providers.Kakao({
       clientId: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
     }),
+*/
+// https://github.com/nextauthjs/next-auth/blob/main/src/providers/kakao.js
+    {
+      id: 'kakao',
+      name: 'Kakao',
+      type: 'oauth',
+      version: '2.0',
+      params: { grant_type: 'authorization_code' },
+      accessTokenUrl: 'https://kauth.kakao.com/oauth/token',
+      authorizationUrl: 'https://kauth.kakao.com/oauth/authorize?response_type=code',
+      profileUrl: 'https://kapi.kakao.com/v2/user/me',
+      async profile(profile, tokens) {
+        // You can use the tokens, in case you want to fetch more profile information
+        // For example several OAuth provider does not return e-mail by default.
+        // Depending on your provider, will have tokens like `access_token`, `id_token` and or `refresh_token`
+        return {
+          id: profile.id,
+          name: profile.kakao_account?.profile.nickname,
+          email: profile.kakao_account?.email,
+          image: profile.kakao_account?.profile.profile_image_url
+        }
+      },
+      clientId: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+    },
+    {
+      id: 'kakao_reauthenticate',
+      name: 'Kakao(Reauthenticate)',
+      type: 'oauth',
+      version: '2.0',
+      params: { grant_type: 'authorization_code' },
+      accessTokenUrl: 'https://kauth.kakao.com/oauth/token',
+      authorizationUrl: 'https://kauth.kakao.com/oauth/authorize?response_type=code&prompt=login',
+      profileUrl: 'https://kapi.kakao.com/v2/user/me',
+      async profile(profile, tokens) {
+        // You can use the tokens, in case you want to fetch more profile information
+        // For example several OAuth provider does not return e-mail by default.
+        // Depending on your provider, will have tokens like `access_token`, `id_token` and or `refresh_token`
+        return {
+          id: profile.id,
+          name: profile.kakao_account?.profile.nickname,
+          email: profile.kakao_account?.email,
+          image: profile.kakao_account?.profile.profile_image_url
+        }
+      },
+      clientId: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+    }
   ],
   callbacks: {
     async signIn(user, account, profile) {
@@ -36,6 +85,7 @@ const settings = {
           console.log(user.refreshToken);
           return true; // return true if everything went well
         } catch (error) {
+          console.log("[...nextauth].js async signIn called, ERROR OCCURRED");
           console.log(error);
           return false;
         }
