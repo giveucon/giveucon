@@ -29,9 +29,6 @@ urlpatterns = [
     path("api/rest-auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
     path('api/rest-auth/register/', include('dj_rest_auth.registration.urls')),
     path('api/all-auth/', include('allauth.urls')),
-    path('api/jwt/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/jwt/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/jwt/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path("api/", include("api.urls")),  # our own views
 ]
 

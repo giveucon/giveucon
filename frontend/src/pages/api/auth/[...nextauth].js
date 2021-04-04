@@ -94,63 +94,65 @@ const settings = {
     },
     
     async jwt(token, user, account, profile, isNewUser) {
+      console.log("[...nextauth].js : async jwt called");
       if (account?.accessToken) {
         try {
           await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            "http://localhost:8000/api/jwt/token/verify/",
+            "http://localhost:8000/api/rest-auth/token/verify/",
             {
               token: user.accessToken,
             },
           );
-          token.accessToken = user.accessToken
-          token.refreshToken = user.refreshToken
-          console.log("[...nextauth].js : async jwt called");
         } catch (error) {
           const response = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            "http://localhost:8000/api/jwt/token/refresh/",
+            "http://localhost:8000/api/rest-auth/token/refresh/",
             {
               refresh: user.refreshToken,
             },
           );
           const { access, refresh } = response.data;
-          token.accessToken = access;
-          token.refreshToken = refresh;
-          console.log("[...nextauth].js : async jwt called, tokens refreshed");
-          console.log(token.accessToken);
-          console.log(token.refreshToken);
+          user.accessToken = access;
+          user.refreshToken = refresh;
+          console.log("[...nextauth].js : Tokens refreshed");
+          console.log(user.accessToken);
+          console.log(user.refreshToken);
+        } finally {
+          token.accessToken = user.accessToken
+          token.refreshToken = user.refreshToken
         }
       }
       return token;
     },
     
     async session(session, token) {
+      console.log("[...nextauth].js : async session called");
       try {
         await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          "http://localhost:8000/api/jwt/token/verify/",
+          "http://localhost:8000/api/rest-auth/token/verify/",
           {
             token: token.accessToken,
           },
         );
-        session.accessToken = token.accessToken;
-        session.refreshToken = token.refreshToken;
-        console.log("[...nextauth].js : async session called");
       } catch (error) {
         const response = await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          "http://localhost:8000/api/jwt/token/refresh/",
+          "http://localhost:8000/api/rest-auth/token/refresh/",
           {
             refresh: token.refreshToken,
           },
         );
         const { access, refresh } = response.data;
-        session.accessToken = access;
-        session.refreshToken = refresh;
-        console.log("[...nextauth].js : async session called, tokens refreshed");
-        console.log(session.accessToken);
-        console.log(session.refreshToken);
+        token.accessToken = access;
+        token.refreshToken = refresh;
+        console.log("[...nextauth].js : Tokens refreshed");
+        console.log(token.accessToken);
+        console.log(token.refreshToken);
+      } finally {
+        session.accessToken = token.accessToken
+        session.refreshToken = token.refreshToken
       }
       return session;
     },
