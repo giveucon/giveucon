@@ -13,6 +13,8 @@ function RootApp(props) {
   const { Component, pageProps } = props;
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
+  const kakaoKey = process.env.KAKAO_CLIENT_ID;
+
   React.useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {

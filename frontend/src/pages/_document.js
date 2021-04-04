@@ -10,6 +10,7 @@ class MyDocument extends Document {
     const materialSheets = new ServerStyleSheets()
     const originalRenderPage = ctx.renderPage;
 
+
     try {
         ctx.renderPage = () => originalRenderPage({
             enhanceApp: App => props => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
@@ -31,6 +32,7 @@ class MyDocument extends Document {
   }
 
   render() {
+    const kakaoKey = process.env.KAKAO_CLIENT_ID;
     return (
       <Html lang="en" dir="ltr">
         <Head>
