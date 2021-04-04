@@ -9,4 +9,4 @@ class PingView(APIView):
     Retrieve, update or delete a snippet instance.
     """
     def ping(request):
-        return HttpResponse('pong')
+        return HttpResponse('Pong')

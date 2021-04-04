@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from 'react';
 import axios from 'axios'
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
 import Styled from 'styled-components'
@@ -11,6 +12,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 
+
+const Title = Styled.h1`
+  color: green;
+  font-size: 50px;
+`
 
 const fetchData = async (session) => await axios.get(
   `http://localhost:8000/api/users`, {
@@ -39,18 +45,18 @@ export async function getServerSideProps(context) {
   };
 }
 
-function Home({ data }) {
+function Sandbox({ data }) {
   const [session, loading] = useSession();
   console.log(data);
   return (
     <Layout>
       <Section
         backButton
-        title="홈"
+        title="테스트"
       >
       </Section>
       <Section
-        title="로그인 정보"
+        title="테스트하는 중..."
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <>
@@ -90,4 +96,4 @@ function Home({ data }) {
   );
 }
 
-export default Home;
+export default Sandbox;

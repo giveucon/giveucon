@@ -12,6 +12,10 @@ urlpatterns = [
     path('users/current', CurrentUserDetailView.as_view()),
     path('users/<int:pk>/', UserDetailView.as_view()),
 
+    # Store views
+    path('stores/', StoreListView.as_view()),
+    path('stores/<int:pk>/', StoreDetailView.as_view()),
+
     # Test views
     path('ping/', PingView.ping),
 ]

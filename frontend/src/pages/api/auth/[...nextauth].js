@@ -157,6 +157,32 @@ const settings = {
       return session;
     },
   },
+  events: {
+    async signIn(message) { 
+      console.log("[...nextauth].js : signIn event occurred");
+      console.log(message);
+    },
+    async signOut(message) { 
+      console.log("[...nextauth].js : signOut event occurred");
+      console.log(message);
+    },
+    async createUser(message) { 
+      console.log("[...nextauth].js : createUser event occurred");
+      console.log(message);
+    },
+    async linkAccount(message) { 
+      console.log("[...nextauth].js : linkAccount event occurred");
+      console.log(message);
+    },
+    async session(message) { 
+      console.log("[...nextauth].js : session event occurred");
+      console.log(message);
+    },
+    async error(message) { 
+      console.log("[...nextauth].js : error event occurred");
+      console.log(message);
+    },
+  }
 };
 
 export default (req, res) =>

@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect, useState } from 'react';
 import axios from 'axios'
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
 import Styled from 'styled-components'
@@ -16,11 +15,6 @@ import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
 import UserProfileSection from '../../components/UserProfileSection'
 
-
-const Title = Styled.h1`
-  color: green;
-  font-size: 50px;
-`
 
 const fetchData = async (session) => await axios.get(
   `http://localhost:8000/api/users`, {
@@ -42,8 +36,6 @@ const fetchData = async (session) => await axios.get(
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  console.log("home.js : session");
-  console.log(session);
   const data = await fetchData(session);
 
   return {
@@ -78,7 +70,8 @@ function MyAccount({ data }) {
           {!loading && !session && (
             <>
               <Typography>{!session && "User is not logged in"}</Typography>
-              <Button variant="contained" color="primary" onClick={() => signIn()}>Sign in</Button>
+              <Button variant="contained" color="primary" onClick={() => signIn('kakao')}>Sign in</Button>
+              <Button variant="contained" color="primary" onClick={() => signIn('kakao_reauthenticate')}>Sign in (Reauth)</Button>
             </>
           )}
           {!loading && session && (
