@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function Section({ backButton=false, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
+export default function Section({ backButton=false, border=true, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Box marginX={2} marginY={1}>
-      <Paper>
+    <Box marginX={1} marginY={border ? 2 : 0}>
+      <Paper elevation={border ? 3 : 0}>
         <Box
           alignItems="center"
           display="flex"
@@ -46,7 +46,12 @@ export default function Section({ backButton=false, children=null, title=null, t
           <Box display={titlePrefix ? "block" : "none"}>
             {titlePrefix}
           </Box>
-          <Box display={title ? "block" : "none"} flexGrow={1}>
+          <Box
+            display={title ? "block" : "none"}
+            flexGrow={1}
+            paddingX={(backButton || titlePrefix) ? 0 : 2}
+            paddingY={1.5}
+          >
             <Typography variant="h6" className={classes.title}>{title}</Typography>
           </Box>
           <Box display={titleSuffix ? "block" : "none"} flexShrink={0}>

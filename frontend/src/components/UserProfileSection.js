@@ -33,12 +33,12 @@ export default function UserProfileSection({ actions=null, children, image=null,
 
   return (
     <Box margin={2} className={classes.root}>
-      <Box display="flex" justifyContent="center" position="relative" >
-        <IconButton className={classes.avatarIconButton}>
-          <Avatar alt={name} className={classes.avatar} src={image} />
-        </IconButton>
-      </Box>
-      <Box position="relative" top={-55}>
+      <Box>
+        <Box position="relative" top={55} display="flex" justifyContent="center" position="relative" >
+          <IconButton className={classes.avatarIconButton}>
+            <Avatar alt={name} className={classes.avatar} src={image} />
+          </IconButton>
+        </Box>
         <Card className={classes.card}>
           <Box display={(name || subtitle || actions) ? 'block' : "none"} paddingTop={8} paddingBottom={1}>
             <Box display={name ? 'flex' : "none"} justifyContent="center">

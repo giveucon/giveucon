@@ -6,7 +6,7 @@ import BottomNav from './BottomNav'
 
 export default function Layout({ children, title }) {
   return (
-    <>
+    <Container maxWidth="sm">
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,6 +17,6 @@ export default function Layout({ children, title }) {
         </Container>
       </Box>
       <BottomNav />
-    </>
+    </Container>
   );
 };

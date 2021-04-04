@@ -8,9 +8,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import SettingsIcon from '@material-ui/icons/Settings';
 
-import Layout from '../components/Layout'
-import Section from '../components/Section'
+import Layout from '../../components/Layout'
+import Section from '../../components/Section'
+import UserProfileBox from '../../components/UserProfileBox'
+import UserProfileSection from '../../components/UserProfileSection'
 
 
 const Title = Styled.h1`
@@ -47,20 +51,25 @@ export async function getServerSideProps(context) {
   };
 }
 
-function Home({ data }) {
+function MyAccount({ data }) {
   const [session, loading] = useSession();
   console.log(data);
   return (
     <Layout>
       <Section
         backButton
-        title="홈"
+        title="내 계정"
       >
       </Section>
       <Section
-        title="테스트하는 중..."
+        title="내 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
+        <UserProfileBox
+          name="Username"
+          subtitle="Subtitle"
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+        />
         <>
           {
             loading && <h2>Loading...</h2>
@@ -82,7 +91,7 @@ function Home({ data }) {
               }
               {
                 session.refreshToken && (
-                  <Typography >User has refresh token {session.refreshToken}</Typography>
+                  <Typography>User has refresh token {session.refreshToken}</Typography>
                 )
               }
               <Button variant="contained" color="primary" onClick={() => signOut()}>Sign out</Button>
@@ -97,4 +106,4 @@ function Home({ data }) {
   );
 }
 
-export default Home;
+export default MyAccount;
