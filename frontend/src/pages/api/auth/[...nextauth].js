@@ -32,9 +32,10 @@ const settings = {
           image: profile.kakao_account?.profile.profile_image_url
         }
       },
-      clientId: process.env.KAKAO_CLIENT_ID,
-      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      clientId: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
+      clientSecret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
     },
+/*
     {
       id: 'kakao_reauthenticate',
       name: 'Kakao(Reauthenticate)',
@@ -55,9 +56,10 @@ const settings = {
           image: profile.kakao_account?.profile.profile_image_url
         }
       },
-      clientId: process.env.KAKAO_CLIENT_ID,
-      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      clientId: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
+      clientSecret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
     }
+*/
   ],
   callbacks: {
     async signIn(user, account, profile) {

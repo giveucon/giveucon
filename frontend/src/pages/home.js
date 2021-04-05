@@ -59,8 +59,7 @@ function Home({ data }) {
           {!loading && !session && (
             <>
               <Typography>{!session && "User is not logged in"}</Typography>
-              <Button variant="contained" color="primary" onClick={() => signIn('kakao')}>Sign in</Button>
-              <Button variant="contained" color="primary" onClick={() => signIn('kakao_reauthenticate')}>Sign in (Reauth)</Button>
+              <Button variant="contained" color="primary" onClick={() => signIn()}>Sign in</Button>
             </>
           )}
           {!loading && session && (

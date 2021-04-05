@@ -35,7 +35,7 @@ Go to Product Settings > Kakao Login > Security and get Client Secret
 Move to backend directory:
 
 ```
-cd [project_root_dir_here]/backend
+cd [project_root_directory_here]/backend
 ```
 
 Setup python virtual environment:
