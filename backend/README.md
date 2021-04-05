@@ -46,17 +46,17 @@ python -m venv venv
 
 Activate python virtual environment:
 
-> in Linux: 
+> on Linux: 
 > ```
 > . venv/bin/activate
 > ```
 
-> in Windows command prompt: 
+> on Windows command prompt: 
 > ```
 > . venv\Scripts\activate.bat
 > ```
 
-> in Windows Powershell: 
+> on Windows Powershell: 
 > ```
 > . venv\Scripts\Activate.ps1
 > ```
