@@ -9,7 +9,7 @@ class CouponSerializer(ModelSerializer):
     class Meta:
         model = Coupon
         fields = '__all__'
-        read_only_fields = ('signature',)
+        read_only_fields = ('signature', 'user')
     def create(self, validated_data):
         coupon = Coupon(**validated_data)
         private_key = ecdsa.SigningKey.from_string(
