@@ -6,11 +6,10 @@ import styled from "styled-components";
 class Map extends React.Component{
 
     componentDidMount() {
-      const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
       const script = document.createElement("script");
       script.async = true;
       script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + kakaoKey + "&autoload=false";
+        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY + "&autoload=false";
       document.head.appendChild(script);
 
       script.onload = () => {

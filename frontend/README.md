@@ -6,7 +6,7 @@
 Move to frontend directory:
 
 ```
-cd [project_root_dir_here]/frontend
+cd [project_root_directory_here]/frontend
 ```
 
 Install Node packages:
@@ -28,8 +28,9 @@ then create .env.local:
 
 ```
 NEXTAUTH_URL=http://127.0.0.1:3000
-NEXT_PUBLIC_KAKAO_CLIENT_ID="your_kakao_app_javascript_key_here"
-NEXT_PUBLIC_KAKAO_CLIENT_SECRET="some_string_here"
+NEXT_PUBLIC_KAKAO_APP_REST_API_KEY="your_kakao_app_rest_api_key_here"
+NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY="your_kakao_app_javascript_key_here"
+NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET="your_kakao_app_client_secret_here"
 ```
 
 
