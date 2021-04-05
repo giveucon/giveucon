@@ -7,8 +7,8 @@ const settings = {
   providers: [
 /*
     Providers.Kakao({
-      clientId: process.env.KAKAO_CLIENT_ID,
-      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      clientId: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
+      clientSecret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
     }),
 */
 // https://github.com/nextauthjs/next-auth/blob/main/src/providers/kakao.js
@@ -83,8 +83,8 @@ const settings = {
           user.accessToken = access_token;
           user.refreshToken = refresh_token;
           console.log("[...nextauth].js async signIn called");
-          console.log(user.accessToken);
-          console.log(user.refreshToken);
+          console.log("Access token : " + user.accessToken);
+          console.log("Refresh token : " + user.refreshToken);
           return true; // return true if everything went well
         } catch (error) {
           console.log("[...nextauth].js async signIn called, ERROR OCCURRED");
@@ -118,8 +118,8 @@ const settings = {
           user.accessToken = access;
           user.refreshToken = refresh;
           console.log("[...nextauth].js : Tokens refreshed");
-          console.log(user.accessToken);
-          console.log(user.refreshToken);
+          console.log("Access token : " + user.accessToken);
+          console.log("Refresh token : " + user.refreshToken);
         } finally {
           token.accessToken = user.accessToken
           token.refreshToken = user.refreshToken
@@ -150,8 +150,8 @@ const settings = {
         token.accessToken = access;
         token.refreshToken = refresh;
         console.log("[...nextauth].js : Tokens refreshed");
-        console.log(token.accessToken);
-        console.log(token.refreshToken);
+        console.log("Access token : " + token.accessToken);
+        console.log("Refresh token : " + token.refreshToken);
       } finally {
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken
@@ -162,23 +162,18 @@ const settings = {
   events: {
     async signIn(message) { 
       console.log("[...nextauth].js : signIn event occurred");
-      console.log(message);
     },
     async signOut(message) { 
       console.log("[...nextauth].js : signOut event occurred");
-      console.log(message);
     },
     async createUser(message) { 
       console.log("[...nextauth].js : createUser event occurred");
-      console.log(message);
     },
     async linkAccount(message) { 
       console.log("[...nextauth].js : linkAccount event occurred");
-      console.log(message);
     },
     async session(message) { 
       console.log("[...nextauth].js : session event occurred");
-      console.log(message);
     },
     async error(message) { 
       console.log("[...nextauth].js : error event occurred");

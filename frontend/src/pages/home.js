@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { signIn, signOut, getSession, useSession } from "next-auth/client";
+import { signIn, signOut, useSession } from "next-auth/client";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -8,38 +8,41 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../components/Layout'
 import Section from '../components/Section'
+import withAuth from '../components/withAuth'
 
 
-const fetchData = async (session) => await axios.get(
-  `http://localhost:8000/api/users`, {
-    headers: {
-      'Authorization': "Bearer " + session?.accessToken,
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    }
-  })
-  .then(res => ({
-    error: false,
-    data: res.data,
-  }))
-  .catch((error) => ({
-    error: true,
-    data: ["failed", "failed"],
-  }),
-);
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  const data = await fetchData(session);
-
-  return {
-    props: data,
-  };
-}
-
-function Home({ data }) {
+function Home() {
   const [session, loading] = useSession();
-  console.log(data);
+  const [userList, setUserList] = useState('');
+
+  const  getUserList = async () => { 
+    const result = async (session) => await axios.get(
+      `http://localhost:8000/api/users`, {
+        headers: {
+          'Authorization': "Bearer " + session?.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      })
+      .then(res => ({
+        error: false,
+        data: res.data,
+      }))
+      .catch((error) => ({
+        error: true,
+        data: ["failed", "failed"],
+      }),
+    );
+    setUserList(result.data)
+  }
+
+  useEffect(() => {
+    getUserList()
+  },[])
+
+  console.log("Hi!!!!!!!!!!!");
+  console.log(userList);
+
   return (
     <Layout title="홈 - Give-U-Con">
       <Section
@@ -78,13 +81,10 @@ function Home({ data }) {
               <Button variant="contained" color="primary" onClick={() => signOut()}>Sign out</Button>
             </>
           )}
-          {data.map((item) => (
-            <Typography>{item.username}</Typography>
-          ))}
         </>
       </Section>
     </Layout>
   );
 }
 
-export default Home;
+export default withAuth(Home);
