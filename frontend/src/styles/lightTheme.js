@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, createStyles } from '@material-ui/core/styles';
 
 // Create a theme instance.
 const theme = createMuiTheme({
@@ -23,6 +23,21 @@ const theme = createMuiTheme({
     },
     background: { // White
       default: '#ffffff',
+    },
+  },
+  overrides: {
+    MuiBottomNavigationAction: createStyles({
+      root: {
+        minWidth: "40px",
+      }
+    }),
+  },
+  props: {
+    MuiIconButton: {
+      color: "inherit",
+    },
+    MuiPaper: {
+      elevation: 3,
     },
   },
 });

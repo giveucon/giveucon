@@ -1,19 +1,15 @@
 import React from "react";
 import axios from 'axios'
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
-import Styled from 'styled-components'
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
-import UserProfileSection from '../../components/UserProfileSection'
 
 
 const fetchData = async (session) => await axios.get(
@@ -47,7 +43,7 @@ function MyAccount({ data }) {
   const [session, loading] = useSession();
   console.log(data);
   return (
-    <Layout>
+    <Layout title="내 정보 - Give-U-Con">
       <Section
         backButton
         title="내 계정"

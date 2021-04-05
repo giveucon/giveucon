@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -12,10 +11,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
-    },
-    titlePrefix: {
-      marginRight: theme.spacing(2),
+      maxWidth: '100%',
     },
     title: {
       flexGrow: 1,
@@ -23,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function Section({ backButton=false, border=true, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
+export default function Section({ backButton=false, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Box marginX={1} marginY={border ? 2 : 0}>
-      <Paper elevation={border ? 3 : 0}>
+    <Box marginY={2}>
+      <Paper>
         <Box
           alignItems="center"
           display="flex"

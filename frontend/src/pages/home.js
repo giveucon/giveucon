@@ -1,11 +1,9 @@
-import React from "react";
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
-import Styled from 'styled-components'
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../components/Layout'
@@ -43,7 +41,7 @@ function Home({ data }) {
   const [session, loading] = useSession();
   console.log(data);
   return (
-    <Layout>
+    <Layout title="홈 - Give-U-Con">
       <Section
         backButton
         title="홈"

@@ -5,7 +5,9 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
 
+import HomeIcon from '@material-ui/icons/Home';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -14,22 +16,22 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     zIndex: theme.zIndex.drawer + 1,
   },
-  bottomNavBar: {
+  bottomNavigation: {
     backgroundColor: theme.palette.background.default,
   },
 }));
 
 
-export default function BottomNavAppBar(props) {
+export default function BottomNavBar(props) {
   const router = useRouter();
   const classes = useStyles();
   let key = 0;
-  const actions = [
-    ['Button', 'home', <MoreIcon />],
-    ['Button', 'home', <MoreIcon />],
-    ['Button', 'home', <MoreIcon />],
-    ['Button', 'home', <MoreIcon />],
-    ['Button', 'home', <MoreIcon />]
+  const defaultActions = [
+    ['홈', 'home', <HomeIcon />],
+    ['버튼', '', <MoreIcon />],
+    ['버튼', '', <MoreIcon />],
+    ['버튼', '', <MoreIcon />],
+    ['내 계정', 'myaccount', <AccountCircleIcon />]
   ].map(([label, value, icon]) => {
       return (
         <BottomNavigationAction
@@ -43,12 +45,12 @@ export default function BottomNavAppBar(props) {
   });
   return (
       <AppBar className={classes.appBar}>
-        <Container maxWidth="sm">
+        <Container maxWidth="xs">
           <BottomNavigation
-            className={classes.bottomNavBar}
+            className={classes.bottomNavigation}
             value={router.pathname.split('/')[1] || 'home'}
           >
-            {actions}
+            {defaultActions}
           </BottomNavigation>
         </Container>
       </AppBar>

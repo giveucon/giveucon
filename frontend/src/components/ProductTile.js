@@ -11,9 +11,8 @@ import BaseTile from './BaseTile'
 
 
 const useStyles = makeStyles((theme) => ({
-  fab: {
-    right: '1.25em',
-    position: 'inherit',
+  root: {
+    maxWidth: '100%',
   },
 }));
 
