@@ -6,3 +6,7 @@ from .user_list_view import UserListView
 from .store_detail_view  import StoreDetailView
 from .store_list_view import StoreListView
 from .ping_view import PingView
+from .product_list_view import ProductListView
+from .product_detail_view import ProductDetailView
+from .image_list_view import ImageListView
+from .image_detail_view import ImageDetailView
