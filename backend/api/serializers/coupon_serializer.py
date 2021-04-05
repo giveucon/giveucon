@@ -10,8 +10,9 @@ class CouponSerializer(ModelSerializer):
         model = Coupon
         fields = '__all__'
         read_only_fields = ('signature', 'user')
-    def create(self, validated_data):
-        coupon = Coupon(**validated_data)
+
+    @staticmethod
+    def sign_coupon(coupon):
         private_key = ecdsa.SigningKey.from_string(
             bytes.fromhex(coupon.product.store.private_key),
             curve=ecdsa.SECP256k1,
@@ -25,5 +26,14 @@ class CouponSerializer(ModelSerializer):
         coupon.signature = private_key.sign(
             bytearray(json.dumps(coupon_data), 'utf-8')
         ).hex()
+        return coupon
+
+    def create(self, validated_data):
+        coupon = self.sign_coupon(Coupon(**validated_data))
+        coupon.save()
+        return coupon
+
+    def update(self, instance, validated_data):
+        coupon = self.sign_coupon(instance)
         coupon.save()
         return coupon
