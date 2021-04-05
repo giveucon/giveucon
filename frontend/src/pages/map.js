@@ -15,7 +15,7 @@ class Map extends React.Component{
 
       script.onload = () => {
         kakao.maps.load(() => {
-          let container = document.getElementById("map");
+          let container = document.getElementById("kakao_map");
           let options = {
             center: new window.kakao.maps.LatLng(37.506502, 127.053617),
             level: 7
@@ -28,14 +28,14 @@ class Map extends React.Component{
     }
     render(){
       return(
-        <Maps id="map" />
+        <Maps id="kakao_map" />
       )
     }
 }
+
 const Maps = styled.div`
 width: 400px;
 height: 400px;
 `;
-
 
 export default Map;

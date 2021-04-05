@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-from .secrets import DJANGO_BASE_URL, DJANGO_DEBUG, DJANGO_JWT_SECRET_KEY, DJANGO_SECRET_KEY
+from .secrets import DJANGO_BASE_URL, DJANGO_DEBUG, DJANGO_SIMPLE_JWT_SIGNING_KEY, DJANGO_SECRET_KEY
 import os
 # import json, os, sys
 
@@ -106,7 +106,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True, 
     'UPDATE_LAST_LOGIN': True,
     "USER_ID_CLAIM": "user_id",
-    "SIGNING_KEY": DJANGO_JWT_SECRET_KEY
+    "SIGNING_KEY": DJANGO_SIMPLE_JWT_SIGNING_KEY
 }
 
 CORS_ORIGIN_ALLOW_ALL = True # only for dev environment!, this should be changed before you push to production
