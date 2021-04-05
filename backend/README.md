@@ -56,7 +56,7 @@ Activate python virtual environment:
 > . venv\Scripts\activate.bat
 > ```
 
-> on Windows Powershell: 
+> on Windows PowerShell: 
 > ```
 > . venv\Scripts\Activate.ps1
 > ```
