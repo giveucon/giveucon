@@ -10,3 +10,5 @@ from .product_list_view import ProductListView
 from .product_detail_view import ProductDetailView
 from .image_list_view import ImageListView
 from .image_detail_view import ImageDetailView
+from .coupon_list_view import CouponListView
+from .coupon_detail_view import CouponDetailView

@@ -211,6 +211,7 @@ class ProductReview(models.Model):
 
 class Coupon(models.Model):
     until = models.DateTimeField(null=False)
+    signature = models.CharField(max_length=64, blank=False, null=False, unique=True)
     user = models.ForeignKey(
         User,
         null=False,
