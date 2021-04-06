@@ -7,7 +7,7 @@ from ..models import AccountUser
 from ..serializers import AccountSerializer
 
 
-class SelfAccountDetailView(generics.RetrieveUpdateDestroyAPIView):
+class SelfAccountDetailView(generics.RetrieveAPIView):
     queryset = Account.objects.all() # is this queryset needed? or properly used?
     serializer_class = AccountSerializer
     def retrieve(self, request, *args, **kwargs):

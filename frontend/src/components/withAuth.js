@@ -7,11 +7,11 @@ import Typography from '@material-ui/core/Typography';
 
 export default function withAuth(Component) {
   return (props) => {
-    const [session, loading] = useSession();
-    const [self, setSelf] = useState('');
     const router = useRouter();
+    const [session, loading] = useSession();
+    const [selfUser, setSelfUser] = useState('');
   
-    const getSelf = async () => {
+    const getSelfUser = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/users/self`, {
@@ -22,20 +22,19 @@ export default function withAuth(Component) {
             }
           }
         );
-        setSelf(response.data);
+        setSelfUser(response.data);
       } catch (error) {
-        console.error(error);
-        setSelf('');
+        if (error.response.status === 404) {
+          router.push('/users/create');
+        } else {
+          console.log(error);
+        }
       }
     };
 
     useEffect(() => {
-      getSelf()
+      getSelfUser()
       console.log(self)
-      if (self == '') {
-        router.push('/users/create');
-        return <Typography>Signup Required</Typography>;
-      }
     },[])
     return <Component {...props} />
   }

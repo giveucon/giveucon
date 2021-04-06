@@ -16,12 +16,12 @@ import withAuth from '../../components/withAuth'
 
 function MyAccount({ data }) {
   const [session, loading] = useSession();
-  const [userList, setUserList] = useState('');
+  const [selfUser, setSelfUser] = useState('');
 
-  const getUserList = async () => {
+  const getSelfUser = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/users`, {
+        `http://localhost:8000/api/users/self`, {
           headers: {
             'Authorization': "Bearer " + session?.accessToken,
             'Content-Type': 'application/json',
@@ -29,14 +29,14 @@ function MyAccount({ data }) {
           }
         }
       );
-      setUserList(response.data);
+      setSelfUser(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    getUserList()
+    getSelfUser()
   },[])
 
   return (
@@ -50,42 +50,17 @@ function MyAccount({ data }) {
         title="내 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
+      {selfUser && (
         <UserProfileBox
-          name="Username"
-          subtitle="Subtitle"
+          name={selfUser.user_name}
+          subtitle={selfUser.email}
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
         />
+      )}
         <>
-          {
-            loading && <h2>Loading...</h2>
-          }
-
           {!loading && !session && (
-            <>
-              <Typography>{!session && "User is not logged in"}</Typography>
-              <Button variant="contained" color="primary" onClick={() => signIn('kakao')}>Sign in</Button>
-              <Button variant="contained" color="primary" onClick={() => signIn('kakao_reauthenticate')}>Sign in (Reauth)</Button>
-            </>
+            <Typography>{!session && "User is not logged in"}</Typography>
           )}
-          {!loading && session && (
-            <>
-              <Typography>Signed in as {session.user.email}</Typography>
-              {
-                session.accessToken && (
-                  <Typography>User has access token {session.accessToken}</Typography>
-                )
-              }
-              {
-                session.refreshToken && (
-                  <Typography>User has refresh token {session.refreshToken}</Typography>
-                )
-              }
-              <Button variant="contained" color="primary" onClick={() => signOut()}>Sign out</Button>
-            </>
-          )}
-          {userList && userList.map((item) => (
-            <Typography>{item.username}</Typography>
-          ))}
         </>
       </Section>
     </Layout>
