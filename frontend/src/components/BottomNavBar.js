@@ -5,9 +5,12 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
 
-import HomeIcon from '@material-ui/icons/Home';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import StorefrontIcon from '@material-ui/icons/Storefront';
+import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
+import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -27,11 +30,11 @@ export default function BottomNavBar(props) {
   const classes = useStyles();
   let key = 0;
   const defaultActions = [
-    ['홈', 'home', <HomeIcon />],
-    ['버튼', '', <MoreIcon />],
-    ['버튼', '', <MoreIcon />],
-    ['버튼', '', <MoreIcon />],
-    ['내 계정', 'myaccount', <AccountCircleIcon />]
+    ['홈', 'home', <HomeOutlinedIcon />],
+    ['내 지갑', '', <AccountBalanceWalletOutlinedIcon />],
+    ['가게', '', <StorefrontIcon />],
+    ['거래', '', <LocalMallOutlinedIcon />],
+    ['내 계정', 'myaccount', <AccountCircleOutlinedIcon />]
   ].map(([label, value, icon]) => {
       return (
         <BottomNavigationAction
@@ -49,6 +52,7 @@ export default function BottomNavBar(props) {
           <BottomNavigation
             className={classes.bottomNavigation}
             value={router.pathname.split('/')[1] || 'home'}
+            showLabels
           >
             {defaultActions}
           </BottomNavigation>
