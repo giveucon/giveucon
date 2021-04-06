@@ -9,7 +9,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../../components/Layout'
@@ -25,17 +24,11 @@ function Create(props) {
     last_name: "",
     dark_mode: false
   });
-  const handleTextFieldChange = (event) => {
-    setSelfUser({ ...selfUser, [event.target.name]: event.target.value });
-  };
-  const handleCheckBoxChange = (event) => {
-    setSelfUser({ ...selfUser, [event.target.name]: event.target.checked });
-  };
 
   const getSelfUser = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/accounts/self`, {
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/accounts/self", {
           headers: {
             'Authorization': "Bearer " + session?.accessToken,
             'Content-Type': 'application/json',
@@ -52,7 +45,7 @@ function Create(props) {
   const postSelfUser = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/users/`, {
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users/", {
           email: selfUser.email,
           user_name: selfUser.username,
           first_name: selfUser.first_name,
@@ -94,7 +87,9 @@ function Create(props) {
                 value={selfUser.username}
                 fullWidth
                 label="사용자 이름"
-                onChange={handleTextFieldChange}
+                onChange={(event) => {
+                  setSelfUser({ ...selfUser, username: event.target.value });
+                }}
                 required
               />
             </Box>
@@ -104,7 +99,9 @@ function Create(props) {
                 value={selfUser.email}
                 fullWidth
                 label="이메일"
-                onChange={handleTextFieldChange}
+                onChange={(event) => {
+                  setSelfUser({ ...selfUser, email: event.target.value });
+                }}
                 required
               />
             </Box>
@@ -114,7 +111,9 @@ function Create(props) {
                 value={selfUser.last_name}
                 fullWidth
                 label="성"
-                onChange={handleTextFieldChange}
+                onChange={(event) => {
+                  setSelfUser({ ...selfUser, last_name: event.target.value });
+                }}
                 required
               />
             </Box>
@@ -124,7 +123,9 @@ function Create(props) {
                 value={selfUser.first_name}
                 fullWidth
                 label="이름"
-                onChange={handleTextFieldChange}
+                onChange={(event) => {
+                  setSelfUser({ ...selfUser, first_name: event.target.value });
+                }}
                 required
               />
             </Box>
@@ -136,7 +137,9 @@ function Create(props) {
                     name="dark_mode"
                     color="primary"
                     checked={selfUser.dark_mode}
-                    onChange={handleCheckBoxChange}
+                    onChange={(event) => {
+                      setSelfUser({ ...selfUser, dark_mode: event.target.checked });
+                    }}
                   />
                 }
                 label="Dark Mode"

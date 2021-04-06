@@ -10,6 +10,7 @@ import Layout from '../components/Layout'
 import Section from '../components/Section'
 import withAuth from '../components/withAuth'
 
+
 function Home(props) {
   const [session, loading] = useSession();
   const [userList, setUserList] = useState('');
@@ -17,7 +18,7 @@ function Home(props) {
   const getUserList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/users`, {
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users", {
           headers: {
             'Authorization': "Bearer " + session?.accessToken,
             'Content-Type': 'application/json',

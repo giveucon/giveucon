@@ -13,7 +13,6 @@ import UserProfileBox from '../../components/UserProfileBox'
 import withAuth from '../../components/withAuth'
 
 
-
 function MyAccount({ data }) {
   const [session, loading] = useSession();
   const [selfUser, setSelfUser] = useState('');
@@ -21,7 +20,7 @@ function MyAccount({ data }) {
   const getSelfUser = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/users/self`, {
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users/self", {
           headers: {
             'Authorization': "Bearer " + session?.accessToken,
             'Content-Type': 'application/json',
@@ -50,6 +49,9 @@ function MyAccount({ data }) {
         title="내 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
+      {!loading && !session && (
+        <Typography>{!session && "User is not logged in"}</Typography>
+      )}
       {selfUser && (
         <UserProfileBox
           name={selfUser.user_name}
@@ -57,11 +59,6 @@ function MyAccount({ data }) {
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
         />
       )}
-        <>
-          {!loading && !session && (
-            <Typography>{!session && "User is not logged in"}</Typography>
-          )}
-        </>
       </Section>
     </Layout>
   );
