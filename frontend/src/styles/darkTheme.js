@@ -11,6 +11,16 @@ const theme = createMuiTheme({
         minWidth: "40px",
       }
     }),
+    MuiButton: createStyles({
+      root: {
+        borderRadius: "20px"
+      }
+    }),
+    MuiPaper: createStyles({
+      rounded: {
+        borderRadius: "20px"
+      }
+    }),
   },
   props: {
     MuiIconButton: {

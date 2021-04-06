@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -59,6 +60,35 @@ function MyAccount({ data }) {
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
         />
       )}
+      </Section>
+      <Section
+        title="설정"
+        titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+      >
+        {!loading && !session && (
+          <>
+            <Button
+              color="primary"
+              fullWidth
+              variant="contained"
+              onClick={() => signIn("kakao")}
+            >
+              로그인
+            </Button>
+          </>
+        )}
+        {!loading && session && (
+          <>
+            <Button
+              color="primary"
+              fullWidth
+              variant="contained"
+              onClick={() => signOut()}
+            >
+              로그아웃
+            </Button>
+          </>
+        )}
       </Section>
     </Layout>
   );

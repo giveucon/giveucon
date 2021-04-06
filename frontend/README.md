@@ -24,7 +24,7 @@ Install Node packages:
 
 ## Create Secret File
 
-then create .env.local:
+Create .env.local:
 
 ```
 NEXTAUTH_URL=http://127.0.0.1:3000
