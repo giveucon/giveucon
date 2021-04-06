@@ -9,11 +9,8 @@ import lightTheme from '../styles/lightTheme';
 import darkTheme from '../styles/darkTheme';
 
 
-function RootApp(props) {
-  const { Component, pageProps } = props;
+function RootApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-
-  const kakaoKey = process.env.KAKAO_CLIENT_ID;
 
   React.useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
@@ -31,7 +28,8 @@ function RootApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
         />
       </Head>
-      <NextAuthProvider session={pageProps.session}
+      <NextAuthProvider
+        session={pageProps.session}
         options={{ 
           clientMaxAge: 60,   // Re-fetch session if cache is older than 60 seconds
           keepAlive: 5 * 60   // Send keepAlive message every 5 minutes
@@ -46,6 +44,7 @@ function RootApp(props) {
     </>
   );
 }
+
 
 RootApp.propTypes = {
   Component: PropTypes.elementType.isRequired,

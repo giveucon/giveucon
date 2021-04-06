@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from 'react';
 import axios from 'axios'
 import { signIn, signOut, getSession, useSession } from "next-auth/client";
 import Button from '@material-ui/core/Button';
@@ -10,38 +10,35 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
+import withAuth from '../../components/withAuth'
 
 
-const fetchData = async (session) => await axios.get(
-  `http://localhost:8000/api/users`, {
-    headers: {
-      'Authorization': "Bearer " + session?.accessToken,
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    }
-  })
-  .then(res => ({
-    error: false,
-    data: res.data,
-  }))
-  .catch((error) => ({
-    error: true,
-    data: ["failed", "failed"],
-  }),
-);
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  const data = await fetchData(session);
-
-  return {
-    props: data,
-  };
-}
 
 function MyAccount({ data }) {
   const [session, loading] = useSession();
-  console.log(data);
+  const [userList, setUserList] = useState('');
+
+  const getUserList = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/users`, {
+          headers: {
+            'Authorization': "Bearer " + session?.accessToken,
+            'Content-Type': 'application/json',
+            'accept': 'application/json'
+          }
+        }
+      );
+      setUserList(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserList()
+  },[])
+
   return (
     <Layout title="내 정보 - Give-U-Con">
       <Section
@@ -86,7 +83,7 @@ function MyAccount({ data }) {
               <Button variant="contained" color="primary" onClick={() => signOut()}>Sign out</Button>
             </>
           )}
-          {data.map((item) => (
+          {userList && userList.map((item) => (
             <Typography>{item.username}</Typography>
           ))}
         </>
@@ -95,4 +92,11 @@ function MyAccount({ data }) {
   );
 }
 
-export default MyAccount;
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  return {
+    props: { session }
+  }
+}
+
+export default withAuth(MyAccount);

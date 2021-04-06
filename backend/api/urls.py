@@ -5,7 +5,9 @@ urlpatterns = [
     # Social views
     path("social/login/kakao/", SocialKakaoLoginView.as_view()),
 
+    # Account views
     path('accounts/', AccountListView.as_view()),
+    path('accounts/self', SelfAccountDetailView.as_view()),
 
     # User views
     path('users/', UserListView.as_view()),

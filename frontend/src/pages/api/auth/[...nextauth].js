@@ -63,6 +63,7 @@ const settings = {
   ],
   callbacks: {
     async signIn(user, account, profile) {
+      console.log("[...nextauth].js : async signIn called");
       // may have to switch it up a bit for other providers
       if (account.provider === "kakao") {
         // extract these two tokens
@@ -97,7 +98,8 @@ const settings = {
     
     async jwt(token, user, account, profile, isNewUser) {
       console.log("[...nextauth].js : async jwt called");
-      if (account?.accessToken) {
+      if (user?.accessToken) {
+        /*
         try {
           await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
@@ -124,6 +126,9 @@ const settings = {
           token.accessToken = user.accessToken
           token.refreshToken = user.refreshToken
         }
+        */
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
       }
       return token;
     },
