@@ -6,7 +6,6 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
 
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import MoreIcon from '@material-ui/icons/MoreHoriz';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
@@ -31,9 +30,9 @@ export default function BottomNavBar(props) {
   let key = 0;
   const defaultActions = [
     ['홈', 'home', <HomeOutlinedIcon />],
-    ['내 지갑', '', <AccountBalanceWalletOutlinedIcon />],
-    ['가게', '', <StorefrontIcon />],
-    ['거래', '', <LocalMallOutlinedIcon />],
+    ['내 지갑', 'mywallet', <AccountBalanceWalletOutlinedIcon />],
+    ['가게', 'stores', <StorefrontIcon />],
+    ['거래', 'trades', <LocalMallOutlinedIcon />],
     ['내 계정', 'myaccount', <AccountCircleOutlinedIcon />]
   ].map(([label, value, icon]) => {
       return (
