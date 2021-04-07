@@ -33,7 +33,7 @@ class AccountUser(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     content = models.TextField(blank=True, null=False)
-    at = models.DateTimeField(null=False, default=timezone.now, editable=False)
+    created_at = models.DateTimeField(null=False, editable=False, default=timezone.now)
     user = models.ForeignKey(
         User,
         null=False,
@@ -53,6 +53,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
     description = models.TextField(blank=True, null=False)
     price = models.PositiveIntegerField(null=False)
+    duration = models.DurationField(null=False, default=timezone.timedelta(days=365))
     store = models.ForeignKey(
         Store,
         null=False,
@@ -210,8 +211,9 @@ class ProductReview(models.Model):
         unique_together = ('product', 'review')
 
 class Coupon(models.Model):
-    until = models.DateTimeField(null=False)
     signature = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    created_at = models.DateTimeField(null=False, editable=False, default=timezone.now)
+    used = models.BooleanField(default=False)
     user = models.ForeignKey(
         User,
         null=False,
