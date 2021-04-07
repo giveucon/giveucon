@@ -8,9 +8,11 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Layout from '../components/Layout';
 import MenuItem from '@material-ui/core/MenuItem';
+
 import TitleBar from '../components/TitleBar';
 import Section from '../components/Section';
-import ProductTile from '../components/ProductTile';
+import BusinessCard from '../components/BusinessCard';
+import Tile from '../components/Tile';
 import UserListItem from '../components/UserListItem';
 import UserProfileBox from '../components/UserProfileBox';
 import UserProfileSection from '../components/UserProfileSection';
@@ -72,32 +74,73 @@ export default function Index() {
       </Section>
 
       <Section
-        title="ProductTile"
+        title="BusinessCard"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <Grid container>
+          <Grid item sm={12}>
+            <BusinessCard
+              title="BusinessCard"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+            />
+          </Grid>
+          <Grid item sm={12}>
+            <BusinessCard
+              title="BusinessCard"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              menuItems={
+                <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
+              }
+            />
+          </Grid>
+          <Grid item sm={12}>
+            <BusinessCard
+              title="한글한글아름답게한글한글아름답게한글한글아름답게"
+              maxTitleLength={36}
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              actions={
+                <><Button>Edit</Button></>
+              }
+            />
+          </Grid>
+        </Grid>
+      </Section>
+
+      <Section
+        title="Tile"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<><Button>Edit</Button></>}
       >
         <Grid container>
           <Grid item sm={6}>
-            <ProductTile
-              name="ProductTileProductTile"
+            <Tile
+              title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
             />
           </Grid>
           <Grid item sm={6}>
-            <ProductTile
-              name="ProductTile"
-              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-              onClick={() => alert( 'Tapped' )}
-            />
-          </Grid>
-          <Grid item sm={6}>
-            <ProductTile
-              name="ProductTile"
+            <Tile
+              title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               menuItems={
-                <MenuItem>Menu Item</MenuItem>
+                <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
+              }
+            />
+          </Grid>
+          <Grid item sm={6}>
+            <Tile
+              title="한글한글아름답게한글한글아름답게"
+              maxTitleLength={20}
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              actions={
+                <><Button>Edit</Button></>
               }
             />
           </Grid>
