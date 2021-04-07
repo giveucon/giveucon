@@ -20,8 +20,8 @@ class CouponSerializer(ModelSerializer):
         )
         coupon_data = {
             'magic': 'giveucon',
+            'coupon': coupon.pk,
             'user': coupon.user.pk,
-            'product': coupon.product.pk
         }
         coupon.signature = private_key.sign(
             bytearray(json.dumps(coupon_data), 'utf-8')
