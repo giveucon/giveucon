@@ -11,7 +11,7 @@ import Section from '../components/Section'
 import withAuth from '../components/withAuth'
 
 
-function Home(props) {
+function Home() {
   const [session, loading] = useSession();
   const [userList, setUserList] = useState('');
 
@@ -70,7 +70,7 @@ function Home(props) {
               {userList && userList.map((item, key) => (
                 <Typography>{item.user_name}</Typography>
               ))}
-              <Button variant="contained" color="primary" onClick={() => signOut()}>Sign out</Button>
+              <Button variant="contained" color="primary" onClick={() => signOut({callbackUrl: "http://localhost:3000/login"})}>Sign out</Button>
             </>
           )}
         </>

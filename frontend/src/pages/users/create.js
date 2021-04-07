@@ -14,7 +14,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 
-function Create(props) {
+function Create() {
   const router = useRouter();
   const [session, loading] = useSession();
   const [selfUser, setSelfUser] = useState({

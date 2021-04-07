@@ -21,11 +21,18 @@ http://127.0.0.1:3000
 http://localhost:3000
 ```
 
-Go to Product Settings > Kakao Llogin and create Redirect URI:
+Go to Product Settings > Kakao Login and create Redirect URI:
 
 ```
 http://127.0.0.1:3000/api/auth/callback/kakao
 http://localhost:3000/api/auth/callback/kakao
+```
+
+Go to Product Settings > Kakao Login > Consent Items and set following states to Required or Optional consent:
+
+```
+Profile Info
+Email
 ```
 
 Go to Product Settings > Kakao Login > Security and get Client Secret
