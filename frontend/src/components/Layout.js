@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import BottomNavBar from './BottomNavBar'
 
 
-export default function Layout({ children, title }) {
+export default function Layout({ bottomNav=true, children, title }) {
   return (
     <>
       <Head>
@@ -12,10 +12,14 @@ export default function Layout({ children, title }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Container maxWidth="xs">
-        <Box mb={10}>
+        <Box mb={bottomNav ? 7.5 : 0}>
           {children}
         </Box>
-        <BottomNavBar />
+        {
+          bottomNav && (
+            <BottomNavBar />
+          )
+        }
       </Container>
     </>
   );

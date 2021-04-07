@@ -11,7 +11,7 @@ import Section from '../components/Section'
 import withAuth from '../components/withAuth'
 
 
-function Home(props) {
+function Home() {
   const [session, loading] = useSession();
   const [userList, setUserList] = useState('');
 
