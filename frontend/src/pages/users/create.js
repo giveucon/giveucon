@@ -106,7 +106,7 @@ function Create({ session, selfAccount }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
           <TextField
             name="last_name"
             value={selfUser.last_name}
@@ -118,7 +118,7 @@ function Create({ session, selfAccount }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
           <TextField
             name="first_name"
             value={selfUser.first_name}
@@ -143,13 +143,14 @@ function Create({ session, selfAccount }) {
                 }}
               />
             }
-            label="Dark Mode"
+            label="다크 모드"
             />
           </FormGroup>
         </Box>
-        <Box display="flex" justifyContent="flex-end">
+        <Box marginY={1}>
           <Button
             color="primary"
+            fullWidth
             variant="contained"
             onClick={() => {
               postSelfUser(session, selfUser);

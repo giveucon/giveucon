@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -77,7 +79,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Index({store, productList}) {
+function Index({session, selfUser, store, productList}) {
   const router = useRouter();
   return (
     <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -105,6 +107,23 @@ function Index({store, productList}) {
           ))}
         </Grid>
       </Section>
+      { selfUser.id === store.owner && (
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => 
+              router.push({
+                pathname: '/stores/update',
+                query: { id: store.id },
+              })
+            }
+          >
+            정보 수정
+          </Button>
+        </Box>
+      )}
     </Layout>
   );
 }

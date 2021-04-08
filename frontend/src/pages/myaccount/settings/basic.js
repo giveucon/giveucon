@@ -9,7 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
@@ -56,21 +56,21 @@ const putSelfUser = async (session, selfUser) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  const _selfUser = await getSelfUser(session)
+  const prevSelfUser = await getSelfUser(session)
   return {
-    props: { session, _selfUser }
+    props: { session, prevSelfUser }
   }
 }
 
-function Basic({ session, _selfUser }) {
+function Basic({ session, prevSelfUser }) {
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
-    id: _selfUser.id,
-    email: _selfUser.email,
-    user_name: _selfUser.user_name,
-    first_name: _selfUser.first_name,
-    last_name: _selfUser.last_name,
-    dark_mode: _selfUser.dark_mode,
+    id: prevSelfUser.id,
+    email: prevSelfUser.email,
+    user_name: prevSelfUser.user_name,
+    first_name: prevSelfUser.first_name,
+    last_name: prevSelfUser.last_name,
+    dark_mode: prevSelfUser.dark_mode,
   });
   return (
     <Layout title={"기본 설정 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -80,8 +80,8 @@ function Basic({ session, _selfUser }) {
       >
       </Section>
       <Section
-        title="사용자 정보"
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
+        title="기본 정보"
+        titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -107,7 +107,7 @@ function Basic({ session, _selfUser }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
           <TextField
             name="last_name"
             value={selfUser.last_name}
@@ -119,7 +119,7 @@ function Basic({ session, _selfUser }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
           <TextField
             name="first_name"
             value={selfUser.first_name}
@@ -144,13 +144,14 @@ function Basic({ session, _selfUser }) {
                 }}
               />
             }
-            label="Dark Mode"
+            label="다크 모드"
             />
           </FormGroup>
         </Box>
-        <Box display="flex" justifyContent="flex-end">
+        <Box marginY={1}>
           <Button
             color="primary"
+            fullWidth
             variant="contained"
             onClick={() => {
               putSelfUser(session, selfUser);

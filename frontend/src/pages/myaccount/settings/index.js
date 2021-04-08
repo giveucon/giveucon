@@ -6,7 +6,6 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../../components/Layout'
@@ -50,7 +49,7 @@ function Index({ session, selfUser }) {
       </Section>
       <Section
         title="설정"
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
+        titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
