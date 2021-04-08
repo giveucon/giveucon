@@ -8,6 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import Section from '../components/Section';
 import BusinessCard from '../components/BusinessCard';
+import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
+import SwipeableTiles from '../components/SwipeableTiles';
 import Tile from '../components/Tile';
 import UserListItem from '../components/UserListItem';
 import UserProfileBox from '../components/UserProfileBox';
@@ -16,6 +18,47 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 
 export default function Index() {
+
+
+
+  const swipeableBusinessCards = [
+    <BusinessCard
+      title="한글한글아름답게한글한글아름답게한글한글아름답게"
+      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <><Button>Edit</Button></>
+      }
+    />,
+    <BusinessCard
+      title="한글한글아름답게한글한글아름답게한글한글아름답게"
+      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <><Button>Edit</Button></>
+      }
+    />
+  ]
+
+  const swipeableTiles = [
+    <Tile
+      title="한글한글아름답게한글한글아름답게한글한글아름답게"
+      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <><Button>Edit</Button></>
+      }
+    />,
+    <Tile
+      title="한글한글아름답게한글한글아름답게한글한글아름답게"
+      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <><Button>Edit</Button></>
+      }
+    />
+  ]
+
   return (
     <Layout title={"컴포넌트 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
 
@@ -95,7 +138,6 @@ export default function Index() {
           <Grid item xs={12}>
             <BusinessCard
               title="한글한글아름답게한글한글아름답게한글한글아름답게"
-              maxTitleLength={20}
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={
@@ -104,6 +146,26 @@ export default function Index() {
             />
           </Grid>
         </Grid>
+      </Section>
+
+      <Section
+        title="SwipeableBusinessCards"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <SwipeableBusinessCards>
+          {swipeableBusinessCards}
+        </SwipeableBusinessCards>
+      </Section>
+
+      <Section
+        title="SwipeableTiles"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <SwipeableTiles>
+          {swipeableTiles}
+        </SwipeableTiles>
       </Section>
 
       <Section
@@ -132,7 +194,6 @@ export default function Index() {
           <Grid item xs={6}>
             <Tile
               title="한글한글아름답게한글한글아름답게한글한글아름답게"
-              maxTitleLength={20}
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={
