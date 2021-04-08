@@ -7,9 +7,14 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import Layout from '../components/Layout'
-import Section from '../components/Section'
 
 const useStyles = makeStyles({
+  background: {
+    backgroundImage: "url(https://cdn.pixabay.com/photo/2014/07/30/18/26/grocery-store-405522_960_720.jpg)"
+  },
+  title: {
+    color: "white"
+  },
   kakaoButton: {
     background: 'yellow',
     color: 'black',
@@ -28,24 +33,27 @@ function Login() {
   },[])
 
   return (
-    <Layout bottomNav={false} title="로그인 - Give-U-Con">
+    <Layout bottomNav={false} title="로그인 - giveUcon">
       <Box
-        bgcolor="error.main"
-        paddingX={2}
+        className={classes.background}
+        paddingX={5}
         style={{ height: '100vh' }}
       >
         <Box
           alignItems="center"
-          bgcolor="primary.main"
           display="flex"
           justifyContent="center"
           style={{ height: '50vh' }}
         >
-          <Typography variant="h3">GIVE-U-CON</Typography>
+          <Typography
+            className={classes.title}
+            variant="h3"
+          >
+            giveUcon
+          </Typography>
         </Box>
         <Box
           alignItems="center"
-          bgcolor="secondary.main"
           display="flex"
           justifyContent="center"
           style={{ height: '50vh' }}

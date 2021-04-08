@@ -87,4 +87,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default Home;
+export default withAuth(Home);
