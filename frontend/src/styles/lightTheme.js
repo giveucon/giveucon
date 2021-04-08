@@ -28,17 +28,32 @@ const theme = createMuiTheme({
   overrides: {
     MuiBottomNavigationAction: createStyles({
       root: {
-        minWidth: "40px",
+        minWidth: "2.5rem",
       }
     }),
     MuiButton: createStyles({
       root: {
-        borderRadius: "20px"
+        borderRadius: "1.5rem",
+      }
+    }),
+    MuiContainer: createStyles({
+      root: {
+        paddingLeft: "0.5rem",
+        paddingRight: "0.5rem",
+        ['@media (min-width:600px)']: {
+          paddingLeft: "0.5rem",
+          paddingRight: "0.5rem",
+        },
+      },
+    }),
+    MuiIconButton: createStyles({
+      root: {
+        padding: "0.5rem",
       }
     }),
     MuiPaper: createStyles({
       rounded: {
-        borderRadius: "20px"
+        borderRadius: "1.5rem",
       }
     }),
   },

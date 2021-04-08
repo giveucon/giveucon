@@ -11,33 +11,32 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: '100%',
+    maxWidth: "100%",
+  },
+  actions: {
+    position: "absolute",
+    bottom: "0.5rem",
+    right: "0.5rem",
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    borderRadius: "1.5rem",
+    boxShadow: theme.shadows[3],
+  },
+  actionAreaWrapper: {
+    position: "relative",
   },
   media: {
-    paddingTop: '100%', // 1:1,
-    // paddingTop: '56.25%', // 16:9,
+    paddingTop: "100%", // 1:1,
+    // paddingTop: "56.25%", // 16:9,
+  },
+  title: {
+    lineHeight: "1.5em",
+    height: "3em",
+    overflow: "hidden",
   },
 }));
 
 
-function truncateString(string, maxLength) {
-  var byteCount = 0;
-  for(var i = 0; i < string.length; i++) {
-    if(escape(string.charAt(i)).length == 6) {
-      byteCount = byteCount + 2;
-    } else {
-      byteCount = byteCount + 1;
-    }
-    if (byteCount > maxLength) {
-      string = string.substr(0, i - 3);
-      string = string.concat("...");
-      return string;
-    }
-  }        
-  return string;
-}
-
-export default function Tile({ actions=null, image=null, title=null, maxTitleLength=null, menuItems=null, onClick=null }) {
+export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -48,37 +47,36 @@ export default function Tile({ actions=null, image=null, title=null, maxTitleLen
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  if (maxTitleLength) {
-    title = truncateString(title, maxTitleLength);
-  }
   
   return (
-    <Box margin={1}>
-      <Card className={classes.root}>
-        <CardActionArea onClick={onClick}>
-          <CardMedia
-            className={classes.media}
-            image={image}
-            title={title}
-          />
-        </CardActionArea>
-        <Box display={title ? 'block' : "none"}>
-          <Box paddingX={2} paddingTop={1} paddingBottom={(actions || menuItems) ? 0 : 1}>
-            <Typography variant="body1">{title}</Typography>
+    <Box margin={0.5} className={classes.root}>
+      <Card>
+        <Box className={classes.actionAreaWrapper}>
+          <CardActionArea onClick={onClick}>
+            <CardMedia
+              className={classes.media}
+              image={image}
+              title={title}
+            />
+          </CardActionArea>
+          <Box
+            className={classes.actions}
+            display={(actions || menuItems) ? "flex" : "none"}
+            justifyContent="flex-end"
+          >
+            {actions}
+            { menuItems ? (
+              <IconButton onClick={handleClick}>
+                <MoreVertIcon />
+              </IconButton>
+              ) : null
+            }
           </Box>
         </Box>
-        <Box
-          display={(actions || menuItems) ? 'flex' : "none"}
-          justifyContent="flex-end"
-        >
-          {actions}
-          { menuItems ? (
-            <IconButton onClick={handleClick}>
-              <MoreVertIcon />
-            </IconButton>
-            ) : null
-          }
+        <Box display={title ? "block" : "none"}>
+          <Box paddingX={1} paddingY={1}>
+            <Typography variant="body1" className={classes.title}>{title}</Typography>
+          </Box>
         </Box>
         <Menu
           anchorEl={anchorEl}

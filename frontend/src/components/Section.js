@@ -30,9 +30,9 @@ export default function Section({ backButton=false, children=null, title=null, t
           display="flex"
           flexDirection="row"
           justifyContent="flex-start"
-          paddingRight={1}
+          paddingX={1}
         >
-          <Box display={backButton ? "block" : "none"} >
+          <Box display={backButton ? "block" : "none"}>
             <IconButton
               onClick={() => {router.back()}}
             >
@@ -57,7 +57,7 @@ export default function Section({ backButton=false, children=null, title=null, t
         <Box display={(backButton || titlePrefix || title || titleSuffix) && children ? "block" : "none"} >
           <Divider />
         </Box>
-        <Box padding={2} display={children ? "block" : "none"}>
+        <Box display={children ? "block" : "none"} padding={0.5}>
           {children}
         </Box>
       </Paper>

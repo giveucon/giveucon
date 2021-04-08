@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Layout from '../components/Layout';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import TitleBar from '../components/TitleBar';
 import Section from '../components/Section';
 import BusinessCard from '../components/BusinessCard';
 import Tile from '../components/Tile';
@@ -20,18 +19,18 @@ export default function Index() {
   return (
     <Layout title="컴포넌트 - Give-U-Con">
 
-      <TitleBar
-        backButton
+      <Section
         title="Section Head"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><IconButton><MenuIcon /></IconButton ><IconButton><MenuIcon /></IconButton></>}
-      />
+        titleSuffix={<><IconButton><MenuIcon /></IconButton></>}
+      >
+        <Typography variant="h4">Children</Typography>
+      </Section>
 
       <Section
         backButton
         title="Section Head"
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><IconButton><MenuIcon /></IconButton><IconButton><MenuIcon /></IconButton></>}
+        titleSuffix={<><IconButton><MenuIcon /></IconButton></>}
       >
         <Typography variant="h4">Children</Typography>
       </Section>
@@ -76,16 +75,16 @@ export default function Index() {
         titleSuffix={<><Button>Edit</Button></>}
       >
         <Grid container>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <BusinessCard
-              title="BusinessCard"
+              title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <BusinessCard
-              title="BusinessCard"
+              title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               menuItems={
@@ -93,10 +92,10 @@ export default function Index() {
               }
             />
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <BusinessCard
               title="한글한글아름답게한글한글아름답게한글한글아름답게"
-              maxTitleLength={36}
+              maxTitleLength={20}
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={
@@ -113,14 +112,14 @@ export default function Index() {
         titleSuffix={<><Button>Edit</Button></>}
       >
         <Grid container>
-          <Grid item sm={6}>
+          <Grid item xs={6}>
             <Tile
               title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
             />
           </Grid>
-          <Grid item sm={6}>
+          <Grid item xs={6}>
             <Tile
               title="Tile"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -130,9 +129,9 @@ export default function Index() {
               }
             />
           </Grid>
-          <Grid item sm={6}>
+          <Grid item xs={6}>
             <Tile
-              title="한글한글아름답게한글한글아름답게"
+              title="한글한글아름답게한글한글아름답게한글한글아름답게"
               maxTitleLength={20}
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
