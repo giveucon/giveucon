@@ -57,7 +57,7 @@ export default function Section({ backButton=false, children=null, title=null, t
         <Box display={(backButton || titlePrefix || title || titleSuffix) && children ? "block" : "none"} >
           <Divider />
         </Box>
-        <Box display={children ? "block" : "none"} padding={0.5}>
+        <Box display={children ? "block" : "none"} padding={1}>
           {children}
         </Box>
       </Paper>

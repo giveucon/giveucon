@@ -46,6 +46,16 @@ const theme = createMuiTheme({
         },
       },
     }),
+    MuiFab: createStyles({
+      root: {
+        margin: 0,
+        top: 'auto',
+        right: "1.5rem",
+        bottom: "6rem",
+        left: 'auto',
+        position: 'absolute',
+      }
+    }),
     MuiIconButton: createStyles({
       root: {
         padding: "0.5rem",

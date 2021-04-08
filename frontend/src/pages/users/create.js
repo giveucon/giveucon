@@ -82,85 +82,83 @@ function Create({ session, selfAccount }) {
         title="로그인 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
-        <Box padding={2}>
-          <Box paddingY={1}>
-            <TextField
-              name="username"
-              value={selfUser.user_name}
-              fullWidth
-              label="사용자 이름"
-              onChange={(event) => {
-                setSelfUser({ ...selfUser, user_name: event.target.value });
-              }}
-              required
-            />
-          </Box>
-          <Box paddingY={1}>
-            <TextField
-              name="email"
-              value={selfUser.email}
-              fullWidth
-              label="이메일"
-              onChange={(event) => {
-                setSelfUser({ ...selfUser, email: event.target.value });
-              }}
-              required
-            />
-          </Box>
-          <Box>
-            <TextField
-              name="last_name"
-              value={selfUser.last_name}
-              fullWidth
-              label="성"
-              onChange={(event) => {
-                setSelfUser({ ...selfUser, last_name: event.target.value });
-              }}
-              required
-            />
-          </Box>
-          <Box>
-            <TextField
-              name="first_name"
-              value={selfUser.first_name}
-              fullWidth
-              label="이름"
-              onChange={(event) => {
-                setSelfUser({ ...selfUser, first_name: event.target.value });
-              }}
-              required
-            />
-          </Box>
-          <Box>
-            <FormGroup row>
-              <FormControlLabel
-              control={
-                <Checkbox
-                  name="dark_mode"
-                  color="primary"
-                  checked={selfUser.dark_mode}
-                  onChange={(event) => {
-                    setSelfUser({ ...selfUser, dark_mode: event.target.checked });
-                  }}
-                />
-              }
-              label="Dark Mode"
+        <Box paddingY={1}>
+          <TextField
+            name="username"
+            value={selfUser.user_name}
+            fullWidth
+            label="사용자 이름"
+            onChange={(event) => {
+              setSelfUser({ ...selfUser, user_name: event.target.value });
+            }}
+            required
+          />
+        </Box>
+        <Box paddingY={1}>
+          <TextField
+            name="email"
+            value={selfUser.email}
+            fullWidth
+            label="이메일"
+            onChange={(event) => {
+              setSelfUser({ ...selfUser, email: event.target.value });
+            }}
+            required
+          />
+        </Box>
+        <Box>
+          <TextField
+            name="last_name"
+            value={selfUser.last_name}
+            fullWidth
+            label="성"
+            onChange={(event) => {
+              setSelfUser({ ...selfUser, last_name: event.target.value });
+            }}
+            required
+          />
+        </Box>
+        <Box>
+          <TextField
+            name="first_name"
+            value={selfUser.first_name}
+            fullWidth
+            label="이름"
+            onChange={(event) => {
+              setSelfUser({ ...selfUser, first_name: event.target.value });
+            }}
+            required
+          />
+        </Box>
+        <Box>
+          <FormGroup row>
+            <FormControlLabel
+            control={
+              <Checkbox
+                name="dark_mode"
+                color="primary"
+                checked={selfUser.dark_mode}
+                onChange={(event) => {
+                  setSelfUser({ ...selfUser, dark_mode: event.target.checked });
+                }}
               />
-            </FormGroup>
-          </Box>
-          <Box display="flex" justifyContent="flex-end">
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={ () => {
-                  postSelfUser(session, selfUser);
-                  router.push('/myaccount');
-                }
+            }
+            label="Dark Mode"
+            />
+          </FormGroup>
+        </Box>
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={ () => {
+                postSelfUser(session, selfUser);
+                router.push('/myaccount');
               }
-            >
-              제출
-            </Button>
-          </Box>
+            }
+          >
+            제출
+          </Button>
         </Box>
       </Section>
     </Layout>

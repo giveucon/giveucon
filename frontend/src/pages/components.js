@@ -54,7 +54,7 @@ export default function Index() {
       </Section>
       
       <Section title="Typography">
-        <Typography variant="h1">Responsive H1</Typography>
+        <Typography variant="h1">Res. H1</Typography>
         <Typography variant="h2">Responsive H2</Typography>
         <Typography variant="h3">Responsive H3</Typography>
         <Typography variant="h4">Responsive H4</Typography>

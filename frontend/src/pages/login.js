@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { signIn, getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';

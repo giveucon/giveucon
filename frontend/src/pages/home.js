@@ -30,30 +30,7 @@ function Home({session}) {
         title="로그인 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
-        <>
-          {!session && (
-            <>
-              <Typography>{!session && "User is not logged in"}</Typography>
-              <Button variant="contained" color="primary" onClick={() => signIn()}>Sign in</Button>
-            </>
-          )}
-          {session && (
-            <>
-              <Typography>Signed in as {session.user.email}</Typography>
-              {
-                session.accessToken && (
-                  <Typography>User has access token {session.accessToken}</Typography>
-                )
-              }
-              {
-                session.refreshToken && (
-                  <Typography >User has refresh token {session.refreshToken}</Typography>
-                )
-              }
-              <Button variant="contained" color="primary" onClick={() => signOut({callbackUrl: "http://localhost:3000/login"})}>Sign out</Button>
-            </>
-          )}
-        </>
+      <Typography>Signed in as {session.user.email}</Typography>
       </Section>
     </Layout>
   );

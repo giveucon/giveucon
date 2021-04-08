@@ -2,15 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
+import { makeStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
+import AddIcon from '@material-ui/icons/Add';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import withAuth from '../../components/withAuth'
+
 
 const getStoreList = async (session) => {
   try {
@@ -58,13 +62,16 @@ function Index({storeList}) {
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
                 onClick={() => router.push(`/stores/${item.id}`)}
                 menuItems={
-                  <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
+                  <MenuItem>Menu Item</MenuItem>
                 }
               />
             </Grid>
           ))}
         </Grid>
       </Section>
+      <Fab color="primary">
+        <AddIcon />
+      </Fab>
     </Layout>
   );
 }
