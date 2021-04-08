@@ -7,6 +7,9 @@ urlpatterns = [
     path('accounts/', AccountListView.as_view()),
     path('accounts/self', SelfAccountDetailView.as_view()),
 
+    path('articles/', ArticleListView.as_view()),
+    path('articles/<int:pk>', ArticleDetailView.as_view()),
+
     path('users/', UserListView.as_view()),
     path('users/self', SelfUserDetailView.as_view()),
     path('users/<int:pk>/', UserDetailView.as_view()),
