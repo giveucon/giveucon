@@ -92,7 +92,9 @@ function Index({ session, selfUser }) {
                 color="error"
                 fullWidth
                 variant="contained"
-                onClick={() => signOut()}
+                onClick={() => {
+                  signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+                }}
               >
                 로그아웃
               </Button>

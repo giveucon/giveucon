@@ -100,6 +100,7 @@ function Create({ session, selfUser }) {
         <Box display="flex" justifyContent="flex-end">
           <Button
             color="primary"
+            fullWidth
             variant="contained"
             onClick={async () => {
               const response = await postStore(session, selfUser, store);
