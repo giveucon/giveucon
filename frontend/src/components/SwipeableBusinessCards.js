@@ -31,10 +31,11 @@ class SwipeableBusinessCard extends React.Component {
       return child;
     });
     const { index } = this.state;
+    const { autoplay } = this.props;
 
     return (
       <div style={styles.root}>
-        <AutoPlaySwipeableViews enableMouseEvents index={index} onChangeIndex={this.handleChangeIndex}>
+        <AutoPlaySwipeableViews autoplay={autoplay} enableMouseEvents index={index} onChangeIndex={this.handleChangeIndex}>
           {children}
         </AutoPlaySwipeableViews>
         <Pagination dots={React.Children.count(children)} index={index} onChangeIndex={this.handleChangeIndex} />

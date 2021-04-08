@@ -159,6 +159,16 @@ export default function Index() {
       </Section>
 
       <Section
+        title="SwipeableBusinessCards - without Autoplay"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <SwipeableBusinessCards autoplay={false}>
+          {swipeableBusinessCards}
+        </SwipeableBusinessCards>
+      </Section>
+
+      <Section
         title="SwipeableTiles"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<><Button>Edit</Button></>}
