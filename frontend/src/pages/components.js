@@ -17,7 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 export default function Index() {
   return (
-    <Layout title="컴포넌트 - Give-U-Con">
+    <Layout title={"컴포넌트 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
 
       <Section
         title="Section Head"

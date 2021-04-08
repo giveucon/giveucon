@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { getSession, useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -14,62 +14,65 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 
-function Create() {
+const getSelfAccount = async (session) => {
+  try {
+    const response = await axios.get(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/accounts/self", {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const postSelfUser = async (session, selfUser) => {
+  try {
+    const response = await axios.post(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/", {
+        email: selfUser.email,
+        user_name: selfUser.user_name,
+        first_name: selfUser.first_name,
+        last_name: selfUser.last_name,
+        dark_mode: selfUser.dark_mode,
+      }, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  const selfAccount = await getSelfAccount(session)
+  return {
+    props: { session, selfAccount }
+  }
+}
+
+function Create({ session, selfAccount }) {
   const router = useRouter();
-  const [session, loading] = useSession();
   const [selfUser, setSelfUser] = useState({
-    email: "",
-    username: "",
+    email: selfAccount.email,
+    user_name: selfAccount.username,
     first_name: "",
     last_name: "",
     dark_mode: false
   });
-
-  const getSelfUser = async () => {
-    try {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/accounts/self", {
-          headers: {
-            'Authorization': "Bearer " + session?.accessToken,
-            'Content-Type': 'application/json',
-            'accept': 'application/json'
-          }
-        }
-      );
-      setSelfUser(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const postSelfUser = async () => {
-    try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users/", {
-          email: selfUser.email,
-          user_name: selfUser.username,
-          first_name: selfUser.first_name,
-          last_name: selfUser.last_name,
-          dark_mode: selfUser.dark_mode,
-        }, {
-          headers: {
-            'Authorization': "Bearer " + session?.accessToken,
-            'Content-Type': 'application/json',
-            'accept': 'application/json'
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getSelfUser()
-  },[])
-
   return (
-    <Layout title="사용자 생성 - Give-U-Con">
+    <Layout title={"사용자 생성 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
       <Section
         backButton
         title="사용자 생성"
@@ -79,99 +82,89 @@ function Create() {
         title="로그인 정보"
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
-        {selfUser && (
-          <>
-            <Box>
-              <TextField
-                name="username"
-                value={selfUser.username}
-                fullWidth
-                label="사용자 이름"
-                onChange={(event) => {
-                  setSelfUser({ ...selfUser, username: event.target.value });
-                }}
-                required
-              />
-            </Box>
-            <Box>
-              <TextField
-                name="email"
-                value={selfUser.email}
-                fullWidth
-                label="이메일"
-                onChange={(event) => {
-                  setSelfUser({ ...selfUser, email: event.target.value });
-                }}
-                required
-              />
-            </Box>
-            <Box>
-              <TextField
-                name="last_name"
-                value={selfUser.last_name}
-                fullWidth
-                label="성"
-                onChange={(event) => {
-                  setSelfUser({ ...selfUser, last_name: event.target.value });
-                }}
-                required
-              />
-            </Box>
-            <Box>
-              <TextField
-                name="first_name"
-                value={selfUser.first_name}
-                fullWidth
-                label="이름"
-                onChange={(event) => {
-                  setSelfUser({ ...selfUser, first_name: event.target.value });
-                }}
-                required
-              />
-            </Box>
-            <Box>
-              <FormGroup row>
-                <FormControlLabel
-                control={
-                  <Checkbox
-                    name="dark_mode"
-                    color="primary"
-                    checked={selfUser.dark_mode}
-                    onChange={(event) => {
-                      setSelfUser({ ...selfUser, dark_mode: event.target.checked });
-                    }}
-                  />
-                }
-                label="Dark Mode"
+        <Box padding={2}>
+          <Box paddingY={1}>
+            <TextField
+              name="username"
+              value={selfUser.user_name}
+              fullWidth
+              label="사용자 이름"
+              onChange={(event) => {
+                setSelfUser({ ...selfUser, user_name: event.target.value });
+              }}
+              required
+            />
+          </Box>
+          <Box paddingY={1}>
+            <TextField
+              name="email"
+              value={selfUser.email}
+              fullWidth
+              label="이메일"
+              onChange={(event) => {
+                setSelfUser({ ...selfUser, email: event.target.value });
+              }}
+              required
+            />
+          </Box>
+          <Box>
+            <TextField
+              name="last_name"
+              value={selfUser.last_name}
+              fullWidth
+              label="성"
+              onChange={(event) => {
+                setSelfUser({ ...selfUser, last_name: event.target.value });
+              }}
+              required
+            />
+          </Box>
+          <Box>
+            <TextField
+              name="first_name"
+              value={selfUser.first_name}
+              fullWidth
+              label="이름"
+              onChange={(event) => {
+                setSelfUser({ ...selfUser, first_name: event.target.value });
+              }}
+              required
+            />
+          </Box>
+          <Box>
+            <FormGroup row>
+              <FormControlLabel
+              control={
+                <Checkbox
+                  name="dark_mode"
+                  color="primary"
+                  checked={selfUser.dark_mode}
+                  onChange={(event) => {
+                    setSelfUser({ ...selfUser, dark_mode: event.target.checked });
+                  }}
                 />
-              </FormGroup>
-            </Box>
-            <Box display="flex" justifyContent="flex-end">
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={ () => {
-                    postSelfUser();
-                    router.push('/myaccount');
-                  }
+              }
+              label="Dark Mode"
+              />
+            </FormGroup>
+          </Box>
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={ () => {
+                  postSelfUser(session, selfUser);
+                  router.push('/myaccount');
                 }
-              >
-                제출
-              </Button>
-            </Box>
-          </>
-        )}
+              }
+            >
+              제출
+            </Button>
+          </Box>
+        </Box>
       </Section>
     </Layout>
   );
-}
-
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  return {
-    props: { session }
-  }
 }
 
 export default Create;

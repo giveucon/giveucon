@@ -2,20 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../../components/Layout'
-import Tile from '../../../components/Tile';
+import BusinessCard from '../../../components/BusinessCard';
 import Section from '../../../components/Section'
 import withAuth from '../../../components/withAuth'
 
-const getStore = async (session, id) => {
+const getCoupon = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/" + id, {
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/coupons/" + id, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -23,16 +22,17 @@ const getStore = async (session, id) => {
         }
       }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
   }
 };
 
-const getProductList = async (session) => {
+const getProduct = async (session, coupon) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products", {
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products/" + coupon.product, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -48,40 +48,34 @@ const getProductList = async (session) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  const store = await getStore(session, context.query.id)
-  const productList = await getProductList(session)
+  const coupon = await getCoupon(session, context.query.id)
+  const product = await getProduct(session, coupon)
   return {
-    props: { session, store, productList }
+    props: { session, coupon, product }
   }
 }
 
-function Index({store, productList}) {
+function Index({coupon, product}) {
   const router = useRouter();
   return (
-    <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={"쿠폰 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
       <Section
         backButton
-        title="가게"
+        title={product.name}
       >
       </Section>
       <Section
-        title={store.name}
+        title={product.name}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
       >
-        <Grid container>
-          {productList.map((item, key) => (
-            <Grid item xs={6}>
-              <Tile
-                title={item.name}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => alert( 'Tapped' )}
-                menuItems={
-                  <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
-                }
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <BusinessCard
+          title={product.description}
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          onClick={() => alert( 'Tapped' )}
+          menuItems={
+            <MenuItem>Menu Item</MenuItem>
+          }
+        />
       </Section>
     </Layout>
   );
