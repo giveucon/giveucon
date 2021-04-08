@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     maxWidth: "100%",
   },
-  container: {
+  childrenBox: {
     position: "relative",
   },
 }));
@@ -22,8 +22,8 @@ export default function Layout({ bottomNav=true, children, title }) {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Container className={classes.container} maxWidth="xs">
-        <Box mb={bottomNav ? 7.5 : 0}>
+      <Container maxWidth="xs">
+        <Box className={classes.childrenBox} mb={bottomNav ? 8 : 0}>
           {children}
         </Box>
         {

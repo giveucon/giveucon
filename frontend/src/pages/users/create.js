@@ -151,11 +151,10 @@ function Create({ session, selfAccount }) {
           <Button
             color="primary"
             variant="contained"
-            onClick={ () => {
-                postSelfUser(session, selfUser);
-                router.push('/myaccount');
-              }
-            }
+            onClick={() => {
+              postSelfUser(session, selfUser);
+              router.push('/myaccount');
+            }}
           >
             제출
           </Button>

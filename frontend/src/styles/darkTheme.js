@@ -31,9 +31,9 @@ const theme = createMuiTheme({
         margin: 0,
         top: 'auto',
         right: "1.5rem",
-        bottom: "6rem",
+        bottom: "5rem",
         left: 'auto',
-        position: 'absolute',
+        position: 'fixed',
       }
     }),
     MuiIconButton: createStyles({

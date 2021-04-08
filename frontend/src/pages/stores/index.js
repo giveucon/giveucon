@@ -44,35 +44,44 @@ export async function getServerSideProps(context) {
 function Index({storeList}) {
   const router = useRouter();
   return (
-    <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
-      <Section
-        backButton
-        title="가게"
-      >
-      </Section>
-      <Section
-        title="모든 가게"
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-      >
-        <Grid container>
-          {storeList && storeList.map((item, key) => (
-            <Grid item xs={6}>
-              <Tile
-                title={item.name}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => router.push(`/stores/${item.id}`)}
-                menuItems={
-                  <MenuItem>Menu Item</MenuItem>
-                }
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Section>
-      <Fab color="primary">
-        <AddIcon />
-      </Fab>
-    </Layout>
+    <>
+      <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+        <Section
+          backButton
+          title="가게"
+        >
+        </Section>
+        <Section
+          title="모든 가게"
+          titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        >
+          <Grid container>
+            {storeList && storeList.map((item, key) => (
+              <Grid item xs={6}>
+                <Tile
+                  title={item.name}
+                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                  onClick={() => 
+                    router.push(`/stores/${item.id}`
+                  )}
+                  menuItems={
+                    <MenuItem>Menu Item</MenuItem>
+                  }
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Section>
+        <Fab
+          color="primary"
+          onClick={() => 
+            router.push(`/stores/create`
+          )}
+        >
+          <AddIcon />
+        </Fab>
+      </Layout>
+    </>
   );
 }
 
