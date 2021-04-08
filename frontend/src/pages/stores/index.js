@@ -9,9 +9,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import BusinessCard from '../../components/BusinessCard';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import Tile from '../../components/Tile';
 import withAuth from '../../components/withAuth'
 
 
@@ -55,7 +55,7 @@ function Stores() {
         <Grid container>
           {storeList && storeList.map((item, key) => (
             <Grid item sm={12}>
-              <BusinessCard
+              <Tile
                 title={item.name}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
                 onClick={() => router.push(`/stores/${item.id}`)}
