@@ -12,6 +12,24 @@ import Tile from '../../../components/Tile';
 import Section from '../../../components/Section'
 import withAuth from '../../../components/withAuth'
 
+
+const getSelfUser = async (session) => {
+  try {
+    const response = await axios.get(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const getStore = async (session, id) => {
   try {
     const response = await axios.get(
@@ -29,10 +47,13 @@ const getStore = async (session, id) => {
   }
 };
 
-const getProductList = async (session) => {
+const getProductList = async (session, store) => {
   try {
     const response = await axios.get(
       process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products", {
+        params: {
+          store: store.id,
+        },
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -48,10 +69,11 @@ const getProductList = async (session) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
+  const selfUser = await getSelfUser(session)
   const store = await getStore(session, context.query.id)
-  const productList = await getProductList(session)
+  const productList = await getProductList(session, store)
   return {
-    props: { session, store, productList }
+    props: { session, selfUser, store, productList }
   }
 }
 

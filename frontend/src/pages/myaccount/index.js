@@ -2,9 +2,9 @@ import React from 'react';
 import axios from 'axios'
 import { signIn, signOut, getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function MyAccount({ session, selfUser }) {
+function Index({ session, selfUser }) {
   const router = useRouter();
   return (
     <Layout title={"내 정보 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -63,26 +63,40 @@ function MyAccount({ session, selfUser }) {
       >
         {!session && (
           <>
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              onClick={() => signIn("kakao")}
-            >
-              로그인
-            </Button>
+            <Box marginY={1}>
+              <Button
+                color="primary"
+                fullWidth
+                variant="contained"
+                onClick={() => signIn("kakao")}
+              >
+                로그인
+              </Button>
+            </Box>
           </>
         )}
         {session && (
           <>
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              onClick={() => signOut()}
-            >
-              로그아웃
-            </Button>
+            <Box marginY={1}>
+              <Button
+                color="default"
+                fullWidth
+                variant="contained"
+                onClick={() => router.push(`/myaccount/settings`)}
+              >
+                설정
+              </Button>
+            </Box>
+            <Box marginY={1}>
+              <Button
+                color="error"
+                fullWidth
+                variant="contained"
+                onClick={() => signOut()}
+              >
+                로그아웃
+              </Button>
+            </Box>
           </>
         )}
       </Section>
@@ -90,4 +104,4 @@ function MyAccount({ session, selfUser }) {
   );
 }
 
-export default withAuth(MyAccount);
+export default withAuth(Index);

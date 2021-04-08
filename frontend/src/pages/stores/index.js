@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import AddIcon from '@material-ui/icons/Add';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../components/Layout'
@@ -52,8 +53,31 @@ function Index({storeList}) {
         >
         </Section>
         <Section
+          title="내 가게"
+          titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+        >
+          <Grid container>
+            {storeList && storeList.map((item, key) => (
+              <Grid item xs={6}>
+                <Tile
+                  title={item.name}
+                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                  onClick={() => 
+                    router.push(`/stores/${item.id}`
+                  )}
+                  menuItems={
+                    <MenuItem>Menu Item</MenuItem>
+                  }
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Section>
+        <Section
           title="모든 가게"
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
             {storeList && storeList.map((item, key) => (
