@@ -9,7 +9,7 @@ class CouponSerializer(ModelSerializer):
     class Meta:
         model = Coupon
         fields = '__all__'
-        read_only_fields = ('signature', 'user')
+        read_only_fields = ('signature',)
 
     @staticmethod
     def sign_coupon(coupon):
@@ -34,6 +34,10 @@ class CouponSerializer(ModelSerializer):
         return coupon
 
     def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            instance[key] == value
+            print(instance, key, value)
+            setattr(instance, key, value)
         coupon = self.sign_coupon(instance)
         coupon.save()
         return coupon
