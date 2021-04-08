@@ -16,10 +16,7 @@ import UserProfileBox from '../components/UserProfileBox';
 import UserProfileSection from '../components/UserProfileSection';
 import MenuIcon from '@material-ui/icons/Menu';
 
-
 export default function Index() {
-
-
 
   const swipeableBusinessCards = [
     <BusinessCard
@@ -159,11 +156,11 @@ export default function Index() {
       </Section>
 
       <Section
-        title="SwipeableBusinessCards - without Autoplay"
+        title="SwipeableBusinessCards - with Autoplay"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<><Button>Edit</Button></>}
       >
-        <SwipeableBusinessCards autoplay={false}>
+        <SwipeableBusinessCards autoplay={true} interval={5000}>
           {swipeableBusinessCards}
         </SwipeableBusinessCards>
       </Section>
