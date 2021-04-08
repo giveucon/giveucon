@@ -21,22 +21,22 @@ class CouponSerializer(ModelSerializer):
         coupon_data = {
             'magic': 'giveucon',
             'coupon': coupon.pk,
-            'user': coupon.user.pk,
         }
+        print(json.dumps(coupon_data))
         coupon.signature = private_key.sign(
-            bytearray(json.dumps(coupon_data), 'utf-8')
+            bytes(json.dumps(coupon_data), 'utf-8')
         ).hex()
         return coupon
 
     def create(self, validated_data):
-        coupon = self.sign_coupon(Coupon(**validated_data))
+        coupon = Coupon(**validated_data)
+        coupon.save()
+        coupon = self.sign_coupon(coupon)
         coupon.save()
         return coupon
 
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
-            instance[key] == value
-            print(instance, key, value)
             setattr(instance, key, value)
         coupon = self.sign_coupon(instance)
         coupon.save()

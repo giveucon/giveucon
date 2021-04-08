@@ -211,7 +211,7 @@ class ProductReview(models.Model):
         unique_together = ('product', 'review')
 
 class Coupon(models.Model):
-    signature = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    signature = models.CharField(max_length=64, blank=False, null=True, unique=True)
     created_at = models.DateTimeField(null=False, editable=False, default=timezone.now)
     used = models.BooleanField(default=False)
     user = models.ForeignKey(
