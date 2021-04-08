@@ -49,7 +49,7 @@ function Index({ session, selfUser }) {
         >
         </Section>
         <Section
-          title="준비중입니다"
+          title="준비중입니다."
           titlePrefix={<IconButton><AttachMoneyIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
