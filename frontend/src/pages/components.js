@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Layout from '../components/Layout';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import TitleBar from '../components/TitleBar';
 import Section from '../components/Section';
+import BusinessCard from '../components/BusinessCard';
 import Tile from '../components/Tile';
 import UserListItem from '../components/UserListItem';
 import UserProfileBox from '../components/UserProfileBox';
@@ -67,6 +67,43 @@ export default function Index() {
         <Typography variant="button">Button</Typography>
         <Typography variant="caption">Caption</Typography>
         <Typography variant="overline">Overline</Typography>
+      </Section>
+
+      <Section
+        title="BusinessCard"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <Grid container>
+          <Grid item xs={12}>
+            <BusinessCard
+              title="Tile"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <BusinessCard
+              title="Tile"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              menuItems={
+                <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <BusinessCard
+              title="한글한글아름답게한글한글아름답게한글한글아름답게"
+              maxTitleLength={20}
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              actions={
+                <><Button>Edit</Button></>
+              }
+            />
+          </Grid>
+        </Grid>
       </Section>
 
       <Section

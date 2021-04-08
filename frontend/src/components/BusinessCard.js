@@ -25,18 +25,18 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   media: {
-    paddingTop: "100%", // 1:1,
+    paddingTop: "42.86%", // 21:9,
     // paddingTop: "56.25%", // 16:9,
   },
   title: {
     lineHeight: "1.5em",
-    height: "3em",
+    height: "1.5em",
     overflow: "hidden",
   },
 }));
 
 
-export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null }) {
+export default function BusinessCard({ actions=null, image=null, title=null, menuItems=null, onClick=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
