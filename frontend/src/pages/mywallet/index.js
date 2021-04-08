@@ -2,14 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import StorefrontIcon from '@material-ui/icons/Storefront';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -33,27 +30,10 @@ const getSelfUser = async (session) => {
   }
 };
 
-const getStoreList = async (session) => {
+const getCouponList = async (session, selfUser) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getSelfStoreList = async (session, selfUser) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores", {
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/coupons", {
         params: {
           user: selfUser.id,
         },
@@ -73,36 +53,35 @@ const getSelfStoreList = async (session, selfUser) => {
 export async function getServerSideProps(context) {
   const session = await getSession(context)
   const selfUser = await getSelfUser(session)
-  const storeList = await getStoreList(session)
-  const selfStoreList = await getSelfStoreList(session, selfUser)
+  const couponList = await getCouponList(session, selfUser)
   return {
-    props: { session, selfUser, storeList, selfStoreList }
+    props: { session, selfUser, couponList }
   }
 }
 
-function Index({ session, selfUser, storeList, selfStoreList }) {
+function Index({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <>
-      <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+      <Layout title={"내 지갑 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
         <Section
           backButton
-          title="가게"
+          title="내 지갑"
         >
         </Section>
         <Section
-          title="내 가게"
-          titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+          title="내 쿠폰"
+          titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
-            {storeList && storeList.map((item, key) => (
+            {couponList && couponList.map((item, key) => (
               <Grid item xs={6}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
                   onClick={() => 
-                    router.push(`/stores/${item.id}`
+                    router.push(`/coupons/${item.id}`
                   )}
                   menuItems={
                     <MenuItem>Menu Item</MenuItem>
@@ -112,34 +91,6 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
             ))}
           </Grid>
         </Section>
-        <Section
-          title="모든 가게"
-          titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
-        >
-          <Grid container>
-            {selfStoreList && selfStoreList.map((item, key) => (
-              <Grid item xs={6}>
-                <Tile
-                  title={item.name}
-                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/stores/${item.id}`
-                  )}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Section>
-        <Fab
-          color="primary"
-          onClick={() => router.push(`/stores/create`)}
-        >
-          <AddIcon />
-        </Fab>
       </Layout>
     </>
   );
