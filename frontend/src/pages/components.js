@@ -1,21 +1,26 @@
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Layout from '../components/Layout';
 import MenuItem from '@material-ui/core/MenuItem';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import Section from '../components/Section';
+import ArticleBox from '../components/ArticleBox';
 import BusinessCard from '../components/BusinessCard';
-import KakaoMap from '../components/KakaoMap';
+import KakaoMapCard from '../components/KakaoMapCard';
 import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
 import SwipeableTiles from '../components/SwipeableTiles';
 import Tile from '../components/Tile';
 import UserListItem from '../components/UserListItem';
 import UserProfileBox from '../components/UserProfileBox';
 import UserProfileSection from '../components/UserProfileSection';
-import MenuIcon from '@material-ui/icons/Menu';
 
 export default function Index() {
 
@@ -111,6 +116,75 @@ export default function Index() {
       </Section>
 
       <Section
+        title="ListItem"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <List>
+          <ListItem
+            button
+            dense
+            onClick={() => alert( 'Tapped' )}
+          >
+            <ListItemText
+              primary="Article primary text"
+              secondary="Article secondary text"
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end">
+                <MenuIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem
+            button
+            dense
+            onClick={() => alert( 'Tapped' )}
+          >
+            <ListItemText
+              primary="Article primary text"
+              secondary="Article secondary text"
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end">
+                <MenuIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem
+            button
+            dense
+            onClick={() => alert( 'Tapped' )}
+          >
+            <ListItemText
+              primary="Article primary text"
+              secondary="Article secondary text"
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end">
+                <MenuIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Section>
+
+      <Section
+        title="ArticleBox"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <ArticleBox
+          title="ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title "
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          content="ArticleBox Content ArticleBox Content ArticleBox Content "
+          onClick={() => alert( 'Tapped' )}
+        >
+          <Button>Edit</Button>
+        </ArticleBox>
+      </Section>
+
+      <Section
         title="BusinessCard"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<><Button>Edit</Button></>}
@@ -139,7 +213,7 @@ export default function Index() {
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={
-                <><Button>Edit</Button></>
+                <Button>Edit</Button>
               }
             />
           </Grid>
@@ -147,17 +221,17 @@ export default function Index() {
       </Section>
 
       <Section
-        title="KakaoMap"
+        title="KakaoMapCard"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
-        <KakaoMap latitude={37.506502} longitude={127.053617}/>
+        <KakaoMapCard latitude={37.506502} longitude={127.053617}/>
       </Section>
 
       <Section
         title="SwipeableBusinessCards"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <SwipeableBusinessCards>
           {swipeableBusinessCards}
@@ -167,7 +241,7 @@ export default function Index() {
       <Section
         title="SwipeableBusinessCards - with Autoplay"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <SwipeableBusinessCards autoplay={true} interval={5000}>
           {swipeableBusinessCards}

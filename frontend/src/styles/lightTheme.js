@@ -26,6 +26,38 @@ const theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiAccordion: createStyles({
+      rounded: {
+        borderRadius: "1.5rem",
+        '&:first-child': {
+          borderTopLeftRadius: "1.5rem",
+          borderTopRightRadius: "1.5rem",
+        },
+        '&:last-child': {
+          borderBottomLeftRadius: "1.5rem",
+          borderBottomRightRadius: "1.5rem",
+        },
+      },
+    }),
+    MuiAccordionSummary: createStyles({
+      root: {
+        minHeight: 56,
+        '&$expanded': {
+          minHeight: 56,
+        },
+      },
+      content: {
+        '&$expanded': {
+          margin: '12px 0',
+        },
+      },
+      expanded: {},
+    }),
+    MuiAccordionDetails: createStyles({
+      root: {
+        padding: "1rem",
+      },
+    }),
     MuiBottomNavigationAction: createStyles({
       root: {
         minWidth: "2.5rem",
