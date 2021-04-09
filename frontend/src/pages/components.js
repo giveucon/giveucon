@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import Section from '../components/Section';
 import BusinessCard from '../components/BusinessCard';
+import KakaoMap from '../components/KakaoMap';
 import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
 import SwipeableTiles from '../components/SwipeableTiles';
 import Tile from '../components/Tile';
@@ -143,6 +144,14 @@ export default function Index() {
             />
           </Grid>
         </Grid>
+      </Section>
+
+      <Section
+        title="KakaoMap"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<><Button>Edit</Button></>}
+      >
+        <KakaoMap latitude={37.506502} longitude={127.053617}/>
       </Section>
 
       <Section
