@@ -15,6 +15,7 @@ import Section from '../components/Section';
 import ArticleBox from '../components/ArticleBox';
 import BusinessCard from '../components/BusinessCard';
 import KakaoMapCard from '../components/KakaoMapCard';
+import ListItemCard from '../components/ListItemCard';
 import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
 import SwipeableTiles from '../components/SwipeableTiles';
 import Tile from '../components/Tile';
@@ -226,6 +227,30 @@ export default function Index() {
         titleSuffix={<Button>Edit</Button>}
       >
         <KakaoMapCard latitude={37.506502} longitude={127.053617}/>
+      </Section>
+
+      <Section
+        title="ListItemCard"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <ListItemCard
+          primary="ListItemCard primary"
+          secondary="ListItemCard secondary"
+          onClick={() => alert( 'Tapped' )}
+        />
+        <ListItemCard
+          primary="ListItemCard primary"
+          secondary="ListItemCard secondary"
+          prefix={<IconButton><MenuIcon /></IconButton>}
+          onClick={() => alert( 'Tapped' )}
+        />
+        <ListItemCard
+          primary="ListItemCard primary"
+          secondary="ListItemCard secondary"
+          suffix={<Button>Edit</Button>}
+          onClick={() => alert( 'Tapped' )}
+        />
       </Section>
 
       <Section

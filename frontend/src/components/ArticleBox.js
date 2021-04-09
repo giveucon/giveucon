@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function UserProfileBox({ children=null, content=null, image=null, onClick=null, title=null }) {
+export default function ArticleBox({ children=null, content=null, image=null, onClick=null, title=null }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(true);
 
