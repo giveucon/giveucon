@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserProfileBox({ children=null, content=null, image=null, onClick=null, title=null }) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
 
-  const handleAccordionChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+  const handleAccordionChange = () => (event) => {
+    setExpanded(!expanded);
   };
 
   return (
@@ -43,7 +43,7 @@ export default function UserProfileBox({ children=null, content=null, image=null
         </Card>
       </Box>
       <Box paddingY={1}>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleAccordionChange('panel1')}>
+        <Accordion defaultExpanded expanded={expanded} onChange={handleAccordionChange()}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="h5">{title}</Typography>
           </AccordionSummary>
