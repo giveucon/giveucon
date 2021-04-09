@@ -59,7 +59,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Index({ session, selfUser, couponList }) {
+function Home({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <>
@@ -96,4 +96,4 @@ function Index({ session, selfUser, couponList }) {
   );
 }
 
-export default withAuth(Index);
+export default withAuth(Home);

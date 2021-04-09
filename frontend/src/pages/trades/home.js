@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Index({ session, selfUser }) {
+function Home({ session, selfUser }) {
   const router = useRouter();
   return (
     <>
@@ -49,7 +49,7 @@ function Index({ session, selfUser }) {
         >
         </Section>
         <Section
-          title="준비중입니다."
+          title="쿠폰 거래 서비스 준비중입니다."
           titlePrefix={<IconButton><AttachMoneyIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
@@ -59,4 +59,4 @@ function Index({ session, selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default withAuth(Home);

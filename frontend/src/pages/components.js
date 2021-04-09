@@ -2,16 +2,13 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Layout from '../components/Layout';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import Section from '../components/Section';
+import AccordionSection from '../components/AccordionSection';
 import ArticleBox from '../components/ArticleBox';
 import BusinessCard from '../components/BusinessCard';
 import KakaoMapCard from '../components/KakaoMapCard';
@@ -19,7 +16,6 @@ import ListItemCard from '../components/ListItemCard';
 import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
 import SwipeableTiles from '../components/SwipeableTiles';
 import Tile from '../components/Tile';
-import UserListItem from '../components/UserListItem';
 import UserProfileBox from '../components/UserProfileBox';
 import UserProfileSection from '../components/UserProfileSection';
 
@@ -31,7 +27,7 @@ export default function Index() {
       image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
-        <><Button>Edit</Button></>
+        <Button>Edit</Button>
       }
     />,
     <BusinessCard
@@ -39,7 +35,7 @@ export default function Index() {
       image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
-        <><Button>Edit</Button></>
+        <Button>Edit</Button>
       }
     />
   ]
@@ -50,7 +46,7 @@ export default function Index() {
       image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
-        <><Button>Edit</Button></>
+        <Button>Edit</Button>
       }
     />,
     <Tile
@@ -58,7 +54,7 @@ export default function Index() {
       image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
-        <><Button>Edit</Button></>
+        <Button>Edit</Button>
       }
     />
   ]
@@ -67,19 +63,17 @@ export default function Index() {
     <Layout title={"컴포넌트 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
 
       <Section
-        title="Section Head"
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><IconButton><MenuIcon /></IconButton></>}
-      >
-        <Typography variant="h4">Children</Typography>
-      </Section>
+        backButton
+        title="Page Title"
+        titleSuffix={<IconButton><MenuIcon /></IconButton>}
+      />
 
       <Section
-        backButton
-        title="Section Head"
-        titleSuffix={<><IconButton><MenuIcon /></IconButton></>}
+        title="Section"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<IconButton><MenuIcon /></IconButton>}
       >
-        <Typography variant="h4">Children</Typography>
+        <Typography variant="h5">Section children</Typography>
       </Section>
       
       <Section title="Buttons">
@@ -116,64 +110,17 @@ export default function Index() {
         <Typography variant="overline">Overline</Typography>
       </Section>
 
-      <Section
-        title="ListItem"
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
+      <AccordionSection
+        title="AccordionSection"
+        defaultExpanded={true}
       >
-        <List>
-          <ListItem
-            button
-            dense
-            onClick={() => alert( 'Tapped' )}
-          >
-            <ListItemText
-              primary="Article primary text"
-              secondary="Article secondary text"
-            />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <MenuIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem
-            button
-            dense
-            onClick={() => alert( 'Tapped' )}
-          >
-            <ListItemText
-              primary="Article primary text"
-              secondary="Article secondary text"
-            />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <MenuIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem
-            button
-            dense
-            onClick={() => alert( 'Tapped' )}
-          >
-            <ListItemText
-              primary="Article primary text"
-              secondary="Article secondary text"
-            />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <MenuIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
-      </Section>
+        <Typography variant="h5">AccordionBox children</Typography>
+      </AccordionSection>
 
       <Section
         title="ArticleBox"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <ArticleBox
           title="ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title "
@@ -188,7 +135,7 @@ export default function Index() {
       <Section
         title="BusinessCard"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <Grid container>
           <Grid item xs={12}>
@@ -276,7 +223,7 @@ export default function Index() {
       <Section
         title="SwipeableTiles"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <SwipeableTiles>
           {swipeableTiles}
@@ -286,7 +233,7 @@ export default function Index() {
       <Section
         title="Tile"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<><Button>Edit</Button></>}
+        titleSuffix={<Button>Edit</Button>}
       >
         <Grid container>
           <Grid item xs={6}>
@@ -312,40 +259,11 @@ export default function Index() {
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={
-                <><Button>Edit</Button></>
+                <Button>Edit</Button>
               }
             />
           </Grid>
         </Grid>
-      </Section>
-
-
-      <Section
-        title="UserListItem"
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-      >
-        <List>
-          <UserListItem
-            name="UsernameUsernameUsernameUsernameUsername"
-            content="asdfasdf"
-            image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-            onClick={() => alert( 'Tapped' )}
-          />
-          <UserListItem
-            name="Username"
-            image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-            onClick={() => alert( 'Tapped' )}
-          />
-          <UserListItem
-            name="Username"
-            image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-            onClick={() => alert( 'Tapped' )}
-            menuItems={
-              <MenuItem>Menu Item</MenuItem>
-            }
-          />
-        </List>
       </Section>
 
       <Section title="UserProfileBox">

@@ -2,12 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
@@ -80,7 +79,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Index({ session, selfUser, storeList, selfStoreList }) {
+function Home({ session, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -93,17 +92,19 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
         <Section
           title="내 가게"
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+          titleSuffix={
+            <IconButton onClick={() =>  router.push(`/myaccount/stores` )}>
+              <ArrowForwardIcon />
+            </IconButton>
+          }
         >
           <Grid container>
-            {storeList && storeList.map((item, key) => (
+            {selfStoreList && selfStoreList.map((item, key) => (
               <Grid item xs={6}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/stores/${item.id}`
-                  )}
+                  onClick={() =>  router.push(`/stores/${item.id}` )}
                   menuItems={
                     <MenuItem>Menu Item</MenuItem>
                   }
@@ -134,15 +135,23 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
             ))}
           </Grid>
         </Section>
-        <Fab
-          color="primary"
-          onClick={() => router.push(`/stores/create`)}
-        >
-          <AddIcon />
-        </Fab>
+        {session && (
+          <>
+            <Box marginY={1}>
+              <Button
+                color="primary"
+                fullWidth
+                variant="contained"
+                onClick={() => router.push(`/stores/create`)}
+              >
+                새 가게 추가
+              </Button>
+            </Box>
+          </>
+        )}
       </Layout>
     </>
   );
 }
 
-export default withAuth(Index);
+export default withAuth(Home);

@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function ArticleBox({ children=null, content=null, image=null, onClick=null, title=null }) {
+export default function ArticleBox({ children=null, content=null, defaultExpanded=true, image=null, onClick=null, title=null }) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(defaultExpanded);
 
   const handleAccordionChange = () => (event) => {
     setExpanded(!expanded);
@@ -31,7 +31,7 @@ export default function ArticleBox({ children=null, content=null, image=null, on
 
   return (
     <Box paddingX={0.5}>
-      <Box paddingY={1}>
+      <Box display={image ? "block" : "none"} paddingY={1}>
         <Card>
           <CardActionArea onClick={onClick}>
             <CardMedia
@@ -45,7 +45,7 @@ export default function ArticleBox({ children=null, content=null, image=null, on
       <Box paddingY={1}>
         <Accordion defaultExpanded expanded={expanded} onChange={handleAccordionChange()}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="h6">{title}</Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails>

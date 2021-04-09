@@ -7,12 +7,17 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
+import ArticleBox from '../../../components/ArticleBox';
 import BusinessCard from '../../../components/BusinessCard';
+import KakaoMapCard from '../../../components/KakaoMapCard';
 import Layout from '../../../components/Layout'
 import Tile from '../../../components/Tile';
 import Section from '../../../components/Section'
+import SwipeableBusinessCards from '../../../components/SwipeableBusinessCards';
 import withAuth from '../../../components/withAuth'
 
 
@@ -80,6 +85,30 @@ export async function getServerSideProps(context) {
   }
 }
 
+const storeNotices = [
+  <BusinessCard
+    title="가게 준비중입니다."
+    maxTitleLength={20}
+    image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+    onClick={() => alert( 'Tapped' )}
+  />,
+  <BusinessCard
+    title="가게 준비중입니다."
+    maxTitleLength={20}
+    image="https://cdn.pixabay.com/photo/2018/09/25/23/40/baukran-3703469_960_720.jpg"
+    onClick={() => alert( 'Tapped' )}
+  />,
+  <BusinessCard
+    title="가게 준비중입니다."
+    maxTitleLength={20}
+    image="https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg"
+    onClick={() => alert( 'Tapped' )}
+  />,
+]
+
+const latitude = 37.506502;
+const longitude = 127.053617;
+
 function Index({ session, selfUser, store, productList }) {
   const router = useRouter();
   return (
@@ -88,16 +117,20 @@ function Index({ session, selfUser, store, productList }) {
         backButton
         title={store.name}
       >
-        <BusinessCard
-          title="가게 공지 준비중입니다."
-          maxTitleLength={20}
-          image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+        <SwipeableBusinessCards autoplay={true} interval={5000}>
+          {storeNotices}
+        </SwipeableBusinessCards>
+        <ArticleBox
+          title="가게 설명"
+          content={store.description}
+          defaultExpanded={false}
           onClick={() => alert( 'Tapped' )}
         />
       </Section>
       <Section
         title="상품"
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
         <Grid container>
           {productList.map((item, key) => (
@@ -116,6 +149,22 @@ function Index({ session, selfUser, store, productList }) {
           ))}
         </Grid>
       </Section>
+      <Section
+        title="가게 위치"
+        titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
+      >
+        <KakaoMapCard latitude={latitude} longitude={longitude}/>
+      </Section>
+      <Box marginY={1}>
+        <Button
+          color="default"
+          fullWidth
+          variant="contained"
+          onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
+        >
+          경로 검색
+        </Button>
+      </Box>
       { selfUser.id === store.owner && (
         <>
           <Box marginY={1}>
@@ -136,12 +185,10 @@ function Index({ session, selfUser, store, productList }) {
               color="default"
               fullWidth
               variant="contained"
-              onClick={() => 
-                router.push({
-                  pathname: '/stores/update',
-                  query: { id: store.id },
-                })
-              }
+              onClick={() => router.push({
+                pathname: '/stores/update',
+                query: { id: store.id },
+              })}
             >
               가게 정보 수정
             </Button>

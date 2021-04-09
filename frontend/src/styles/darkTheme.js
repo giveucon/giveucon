@@ -35,7 +35,7 @@ const theme = createMuiTheme({
     }),
     MuiAccordionDetails: createStyles({
       root: {
-        padding: "1rem",
+        padding: "0.5rem",
       },
     }),
     MuiBottomNavigationAction: createStyles({
