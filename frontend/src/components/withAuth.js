@@ -3,6 +3,12 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/client';
 
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  return {
+    props: { session }
+  }
+}
 
 export default function withAuth(Component) {
   return (props) => {
@@ -13,7 +19,7 @@ export default function withAuth(Component) {
     const getSelfUser = async () => {
       try {
         const response = await axios.get(
-          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users/self", {
+          process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
             headers: {
               'Authorization': "Bearer " + session?.accessToken,
               'Content-Type': 'application/json',
@@ -36,12 +42,5 @@ export default function withAuth(Component) {
       console.log(self)
     },[])
     return <Component {...props} />
-  }
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  return {
-    props: { session }
   }
 }

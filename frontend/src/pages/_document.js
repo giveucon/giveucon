@@ -48,6 +48,15 @@ class MyDocument extends Document {
           />
         </Head>
         <body>
+          <style global jsx>{`
+            html,
+            body,
+            body > div:first-child,
+            div#__next,
+            div#__next > div {
+              min_height: 115%;
+            }
+          `}</style>
           <Main />
           <NextScript />
         </body>

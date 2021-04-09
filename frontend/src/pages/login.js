@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
+import { signIn, getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { signIn, getSession, useSession } from "next-auth/client";
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -21,9 +21,8 @@ const useStyles = makeStyles({
   },
 });
 
-function Login() {
+function Login({session}) {
   const classes = useStyles();
-  const [session, loading] = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ function Login() {
   },[])
 
   return (
-    <Layout bottomNav={false} title="로그인 - giveUcon">
+    <Layout bottomNav={false} title={"로그인 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
       <Box
         className={classes.background}
         paddingX={5}

@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useRouter } from 'next/router'
-import { getSession, useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
 
-export default function Home() {
-  const [session, loading] = useSession();
+export default function Home({session}) {
   const router = useRouter();
 
   useEffect(() => {
@@ -13,6 +12,7 @@ export default function Home() {
       router.push('/login')
     }
   });
+  
   return null;
 }
 

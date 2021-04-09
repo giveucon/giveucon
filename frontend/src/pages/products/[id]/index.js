@@ -33,30 +33,10 @@ const getSelfUser = async (session) => {
   }
 };
 
-const getStore = async (session, id) => {
+const getProduct = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/" + id, {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getProductList = async (session, store) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products", {
-        params: {
-          store: store.id,
-        },
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products/" + id, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -73,64 +53,29 @@ const getProductList = async (session, store) => {
 export async function getServerSideProps(context) {
   const session = await getSession(context)
   const selfUser = await getSelfUser(session)
-  const store = await getStore(session, context.query.id)
-  const productList = await getProductList(session, store)
+  const product = await getProduct(session, context.query.id)
   return {
-    props: { session, selfUser, store, productList }
+    props: { session, selfUser, product }
   }
 }
 
-function Index({ session, selfUser, store, productList }) {
+function Index({ session, selfUser, product }) {
   const router = useRouter();
   return (
-    <Layout title={store.name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={product.name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
       <Section
         backButton
-        title={store.name}
+        title={product.name}
       >
         <BusinessCard
-          title="가게 공지 준비중입니다."
+          title="상품 설명 준비중입니다."
           maxTitleLength={20}
           image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
           onClick={() => alert( 'Tapped' )}
         />
       </Section>
-      <Section
-        title="상품"
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-      >
-        <Grid container>
-          {productList.map((item, key) => (
-            <Grid item xs={6}>
-              <Tile
-                title={item.name}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => router.push({
-                  pathname: `/products/${item.id}`,
-                })}
-                menuItems={
-                  <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
-                }
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Section>
-      { selfUser.id === store.owner && (
+      { selfUser.id === product.owner && (
         <>
-          <Box marginY={1}>
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              onClick={() => router.push({
-                pathname: '/products/create',
-                query: { id: store.id },
-              })}
-            >
-              상품 추가
-            </Button>
-          </Box>
           <Box marginY={1}>
             <Button
               color="default"
@@ -138,12 +83,12 @@ function Index({ session, selfUser, store, productList }) {
               variant="contained"
               onClick={() => 
                 router.push({
-                  pathname: '/stores/update',
+                  pathname: '/products/update',
                   query: { id: store.id },
                 })
               }
             >
-              가게 정보 수정
+              상품 정보 수정
             </Button>
           </Box>
         </>

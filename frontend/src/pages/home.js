@@ -1,90 +1,65 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import axios from 'axios';
-import { signIn, signOut, getSession, useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import BusinessCard from '../components/BusinessCard'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 import withAuth from '../components/withAuth'
 
-
-function Home() {
-  const [session, loading] = useSession();
-  const [userList, setUserList] = useState('');
-
-  const getUserList = async () => {
-    try {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/users", {
-          headers: {
-            'Authorization': "Bearer " + session?.accessToken,
-            'Content-Type': 'application/json',
-            'accept': 'application/json'
-          }
+const getSelfUser = async (session) => {
+  try {
+    const response = await axios.get(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
         }
-      );
-      setUserList(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getUserList()
-  },[])
-
-  return (
-    <Layout title="홈 - Give-U-Con">
-      <Section
-        backButton
-        title="홈"
-      >
-      </Section>
-      <Section
-        title="로그인 정보"
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
-      >
-        <>
-          {!loading && !session && (
-            <>
-              <Typography>{!session && "User is not logged in"}</Typography>
-              <Button variant="contained" color="primary" onClick={() => signIn()}>Sign in</Button>
-            </>
-          )}
-          {!loading && session && (
-            <>
-              <Typography>Signed in as {session.user.email}</Typography>
-              {
-                session.accessToken && (
-                  <Typography>User has access token {session.accessToken}</Typography>
-                )
-              }
-              {
-                session.refreshToken && (
-                  <Typography >User has refresh token {session.refreshToken}</Typography>
-                )
-              }
-              {userList && userList.map((item, key) => (
-                <Typography>{item.user_name}</Typography>
-              ))}
-              <Button variant="contained" color="primary" onClick={() => signOut({callbackUrl: "http://localhost:3000/login"})}>Sign out</Button>
-            </>
-          )}
-        </>
-      </Section>
-    </Layout>
-  );
-}
-
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
+  const selfUser = await getSelfUser(session)
   return {
-    props: { session }
+    props: { session, selfUser }
   }
+}
+
+function Home({ session, selfUser }) {
+
+  return (
+    <Layout title={"홈 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+      <Section
+        title="홈"
+        titlePrefix={<IconButton><HomeIcon /></IconButton>}
+        titleSuffix={
+          <IconButton>
+            <Badge badgeContent={100} color="error" max={99}>
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+        }>
+        <BusinessCard
+          title="giveUcon 준비중입니다."
+          maxTitleLength={20}
+          image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+          onClick={() => alert( 'Tapped' )}
+        />
+      </Section>
+    </Layout>
+  );
 }
 
 export default withAuth(Home);

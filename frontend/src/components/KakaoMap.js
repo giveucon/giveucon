@@ -1,11 +1,20 @@
 /*global kakao*/ 
 import React from 'react';
+import { makeStyles } from '@material-ui/styles';
+import Card from '@material-ui/core/Card';
 import styled from "styled-components";
 
+const KakaoMaps = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 20rem;
+`;
 
-class Map extends React.Component{
+class KakaoMap extends React.Component{
 
     componentDidMount() {
+      const { latitude, longitude } = this.props;
+
       const script = document.createElement("script");
       script.async = true;
       script.src =
@@ -16,25 +25,29 @@ class Map extends React.Component{
         kakao.maps.load(() => {
           let container = document.getElementById("kakao_map");
           let options = {
-            center: new window.kakao.maps.LatLng(37.506502, 127.053617),
+            center: new window.kakao.maps.LatLng(latitude, longitude),
             level: 7
           };
 
           var map = new window.kakao.maps.Map(container, options);
+
+          var marker = new window.kakao.maps.Marker({
+              position: new window.kakao.maps.LatLng(latitude, longitude),
+          });
+
+          marker.setMap(map);
     
         });
       };
     }
     render(){
+      const classes = makeStyles();
       return(
-        <Maps id="kakao_map" />
+        <Card className={classes.card}>
+          <KakaoMaps id="kakao_map" />
+        </Card>
       )
     }
 }
 
-const Maps = styled.div`
-width: 400px;
-height: 400px;
-`;
-
-export default Map;
+export default KakaoMap;

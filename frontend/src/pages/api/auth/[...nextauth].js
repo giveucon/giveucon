@@ -73,7 +73,7 @@ const settings = {
         try {
           const response = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/social/login/kakao/",
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/social/login/kakao/",
             {
               access_token: accessToken, // note the differences in key and value variable names
             },
@@ -103,7 +103,7 @@ const settings = {
         try {
           await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/rest-auth/token/verify/",
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/rest-auth/token/verify/",
             {
               token: user.accessToken,
             },
@@ -111,7 +111,7 @@ const settings = {
         } catch (error) {
           const response = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/rest-auth/token/refresh/",
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/rest-auth/token/refresh/",
             {
               refresh: user.refreshToken,
             },
@@ -138,7 +138,7 @@ const settings = {
       try {
         await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/rest-auth/token/verify/",
+          process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/rest-auth/token/verify/",
           {
             token: token.accessToken,
           },
@@ -146,7 +146,7 @@ const settings = {
       } catch (error) {
         const response = await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/rest-auth/token/refresh/",
+          process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/rest-auth/token/refresh/",
           {
             refresh: token.refreshToken,
           },

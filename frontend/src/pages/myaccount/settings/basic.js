@@ -9,15 +9,15 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import InfoIcon from '@material-ui/icons/Info';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
+import Layout from '../../../components/Layout'
+import Section from '../../../components/Section'
 
-const getSelfAccount = async (session) => {
+const getSelfUser = async (session) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/accounts/self", {
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -31,10 +31,10 @@ const getSelfAccount = async (session) => {
   }
 };
 
-const postSelfUser = async (session, selfUser) => {
+const putSelfUser = async (session, selfUser) => {
   try {
-    const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/", {
+    const response = await axios.put(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/" + selfUser.id + "/", {
         email: selfUser.email,
         user_name: selfUser.user_name,
         first_name: selfUser.first_name,
@@ -56,31 +56,32 @@ const postSelfUser = async (session, selfUser) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  const selfAccount = await getSelfAccount(session)
+  const prevSelfUser = await getSelfUser(session)
   return {
-    props: { session, selfAccount }
+    props: { session, prevSelfUser }
   }
 }
 
-function Create({ session, selfAccount }) {
+function Basic({ session, prevSelfUser }) {
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
-    email: selfAccount.email,
-    user_name: selfAccount.username,
-    first_name: "",
-    last_name: "",
-    dark_mode: false
+    id: prevSelfUser.id,
+    email: prevSelfUser.email,
+    user_name: prevSelfUser.user_name,
+    first_name: prevSelfUser.first_name,
+    last_name: prevSelfUser.last_name,
+    dark_mode: prevSelfUser.dark_mode,
   });
   return (
-    <Layout title={"사용자 생성 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={"기본 설정 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
       <Section
         backButton
-        title="사용자 생성"
+        title="기본 설정"
       >
       </Section>
       <Section
-        title="로그인 정보"
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
+        title="기본 정보"
+        titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -153,8 +154,8 @@ function Create({ session, selfAccount }) {
             fullWidth
             variant="contained"
             onClick={() => {
-              postSelfUser(session, selfUser);
-              router.push('/myaccount');
+              putSelfUser(session, selfUser);
+              router.push('/myaccount/settings');
             }}
           >
             제출
@@ -165,4 +166,4 @@ function Create({ session, selfAccount }) {
   );
 }
 
-export default Create;
+export default Basic;
