@@ -1,6 +1,7 @@
 import ecdsa
 import json
 from django.conf import settings
+from django.db import transaction
 from hashlib import sha256
 from rest_framework.serializers import ModelSerializer
 from ..models import Coupon
@@ -30,9 +31,10 @@ class CouponSerializer(ModelSerializer):
 
     def create(self, validated_data):
         coupon = Coupon(**validated_data)
-        coupon.save()
-        coupon = self.sign_coupon(coupon)
-        coupon.save()
+        with transaction.atmoic():
+            coupon.save()
+            coupon = self.sign_coupon(coupon)
+            coupon.save()
         return coupon
 
     def update(self, instance, validated_data):

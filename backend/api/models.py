@@ -30,6 +30,9 @@ class AccountUser(models.Model):
         related_name='account_user'
     )
 
+class Image(models.Model):
+    image = models.ImageField(null=False)
+
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     content = models.TextField(blank=True, null=False)
@@ -40,14 +43,16 @@ class Article(models.Model):
         on_delete=models.CASCADE,
         related_name='article'
     )
+    images = models.ManyToManyField(Image, blank=True)
 
 class Store(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
     #location
-    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
     private_key = models.CharField(max_length=64, blank=False, null=False, unique=True)
     public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
+    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
+    images = models.ManyToManyField(Image, blank=True)
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
@@ -60,6 +65,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name='product'
     )
+    images = models.ManyToManyField(Image, blank=True)
     class Meta:
         unique_together = ('name', 'store')
 
@@ -85,9 +91,6 @@ class StoreTag(models.Model):
 class MenuItem(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
 
-class Image(models.Model):
-    image = models.ImageField(null=False)
-
 class Friend(models.Model):
     from_user = models.ForeignKey(
         User,
@@ -103,54 +106,6 @@ class Friend(models.Model):
     )
     class Meta:
         unique_together = ('from_user', 'to_user')
-
-class ArticleImage(models.Model):
-    article = models.ForeignKey(
-        Article,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='article_image'
-    )
-    image = models.ForeignKey(
-        Image,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='article_image'
-    )
-    class Meta:
-        unique_together = ('article', 'image')
-
-class StoreImage(models.Model):
-    store = models.ForeignKey(
-        Store,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='store_image'
-    )
-    image = models.ForeignKey(
-        Image,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='store_image'
-    )
-    class Meta:
-        unique_together = ('store', 'image')
-
-class ProductImage(models.Model):
-    product = models.ForeignKey(
-        Product,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='product_image'
-    )
-    image = models.ForeignKey(
-        Image,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='product_image'
-    )
-    class Meta:
-        unique_together = ('product', 'image')
 
 class Review(models.Model):
     score = models.PositiveIntegerField(null=False)

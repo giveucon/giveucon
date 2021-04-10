@@ -3,9 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from ..models import Account
-from ..models import AccountUser
 from ..serializers import AccountSerializer
-
 
 class SelfAccountDetailView(generics.RetrieveUpdateAPIView):
     queryset = Account.objects.all() # is this queryset needed? or properly used?

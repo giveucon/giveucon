@@ -10,10 +10,12 @@ class StoreSerializer(ModelSerializer):
         exclude = ('private_key', 'public_key')
 
     def create(self, validated_data):
+        images = validated_data.pop('images')
         private_key = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1, hashfunc=sha256)
         public_key = private_key.get_verifying_key()
         store = Store(**validated_data)
         store.private_key = private_key.to_string().hex()
         store.public_key = public_key.to_string().hex()
         store.save()
+        store.images.set(images)
         return store

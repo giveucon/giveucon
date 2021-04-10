@@ -4,12 +4,13 @@ from rest_framework.response import Response
 
 from ..models import User, AccountUser, Coupon
 from ..serializers import CouponSerializer
+from ..services import UserService
 
 class CouponListView(generics.ListCreateAPIView):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer
     def create(self, request, *args, **kwargs):
-        user = get_object_or_404(AccountUser, account=request.user).user
+        user = UserService.get_current_user(request)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=user)
