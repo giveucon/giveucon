@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
@@ -23,7 +24,7 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 const getStore = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/" + id, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ const getStore = async (session, id) => {
 const getProductList = async (session, store) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
         params: {
           store: store.id,
         },
@@ -92,7 +93,7 @@ const longitude = 127.053617;
 function Index({ session, selfUser, store, productList }) {
   const router = useRouter();
   return (
-    <Layout title={store.name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title={store.name}
@@ -117,13 +118,14 @@ function Index({ session, selfUser, store, productList }) {
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
+                subtitle={item.price.toLocaleString('ko-KR') + "원"}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
                 onClick={() => router.push({
                   pathname: `/products/${item.id}`,
                 })}
-                menuItems={
-                  <><MenuItem>Menu Item</MenuItem><MenuItem>Menu Item</MenuItem></>
-                }
+                actions={[
+                  <IconButton><FavoriteIcon /></IconButton>
+                ]}
               />
             </Grid>
           ))}

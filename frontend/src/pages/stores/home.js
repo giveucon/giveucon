@@ -18,7 +18,7 @@ import withAuthServerSideProps from '../withAuthServerSideProps'
 const getStoreList = async (session) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const getStoreList = async (session) => {
 const getSelfStoreList = async (session, selfUser) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         params: {
           user: selfUser.id,
         },
@@ -64,7 +64,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
   return (
     <>
-      <Layout title={"가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`가게 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
           title="가게"

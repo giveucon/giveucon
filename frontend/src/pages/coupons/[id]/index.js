@@ -13,7 +13,7 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 const getCoupon = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/coupons/" + id, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const getCoupon = async (session, id) => {
 const getProduct = async (session, coupon) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products/" + coupon.product, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${coupon.product}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Index({ session, coupon, product }) {
   const router = useRouter();
   return (
-    <Layout title={"쿠폰 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title={product.name}

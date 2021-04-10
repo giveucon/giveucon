@@ -28,15 +28,25 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "100%", // 1:1,
     // paddingTop: "56.25%", // 16:9,
   },
-  title: {
+  titleOnly: {
     lineHeight: "1.5em",
     height: "3em",
+    overflow: "hidden",
+  },
+  title: {
+    lineHeight: "1.5em",
+    height: "1.5em",
+    overflow: "hidden",
+  },
+  subtitle: {
+    lineHeight: "1.5em",
+    height: "1.5em",
     overflow: "hidden",
   },
 }));
 
 
-export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null }) {
+export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null, subtitle=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -73,9 +83,17 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
             }
           </Box>
         </Box>
-        <Box display={title ? "block" : "none"}>
+        <Box display={(title && !subtitle) ? "block" : "none"}>
           <Box paddingX={1} paddingY={1}>
-            <Typography variant="body1" className={classes.title}>{title}</Typography>
+            <Typography variant="subtitle1" className={classes.titleOnly}>{title}</Typography>
+          </Box>
+        </Box>
+        <Box display={(title && subtitle) ? "block" : "none"}>
+          <Box paddingX={1} paddingTop={1}>
+            <Typography variant="subtitle1" className={classes.title}>{title}</Typography>
+          </Box>
+          <Box paddingX={1} paddingBottom={1.25}>
+            <Typography variant="subtitle2" className={classes.subtitle}>{subtitle}</Typography>
           </Box>
         </Box>
         <Menu

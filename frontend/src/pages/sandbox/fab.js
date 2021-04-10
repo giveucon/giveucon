@@ -19,7 +19,7 @@ function FabTest({ session, selfUser }) {
   const router = useRouter();
   return (
     <>
-      <Layout title={"플로팅 액션 버튼 테스트 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`플로팅 액션 버튼 테스트 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
           title="플로팅 액션 버튼 테스트"
