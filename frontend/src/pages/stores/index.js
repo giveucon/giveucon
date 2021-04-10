@@ -60,41 +60,39 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Index({ session, selfUser, storeList }) {
   const router = useRouter();
   return (
-    <>
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
-        <Section
-          backButton
-          title="가게 목록"
+      <Section
+        backButton
+        title="가게 목록"
+      >
+        <Grid container>
+          {storeList && storeList.map((item, index) => (
+            <Grid item xs={6} key={index}>
+              <Tile
+                title={item.name}
+                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                onClick={() => 
+                  router.push(`/stores/${item.id}`
+                )}
+                menuItems={
+                  <MenuItem>Menu Item</MenuItem>
+                }
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
+      <Box marginY={1}>
+        <Button
+          color="primary"
+          fullWidth
+          variant="contained"
+          onClick={() => router.push(`/stores/create`)}
         >
-          <Grid container>
-            {storeList && storeList.map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/stores/${item.id}`
-                  )}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Section>
-        <Box marginY={1}>
-          <Button
-            color="primary"
-            fullWidth
-            variant="contained"
-            onClick={() => router.push(`/stores/create`)}
-          >
-            새 가게 추가
-          </Button>
-        </Box>
-      </Layout>
-    </>
+          새 가게 추가
+        </Button>
+      </Box>
+    </Layout>
   );
 }
 

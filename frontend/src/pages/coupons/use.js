@@ -7,10 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import Layout from '../../../components/Layout'
-import BusinessCard from '../../../components/BusinessCard';
-import Section from '../../../components/Section'
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import Layout from '../../components/Layout'
+import BusinessCard from '../../components/BusinessCard';
+import Section from '../../components/Section'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCoupon = async (session, id) => {
   try {
@@ -55,13 +55,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   }
 })
 
-function Index({ session, selfUser, coupon, product }) {
+function Use({ session, selfUser, coupon, product }) {
   const router = useRouter();
   return (
-    <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`쿠폰 사용 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={`쿠폰`}
+        title={`쿠폰 사용`}
       >
       </Section>
       <Section
@@ -77,25 +77,18 @@ function Index({ session, selfUser, coupon, product }) {
           }
         />
       </Section>
-      { selfUser.id === coupon.user && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              onClick={() => router.push({
-                pathname: '/coupons/use',
-                query: { id: coupon.id },
-              })}
-            >
-              쿠폰 사용
-            </Button>
-          </Box>
-        </>
-      )}
+      <Box marginY={1}>
+        <Button
+          color="primary"
+          fullWidth
+          variant="contained"
+          onClick={() => router.back()}
+        >
+          뒤로가기
+        </Button>
+      </Box>
     </Layout>
   );
 }
 
-export default Index;
+export default Use;
