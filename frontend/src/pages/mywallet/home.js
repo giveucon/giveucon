@@ -11,24 +11,7 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCouponList = async (session, selfUser) => {
   try {
@@ -50,16 +33,14 @@ const getCouponList = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const couponList = await getCouponList(session, selfUser)
   return {
-    props: { session, selfUser, couponList }
+    props: { selfUser, couponList },
   }
-}
+})
 
-function Home({ session, selfUser, couponList }) {
+function Home({ selfUser, couponList }) {
   const router = useRouter();
   return (
     <>
@@ -96,4 +77,4 @@ function Home({ session, selfUser, couponList }) {
   );
 }
 
-export default withAuth(Home);
+export default Home;

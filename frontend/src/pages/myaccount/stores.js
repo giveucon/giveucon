@@ -2,37 +2,16 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import AddIcon from '@material-ui/icons/Add';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getSelfStoreList = async (session, selfUser) => {
   try {
@@ -54,16 +33,14 @@ const getSelfStoreList = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const selfStoreList = await getSelfStoreList(session, selfUser)
   return {
-    props: { session, selfUser, selfStoreList }
+    props: { selfUser, selfStoreList },
   }
-}
+})
 
-function Stores({ session, selfUser, selfStoreList }) {
+function Stores({ selfUser, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -100,4 +77,4 @@ function Stores({ session, selfUser, selfStoreList }) {
   );
 }
 
-export default withAuth(Stores);
+export default Stores;

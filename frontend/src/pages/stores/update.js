@@ -12,6 +12,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {
@@ -19,23 +20,6 @@ const useStyles = makeStyles({
     color: 'white',
   },
 });
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const getStore = async (session, id) => {
   try {
@@ -75,16 +59,14 @@ const putStore = async (session, store) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const prevStore = await getStore(session, context.query.id)
   return {
-    props: { session, selfUser, prevStore }
+    props: { selfUser, prevStore },
   }
-}
+})
 
-function Update({ session, selfUser, prevStore }) {
+function Update({ selfUser, prevStore }) {
   const router = useRouter();
   const classes = useStyles();
   const [store, setStore] = useState({

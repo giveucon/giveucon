@@ -154,7 +154,7 @@ function Create({ session, selfAccount }) {
             variant="contained"
             onClick={() => {
               postSelfUser(session, selfUser);
-              router.push('/myaccount');
+              router.push('/myaccount/home');
             }}
           >
             제출

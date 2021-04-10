@@ -13,24 +13,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStoreList = async (session) => {
   try {
@@ -69,17 +52,15 @@ const getSelfStoreList = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeList = await getStoreList(session)
   const selfStoreList = await getSelfStoreList(session, selfUser)
   return {
-    props: { session, selfUser, storeList, selfStoreList }
+    props: { selfUser, storeList, selfStoreList },
   }
-}
+})
 
-function Home({ session, selfUser, storeList, selfStoreList }) {
+function Home({ selfUser, storeList, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -135,7 +116,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
             ))}
           </Grid>
         </Section>
-        {session && (
+        {selfUser && (
           <>
             <Box marginY={1}>
               <Button
@@ -154,4 +135,4 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
   );
 }
 
-export default withAuth(Home);
+export default Home;

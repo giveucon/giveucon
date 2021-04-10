@@ -18,25 +18,7 @@ import Layout from '../../../components/Layout'
 import Tile from '../../../components/Tile';
 import Section from '../../../components/Section'
 import SwipeableBusinessCards from '../../../components/SwipeableBusinessCards';
-import withAuth from '../../../components/withAuth'
-
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 const getStore = async (session, id) => {
   try {
@@ -75,15 +57,13 @@ const getProductList = async (session, store) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const store = await getStore(session, context.query.id)
   const productList = await getProductList(session, store)
   return {
-    props: { session, selfUser, store, productList }
+    props: { selfUser, store, productList },
   }
-}
+})
 
 const storeNotices = [
   <BusinessCard
@@ -109,7 +89,7 @@ const storeNotices = [
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Index({ session, selfUser, store, productList }) {
+function Index({ selfUser, store, productList }) {
   const router = useRouter();
   return (
     <Layout title={store.name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -199,4 +179,4 @@ function Index({ session, selfUser, store, productList }) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

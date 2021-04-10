@@ -5,17 +5,13 @@ import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import ArticleBox from '../../../components/ArticleBox';
 import BusinessCard from '../../../components/BusinessCard';
 import Layout from '../../../components/Layout'
 import Tile from '../../../components/Tile';
 import Section from '../../../components/Section'
-import withAuth from '../../../components/withAuth'
+import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {
@@ -23,23 +19,6 @@ const useStyles = makeStyles({
     color: 'white',
   },
 });
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const getProduct = async (session, id) => {
   try {
@@ -75,15 +54,13 @@ const getStore = async (session, id) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const product = await getProduct(session, context.query.id)
   const store = await getStore(session, product.store)
   return {
-    props: { session, selfUser, product, store }
+    props: { selfUser, product, store },
   }
-}
+})
 
 function Index({ session, selfUser, product, store }) {
   const router = useRouter();
@@ -135,4 +112,4 @@ function Index({ session, selfUser, product, store }) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

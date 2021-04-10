@@ -15,23 +15,7 @@ import TextField from '@material-ui/core/TextField';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStore = async (session, id) => {
   try {
@@ -73,16 +57,14 @@ const postProduct = async (session, product) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const store = await getStore(session, context.query.id)
   return {
-    props: { session, selfUser, store }
+    props: { selfUser, store },
   }
-}
+})
 
-function Create({ session, selfUser, store }) {
+function Create({ selfUser, store }) {
   const router = useRouter();
   const [product, setProduct] = useState({
     name: "",

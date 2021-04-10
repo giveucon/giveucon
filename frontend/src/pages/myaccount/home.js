@@ -12,7 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
-import withAuth from '../../components/withAuth'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {
@@ -21,32 +21,13 @@ const useStyles = makeStyles({
   },
 });
 
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { session, selfUser }
+    props: { selfUser },
   }
-}
+})
 
-function Home({ session, selfUser }) {
+function Home({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -107,4 +88,4 @@ function Home({ session, selfUser }) {
   );
 }
 
-export default withAuth(Home);
+export default Home;
