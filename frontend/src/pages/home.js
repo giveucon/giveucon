@@ -62,7 +62,7 @@ function Home({ session, selfUser, centralNoticeList }) {
               key={index}
               title={item.article.title}
               image="https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg"
-              onClick={() => alert( 'Tapped' )}
+              onClick={() =>  router.push(`/notices/${item.id}` )}
             />
           })}
         </SwipeableBusinessCards>
