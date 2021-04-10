@@ -59,7 +59,7 @@ export default function Index() {
   ]
 
   return (
-    <Layout title={"컴포넌트 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`컴포넌트 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
 
       <Section
         backButton
@@ -164,6 +164,17 @@ export default function Index() {
               }
             />
           </Grid>
+          <Grid item xs={12}>
+            <BusinessCard
+              title="한글한글아름답게한글한글아름답게한글한글아름답게"
+              subtitle="조금조금아름답게조금조금아름답게조금조금아름답게"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              actions={
+                <Button>Edit</Button>
+              }
+            />
+          </Grid>
         </Grid>
       </Section>
 
@@ -255,6 +266,17 @@ export default function Index() {
           <Grid item xs={6}>
             <Tile
               title="한글한글아름답게한글한글아름답게한글한글아름답게"
+              image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+              onClick={() => alert( 'Tapped' )}
+              actions={
+                <Button>Edit</Button>
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Tile
+              title="한글한글아름답게한글한글아름답게한글한글아름답게"
+              subtitle="조금조금아름답게조금조금아름답게조금조금아름답게"
               image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
               onClick={() => alert( 'Tapped' )}
               actions={

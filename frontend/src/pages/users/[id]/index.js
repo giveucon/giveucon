@@ -15,7 +15,7 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 const getUser = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/" + id, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Index({ session, selfUser, user }) {
   const router = useRouter();
   return (
-    <Layout title={user.user_name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title={user.user_name}

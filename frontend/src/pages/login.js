@@ -32,7 +32,7 @@ function Login({ session }) {
   },[])
 
   return (
-    <Layout bottomNav={false} title={"로그인 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`로그인 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Box
         className={classes.background}
         paddingX={5}

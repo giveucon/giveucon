@@ -17,7 +17,7 @@ import Section from '../../components/Section'
 const getSelfAccount = async (session) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/accounts/self", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/accounts/self`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const getSelfAccount = async (session) => {
 const postSelfUser = async (session, selfUser) => {
   try {
     const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/`, {
         email: selfUser.email,
         user_name: selfUser.user_name,
         first_name: selfUser.first_name,
@@ -72,7 +72,7 @@ function Create({ session, selfAccount }) {
     dark_mode: false
   });
   return (
-    <Layout title={"사용자 생성 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title="사용자 생성"
@@ -84,10 +84,10 @@ function Create({ session, selfAccount }) {
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="user_name"
             value={selfUser.user_name}
             fullWidth
-            label="사용자 이름"
+            label="유저네임"
             onChange={(event) => {
               setSelfUser({ ...selfUser, user_name: event.target.value });
             }}

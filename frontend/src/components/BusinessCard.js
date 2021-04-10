@@ -33,10 +33,15 @@ const useStyles = makeStyles((theme) => ({
     height: "1.5em",
     overflow: "hidden",
   },
+  subtitle: {
+    lineHeight: "1.5em",
+    height: "1.5em",
+    overflow: "hidden",
+  },
 }));
 
 
-export default function BusinessCard({ actions=null, image=null, title=null, menuItems=null, onClick=null }) {
+export default function BusinessCard({ actions=null, image=null, title=null, menuItems=null, onClick=null, subtitle=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -73,9 +78,17 @@ export default function BusinessCard({ actions=null, image=null, title=null, men
             }
           </Box>
         </Box>
-        <Box display={title ? "block" : "none"}>
+        <Box display={(title && !subtitle) ? "block" : "none"}>
           <Box paddingX={1} paddingY={1}>
-            <Typography variant="body1" className={classes.title}>{title}</Typography>
+            <Typography variant="subtitle1" className={classes.title}>{title}</Typography>
+          </Box>
+        </Box>
+        <Box display={(title && subtitle) ? "block" : "none"}>
+          <Box paddingX={1} paddingTop={1}>
+            <Typography variant="subtitle1" className={classes.title}>{title}</Typography>
+          </Box>
+          <Box paddingX={1} paddingBottom={1.25}>
+            <Typography variant="subtitle2" className={classes.subtitle}>{subtitle}</Typography>
           </Box>
         </Box>
         <Menu

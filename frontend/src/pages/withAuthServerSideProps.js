@@ -4,7 +4,7 @@ import { getSession } from "next-auth/client";
 const getSelfUser = async (session) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/self`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
 
     // Get session from NextAuth
     const session = await getSession(context);
-    if (session.accessToken === null) {
+    if (session === null) {
       return {
         redirect: {
           permanent: false,

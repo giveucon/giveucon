@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 const getStore = async (session, id) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/" + id, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const getStore = async (session, id) => {
 const putStore = async (session, store) => {
   try {
     const response = await axios.put(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/" + store.id + "/", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
         name: store.name,
         description: store.description,
         owner: store.owner,
@@ -72,14 +72,14 @@ function Update({ session, selfUser, prevStore }) {
   const [store, setStore] = useState({
     id: prevStore.id,
     name: prevStore.name,
-    description: prevStore.name,
+    description: prevStore.description,
     owner: prevStore.owner,
   });
   return (
-    <Layout title={"가게 정보 수정 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게"
+        title="가게 수정"
       >
       </Section>
       <Section

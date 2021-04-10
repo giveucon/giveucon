@@ -21,7 +21,7 @@ function Home({ session, selfUser }) {
   const router = useRouter();
   return (
     <>
-      <Layout title={"거래 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+      <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
           title="거래"

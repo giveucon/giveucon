@@ -11,12 +11,12 @@ import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getSelfStoreList = async (session, selfUser) => {
+const getStoreListByUser = async (session, user) => {
   try {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores`, {
         params: {
-          user: selfUser.id,
+          user: user,
         },
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -31,24 +31,43 @@ const getSelfStoreList = async (session, selfUser) => {
   }
 };
 
+const getStoreList = async (session) => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores`, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const selfStoreList = await getSelfStoreList(session, selfUser)
+  let storeList
+  if (context.query.user) { storeList = await getStoreListByUser(session, context.query.user)}
+  else { storeList = await getStoreList(session) }
   return {
-    props: { session, selfUser, selfStoreList },
+    props: { session, selfUser, storeList },
   }
 })
 
-function Stores({ session, selfUser, selfStoreList }) {
+function Index({ session, selfUser, storeList }) {
   const router = useRouter();
   return (
     <>
-      <Layout title={"내 가게 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title="내 가게"
+          title="가게 목록"
         >
           <Grid container>
-            {selfStoreList && selfStoreList.map((item, index) => (
+            {storeList && storeList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
@@ -79,4 +98,4 @@ function Stores({ session, selfUser, selfStoreList }) {
   );
 }
 
-export default Stores;
+export default Index;

@@ -12,7 +12,7 @@ import withAuthServerSideProps from '../withAuthServerSideProps'
 const postStore = async (session, store) => {
   try {
     const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         name: store.name,
         description: store.description,
         owner: store.owner,
@@ -44,7 +44,7 @@ function Create({ session, selfUser }) {
     owner: selfUser.id,
   });
   return (
-    <Layout title={"가게 생성 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title="가게 생성"

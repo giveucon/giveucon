@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import clsx from 'clsx';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import FilledInput from '@material-ui/core/FilledInput';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStore = async (session, id) => {
+const getProduct = async (session, id) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -34,10 +27,10 @@ const getStore = async (session, id) => {
   }
 };
 
-const postProduct = async (session, product) => {
+const putProduct = async (session, product) => {
   try {
-    const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/products/", {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${product.id}/`, {
         name: product.name,
         description: product.description,
         price: product.price,
@@ -58,30 +51,31 @@ const postProduct = async (session, product) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context.query.id)
+  const prevProduct = await getProduct(session, context.query.id)
   return {
-    props: { session, selfUser, store },
+    props: { session, selfUser, prevProduct },
   }
 })
 
-function Create({ session, selfUser, store }) {
+function Update({ session, selfUser, prevProduct }) {
   const router = useRouter();
   const [product, setProduct] = useState({
-    name: "",
-    description: "",
-    price: 0,
-    duration: 0,
-    store: store.id,
+    id: prevProduct.id,
+    name: prevProduct.name,
+    description: prevProduct.description,
+    price: prevProduct.price,
+    duration: prevProduct.duration,
+    store: prevProduct.store,
   });
   return (
-    <Layout title={`상품 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="상품 추가"
+        title="상품 수정"
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="name"
             value={product.name}
             fullWidth
             label="이름"
@@ -93,7 +87,7 @@ function Create({ session, selfUser, store }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name="description"
             value={product.description}
             fullWidth
             label="설명"
@@ -106,7 +100,7 @@ function Create({ session, selfUser, store }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="price"
             value={product.price}
             fullWidth
             label="가격"
@@ -126,7 +120,7 @@ function Create({ session, selfUser, store }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="duration"
             value={product.duration}
             fullWidth
             type="number"
@@ -150,7 +144,7 @@ function Create({ session, selfUser, store }) {
             fullWidth
             variant="contained"
             onClick={async () => {
-              const response = await postProduct(session, product);
+              const response = await putProduct(session, product);
               router.push(`/products/${response.id}`);
             }}
           >
@@ -162,4 +156,4 @@ function Create({ session, selfUser, store }) {
   );
 }
 
-export default Create;
+export default Update;

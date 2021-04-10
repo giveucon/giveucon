@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios'
-import { signIn, signOut, getSession } from "next-auth/client";
+import { signOut } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -31,7 +31,7 @@ function Home({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Layout title={"내 정보 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`내 계정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title="내 계정"
@@ -51,7 +51,10 @@ function Home({ session, selfUser }) {
             color="default"
             fullWidth
             variant="contained"
-            onClick={() => router.push(`/myaccount/stores`)}
+            onClick={() => router.push({
+              pathname: '/stores',
+              query: { user: selfUser.id },
+            })}
           >
             내 가게
           </Button>
@@ -66,7 +69,7 @@ function Home({ session, selfUser }) {
             color="default"
             fullWidth
             variant="contained"
-            onClick={() => router.push(`/myaccount/settings`)}
+            onClick={() => router.push(`/myaccount/update`)}
           >
             설정
           </Button>
@@ -78,6 +81,7 @@ function Home({ session, selfUser }) {
             variant="contained"
             onClick={() => {
               signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+              router.push(`/login`)
             }}
           >
             로그아웃

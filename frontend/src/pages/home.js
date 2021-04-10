@@ -41,7 +41,7 @@ const centralNotices = [
 function Home({ session, selfUser }) {
 
   return (
-    <Layout title={"홈 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         title="홈"
         titlePrefix={<IconButton><HomeIcon /></IconButton>}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
+import { signOut } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -20,27 +20,10 @@ const useStyles = makeStyles({
   },
 });
 
-const getStore = async (session, id) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const deleteStore = async (session, store) => {
+const deleteSelfUser = async (session, selfUser) => {
   try {
     const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${selfuser.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -55,19 +38,18 @@ const deleteStore = async (session, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context.query.id)
   return {
-    props: { session, selfUser, store },
+    props: { session, selfUser },
   }
 })
 
-function Delete({ session, selfUser, store }) {
+function Delete({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="가게 삭제"
+        title="계정 탈퇴"
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -79,11 +61,11 @@ function Delete({ session, selfUser, store }) {
             fullWidth
             variant="contained"
             onClick={async () => {
-              const response = await deleteStore(session, store);
-              router.push(`/stores/home`);
+              const response = await deleteSelfUser(session, selfUser);
+              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
             }}
           >
-            가게 삭제
+            계정 탈퇴
           </Button>
         </Box>
         <Box marginY={1}>

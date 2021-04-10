@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -9,16 +10,24 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import InfoIcon from '@material-ui/icons/Info';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
 import withAuthServerSideProps from '../../withAuthServerSideProps'
 
+const useStyles = makeStyles({
+  RedButton: {
+    background: '#f44336',
+    color: 'white',
+  },
+});
+
 const putSelfUser = async (session, selfUser) => {
   try {
     const response = await axios.put(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/" + selfUser.id + "/", {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${selfuser.id}/`, {
         email: selfUser.email,
         user_name: selfUser.user_name,
         first_name: selfUser.first_name,
@@ -45,8 +54,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   }
 })
 
-function Basic({ session, prevSelfUser }) {
+function User({ session, prevSelfUser }) {
   const router = useRouter();
+  const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
     id: prevSelfUser.id,
     email: prevSelfUser.email,
@@ -56,22 +66,22 @@ function Basic({ session, prevSelfUser }) {
     dark_mode: prevSelfUser.dark_mode,
   });
   return (
-    <Layout title={"기본 설정 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
+    <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="기본 설정"
+        title="사용자 설정"
       >
       </Section>
       <Section
-        title="기본 정보"
-        titlePrefix={<IconButton><InfoIcon /></IconButton>}
+        title="사용자 정보"
+        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
             name="username"
             value={selfUser.user_name}
             fullWidth
-            label="사용자 이름"
+            label="유저네임"
             onChange={(event) => {
               setSelfUser({ ...selfUser, user_name: event.target.value });
             }}
@@ -138,10 +148,25 @@ function Basic({ session, prevSelfUser }) {
             variant="contained"
             onClick={() => {
               putSelfUser(session, selfUser);
-              router.push('/myaccount/settings');
+              router.push('/myaccount/update');
             }}
           >
             제출
+          </Button>
+        </Box>
+      </Section>
+      <Section
+        title="위험 구역"
+        titlePrefix={<IconButton><WarningIcon /></IconButton>}
+      >
+        <Box marginY={1}>
+          <Button
+            className={classes.RedButton}
+            fullWidth
+            variant="contained"
+            onClick={() => router.push('/myaccount/delete')}
+          >
+            계정 탈퇴
           </Button>
         </Box>
       </Section>
@@ -149,4 +174,4 @@ function Basic({ session, prevSelfUser }) {
   );
 }
 
-export default Basic;
+export default User;
