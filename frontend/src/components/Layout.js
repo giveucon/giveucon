@@ -23,7 +23,7 @@ export default function Layout({ bottomNav=true, children, title }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Container maxWidth="xs">
-        <Box className={classes.childrenBox} mb={bottomNav ? 8 : 0}>
+        <Box className={classes.childrenBox} mb={bottomNav ? 10 : 0}>
           {children}
         </Box>
         {

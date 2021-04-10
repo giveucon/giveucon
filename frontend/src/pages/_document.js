@@ -54,7 +54,7 @@ class MyDocument extends Document {
             body > div:first-child,
             div#__next,
             div#__next > div {
-              min_height: 115%;
+              minHeight: 100%;
             }
           `}</style>
           <Main />
