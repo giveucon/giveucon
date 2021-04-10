@@ -49,11 +49,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   const coupon = await getCoupon(session, context.query.id)
   const product = await getProduct(session, coupon)
   return {
-    props: { coupon, product },
+    props: { session, coupon, product },
   }
 })
 
-function Index({ coupon, product }) {
+function Index({ session, coupon, product }) {
   const router = useRouter();
   return (
     <Layout title={"쿠폰 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>

@@ -52,7 +52,7 @@ function Home({ session, selfUser }) {
             </Badge>
           </IconButton>
         }>
-        <SwipeableBusinessCards autoplay={true} interval={5000}>
+        <SwipeableBusinessCards autoplay={true}>
           {centralNotices}
         </SwipeableBusinessCards>
       </Section>

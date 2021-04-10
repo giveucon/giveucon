@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Login({session}) {
+function Login({ session }) {
   const router = useRouter();
   const classes = useStyles();
 

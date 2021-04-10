@@ -36,11 +36,11 @@ const getCouponList = async (session, selfUser) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const couponList = await getCouponList(session, selfUser)
   return {
-    props: { selfUser, couponList },
+    props: { session, selfUser, couponList },
   }
 })
 
-function Home({ selfUser, couponList }) {
+function Home({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <>
@@ -56,8 +56,8 @@ function Home({ selfUser, couponList }) {
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
-            {couponList && couponList.map((item, key) => (
-              <Grid item xs={6}>
+            {couponList && couponList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,16 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      maxWidth: '100%',
-    },
-  }));
-
-
 export default function Section({ backButton=false, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
   const router = useRouter();
-  const classes = useStyles();
   return (
     <Box marginY={2}>
       <Paper>

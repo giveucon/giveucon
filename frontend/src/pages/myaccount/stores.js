@@ -1,12 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -36,11 +34,11 @@ const getSelfStoreList = async (session, selfUser) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const selfStoreList = await getSelfStoreList(session, selfUser)
   return {
-    props: { selfUser, selfStoreList },
+    props: { session, selfUser, selfStoreList },
   }
 })
 
-function Stores({ selfUser, selfStoreList }) {
+function Stores({ session, selfUser, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -50,8 +48,8 @@ function Stores({ selfUser, selfStoreList }) {
           title="내 가게"
         >
           <Grid container>
-            {selfStoreList && selfStoreList.map((item, key) => (
-              <Grid item xs={6}>
+            {selfStoreList && selfStoreList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -66,12 +64,16 @@ function Stores({ selfUser, selfStoreList }) {
             ))}
           </Grid>
         </Section>
-        <Fab
-          color="primary"
-          onClick={() => router.push(`/stores/create`)}
-        >
-          <AddIcon />
-        </Fab>
+        <Box marginY={1}>
+          <Button
+            color="primary"
+            fullWidth
+            variant="contained"
+            onClick={() => router.push(`/stores/create`)}
+          >
+            새 가게 추가
+          </Button>
+        </Box>
       </Layout>
     </>
   );

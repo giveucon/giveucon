@@ -9,13 +9,13 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const postStore = async (session, selfUser, store) => {
+const postStore = async (session, store) => {
   try {
     const response = await axios.post(
       process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/stores/", {
         name: store.name,
         description: store.description,
-        owner: selfUser.id,
+        owner: store.owner,
       }, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -32,15 +32,16 @@ const postStore = async (session, selfUser, store) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { selfUser },
+    props: { session, selfUser },
   }
 })
 
-function Create({ selfUser }) {
+function Create({ session, selfUser }) {
   const router = useRouter();
   const [store, setStore] = useState({
     name: "",
     description: "",
+    owner: selfUser.id,
   });
   return (
     <Layout title={"가게 생성 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -79,7 +80,7 @@ function Create({ selfUser }) {
             fullWidth
             variant="contained"
             onClick={async () => {
-              const response = await postStore(session, selfUser, store);
+              const response = await postStore(session, store);
               router.push(`/stores/${response.id}`);
             }}
           >

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function BottomNavBar(props) {
+export default function BottomNavBar() {
   const router = useRouter();
   const classes = useStyles();
   let key = 0;

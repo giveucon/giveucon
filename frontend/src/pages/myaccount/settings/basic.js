@@ -41,11 +41,11 @@ const putSelfUser = async (session, selfUser) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const prevSelfUser = selfUser
   return {
-    props: { prevSelfUser },
+    props: { session, prevSelfUser },
   }
 })
 
-function Basic({ prevSelfUser }) {
+function Basic({ session, prevSelfUser }) {
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
     id: prevSelfUser.id,

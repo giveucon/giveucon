@@ -39,7 +39,7 @@ class SwipeableBusinessCard extends React.Component {
           autoplay={autoplay ? autoplay : false}
           enableMouseEvents
           index={index}
-          interval={interval ? interval : 3000}
+          interval={interval ? interval : 5000}
           onChangeIndex={this.handleChangeIndex}
         >
           {children}

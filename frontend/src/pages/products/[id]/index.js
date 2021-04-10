@@ -58,7 +58,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   const product = await getProduct(session, context.query.id)
   const store = await getStore(session, product.store)
   return {
-    props: { selfUser, product, store },
+    props: { session, selfUser, product, store },
   }
 })
 

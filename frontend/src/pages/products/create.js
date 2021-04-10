@@ -60,11 +60,11 @@ const postProduct = async (session, product) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const store = await getStore(session, context.query.id)
   return {
-    props: { selfUser, store },
+    props: { session, selfUser, store },
   }
 })
 
-function Create({ selfUser, store }) {
+function Create({ session, selfUser, store }) {
   const router = useRouter();
   const [product, setProduct] = useState({
     name: "",
@@ -130,7 +130,7 @@ function Create({ selfUser, store }) {
             value={product.duration}
             fullWidth
             type="number"
-            label="기간"
+            label="유효기간"
             onChange={(event) => {
               setProduct({ ...product, duration: event.target.value });
             }}

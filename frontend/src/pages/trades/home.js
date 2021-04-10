@@ -13,11 +13,11 @@ import withAuthServerSideProps from '../withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { selfUser },
+    props: { session, selfUser },
   }
 })
 
-function Home({ selfUser }) {
+function Home({ session, selfUser }) {
   const router = useRouter();
   return (
     <>

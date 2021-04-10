@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
@@ -35,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
 export default function UserProfileSection({ actions=null, children, image=null, name=null, onClick=null, subtitle=null }) {
   const classes = useStyles();
 
@@ -58,11 +56,6 @@ export default function UserProfileSection({ actions=null, children, image=null,
             <Box display={actions ? 'flex' : "none"} justifyContent="center">
               {actions}
             </Box>
-            <Grid container>
-              <Grid item>
-
-              </Grid>
-            </Grid>
           </Box>
           <Divider />
           <Box display={children ? 'block' : "none"} padding={2}>

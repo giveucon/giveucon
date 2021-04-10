@@ -24,7 +24,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
 
     // Get session from NextAuth
     const session = await getSession(context);
-    if (!session) {
+    if (session.accessToken === null) {
       return {
         redirect: {
           permanent: false,

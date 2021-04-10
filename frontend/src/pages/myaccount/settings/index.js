@@ -14,11 +14,11 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { selfUser },
+    props: { session, selfUser },
   }
 })
 
-function Index({ selfUser }) {
+function Index({ session, selfUser }) {
   const router = useRouter();
   return (
     <Layout title={"설정 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>

@@ -56,11 +56,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   const storeList = await getStoreList(session)
   const selfStoreList = await getSelfStoreList(session, selfUser)
   return {
-    props: { selfUser, storeList, selfStoreList },
+    props: { session, selfUser, storeList, selfStoreList },
   }
 })
 
-function Home({ selfUser, storeList, selfStoreList }) {
+function Home({ session, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -80,8 +80,8 @@ function Home({ selfUser, storeList, selfStoreList }) {
           }
         >
           <Grid container>
-            {selfStoreList && selfStoreList.map((item, key) => (
-              <Grid item xs={6}>
+            {selfStoreList && selfStoreList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -100,8 +100,8 @@ function Home({ selfUser, storeList, selfStoreList }) {
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
-            {selfStoreList && selfStoreList.map((item, key) => (
-              <Grid item xs={6}>
+            {selfStoreList && selfStoreList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"

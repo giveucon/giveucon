@@ -61,11 +61,11 @@ const deleteStore = async (session, store) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const store = await getStore(session, context.query.id)
   return {
-    props: { selfUser, store },
+    props: { session, selfUser, store },
   }
 })
 
-function Delete({ selfUser, store }) {
+function Delete({ session, selfUser, store }) {
   const router = useRouter();
   const classes = useStyles();
   return (

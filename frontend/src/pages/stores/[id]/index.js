@@ -61,7 +61,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   const store = await getStore(session, context.query.id)
   const productList = await getProductList(session, store)
   return {
-    props: { selfUser, store, productList },
+    props: { session, selfUser, store, productList },
   }
 })
 
@@ -89,7 +89,7 @@ const storeNotices = [
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Index({ selfUser, store, productList }) {
+function Index({ session, selfUser, store, productList }) {
   const router = useRouter();
   return (
     <Layout title={store.name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -97,7 +97,7 @@ function Index({ selfUser, store, productList }) {
         backButton
         title={store.name}
       >
-        <SwipeableBusinessCards autoplay={true} interval={5000}>
+        <SwipeableBusinessCards autoplay={true}>
           {storeNotices}
         </SwipeableBusinessCards>
         <ArticleBox
@@ -113,8 +113,8 @@ function Index({ selfUser, store, productList }) {
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
         <Grid container>
-          {productList.map((item, key) => (
-            <Grid item xs={6}>
+          {productList.map((item, index) => (
+            <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -157,7 +157,7 @@ function Index({ selfUser, store, productList }) {
                 query: { id: store.id },
               })}
             >
-              상품 추가
+              새 상품 추가
             </Button>
           </Box>
           <Box marginY={1}>

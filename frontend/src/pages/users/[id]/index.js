@@ -32,11 +32,11 @@ const getUser = async (session, id) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const user = await getUser(session, context.query.id)
   return {
-    props: { selfUser, user },
+    props: { session, selfUser, user },
   }
 })
 
-function Index({ selfUser, user }) {
+function Index({ session, selfUser, user }) {
   const router = useRouter();
   return (
     <Layout title={user.user_name + " - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>

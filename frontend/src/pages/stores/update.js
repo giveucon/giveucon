@@ -62,11 +62,11 @@ const putStore = async (session, store) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const prevStore = await getStore(session, context.query.id)
   return {
-    props: { selfUser, prevStore },
+    props: { session, selfUser, prevStore },
   }
 })
 
-function Update({ selfUser, prevStore }) {
+function Update({ session, selfUser, prevStore }) {
   const router = useRouter();
   const classes = useStyles();
   const [store, setStore] = useState({
