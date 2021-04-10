@@ -6,12 +6,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import ArticleBox from '../../../components/ArticleBox';
-import BusinessCard from '../../../components/BusinessCard';
-import Layout from '../../../components/Layout'
-import Tile from '../../../components/Tile';
-import Section from '../../../components/Section'
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import ArticleBox from '../../components/ArticleBox';
+import BusinessCard from '../../components/BusinessCard';
+import Layout from '../../components/Layout'
+import Tile from '../../components/Tile';
+import Section from '../../components/Section'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {
@@ -20,10 +20,10 @@ const useStyles = makeStyles({
   },
 });
 
-const getProduct = async (session, id) => {
+const getProduct = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -37,10 +37,10 @@ const getProduct = async (session, id) => {
   }
 };
 
-const getStore = async (session, id) => {
+const getStore = async (session, product) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -55,14 +55,14 @@ const getStore = async (session, id) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const product = await getProduct(session, context.query.id)
-  const store = await getStore(session, product.store)
+  const product = await getProduct(session, context)
+  const store = await getStore(session, product)
   return {
     props: { session, selfUser, product, store },
   }
 })
 
-function Index({ session, selfUser, product, store }) {
+function Id({ session, selfUser, product, store }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -95,6 +95,16 @@ function Index({ session, selfUser, product, store }) {
           </Box>
         </>
       )}
+      <Box marginY={1}>
+        <Button
+          color="default"
+          fullWidth
+          variant="contained"
+          onClick={() => router.push(`/stores/${store.id}`,)}
+        >
+          상점으로 이동
+        </Button>
+      </Box>
       { (selfUser.id === store.owner) && (store.id === product.store) && (
         <>
           <Box marginY={1}>
@@ -110,23 +120,10 @@ function Index({ session, selfUser, product, store }) {
               상품 정보 수정
             </Button>
           </Box>
-          <Box marginY={1}>
-            <Button
-              className={classes.RedButton}
-              fullWidth
-              variant="contained"
-              onClick={() => router.push({
-                  pathname: '/products/delete',
-                  query: { id: product.id },
-              })}
-            >
-              상품 삭제
-            </Button>
-          </Box>
         </>
       )}
     </Layout>
   );
 }
 
-export default Index;
+export default Id;

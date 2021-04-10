@@ -7,15 +7,15 @@ import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import Layout from '../../../components/Layout'
-import BusinessCard from '../../../components/BusinessCard';
-import Section from '../../../components/Section'
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import Layout from '../../components/Layout'
+import BusinessCard from '../../components/BusinessCard';
+import Section from '../../components/Section'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getCoupon = async (session, id) => {
+const getCoupon = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -48,14 +48,14 @@ const getProduct = async (session, coupon) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const coupon = await getCoupon(session, context.query.id)
+  const coupon = await getCoupon(session, context)
   const product = await getProduct(session, coupon)
   return {
     props: { session, selfUser, coupon, product },
   }
 })
 
-function Index({ session, selfUser, coupon, product }) {
+function Id({ session, selfUser, coupon, product }) {
   const router = useRouter();
   return (
     <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -98,4 +98,4 @@ function Index({ session, selfUser, coupon, product }) {
   );
 }
 
-export default Index;
+export default Id;

@@ -5,15 +5,16 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getProduct = async (session, id) => {
+const getProduct = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ const putProduct = async (session, product) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevProduct = await getProduct(session, context.query.id)
+  const prevProduct = await getProduct(session, context)
   return {
     props: { session, selfUser, prevProduct },
   }
@@ -149,6 +150,24 @@ function Update({ session, selfUser, prevProduct }) {
             }}
           >
             제출
+          </Button>
+        </Box>
+      </Section>
+      <Section
+        title="위험 구역"
+        titlePrefix={<IconButton><WarningIcon /></IconButton>}
+      >
+        <Box marginY={1}>
+          <Button
+            className={classes.RedButton}
+            fullWidth
+            variant="contained"
+            onClick={() => router.push({
+              pathname: '/stores/delete',
+              query: { id: store.id },
+            })}
+          >
+            가게 삭제
           </Button>
         </Box>
       </Section>

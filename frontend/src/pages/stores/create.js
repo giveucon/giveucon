@@ -15,7 +15,7 @@ const postStore = async (session, store) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         name: store.name,
         description: store.description,
-        owner: store.owner,
+        user: store.user,
       }, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -41,7 +41,7 @@ function Create({ session, selfUser }) {
   const [store, setStore] = useState({
     name: "",
     description: "",
-    owner: selfUser.id,
+    user: selfUser.id,
   });
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -51,7 +51,7 @@ function Create({ session, selfUser }) {
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="name"
             value={store.name}
             fullWidth
             label="가게 이름"
@@ -63,7 +63,7 @@ function Create({ session, selfUser }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name="description"
             value={store.description}
             fullWidth
             label="가게 설명"

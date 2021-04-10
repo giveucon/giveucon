@@ -11,12 +11,14 @@ import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStoreList = async (session, context) => {
+const getProductList = async (session, context) => {
   try {
     let params = new Object;
     if (context.query.user) { params.user = context.query.user };
+    if (context.query.store) { params.store = context.query.store };
+    if (context.query.product) { params.store = context.query.product };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -32,50 +34,36 @@ const getStoreList = async (session, context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  let storeList = await getStoreList(session, context)
-  let user = context.query.user || null
+  const couponList = await getProductList(session, context)
   return {
-    props: { session, selfUser, storeList, user },
+    props: { session, selfUser, couponList },
   }
 })
 
-function Index({ session, selfUser, storeList, user }) {
+function Index({ session, couponList }) {
   const router = useRouter();
   return (
-    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게 목록"
+        title="쿠폰 목록"
       >
         <Grid container>
-          {storeList && storeList.map((item, index) => (
+          {couponList && couponList.map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => 
-                  router.push(`/stores/${item.id}`
-                )}
-                menuItems={
-                  <MenuItem>Menu Item</MenuItem>
+                onClick={item.user === selfUser.id
+                  ? (() => router.push(`/coupons/${item.id}`))
+                  : null
                 }
+                menuItems={<MenuItem>Menu Item</MenuItem>}
               />
             </Grid>
           ))}
         </Grid>
       </Section>
-      { user && (user.id === selfUser.id) && (
-        <Box marginY={1}>
-          <Button
-            color="primary"
-            fullWidth
-            variant="contained"
-            onClick={() => router.push(`/stores/create`)}
-          >
-            새 가게 추가
-          </Button>
-        </Box>
-      )}
     </Layout>
   );
 }

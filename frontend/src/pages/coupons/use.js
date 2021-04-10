@@ -12,10 +12,10 @@ import BusinessCard from '../../components/BusinessCard';
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getCoupon = async (session, id) => {
+const getCoupon = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const getProduct = async (session, coupon) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const coupon = await getCoupon(session, context.query.id)
+  const coupon = await getCoupon(session, context)
   const product = await getProduct(session, coupon)
   return {
     props: { session, selfUser, coupon, product },

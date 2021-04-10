@@ -21,10 +21,10 @@ const useStyles = makeStyles({
   },
 });
 
-const getStore = async (session, id) => {
+const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const putStore = async (session, store) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
         name: store.name,
         description: store.description,
-        owner: store.owner,
+        user: store.user,
       }, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -60,7 +60,7 @@ const putStore = async (session, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevStore = await getStore(session, context.query.id)
+  const prevStore = await getStore(session, context)
   return {
     props: { session, selfUser, prevStore },
   }
@@ -73,7 +73,7 @@ function Update({ session, selfUser, prevStore }) {
     id: prevStore.id,
     name: prevStore.name,
     description: prevStore.description,
-    owner: prevStore.owner,
+    user: prevStore.user,
   });
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

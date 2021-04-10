@@ -14,10 +14,10 @@ import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getCentralNotice = async (session, id) => {
+const getCentralNotice = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const getCentralNotice = async (session, id) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const noticeList = await getCentralNotice(session, context.query.id)
+  const noticeList = await getCentralNotice(session, context)
   return {
     props: { session, selfUser, noticeList },
   }

@@ -11,12 +11,30 @@ import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStoreList = async (session, context) => {
+const getStore = async (session, context) => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.store}`, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getProductList = async (session, context) => {
   try {
     let params = new Object;
     if (context.query.user) { params.user = context.query.user };
+    if (context.query.store) { params.store = context.query.store };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -32,20 +50,20 @@ const getStoreList = async (session, context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  let storeList = await getStoreList(session, context)
-  let user = context.query.user || null
+  const productList = await getProductList(session, context)
+  const store = context.query.store ? await getStore(session, context) : null
   return {
-    props: { session, selfUser, storeList, user },
+    props: { session, selfUser, productList, store },
   }
 })
 
-function Index({ session, selfUser, storeList, user }) {
+function Index({ session, selfUser, storeList, store }) {
   const router = useRouter();
   return (
-    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게 목록"
+        title="상품 목록"
       >
         <Grid container>
           {storeList && storeList.map((item, index) => (
@@ -53,26 +71,25 @@ function Index({ session, selfUser, storeList, user }) {
               <Tile
                 title={item.name}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => 
-                  router.push(`/stores/${item.id}`
-                )}
-                menuItems={
-                  <MenuItem>Menu Item</MenuItem>
-                }
+                onClick={() => router.push(`/stores/${item.id}`)}
+                menuItems={<MenuItem>Menu Item</MenuItem>}
               />
             </Grid>
           ))}
         </Grid>
       </Section>
-      { user && (user.id === selfUser.id) && (
+      { store && (selfUser.id === store.user) && (
         <Box marginY={1}>
           <Button
             color="primary"
             fullWidth
             variant="contained"
-            onClick={() => router.push(`/stores/create`)}
+            onClick={() => router.push({
+              pathname: '/products/create',
+              query: { id: store.id },
+            })}
           >
-            새 가게 추가
+            새 상품 추가
           </Button>
         </Box>
       )}

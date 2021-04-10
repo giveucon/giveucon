@@ -9,10 +9,10 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getProduct = async (session, id) => {
+const getProduct = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -26,10 +26,10 @@ const getProduct = async (session, id) => {
   }
 };
 
-const getStore = async (session, id) => {
+const getStore = async (session, product) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.store}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -66,8 +66,8 @@ const postCoupon = async (session, selfUser, product) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const product = await getProduct(session, context.query.id)
-  const store = await getStore(session, product.store)
+  const product = await getProduct(session, context)
+  const store = await getStore(session, product)
   return {
     props: { session, selfUser, product, store },
   }

@@ -7,15 +7,15 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import Layout from '../../../components/Layout'
-import Section from '../../../components/Section'
-import UserProfileSection from '../../../components/UserProfileSection';
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import Layout from '../../components/Layout'
+import Section from '../../components/Section'
+import UserProfileSection from '../../components/UserProfileSection';
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getUser = async (session, id) => {
+const getUser = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -30,13 +30,13 @@ const getUser = async (session, id) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const user = await getUser(session, context.query.id)
+  const user = await getUser(session, context)
   return {
     props: { session, selfUser, user },
   }
 })
 
-function Index({ session, selfUser, user }) {
+function Id({ session, selfUser, user }) {
   const router = useRouter();
   return (
     <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -62,12 +62,9 @@ function Index({ session, selfUser, user }) {
               color="default"
               fullWidth
               variant="contained"
-              onClick={() => router.push({
-                pathname: '/myaccount',
-                query: { id: store.id },
-              })}
+              onClick={() => router.push('/myaccount')}
             >
-              내 계정
+              내 계정으로 이동
             </Button>
           </Box>
         </>
@@ -76,4 +73,4 @@ function Index({ session, selfUser, user }) {
   );
 }
 
-export default Index;
+export default Id;

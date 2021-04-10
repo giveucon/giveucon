@@ -1,12 +1,11 @@
 import React from 'react';
-import axios from 'axios'
-import { signOut } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import CodeIcon from '@material-ui/icons/Code';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../components/Layout'
@@ -59,6 +58,19 @@ function Home({ session, selfUser }) {
             내 가게
           </Button>
         </Box>
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => router.push({
+              pathname: '/products',
+              query: { user: selfUser.id },
+            })}
+          >
+            내 상품
+          </Button>
+        </Box>
       </Section>
       <Section
         title="설정"
@@ -79,12 +91,34 @@ function Home({ session, selfUser }) {
             className={classes.RedButton}
             fullWidth
             variant="contained"
-            onClick={() => {
-              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
-              router.push(`/login`)
-            }}
+            onClick={() => {router.push(`/logout`)}}
           >
             로그아웃
+          </Button>
+        </Box>
+      </Section>
+      <Section
+        title="개발자 도구"
+        titlePrefix={<IconButton><CodeIcon /></IconButton>}
+      >
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => {router.push(`/sandbox/comps`)}}
+          >
+            컴포넌트
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => router.push(`/sandbox/scanner`)}
+          >
+            QR 스캐너
           </Button>
         </Box>
       </Section>

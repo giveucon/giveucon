@@ -12,19 +12,19 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import ArticleBox from '../../../components/ArticleBox';
-import BusinessCard from '../../../components/BusinessCard';
-import KakaoMapCard from '../../../components/KakaoMapCard';
-import Layout from '../../../components/Layout'
-import Tile from '../../../components/Tile';
-import Section from '../../../components/Section'
-import SwipeableBusinessCards from '../../../components/SwipeableBusinessCards';
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import ArticleBox from '../../components/ArticleBox';
+import BusinessCard from '../../components/BusinessCard';
+import KakaoMapCard from '../../components/KakaoMapCard';
+import Layout from '../../components/Layout'
+import Tile from '../../components/Tile';
+import Section from '../../components/Section'
+import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStore = async (session, id) => {
+const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const getProductList = async (session, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context.query.id)
+  const store = await getStore(session, context)
   const productList = await getProductList(session, store)
   return {
     props: { session, selfUser, store, productList },
@@ -90,7 +90,7 @@ const storeNotices = [
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Index({ session, selfUser, store, productList }) {
+function Id({ session, selfUser, store, productList }) {
   const router = useRouter();
   return (
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -181,4 +181,4 @@ function Index({ session, selfUser, store, productList }) {
   );
 }
 
-export default Index;
+export default Id;
