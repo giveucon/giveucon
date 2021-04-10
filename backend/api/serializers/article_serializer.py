@@ -1,25 +1,24 @@
 from django.conf import settings
 from django.db import transaction
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .image_serializer import ImageSerializer
-from ..models import Article
+from ..models import Article, Image
 
-class ArticleSerializer(ModelSerializer):
-    images = ImageSerializer(many=True, required=False)
+class ArticleSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
     class Meta:
         model = Article
         fields = '__all__'
         read_only_fields = ('user',)
 
     def create(self, validated_data):
-        print(validated_data)
-        if 'images' in validated_data:
-            images_data = validated_data.pop('images')
-            print(images_data)
         user = validated_data.pop('user')
+        images_data = validated_data.pop('images')
+        print(images_data)
         with transaction.atomic():
-            images = []
+            images = Image.objects.bulk_create([Image() for _ in images_data])
+            for i in range(len(images)):
+                images[i].image.save(images_data[i].name, images_data[i])
             article = Article.objects.create(user=user, **validated_data)
-            for image in images:
-                article.images.add(image)
+            article.images.set(images)
         return article

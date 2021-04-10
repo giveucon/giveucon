@@ -7,3 +7,8 @@ from ..serializers import ImageSerializer
 class ImageListView(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    '''
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        return super().create(request, *args, **kwargs)
+    '''

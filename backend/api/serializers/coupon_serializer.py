@@ -31,7 +31,7 @@ class CouponSerializer(ModelSerializer):
 
     def create(self, validated_data):
         coupon = Coupon(**validated_data)
-        with transaction.atmoic():
+        with transaction.atomic():
             coupon.save()
             coupon = self.sign_coupon(coupon)
             coupon.save()
