@@ -51,7 +51,7 @@ class Store(models.Model):
     #location
     private_key = models.CharField(max_length=64, blank=False, null=False, unique=True)
     public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
-    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
+    user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
     images = models.ManyToManyField(Image, blank=True)
 
 class Product(models.Model):
