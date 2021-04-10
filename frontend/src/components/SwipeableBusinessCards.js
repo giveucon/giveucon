@@ -44,8 +44,8 @@ class SwipeableBusinessCard extends React.Component {
         >
           {children}
         </AutoPlaySwipeableViews>
-        { React.Children.count(children) > 1 && (
-          <Pagination dots={React.Children.count(children)} index={index} onChangeIndex={this.handleChangeIndex} />
+        {children.length > 1 && (
+          <Pagination dots={children.length} index={index} onChangeIndex={this.handleChangeIndex} />
         )}
       </div>
     );

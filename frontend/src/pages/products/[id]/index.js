@@ -78,6 +78,23 @@ function Index({ session, selfUser, product, store }) {
           onClick={() => alert( 'Tapped' )}
         />
       </Section>
+      { (selfUser.id !== store.owner) && (store.id === product.store) && (
+        <>
+          <Box marginY={1}>
+            <Button
+              color="primary"
+              fullWidth
+              variant="contained"
+              onClick={() => router.push({
+                  pathname: '/products/charge',
+                  query: { id: product.id },
+              })}
+            >
+              쿠폰 구매
+            </Button>
+          </Box>
+        </>
+      )}
       { (selfUser.id === store.owner) && (store.id === product.store) && (
         <>
           <Box marginY={1}>
