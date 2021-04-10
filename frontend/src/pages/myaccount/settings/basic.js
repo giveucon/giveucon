@@ -13,23 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 const putSelfUser = async (session, selfUser) => {
   try {
@@ -54,13 +38,12 @@ const putSelfUser = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const prevSelfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+  const prevSelfUser = selfUser
   return {
-    props: { session, prevSelfUser }
+    props: { session, prevSelfUser },
   }
-}
+})
 
 function Basic({ session, prevSelfUser }) {
   const router = useRouter();

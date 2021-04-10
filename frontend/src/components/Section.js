@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,19 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      maxWidth: '100%',
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }));
-
-
 export default function Section({ backButton=false, children=null, title=null, titlePrefix=null, titleSuffix=null }) {
   const router = useRouter();
-  const classes = useStyles();
   return (
     <Box marginY={2}>
       <Paper>
@@ -45,10 +33,11 @@ export default function Section({ backButton=false, children=null, title=null, t
           <Box
             display={title ? "block" : "none"}
             flexGrow={1}
-            paddingX={(backButton || titlePrefix) ? 0 : 2}
+            paddingLeft={(backButton || titlePrefix) ? 0 : 2}
+            paddingRight={(titleSuffix) ? 0 : 2}
             paddingY={1.5}
           >
-            <Typography variant="h6" className={classes.title}>{title}</Typography>
+            <Typography variant="h6">{title}</Typography>
           </Box>
           <Box display={titleSuffix ? "block" : "none"} flexShrink={0}>
             {titleSuffix}

@@ -24,16 +24,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function BottomNavBar(props) {
+export default function BottomNavBar() {
   const router = useRouter();
   const classes = useStyles();
   let key = 0;
   const defaultActions = [
     ['홈', 'home', <HomeOutlinedIcon />],
-    ['내 지갑', 'mywallet', <AccountBalanceWalletOutlinedIcon />],
-    ['가게', 'stores', <StorefrontIcon />],
-    ['거래', 'trades', <LocalMallOutlinedIcon />],
-    ['내 계정', 'myaccount', <AccountCircleOutlinedIcon />]
+    ['내 지갑', 'mywallet/home', <AccountBalanceWalletOutlinedIcon />],
+    ['가게', 'stores/home', <StorefrontIcon />],
+    ['거래', 'trades/home', <LocalMallOutlinedIcon />],
+    ['내 계정', 'myaccount/home', <AccountCircleOutlinedIcon />]
   ].map(([label, value, icon]) => {
       return (
         <BottomNavigationAction

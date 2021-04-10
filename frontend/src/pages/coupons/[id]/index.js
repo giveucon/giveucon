@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,7 +8,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from '../../../components/Layout'
 import BusinessCard from '../../../components/BusinessCard';
 import Section from '../../../components/Section'
-import withAuth from '../../../components/withAuth'
+import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 const getCoupon = async (session, id) => {
   try {
@@ -46,16 +45,15 @@ const getProduct = async (session, coupon) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const coupon = await getCoupon(session, context.query.id)
   const product = await getProduct(session, coupon)
   return {
-    props: { session, coupon, product }
+    props: { session, coupon, product },
   }
-}
+})
 
-function Index({coupon, product}) {
+function Index({ session, coupon, product }) {
   const router = useRouter();
   return (
     <Layout title={"쿠폰 - " + process.env.NEXT_PUBLIC_APPLICATION_NAME}>
@@ -81,4 +79,4 @@ function Index({coupon, product}) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

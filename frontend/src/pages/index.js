@@ -1,24 +1,11 @@
-import { useEffect } from "react";
-import { useRouter } from 'next/router'
-import { getSession } from "next-auth/client";
+import withAuthServerSideProps from './withAuthServerSideProps'
 
-export default function Home({session}) {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      router.push('/home');
-    } else {
-      router.push('/login')
-    }
-  });
-  
-  return null;
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { session }
+    props: {},
   }
+})
+
+export default function Index({}) {
+  return null;
 }

@@ -11,24 +11,7 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCouponList = async (session, selfUser) => {
   try {
@@ -50,16 +33,14 @@ const getCouponList = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const couponList = await getCouponList(session, selfUser)
   return {
-    props: { session, selfUser, couponList }
+    props: { session, selfUser, couponList },
   }
-}
+})
 
-function Index({ session, selfUser, couponList }) {
+function Home({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <>
@@ -75,8 +56,8 @@ function Index({ session, selfUser, couponList }) {
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
-            {couponList && couponList.map((item, key) => (
-              <Grid item xs={6}>
+            {couponList && couponList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -96,4 +77,4 @@ function Index({ session, selfUser, couponList }) {
   );
 }
 
-export default withAuth(Index);
+export default Home;

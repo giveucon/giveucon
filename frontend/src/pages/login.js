@@ -21,9 +21,9 @@ const useStyles = makeStyles({
   },
 });
 
-function Login({session}) {
-  const classes = useStyles();
+function Login({ session }) {
   const router = useRouter();
+  const classes = useStyles();
 
   useEffect(() => {
     if (session) {

@@ -3,44 +3,58 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/client';
 
+const getSelfUser = async () => {
+  try {
+    const response = await axios.get(
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
+        headers: {
+          'Authorization': "Bearer " + session?.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response.status === 404) {
+    } else {
+      console.log(error);
+    }
+    return error;
+  }
+};
+
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  return {
-    props: { session }
+  const selfUser = await getSelfUser(session)
+  console.log(session);
+  if (session !== undefined) {
+    if (selfUser.response.status === 404) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/users/create",
+        },
+        props: {}
+      }
+    } else {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/components",
+        },
+        props: {}
+      }
+    }
+  } else {
+    return {
+      props: { session, selfUser }
+    }
   }
 }
 
-export default function withAuth(Component) {
+export default function withAuth( Component ) {
   return (props) => {
-    const router = useRouter();
-    const [session, loading] = useSession();
-    const [selfUser, setSelfUser] = useState('');
-  
-    const getSelfUser = async () => {
-      try {
-        const response = await axios.get(
-          process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-            headers: {
-              'Authorization': "Bearer " + session?.accessToken,
-              'Content-Type': 'application/json',
-              'accept': 'application/json'
-            }
-          }
-        );
-        setSelfUser(response.data);
-      } catch (error) {
-        if (error.response.status === 404) {
-          router.push('/users/create');
-        } else {
-          console.log(error);
-        }
-      }
-    };
-
-    useEffect(() => {
-      getSelfUser()
-      console.log(self)
-    },[])
     return <Component {...props} />
   }
 }

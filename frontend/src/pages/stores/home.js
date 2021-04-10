@@ -2,36 +2,18 @@ import React from 'react';
 import axios from 'axios';
 import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
-
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStoreList = async (session) => {
   try {
@@ -70,17 +52,15 @@ const getSelfStoreList = async (session, selfUser) => {
   }
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeList = await getStoreList(session)
   const selfStoreList = await getSelfStoreList(session, selfUser)
   return {
-    props: { session, selfUser, storeList, selfStoreList }
+    props: { session, selfUser, storeList, selfStoreList },
   }
-}
+})
 
-function Index({ session, selfUser, storeList, selfStoreList }) {
+function Home({ session, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
   return (
     <>
@@ -93,17 +73,19 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
         <Section
           title="내 가게"
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+          titleSuffix={
+            <IconButton onClick={() =>  router.push(`/myaccount/stores` )}>
+              <ArrowForwardIcon />
+            </IconButton>
+          }
         >
           <Grid container>
-            {storeList && storeList.map((item, key) => (
-              <Grid item xs={6}>
+            {selfStoreList && selfStoreList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/stores/${item.id}`
-                  )}
+                  onClick={() =>  router.push(`/stores/${item.id}` )}
                   menuItems={
                     <MenuItem>Menu Item</MenuItem>
                   }
@@ -118,8 +100,8 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
           <Grid container>
-            {selfStoreList && selfStoreList.map((item, key) => (
-              <Grid item xs={6}>
+            {selfStoreList && selfStoreList.map((item, index) => (
+              <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
@@ -134,15 +116,23 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
             ))}
           </Grid>
         </Section>
-        <Fab
-          color="primary"
-          onClick={() => router.push(`/stores/create`)}
-        >
-          <AddIcon />
-        </Fab>
+        {selfUser && (
+          <>
+            <Box marginY={1}>
+              <Button
+                color="primary"
+                fullWidth
+                variant="contained"
+                onClick={() => router.push(`/stores/create`)}
+              >
+                새 가게 추가
+              </Button>
+            </Box>
+          </>
+        )}
       </Layout>
     </>
   );
 }
 
-export default withAuth(Index);
+export default Home;

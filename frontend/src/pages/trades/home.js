@@ -4,41 +4,20 @@ import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import Tile from '../../components/Tile';
-import withAuth from '../../components/withAuth'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/users/self", {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfUser = await getSelfUser(session)
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
-    props: { session, selfUser }
+    props: { session, selfUser },
   }
-}
+})
 
-function Index({ session, selfUser }) {
+function Home({ session, selfUser }) {
   const router = useRouter();
   return (
     <>
@@ -49,7 +28,7 @@ function Index({ session, selfUser }) {
         >
         </Section>
         <Section
-          title="준비중입니다."
+          title="쿠폰 거래 서비스 준비중입니다."
           titlePrefix={<IconButton><AttachMoneyIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
@@ -59,4 +38,4 @@ function Index({ session, selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default Home;
