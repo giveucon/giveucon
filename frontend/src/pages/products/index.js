@@ -70,6 +70,7 @@ function Index({ session, selfUser, storeList, store }) {
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
+                subtitle={item.price.toLocaleString('ko-KR') + "원"}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
                 onClick={() => router.push(`/stores/${item.id}`)}
                 menuItems={<MenuItem>Menu Item</MenuItem>}

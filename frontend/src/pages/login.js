@@ -13,6 +13,7 @@ import Section from '../components/Section'
 
 const useStyles = makeStyles({
   background: {
+    height: "100vh",
     backgroundImage: "url(https://cdn.pixabay.com/photo/2014/07/30/18/26/grocery-store-405522_960_720.jpg)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -49,11 +50,11 @@ function Login({ session }) {
         alignItems="center"
         justifyContent="center"
       >
-        <Box style={{ minHeight: "10rem", minWidth: "20rem" }}>
+        <Box style={{ minHeight: "8rem", minWidth: "16rem" }}>
           <Section
             title="환영합니다!"
           >
-            <Box paddingY={7.5}>
+            <Box paddingY={5}>
               <Typography align="center" color="textPrimary" variant="h3">
                 giveUcon
               </Typography>

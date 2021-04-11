@@ -1,24 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import ArticleBox from '../../components/ArticleBox';
-import BusinessCard from '../../components/BusinessCard';
+import ProductBox from '../../components/ProductBox';
 import Layout from '../../components/Layout'
-import Tile from '../../components/Tile';
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
-
-const useStyles = makeStyles({
-  RedButton: {
-    background: '#f44336',
-    color: 'white',
-  },
-});
 
 const getProduct = async (session, context) => {
   try {
@@ -64,15 +53,15 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 
 function Id({ session, selfUser, product, store }) {
   const router = useRouter();
-  const classes = useStyles();
   return (
     <Layout title={`${product.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title={product.name}
       >
-        <ArticleBox
-          title="상품 설명"
+        <ProductBox
+          name={product.name}
+          price={product.price}
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
           content={product.description}
           onClick={() => alert( 'Tapped' )}

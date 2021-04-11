@@ -21,21 +21,22 @@ const theme = createMuiTheme({
     }),
     MuiAccordionSummary: createStyles({
       root: {
-        minHeight: 56,
+        minHeight: "0rem",
         '&$expanded': {
-          minHeight: 56,
+          minHeight: "0rem",
         },
       },
       content: {
+        margin: "0rem",
         '&$expanded': {
-          margin: '12px 0',
+          margin: "0rem",
         },
       },
       expanded: {},
     }),
     MuiAccordionDetails: createStyles({
       root: {
-        padding: "0.5rem",
+        padding: "0rem",
       },
     }),
     MuiBottomNavigationAction: createStyles({

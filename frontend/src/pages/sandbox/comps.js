@@ -12,6 +12,7 @@ import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
 import KakaoMapCard from '../../components/KakaoMapCard';
 import ListItemCard from '../../components/ListItemCard';
+import ProductBox from '../../components/ProductBox';
 import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
 import SwipeableTiles from '../../components/SwipeableTiles';
 import Tile from '../../components/Tile';
@@ -206,6 +207,21 @@ export default function Index() {
           primary="ListItemCard primary"
           secondary="ListItemCard secondary"
           suffix={<Button>Edit</Button>}
+          onClick={() => alert( 'Tapped' )}
+        />
+      </Section>
+
+      <Section
+        title="ProductBox"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <ProductBox
+          name="Product name"
+          price={10000}
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          content="ArticleBox Content ArticleBox Content ArticleBox Content "
+          actions={<Button>Edit</Button>}
           onClick={() => alert( 'Tapped' )}
         />
       </Section>
