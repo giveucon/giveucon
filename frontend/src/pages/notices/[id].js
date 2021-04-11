@@ -1,13 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import ChatIcon from '@material-ui/icons/Chat';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'

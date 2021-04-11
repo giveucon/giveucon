@@ -49,8 +49,10 @@ export default function ArticleBox({ children=null, content=null, defaultExpande
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
-            <Box paddingX={0.5} paddingY={1}>
+            <Box paddingX={2} paddingY={1}>
               <Typography variant="body1">{content}</Typography>
+            </Box>
+            <Box paddingY={1}>
               {children}
             </Box>
           </AccordionDetails>
