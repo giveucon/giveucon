@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -14,7 +13,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
-import KakaoMapCard from '../../components/KakaoMapCard';
+import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
@@ -135,7 +134,9 @@ function Id({ session, selfUser, store, productList }) {
         title="가게 위치"
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
-        <KakaoMapCard latitude={latitude} longitude={longitude}/>
+        <Card>
+          <KakaoMapBox latitude={latitude} longitude={longitude}/>
+        </Card>
       </Section>
       <Box marginY={1}>
         <Button

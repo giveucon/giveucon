@@ -1,8 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import QRCode from 'qrcode.react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,6 +18,27 @@ const getCoupon = async (session, context) => {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getCouponQR = async (session, context) => {
+  try {
+    let params = new Object;
+    params.type = `qr`;
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
+        params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -49,33 +72,30 @@ const getProduct = async (session, coupon) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const coupon = await getCoupon(session, context)
+  const couponQR = await getCouponQR(session, context)
   const product = await getProduct(session, coupon)
   return {
-    props: { session, selfUser, coupon, product },
+    props: { session, selfUser, coupon, couponQR, product },
   }
 })
 
-function Use({ session, selfUser, coupon, product }) {
+function Use({ session, selfUser, coupon, couponQR, product }) {
   const router = useRouter();
   return (
     <Layout title={`쿠폰 사용 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={`쿠폰 사용`}
-      >
-      </Section>
-      <Section
         title={product.name}
-        titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
       >
-        <BusinessCard
-          title={product.description}
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-          onClick={() => alert( 'Tapped' )}
-          menuItems={
-            <MenuItem>Menu Item</MenuItem>
-          }
-        />
+        <Card>
+          <Box display="flex" justifyContent="center" style={{positions: "responsive"}}> 
+            <QRCode
+              value={`${couponQR.magic} ${couponQR.coupon} ${couponQR.signature}`}
+              size={400}
+              includeMargin={true}
+            />
+          </Box>
+        </Card>
       </Section>
       <Box marginY={1}>
         <Button

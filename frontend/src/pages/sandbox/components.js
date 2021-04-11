@@ -10,17 +10,16 @@ import Section from '../../components/Section';
 import AccordionSection from '../../components/AccordionSection';
 import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
-import KakaoMapCard from '../../components/KakaoMapCard';
+import KakaoMapBox from '../../components/KakaoMapBox';
 import ListItemCard from '../../components/ListItemCard';
 import ProductBox from '../../components/ProductBox';
-import ScannerCard from '../../components/ScannerCard';
 import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
 import SwipeableTiles from '../../components/SwipeableTiles';
 import Tile from '../../components/Tile';
 import UserProfileBox from '../../components/UserProfileBox';
 import UserProfileSection from '../../components/UserProfileSection';
 
-export default function Index() {
+export default function Components() {
 
   const swipeableBusinessCards = [
     <BusinessCard
@@ -181,11 +180,11 @@ export default function Index() {
       </Section>
 
       <Section
-        title="KakaoMapCard"
+        title="KakaoMapBox"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <KakaoMapCard latitude={37.506502} longitude={127.053617}/>
+        <KakaoMapBox latitude={37.506502} longitude={127.053617}/>
       </Section>
 
       <Section
@@ -225,14 +224,6 @@ export default function Index() {
           actions={<Button>Edit</Button>}
           onClick={() => alert( 'Tapped' )}
         />
-      </Section>
-
-      <Section
-        title="ScannerCard"
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-      >
-        <ScannerCard />
       </Section>
 
       <Section

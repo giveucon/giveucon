@@ -1,6 +1,6 @@
 /*global kakao*/ 
 import React from 'react';
-import Card from '@material-ui/core/Card';
+import Box from '@material-ui/core/Box';
 import styled from "styled-components";
 
 const KakaoMaps = styled.div`
@@ -9,7 +9,7 @@ const KakaoMaps = styled.div`
   height: 20rem;
 `;
 
-class KakaoMapCard extends React.Component{
+class KakaoMapBox extends React.Component{
 
     componentDidMount() {
       const { latitude, longitude } = this.props;
@@ -37,11 +37,11 @@ class KakaoMapCard extends React.Component{
 
     render(){
       return(
-        <Card>
+        <Box>
           <KakaoMaps id="kakao_map" />
-        </Card>
+        </Box>
       )
     }
 }
 
-export default KakaoMapCard;
+export default KakaoMapBox;

@@ -106,7 +106,7 @@ function Home({ session, selfUser }) {
             color="default"
             fullWidth
             variant="contained"
-            onClick={() => {router.push(`/sandbox/comps`)}}
+            onClick={() => {router.push(`/sandbox/components`)}}
           >
             컴포넌트
           </Button>
