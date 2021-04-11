@@ -13,6 +13,7 @@ import BusinessCard from '../../components/BusinessCard';
 import KakaoMapCard from '../../components/KakaoMapCard';
 import ListItemCard from '../../components/ListItemCard';
 import ProductBox from '../../components/ProductBox';
+import ScannerCard from '../../components/ScannerCard';
 import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
 import SwipeableTiles from '../../components/SwipeableTiles';
 import Tile from '../../components/Tile';
@@ -224,6 +225,14 @@ export default function Index() {
           actions={<Button>Edit</Button>}
           onClick={() => alert( 'Tapped' )}
         />
+      </Section>
+
+      <Section
+        title="ScannerCard"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <ScannerCard />
       </Section>
 
       <Section
