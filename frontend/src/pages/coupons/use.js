@@ -5,12 +5,8 @@ import QRCode from 'qrcode.react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import IconButton from '@material-ui/core/IconButton';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import Layout from '../../components/Layout'
-import BusinessCard from '../../components/BusinessCard';
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
