@@ -1,18 +1,47 @@
-import React from 'react';
-import { useEffect } from 'react';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router'
 import jsQR from "jsqr";
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+
 import Layout from '../../components/Layout';
 import Section from '../../components/Section'
+import withAuthServerSideProps from '../withAuthServerSideProps'
 
-export default function Scanner() {
-  const testRef = React.createRef();
+const putCouponScan = async (session, qrData) => {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/scan/`, {
+        qr_data: qrData,
+      }, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+  return {
+    props: { session, selfUser },
+  }
+})
+
+function Scan({ session, selfUser }) {
+  const router = useRouter();
+
   useEffect(() => {
     const video = document.createElement("video");
     const canvasElement = document.getElementById("canvas");
     const canvas = canvasElement.getContext("2d");
-    const outputData = document.getElementById("outputData");
 
     function drawLine(begin, end, color) {
       canvas.beginPath();
@@ -22,22 +51,16 @@ export default function Scanner() {
       canvas.strokeStyle = color;
       canvas.stroke();
     }
-    navigator
-      .mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
-      .then((stream) => {
-        video.srcObject = stream;
-        video.setAttribute("playsinline", true);
-        video.play();
-        requestAnimationFrame(tick);
 
-      });
+    async function verifyQRData(session, qrData) {
+      const response = await putCouponScan(session, qrData);
+      if (response.status === 200) return true;
+      else return false;
+    }
+
     function tick() {
       if (video.readyState === video.HAVE_ENOUGH_DATA) {
         canvasElement.hidden = false;
-        canvasElement.height = video.videoHeight * 0.5;
-        canvasElement.width = video.videoWidth * 0.5;
-        outputData.parentElement.hidden = true;
         canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
         const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
         const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -48,29 +71,46 @@ export default function Scanner() {
           drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
           drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-          outputData.parentElement.hidden = false;
-          outputData.innerText = code.data;
-          console.log(outputData.innerText)
-        }
-        else {
-          outputData.parentElement.hidden = true;
+          const qrData = JSON.parse(code.data)
+          if (verifyQRData(session, qrData)) {
+            console.log(video.srcObject.getTracks())
+            video.srcObject.getTracks().forEach(
+              track => {
+                track.stop();
+                video.srcObject.removeTrack(track);
+              }
+            )
+            video.srcObject = null;
+            router.push(`/coupons/${qrData.coupon}`)
+          }
         }
       }
       requestAnimationFrame(tick);
     }
+
+    navigator
+      .mediaDevices
+      .getUserMedia({ video: { facingMode: "environment" } })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true);
+        video.play();
+        requestAnimationFrame(tick);
+
+      });
   });
 
   return (
-    <Layout title="쿠폰 스캔 - Give-U-Con">
-      <Section backButton title='쿠폰 스캔'></Section>
-      <Container maxWidth="sm">
-        <Box>
-          <canvas id="canvas" hidden></canvas>
-        </Box>
-        <Box>
-          <span id="outputData"></span>
-        </Box>
-      </Container>
+    <Layout title={`쿠폰 스캔 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+      <Section backButton title='쿠폰 스캔'>
+        <Card>
+          <Box display="flex" justifyContent="center" style={{positions: "responsive"}}> 
+            <canvas id="canvas" width="480" height="360" hidden></canvas>
+          </Box>
+        </Card>
+      </Section>
     </Layout>
   );
 }
+
+export default Scan;

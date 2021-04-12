@@ -86,7 +86,7 @@ function Use({ session, selfUser, coupon, couponQR, product }) {
         <Card>
           <Box display="flex" justifyContent="center" style={{positions: "responsive"}}> 
             <QRCode
-              value={`${couponQR.magic} ${couponQR.coupon} ${couponQR.signature}`}
+              value={JSON.stringify(couponQR)}
               size={400}
               includeMargin={true}
             />
