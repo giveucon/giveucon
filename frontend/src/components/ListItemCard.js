@@ -34,7 +34,7 @@ export default function ListItemCard({ onClick=null, primary=null, prefix=null, 
                 flexGrow={1}
                 paddingY={1}
               >
-                <Typography variant="h6">{primary}</Typography>
+                <Typography variant="body1">{primary}</Typography>
                 <Typography variant="body2">{secondary}</Typography>
               </Box>
             </CardActionArea>

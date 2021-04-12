@@ -55,7 +55,7 @@ function Index({ session, selfUser, noticeList }) {
               key={index}
               title={item.article.title}
               image="https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg"
-              onClick={() => alert( 'Tapped' )}
+              onClick={() =>  router.push(`/notices/${item.id}` )}
             />
           })}
         </SwipeableBusinessCards>
@@ -68,6 +68,7 @@ function Index({ session, selfUser, noticeList }) {
           <Grid item xs={12} key={index}>
             <ListItemCard
               primary={item.article.title}
+              secondary={new Date(item.article.created_at).toLocaleDateString()}
               onClick={() =>  router.push(`/notices/${item.id}` )}
             />
           </Grid>

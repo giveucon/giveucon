@@ -25,24 +25,25 @@ const getCentralNotice = async (session, context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const noticeList = await getCentralNotice(session, context)
+  const notice = await getCentralNotice(session, context)
   return {
-    props: { session, selfUser, noticeList },
+    props: { session, selfUser, notice },
   }
 })
 
-function Id({ session, selfUser, noticeList }) {
+function Id({ session, selfUser, notice }) {
   const router = useRouter();
   return (
     <Layout title={`공지 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={noticeList.article.title}
+        title={notice.article.title}
       >
         <ArticleBox
-          title={noticeList.article.title}
+          title={notice.article.title}
+          subtitle={new Date(notice.article.created_at).toLocaleDateString()}
           image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-          content={noticeList.article.content}
+          content={notice.article.content}
         >
         </ArticleBox>
       </Section>
