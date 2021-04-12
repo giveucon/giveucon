@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import StorefrontIcon from '@material-ui/icons/Storefront';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
@@ -109,7 +109,7 @@ function Id({ session, selfUser, store, productList }) {
       </Section>
       <Section
         title="상품"
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
         <Grid container>

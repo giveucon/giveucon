@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,6 +11,16 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
+
+const useStyles = makeStyles({
+  RedButton: {
+    background: '#f44336',
+    color: 'white',
+    '&:hover': {
+       background: "#aa2e25",
+    },
+  },
+});
 
 const getProduct = async (session, context) => {
   try {
@@ -60,6 +71,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 
 function Update({ session, selfUser, prevProduct }) {
   const router = useRouter();
+  const classes = useStyles();
   const [product, setProduct] = useState({
     id: prevProduct.id,
     name: prevProduct.name,
@@ -163,11 +175,11 @@ function Update({ session, selfUser, prevProduct }) {
             fullWidth
             variant="contained"
             onClick={() => router.push({
-              pathname: '/stores/delete',
+              pathname: '/products/delete',
               query: { id: store.id },
             })}
           >
-            가게 삭제
+            상품 삭제
           </Button>
         </Box>
       </Section>

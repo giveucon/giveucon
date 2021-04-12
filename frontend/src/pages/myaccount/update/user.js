@@ -20,6 +20,9 @@ const useStyles = makeStyles({
   RedButton: {
     background: '#f44336',
     color: 'white',
+    '&:hover': {
+       background: "#aa2e25",
+    },
   },
 });
 

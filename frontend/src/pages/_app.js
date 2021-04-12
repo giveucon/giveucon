@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Provider as NextAuthProvider } from 'next-auth/client';
 import { ThemeProvider, makeStyles } from '@material-ui/styles';
 import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';

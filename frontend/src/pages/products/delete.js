@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-const getStore = async (session, context) => {
+const getProduct = async (session, context) => {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
@@ -40,10 +40,10 @@ const getStore = async (session, context) => {
   }
 };
 
-const deleteStore = async (session, store) => {
+const deleteProduct = async (session, product) => {
   try {
     const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${product.id}`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -58,19 +58,19 @@ const deleteStore = async (session, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context)
+  const product = await getProduct(session, context)
   return {
-    props: { session, selfUser, store },
+    props: { session, selfUser, product },
   }
 })
 
-function Delete({ session, selfUser, store }) {
+function Delete({ session, selfUser, product }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="가게 삭제"
+        title="상품 삭제"
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -82,8 +82,8 @@ function Delete({ session, selfUser, store }) {
             fullWidth
             variant="contained"
             onClick={async () => {
-              const response = await deleteStore(session, store);
-              router.push(`/stores/home`);
+              const response = await deleteProduct(session, product);
+              router.push(`/stores/${product.store}`);
             }}
           >
             가게 삭제
