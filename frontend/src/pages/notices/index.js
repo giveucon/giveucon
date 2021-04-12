@@ -40,14 +40,14 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Index({ session, selfUser, noticeList }) {
   const router = useRouter();
   return (
-    <Layout title={`공지 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`공지사항 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="공지"
+        title="공지사항"
       />
       <Section
         titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
-        title="최신 공지"
+        title="최신 공지사항"
       >
         <SwipeableBusinessCards autoplay={true}>
           {noticeList.slice(0, 2).map((item, index) => {
@@ -61,7 +61,7 @@ function Index({ session, selfUser, noticeList }) {
         </SwipeableBusinessCards>
       </Section>
       <Section
-        title="전체 공지"
+        title="전체 공지사항"
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
       >
         {noticeList.map((item, index) => (

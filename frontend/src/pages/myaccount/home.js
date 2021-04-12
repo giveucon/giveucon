@@ -74,11 +74,34 @@ function Home({ session, selfUser }) {
             내 상품
           </Button>
         </Box>
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => router.push({
+              pathname: '/coupons',
+              query: { user: selfUser.id },
+            })}
+          >
+            내 쿠폰
+          </Button>
+        </Box>
       </Section>
       <Section
-        title="설정"
+        title="관리"
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => router.push(`/notices`)}
+          >
+            공지사항
+          </Button>
+        </Box>
         <Box marginY={1}>
           <Button
             color="default"

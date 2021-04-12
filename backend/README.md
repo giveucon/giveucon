@@ -37,6 +37,31 @@ Email
 
 Go to Product Settings > Kakao Login > Security and get Client Secret
 
+
+## Create Secret File
+
+Move to Backend core application directory:
+
+```
+cd [project_root_directory_here]/backend/giveucon
+```
+
+then create secrets.py:
+
+```
+DJANGO_BASE_URL = "http://127.0.0.1:8000"
+DJANGO_DEBUG = True
+DJANGO_SIMPLE_JWT_SIGNING_KEY = "some_string_here"
+DJANGO_SECRET_KEY = "your_django_secert_key_here"
+```
+
+Move back to backend root directory:
+
+```
+cd ..
+```
+
+
 ## Installation
 
 Move to backend directory:
@@ -78,7 +103,7 @@ pip install -r requirements.txt
 Make Django migrations and migrate:
 
 ```
-python manage.py makemigration
+python manage.py makemigrations
 python manage.py migrate
 ```
 
@@ -88,28 +113,13 @@ Create superuser:
 python manage.py createsuperuser
 ```
 
-
-## Create Secret File
-
-Move to Backend core application directory:
+Then create a superuser like this:
 
 ```
-cd giveucon
-```
-
-then create secrets.py:
-
-```
-DJANGO_BASE_URL = "http://127.0.0.1:8000"
-DJANGO_DEBUG = True
-DJANGO_SIMPLE_JWT_SIGNING_KEY = "some_string_here"
-DJANGO_SECRET_KEY = "your_django_secert_key_here"
-```
-
-Move back to backend root directory:
-
-```
-cd ..
+username: admin
+email: admin@giveucon.com
+password: your_admin_password_here
+password: your_admin_password_here
 ```
 
 ## Launch
@@ -117,7 +127,7 @@ cd ..
 Launch backend:
 
 ```
-cd backend
+cd [project_root_directory_here]/backend
 python manage.py runserver
 ```
 

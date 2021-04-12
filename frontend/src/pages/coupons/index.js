@@ -11,14 +11,14 @@ import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getProductList = async (session, context) => {
+const getCouponList = async (session, context) => {
   try {
     let params = new Object;
     if (context.query.user) { params.user = context.query.user };
     if (context.query.store) { params.store = context.query.store };
     if (context.query.product) { params.store = context.query.product };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -34,13 +34,13 @@ const getProductList = async (session, context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponList = await getProductList(session, context)
+  const couponList = await getCouponList(session, context)
   return {
     props: { session, selfUser, couponList },
   }
 })
 
-function Index({ session, couponList }) {
+function Index({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

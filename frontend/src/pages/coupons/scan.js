@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import jsQR from "jsqr";
-import Layout from '../components/Layout';
-import Section from '../components/Section'
+import Layout from '../../components/Layout';
+import Section from '../../components/Section'
 
 export default function Scanner() {
   const testRef = React.createRef();
