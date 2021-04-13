@@ -30,16 +30,21 @@ const getCentralNoticeList = async (session) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const centralNoticeList = await getCentralNoticeList(session)
+  const centralNoticeListResponse = await getCentralNoticeList(session)
   return {
-    props: { session, selfUser, centralNoticeList },
+    props: { 
+      session,
+      selfUser,
+      centralNoticeList: centralNoticeListResponse.data
+    },
   }
 })
 

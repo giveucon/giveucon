@@ -12,10 +12,10 @@ const getSelfUser = async (session) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return error;
+    return { status: error.response.status }
   }
 };
 
@@ -34,9 +34,9 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       };
     }
     
-    const selfUser = await getSelfUser(session);
+    const selfUserResponse = await getSelfUser(session);
     // If account founded but no user models linked
-    if (selfUser.response && selfUser.response.status === 404) {
+    if (selfUserResponse.status === 404) {
       return {
         redirect: {
           permanent: false,
@@ -45,6 +45,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
         props: {}
       }
     }
+    const selfUser = selfUserResponse.data;
 
     // Return props after execute server side functions
     if (getServerSidePropsFunc) {
@@ -55,6 +56,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
         },
       }
     }
+
     return {
       props: {
         selfUser,

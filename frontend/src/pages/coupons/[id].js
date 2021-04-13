@@ -23,10 +23,10 @@ const getCoupon = async (session, context) => {
         }
       }
     );
-    console.log(response.data);
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -41,17 +41,18 @@ const getProduct = async (session, coupon) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const coupon = await getCoupon(session, context)
-  const product = await getProduct(session, coupon)
+  const couponResponse = await getCoupon(session, context)
+  const productResponse = await getProduct(session, couponResponse.data)
   return {
-    props: { session, selfUser, coupon, product },
+    props: { session, selfUser, coupon: couponResponse.data, product: productResponse.data },
   }
 })
 

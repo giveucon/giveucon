@@ -27,16 +27,17 @@ const getCouponList = async (session, selfUser) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponList = await getCouponList(session, selfUser)
+  const couponListResponse = await getCouponList(session, selfUser)
   return {
-    props: { session, selfUser, couponList },
+    props: { session, selfUser, couponList: couponListResponse.data },
   }
 })
 

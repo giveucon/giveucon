@@ -31,9 +31,10 @@ const getStore = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -51,17 +52,18 @@ const getProductList = async (session, store) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context)
-  const productList = await getProductList(session, store)
+  const storeResponse = await getStore(session, context)
+  const productListResponse = await getProductList(session, storeResponse.data)
   return {
-    props: { session, selfUser, store, productList },
+    props: { session, selfUser, store: storeResponse.data, productList: productListResponse.data },
   }
 })
 

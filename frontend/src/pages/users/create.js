@@ -25,9 +25,10 @@ const getSelfAccount = async (session) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -48,17 +49,18 @@ const postSelfUser = async (session, selfUser) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  const selfAccount = await getSelfAccount(session)
+  const selfAccountResponse = await getSelfAccount(session)
   return {
-    props: { session, selfAccount }
+    props: { session, selfAccount: selfAccountResponse.data }
   }
 }
 
@@ -153,7 +155,7 @@ function Create({ session, selfAccount }) {
             fullWidth
             variant="contained"
             onClick={() => {
-              postSelfUser(session, selfUser);
+              const response = await postSelfUser(session, selfUser);
               router.push('/myaccount/home');
             }}
           >

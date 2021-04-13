@@ -33,9 +33,10 @@ const getProduct = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -56,9 +57,10 @@ const putProduct = async (session, product) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -158,7 +160,7 @@ function Update({ session, selfUser, prevProduct }) {
             variant="contained"
             onClick={async () => {
               const response = await putProduct(session, product);
-              router.push(`/products/${response.id}`);
+              router.push(`/products/${response.data.id}`);
             }}
           >
             제출

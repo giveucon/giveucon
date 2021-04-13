@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import clsx from 'clsx';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import FilledInput from '@material-ui/core/FilledInput';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
 import Layout from '../../components/Layout'
@@ -28,9 +21,10 @@ const getStore = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -51,16 +45,17 @@ const postProduct = async (session, product) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context)
+  const storeResponse = await getStore(session, context)
   return {
-    props: { session, selfUser, store },
+    props: { session, selfUser, store: storeResponse.data },
   }
 })
 
@@ -151,7 +146,7 @@ function Create({ session, selfUser, store }) {
             variant="contained"
             onClick={async () => {
               const response = await postProduct(session, product);
-              router.push(`/products/${response.id}`);
+              router.push(`/products/${response.data.id}`);
             }}
           >
             제출
