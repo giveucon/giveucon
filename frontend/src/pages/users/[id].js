@@ -23,16 +23,17 @@ const getUser = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const user = await getUser(session, context)
+  const userResponse = await getUser(session, context)
   return {
-    props: { session, selfUser, user },
+    props: { session, selfUser, user: userResponse.data },
   }
 })
 

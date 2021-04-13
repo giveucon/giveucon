@@ -34,9 +34,10 @@ const getCoupon = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -51,16 +52,17 @@ const deleteCoupon = async (session, coupon) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const coupon = await getCoupon(session, context)
+  const couponResponse = await getCoupon(session, context)
   return {
-    props: { session, selfUser, coupon },
+    props: { session, selfUser, coupon: couponResponse.data },
   }
 })
 

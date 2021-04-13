@@ -23,9 +23,10 @@ const putCouponScan = async (session, qrData) => {
         }
       }
     );
-    return response;
+    return { status: response.status, data: response.data };
   } catch (error) {
-    return error.response;
+    console.error(error);
+    return { status: error.response.status }
   }
 };
 

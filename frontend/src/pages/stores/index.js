@@ -25,17 +25,39 @@ const getStoreList = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
+  }
+};
+
+const getUser = async (session, context) => {
+  try {
+    let params = new Object;
+    if (context.query.user) { params.user = context.query.user };
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users`, {
+        params,
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  let storeList = await getStoreList(session, context)
-  let user = context.query.user || null
+  const storeListResponse = await getStoreList(session, context)
+  const userResponse = await getUser(session, context)
   return {
-    props: { session, selfUser, storeList, user },
+    props: { session, selfUser, storeList: storeListResponse.data, user: userResponse.data },
   }
 })
 

@@ -43,9 +43,10 @@ const putSelfUser = async (session, selfUser) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -149,7 +150,7 @@ function User({ session, prevSelfUser }) {
             fullWidth
             variant="contained"
             onClick={() => {
-              putSelfUser(session, selfUser);
+              const response = await putSelfUser(session, selfUser);
               router.push('/myaccount/update');
             }}
           >

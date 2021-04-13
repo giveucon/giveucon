@@ -34,9 +34,10 @@ const getStore = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -55,9 +56,10 @@ const putStore = async (session, store) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -120,7 +122,7 @@ function Update({ session, selfUser, prevStore }) {
             variant="contained"
             onClick={async () => {
               const response = await putStore(session, store);
-              router.push(`/stores/${response.id}`);
+              router.push(`/stores/${response.data.id}`);
             }}
           >
             제출

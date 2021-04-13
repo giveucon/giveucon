@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -34,9 +33,10 @@ const getStore = async (session, context) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
@@ -51,16 +51,17 @@ const deleteStore = async (session, store) => {
         }
       }
     );
-    return response.data;
+    return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
+    return { status: error.response.status }
   }
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const store = await getStore(session, context)
+  const storeResponse = await getStore(session, context)
   return {
-    props: { session, selfUser, store },
+    props: { session, selfUser, store: storeResponse.data },
   }
 })
 
