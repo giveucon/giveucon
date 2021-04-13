@@ -18,7 +18,7 @@ function Error500({}) {
         <ArticleBox
           title="서버 내부 오류입니다."
           image="https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif"
-          content={"??? : 안녕히계세요 여러분"}
+          content={"서버가 이 세상의 모든 굴레와 속박을 벗어 던졌습니다."}
           defaultExpanded={true}
         />
       </Section>

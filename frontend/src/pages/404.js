@@ -18,7 +18,7 @@ function Error404({}) {
         <ArticleBox
           title="페이지를 찾을 수 없습니다."
           image="https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif"
-          content={"??? : 안녕히계세요 여러분"}
+          content={"페이지가 자신의 행복을 찾아 떠났습니다."}
           defaultExpanded={true}
         />
       </Section>

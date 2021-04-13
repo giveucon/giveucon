@@ -27,7 +27,7 @@ const getCentralNoticeList = async (session) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -56,7 +56,7 @@ function Index({ session, selfUser, noticeList }) {
               key={index}
               title={item.article.title}
               image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
-              onClick={() =>  router.push(`/notices/${item.id}` )}
+              onClick={() => router.push(`/notices/${item.id}`)}
             />
           })}
         </SwipeableBusinessCards>
@@ -70,7 +70,7 @@ function Index({ session, selfUser, noticeList }) {
             <ListItemCard
               primary={item.article.title}
               secondary={new Date(item.article.created_at).toLocaleDateString()}
-              onClick={() =>  router.push(`/notices/${item.id}` )}
+              onClick={() => router.push(`/notices/${item.id}`)}
             />
           </Grid>
         ))}

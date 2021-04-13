@@ -28,7 +28,7 @@ const getStoreList = async (session, context) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -49,7 +49,7 @@ const getUser = async (session, context) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -75,9 +75,7 @@ function Index({ session, selfUser, storeList, user }) {
               <Tile
                 title={item.name}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => 
-                  router.push(`/stores/${item.id}`
-                )}
+                onClick={() => router.push(`/stores/${item.id}`)}
                 menuItems={
                   <MenuItem>Menu Item</MenuItem>
                 }

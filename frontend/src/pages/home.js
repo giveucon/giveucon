@@ -33,7 +33,7 @@ const getCentralNoticeList = async (session) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -104,7 +104,7 @@ function Home({ session, selfUser, centralNoticeList }) {
               key={index}
               title={item.article.title}
               image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
-              onClick={() =>  router.push(`/notices/${item.id}` )}
+              onClick={() => router.push(`/notices/${item.id}` )}
             />
           })}
         </SwipeableBusinessCards>

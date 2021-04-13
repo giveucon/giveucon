@@ -37,7 +37,7 @@ const deleteSelfUser = async (session, selfUser) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -77,7 +77,7 @@ function Delete({ session, selfUser }) {
             color="primary"
             fullWidth
             variant="contained"
-            onClick={async () => {router.back()}}
+            onClick={() => {router.back()}}
           >
             뒤로가기
           </Button>

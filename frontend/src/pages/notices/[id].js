@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -21,7 +20,7 @@ const getCentralNotice = async (session, context) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -33,7 +32,6 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 })
 
 function Id({ session, selfUser, notice }) {
-  const router = useRouter();
   return (
     <Layout title={`${notice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

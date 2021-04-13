@@ -46,7 +46,7 @@ const putSelfUser = async (session, selfUser) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -149,7 +149,7 @@ function User({ session, prevSelfUser }) {
             color="primary"
             fullWidth
             variant="contained"
-            onClick={() => {
+            onClick={async () => {
               const response = await putSelfUser(session, selfUser);
               router.push('/myaccount/update');
             }}

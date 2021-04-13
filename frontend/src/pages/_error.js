@@ -18,7 +18,7 @@ function Error({ statusCode }) {
         <ArticleBox
           title={`${statusCode} 오류입니다.`}
           image="https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif"
-          content={"??? : 안녕히계세요 여러분"}
+          content={"안녕히계세요 여러분!"}
           defaultExpanded={true}
         />
       </Section>

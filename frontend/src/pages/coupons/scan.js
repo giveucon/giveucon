@@ -26,7 +26,25 @@ const putCouponScan = async (session, qrData) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
+  }
+};
+
+const getCoupon = async (session, qrData) => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${qrData.id}`, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error(error);
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -54,8 +72,12 @@ function Scan({ session, selfUser }) {
     }
 
     async function verifyQRData(session, qrData) {
-      const response = await putCouponScan(session, qrData);
-      if (response.status === 200) return true;
+      const couponScanResponse = await putCouponScan(session, qrData);
+      if (couponScanResponse.status === 200) {
+        const couponResponse = await getCoupon(session, qrData);
+        if (couponResponse.status === 200) return true;
+        else return false;
+      }
       else return false;
     }
 
@@ -73,7 +95,7 @@ function Scan({ session, selfUser }) {
           drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
           const qrData = JSON.parse(code.data)
-          if (verifyQRData(session, qrData)) {
+          if (verifyQRData(session, qrData) === true) {
             console.log(video.srcObject.getTracks())
             video.srcObject.getTracks().forEach(
               track => {

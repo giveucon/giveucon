@@ -28,7 +28,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   }
 })
 
-function Delete({ session, selfUser }) {
+function Logout({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -58,7 +58,7 @@ function Delete({ session, selfUser }) {
             color="primary"
             fullWidth
             variant="contained"
-            onClick={async () => {router.back()}}
+            onClick={() => {router.back()}}
           >
             뒤로가기
           </Button>
@@ -68,4 +68,4 @@ function Delete({ session, selfUser }) {
   );
 }
 
-export default Delete;
+export default Logout;

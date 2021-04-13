@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
+import { getSession } from "next-auth/client";
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -28,7 +28,7 @@ const getSelfAccount = async (session) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -52,7 +52,7 @@ const postSelfUser = async (session, selfUser) => {
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error(error);
-    return { status: error.response.status }
+    return { status: error.response.status, data: error.response.data }
   }
 };
 
@@ -71,7 +71,13 @@ function Create({ session, selfAccount }) {
     user_name: selfAccount.username,
     first_name: "",
     last_name: "",
-    dark_mode: false
+    dark_mode: false,
+  });
+  const [valueError, setValueError] = useState({
+    email: false,
+    user_name: false,
+    first_name: false,
+    last_name: false,
   });
   return (
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -86,20 +92,9 @@ function Create({ session, selfAccount }) {
       >
         <Box paddingY={1}>
           <TextField
-            name="user_name"
-            value={selfUser.user_name}
-            fullWidth
-            label="유저네임"
-            onChange={(event) => {
-              setSelfUser({ ...selfUser, user_name: event.target.value });
-            }}
-            required
-          />
-        </Box>
-        <Box paddingY={1}>
-          <TextField
             name="email"
             value={selfUser.email}
+            error={valueError.email}
             fullWidth
             label="이메일"
             onChange={(event) => {
@@ -110,8 +105,22 @@ function Create({ session, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <TextField
+            name="user_name"
+            value={selfUser.user_name}
+            error={valueError.user_name}
+            fullWidth
+            label="유저네임"
+            onChange={(event) => {
+              setSelfUser({ ...selfUser, user_name: event.target.value });
+            }}
+            required
+          />
+        </Box>
+        <Box paddingY={1}>
+          <TextField
             name="last_name"
             value={selfUser.last_name}
+            error={valueError.last_name}
             fullWidth
             label="성"
             onChange={(event) => {
@@ -124,6 +133,7 @@ function Create({ session, selfAccount }) {
           <TextField
             name="first_name"
             value={selfUser.first_name}
+            error={valueError.first_name}
             fullWidth
             label="이름"
             onChange={(event) => {
@@ -154,9 +164,20 @@ function Create({ session, selfAccount }) {
             color="primary"
             fullWidth
             variant="contained"
-            onClick={() => {
+            onClick={async () => {
               const response = await postSelfUser(session, selfUser);
-              router.push('/myaccount/home');
+              console.log(response);
+              if (response.status === 200) router.push('/myaccount/home');
+              else if (response.status === 400) {
+                if (response.data.email) setValueError({ ...valueError, email: true });
+                else setValueError({ ...valueError, email: false });
+                if (response.data.user_name) setValueError({ ...valueError, user_name: true });
+                else setValueError({ ...valueError, user_name: false });
+                if (response.data.first_name) setValueError({ ...valueError, first_name: true });
+                else setValueError({ ...valueError, first_name: false });
+                if (response.data.last_name) setValueError({ ...valueError, last_name: true });
+                else setValueError({ ...valueError, last_name: false });
+              }
             }}
           >
             제출
