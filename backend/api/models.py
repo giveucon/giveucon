@@ -3,10 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 class Account(AbstractUser):
-    #Specify verbose_name
     class Meta:
         verbose_name = 'account'
         verbose_name_plural = 'accounts'
+    def __str__(self):
+        return f"[{self.id}] {self.username}"
 
 class User(models.Model):
     email = models.CharField(max_length=255, blank=False, null=False, unique=True)
@@ -15,6 +16,8 @@ class User(models.Model):
     last_name = models.CharField(max_length=255, blank=False, null=False)
     #location
     dark_mode = models.BooleanField(default=False)
+    def __str__(self):
+        return f"[{self.id}] {self.user_name}"
 
 class AccountUser(models.Model):
     account = models.OneToOneField(
@@ -44,6 +47,8 @@ class Article(models.Model):
         related_name='article'
     )
     images = models.ManyToManyField(Image, blank=True)
+    def __str__(self):
+        return f"[{self.id}] {self.title}"
 
 class Store(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
@@ -53,6 +58,8 @@ class Store(models.Model):
     public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
     images = models.ManyToManyField(Image, blank=True)
+    def __str__(self):
+        return f"[{self.id}] {self.name}"
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
@@ -68,9 +75,13 @@ class Product(models.Model):
     images = models.ManyToManyField(Image, blank=True)
     class Meta:
         unique_together = ('name', 'store')
+    def __str__(self):
+        return f"[{self.id}] {self.name}"
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    def __str__(self):
+        return f"[{self.id}] {self.name}"
 
 class StoreTag(models.Model):
     store = models.ForeignKey(
@@ -90,6 +101,8 @@ class StoreTag(models.Model):
 
 class MenuItem(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    def __str__(self):
+        return f"[{self.id}] {self.name}"
 
 class Friend(models.Model):
     from_user = models.ForeignKey(
@@ -115,6 +128,8 @@ class Review(models.Model):
         on_delete=models.CASCADE,
         related_name='review'
     )
+    def __str__(self):
+        return f"[{self.id}] {self.article.title}"
 
 class UserMenuItem(models.Model):
     order = models.PositiveIntegerField(null=False)
@@ -181,6 +196,8 @@ class Coupon(models.Model):
         on_delete=models.CASCADE,
         related_name='coupon'
     )
+    def __str__(self):
+        return f"[{self.id}] Coupon of {self.product.name}"
 
 class Stamp(models.Model):
     max_count = models.PositiveIntegerField(null=False)
@@ -223,6 +240,8 @@ class CentralNotice(models.Model):
         on_delete=models.CASCADE,
         related_name='central_notice'
     )
+    def __str__(self):
+        return f"[{self.id}] {self.article.title}"
 
 class StoreNotice(models.Model):
     article = models.ForeignKey(

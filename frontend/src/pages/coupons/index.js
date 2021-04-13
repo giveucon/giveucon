@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
-import ExploreIcon from '@material-ui/icons/Explore';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DirectionsIcon from '@material-ui/icons/Directions';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -54,9 +54,10 @@ function Index({ session, selfUser, couponList }) {
               <Tile
                 title={`쿠폰 이름`}
                 image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
-                actions={
-                  <IconButton><ExploreIcon /></IconButton>
-                }
+                actions={[
+                  <IconButton><DirectionsIcon /></IconButton>,
+                  <IconButton><CropFreeIcon /></IconButton>
+                ]}
                 onClick={item.user === selfUser.id
                   ? (() => router.push(`/coupons/${item.id}`))
                   : null

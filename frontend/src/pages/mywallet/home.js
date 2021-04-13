@@ -4,7 +4,8 @@ import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import ExploreIcon from '@material-ui/icons/Explore';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DirectionsIcon from '@material-ui/icons/Directions';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import Layout from '../../components/Layout'
@@ -52,7 +53,7 @@ function Home({ session, selfUser, couponList }) {
         <Section
           title="내 쿠폰"
           titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
-          titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+          titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
         >
           <Grid container>
             {couponList && couponList.map((item, index) => (
@@ -60,9 +61,10 @@ function Home({ session, selfUser, couponList }) {
                 <Tile
                   title={`쿠폰 이름`}
                   image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
-                  actions={
-                    <IconButton><ExploreIcon /></IconButton>
-                  }
+                  actions={[
+                    <IconButton><DirectionsIcon /></IconButton>,
+                    <IconButton><CropFreeIcon /></IconButton>
+                  ]}
                   onClick={() => router.push(`/coupons/${item.id}`)}
                 />
               </Grid>

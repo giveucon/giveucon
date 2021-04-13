@@ -4,8 +4,9 @@ import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
-import ExploreIcon from '@material-ui/icons/Explore';
 import HomeIcon from '@material-ui/icons/Home';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
@@ -48,27 +49,30 @@ const geoRecommendCoupons = [
     subtitle="10,000원"
     image="https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg"
     onClick={() => alert( 'Tapped' )}
-    actions={
-      <IconButton><ExploreIcon /></IconButton>
-    }
+    actions={[
+      <IconButton><DirectionsIcon /></IconButton>,
+      <IconButton><CropFreeIcon /></IconButton>
+    ]}
   />,
   <Tile
     title="두 번째 쿠폰"
     subtitle="20,000원"
     image="https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg"
     onClick={() => alert( 'Tapped' )}
-    actions={
-      <IconButton><ExploreIcon /></IconButton>
-    }
+    actions={[
+      <IconButton><DirectionsIcon /></IconButton>,
+      <IconButton><CropFreeIcon /></IconButton>
+    ]}
   />,
   <Tile
     title="세 번째 쿠폰"
     subtitle="30,000원"
     image="https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg"
     onClick={() => alert( 'Tapped' )}
-    actions={
-      <IconButton><ExploreIcon /></IconButton>
-    }
+    actions={[
+      <IconButton><DirectionsIcon /></IconButton>,
+      <IconButton><CropFreeIcon /></IconButton>
+    ]}
   />
 ]
 
