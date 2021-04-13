@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Layout from '../../components/Layout'
@@ -74,7 +74,11 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           title="내 가게"
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
           titleSuffix={
-            <IconButton onClick={() =>  router.push(`/myaccount/stores` )}>
+            <IconButton 
+              onClick={() => router.push({
+                pathname: '/stores',
+                query: { user: selfUser.id },
+              })}>
               <ArrowForwardIcon />
             </IconButton>
           }
@@ -85,10 +89,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() =>  router.push(`/stores/${item.id}` )}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
+                  onClick={() => router.push(`/stores/${item.id}` )}
                 />
               </Grid>
             ))}
@@ -105,12 +106,10 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
                 <Tile
                   title={item.name}
                   image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/stores/${item.id}`
-                  )}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
+                  actions={[
+                    <IconButton><FavoriteIcon /></IconButton>
+                  ]}
+                  onClick={() => router.push(`/stores/${item.id}`)}
                 />
               </Grid>
             ))}

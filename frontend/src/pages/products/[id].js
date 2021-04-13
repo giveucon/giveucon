@@ -62,7 +62,7 @@ function Id({ session, selfUser, product, store }) {
         <ProductBox
           name={product.name}
           price={product.price}
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
           content={product.description}
           onClick={() => alert( 'Tapped' )}
         />
@@ -75,8 +75,8 @@ function Id({ session, selfUser, product, store }) {
               fullWidth
               variant="contained"
               onClick={() => router.push({
-                  pathname: '/products/charge',
-                  query: { id: product.id },
+                pathname: '/products/charge',
+                query: { id: product.id },
               })}
             >
               쿠폰 구매
@@ -102,8 +102,8 @@ function Id({ session, selfUser, product, store }) {
               fullWidth
               variant="contained"
               onClick={() => router.push({
-                  pathname: '/products/update',
-                  query: { id: product.id },
+                pathname: '/products/update',
+                query: { id: product.id },
               })}
             >
               상품 정보 수정

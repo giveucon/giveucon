@@ -23,16 +23,24 @@ export default function Components() {
 
   const swipeableBusinessCards = [
     <BusinessCard
-      title="한글한글아름답게한글한글아름답게한글한글아름답게"
-      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      title="Swipeable Business Card 1"
+      image="https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
         <Button>Edit</Button>
       }
     />,
     <BusinessCard
-      title="한글한글아름답게한글한글아름답게한글한글아름답게"
-      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      title="Swipeable Business Card 2"
+      image="https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <Button>Edit</Button>
+      }
+    />,
+    <BusinessCard
+      title="Swipeable Business Card 3"
+      image="https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
         <Button>Edit</Button>
@@ -42,16 +50,24 @@ export default function Components() {
 
   const swipeableTiles = [
     <Tile
-      title="한글한글아름답게한글한글아름답게한글한글아름답게"
-      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      title="Swipeable Tile 1"
+      image="https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
         <Button>Edit</Button>
       }
     />,
     <Tile
-      title="한글한글아름답게한글한글아름답게한글한글아름답게"
-      image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+      title="Swipeable Tile 2"
+      image="https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg"
+      onClick={() => alert( 'Tapped' )}
+      actions={
+        <Button>Edit</Button>
+      }
+    />,
+    <Tile
+      title="Swipeable Tile 3"
+      image="https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg"
       onClick={() => alert( 'Tapped' )}
       actions={
         <Button>Edit</Button>

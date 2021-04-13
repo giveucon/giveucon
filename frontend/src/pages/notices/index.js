@@ -54,7 +54,7 @@ function Index({ session, selfUser, noticeList }) {
             return <BusinessCard
               key={index}
               title={item.article.title}
-              image="https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg"
+              image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
               onClick={() =>  router.push(`/notices/${item.id}` )}
             />
           })}

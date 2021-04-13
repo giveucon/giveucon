@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
+import ExploreIcon from '@material-ui/icons/Explore';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -52,13 +52,15 @@ function Index({ session, selfUser, couponList }) {
           {couponList && couponList.map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
-                title={item.name}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                title={`쿠폰 이름`}
+                image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                actions={
+                  <IconButton><ExploreIcon /></IconButton>
+                }
                 onClick={item.user === selfUser.id
                   ? (() => router.push(`/coupons/${item.id}`))
                   : null
                 }
-                menuItems={<MenuItem>Menu Item</MenuItem>}
               />
             </Grid>
           ))}

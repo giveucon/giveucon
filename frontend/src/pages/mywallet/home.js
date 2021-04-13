@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ExploreIcon from '@material-ui/icons/Explore';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import Layout from '../../components/Layout'
@@ -59,14 +58,12 @@ function Home({ session, selfUser, couponList }) {
             {couponList && couponList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
-                  title={item.name}
-                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                  onClick={() => 
-                    router.push(`/coupons/${item.id}`
-                  )}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
+                  title={`쿠폰 이름`}
+                  image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                  actions={
+                    <IconButton><ExploreIcon /></IconButton>
                   }
+                  onClick={() => router.push(`/coupons/${item.id}`)}
                 />
               </Grid>
             ))}

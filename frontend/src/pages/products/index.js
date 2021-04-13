@@ -4,7 +4,8 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -71,9 +72,11 @@ function Index({ session, selfUser, storeList, store }) {
               <Tile
                 title={item.name}
                 subtitle={item.price.toLocaleString('ko-KR') + "원"}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                actions={[
+                  <IconButton><FavoriteIcon /></IconButton>
+                ]}
                 onClick={() => router.push(`/stores/${item.id}`)}
-                menuItems={<MenuItem>Menu Item</MenuItem>}
               />
             </Grid>
           ))}

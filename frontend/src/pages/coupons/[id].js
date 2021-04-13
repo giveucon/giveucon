@@ -70,7 +70,7 @@ function Id({ session, selfUser, coupon, product }) {
       >
         <BusinessCard
           title={product.description}
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
           onClick={() => alert( 'Tapped' )}
           menuItems={
             <MenuItem>Menu Item</MenuItem>

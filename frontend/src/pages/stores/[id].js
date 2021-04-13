@@ -119,12 +119,10 @@ function Id({ session, selfUser, store, productList }) {
                 title={item.name}
                 subtitle={item.price.toLocaleString('ko-KR') + "원"}
                 image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-                onClick={() => router.push({
-                  pathname: `/products/${item.id}`,
-                })}
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}
+                onClick={() => router.push(`/products/${item.id}`)}
               />
             </Grid>
           ))}

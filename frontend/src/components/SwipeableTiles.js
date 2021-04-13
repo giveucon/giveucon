@@ -6,12 +6,12 @@ const styles = {
   root: {
     position: 'relative',
   },
-  slideContainer: {
+  container: {
     maxWidth: "50%",
   },
 };
 
-class SwipeableTile extends React.Component {
+class SwipeableTiles extends React.Component {
 
   render() {
     const children = React.Children.map(this.props.children, child => {
@@ -23,7 +23,7 @@ class SwipeableTile extends React.Component {
 
     return (
       <div style={styles.root}>
-        <SwipeableViews enableMouseEvents style={styles.root} slideStyle={styles.slideContainer}>
+        <SwipeableViews enableMouseEvents style={styles.root} containerStyle={styles.container}>
           {children}
         </SwipeableViews>
       </div>
@@ -31,4 +31,4 @@ class SwipeableTile extends React.Component {
   }
 }
 
-export default SwipeableTile;
+export default SwipeableTiles;

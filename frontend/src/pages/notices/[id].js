@@ -42,7 +42,7 @@ function Id({ session, selfUser, notice }) {
         <ArticleBox
           title={notice.article.title}
           subtitle={new Date(notice.article.created_at).toLocaleDateString()}
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
           content={notice.article.content}
         >
         </ArticleBox>
