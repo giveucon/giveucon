@@ -5,4 +5,4 @@ from django.conf import settings
 class AccountSerializer(ModelSerializer):
     class Meta:
         model = Account
-        fields = '__all__'
+        exclude = ('password',)
