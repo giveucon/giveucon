@@ -35,4 +35,7 @@ urlpatterns = [
     path('coupons/', CouponListView.as_view()),
     path('coupons/scan/', CouponScanView.as_view()),
     path('coupons/<int:pk>/', CouponDetailView.as_view()),
+
+    path('tags/', TagListView.as_view()),
+    path('tags/<int:pk>', TagDetailView.as_view())
 ]

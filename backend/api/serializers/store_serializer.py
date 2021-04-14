@@ -1,5 +1,4 @@
 import ecdsa
-from django.conf import settings
 from hashlib import sha256
 from rest_framework.serializers import ModelSerializer
 from ..models import Store
@@ -11,6 +10,7 @@ class StoreSerializer(ModelSerializer):
 
     def create(self, validated_data):
         images = validated_data.pop('images')
+        tags = validated_data.pop('tags')
         private_key = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1, hashfunc=sha256)
         public_key = private_key.get_verifying_key()
         store = Store(**validated_data)
@@ -18,4 +18,5 @@ class StoreSerializer(ModelSerializer):
         store.public_key = public_key.to_string().hex()
         store.save()
         store.images.set(images)
+        store.tags.set(tags)
         return store

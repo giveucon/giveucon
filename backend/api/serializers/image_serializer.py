@@ -1,6 +1,5 @@
 from rest_framework.serializers import ModelSerializer
 from ..models import Image
-from django.conf import settings
 
 class ImageSerializer(ModelSerializer):
     class Meta:

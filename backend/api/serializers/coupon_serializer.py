@@ -1,6 +1,5 @@
 import ecdsa
 import json
-from django.conf import settings
 from django.db import transaction
 from hashlib import sha256
 from rest_framework.serializers import ModelSerializer

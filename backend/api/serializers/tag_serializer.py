@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import Product
+from ..models import Tag
 
-class ProductSerializer(ModelSerializer):
+class TagSerializer(ModelSerializer):
     class Meta:
-        model = Product
+        model = Tag
         fields = '__all__'

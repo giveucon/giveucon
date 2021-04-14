@@ -7,3 +7,4 @@ from .image_serializer import ImageSerializer
 from .coupon_serializer import CouponSerializer
 from .central_notice_serializer import CentralNoticeSerializer
 from .store_notice_serializer import StoreNoticeSerializer
+from .tag_serializer import TagSerializer

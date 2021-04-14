@@ -1,4 +1,3 @@
-from django.utils import timezone
 from rest_framework import generics
 
 from ..models import Account
