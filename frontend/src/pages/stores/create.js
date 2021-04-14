@@ -45,6 +45,10 @@ function Create({ session, selfUser }) {
     description: "",
     user: selfUser.id,
   });
+  const [storeError, setStoreError] = useState({
+    name: false,
+    description: false,
+  });
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -55,10 +59,11 @@ function Create({ session, selfUser }) {
           <TextField
             name="name"
             value={store.name}
+            error={storeError.name}
             fullWidth
             label="가게 이름"
             onChange={(event) => {
-              setStore({ ...store, name: event.target.value });
+              setStore(prevStore => ({ ...prevStore, name: event.target.value }));
             }}
             required
           />
@@ -67,11 +72,12 @@ function Create({ session, selfUser }) {
           <TextField
             name="description"
             value={store.description}
+            error={storeError.description}
             fullWidth
             label="가게 설명"
             multiline
             onChange={(event) => {
-              setStore({ ...store, description: event.target.value });
+              setStore(prevStore => ({ ...store, description: event.target.value }));
             }}
             required
           />
@@ -86,6 +92,19 @@ function Create({ session, selfUser }) {
               if (response.status === 201) {
                 router.push(`/stores/${response.id}`);
                 toast.success('가게가 생성되었습니다.');
+              } 
+              else if (response.status === 400) {
+                if (response.data.name) {
+                  setStoreError(prevStoreError => ({...prevStoreError, name: true}));
+                } else {
+                  setStoreError(prevStoreError => ({...prevStoreError, name: false}));
+                }
+                if (response.data.description) {
+                  setStoreError(prevStoreError => ({...prevStoreError, description: true}));
+                } else {
+                  setStoreError(prevStoreError => ({...prevStoreError, description: false}));
+                }
+                toast.error('입력란을 확인하세요.');
               } else {
                 toast.error('가게 생성 중 오류가 발생했습니다.');
               }
