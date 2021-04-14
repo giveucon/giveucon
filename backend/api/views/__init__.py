@@ -21,3 +21,4 @@ from .coupon_detail_view import CouponDetailView
 from .coupon_scan_view import CouponScanView
 from .tag_list_view import TagListView
 from .tag_detail_view import TagDetailView
+from .review_list_view import ReviewListView
