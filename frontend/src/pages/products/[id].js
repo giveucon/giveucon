@@ -14,7 +14,7 @@ const getProduct = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -32,7 +32,7 @@ const getStore = async (session, product) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -64,7 +64,7 @@ function Id({ session, selfUser, product, store }) {
         <ProductBox
           name={product.name}
           price={product.price}
-          image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+          image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
           content={product.description}
           onClick={() => alert( 'Tapped' )}
         />
@@ -73,9 +73,9 @@ function Id({ session, selfUser, product, store }) {
         <>
           <Box marginY={1}>
             <Button
-              color="primary"
+              color='primary'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push({
                 pathname: '/products/charge',
                 query: { id: product.id },
@@ -88,9 +88,9 @@ function Id({ session, selfUser, product, store }) {
       )}
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.push(`/stores/${store.id}`,)}
         >
           상점으로 이동
@@ -100,9 +100,9 @@ function Id({ session, selfUser, product, store }) {
         <>
           <Box marginY={1}>
             <Button
-              color="default"
+              color='default'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push({
                 pathname: '/products/update',
                 query: { id: product.id },

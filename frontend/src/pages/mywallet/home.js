@@ -21,7 +21,7 @@ const getCouponList = async (session, selfUser) => {
           user: selfUser.id,
         },
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -48,11 +48,11 @@ function Home({ session, selfUser, couponList }) {
     <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title="내 지갑"
+          title='내 지갑'
         >
         </Section>
         <Section
-          title="내 쿠폰"
+          title='내 쿠폰'
           titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
           titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
         >
@@ -61,7 +61,7 @@ function Home({ session, selfUser, couponList }) {
               <Grid item xs={6} key={index}>
                 <Tile
                   title={`쿠폰 이름`}
-                  image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                  image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
                   actions={[
                     <IconButton><DirectionsIcon /></IconButton>,
                     <IconButton><CropFreeIcon /></IconButton>

@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -28,7 +28,7 @@ const getProduct = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -48,11 +48,11 @@ const putProduct = async (session, product) => {
         name: product.name,
         description: product.description,
         price: product.price,
-        duration: product.duration + " 00",
+        duration: product.duration + ' 00',
         store: product.store,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -93,15 +93,15 @@ function Update({ session, selfUser, prevProduct }) {
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="상품 수정"
+        title='상품 수정'
       >
         <Box paddingY={1}>
           <TextField
-            name="name"
+            name='name'
             value={product.name}
             error={productError.name}
             fullWidth
-            label="이름"
+            label='이름'
             onChange={(event) => {
               setProduct(prevProduct => ({ ...prevProduct, name: event.target.value }));
             }}
@@ -110,11 +110,11 @@ function Update({ session, selfUser, prevProduct }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="description"
+            name='description'
             value={product.description}
             error={productError.description}
             fullWidth
-            label="설명"
+            label='설명'
             multiline
             onChange={(event) => {
               setProduct(prevProduct => ({ ...prevProduct, description: event.target.value }));
@@ -124,43 +124,43 @@ function Update({ session, selfUser, prevProduct }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="price"
+            name='price'
             value={product.price}
             error={productError.price}
             fullWidth
-            label="가격"
-            type="number"
+            label='가격'
+            type='number'
             onChange={(event) => {
               setProduct(prevProduct => ({ ...prevProduct, price: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (<InputAdornment position="end">원</InputAdornment>),
+              endAdornment: (<InputAdornment position='end'>원</InputAdornment>),
             }}
             required
           />
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="duration"
+            name='duration'
             value={product.duration}
             error={productError.duration}
             fullWidth
-            type="number"
-            label="유효기간"
+            type='number'
+            label='유효기간'
             onChange={(event) => {
               setProduct(prevProduct => ({ ...prevProduct, duration: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (<InputAdornment position="end">일</InputAdornment>),
+              endAdornment: (<InputAdornment position='end'>일</InputAdornment>),
             }}
             required
           />
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await putProduct(session, product);
               if (response.status === 200) {
@@ -198,14 +198,14 @@ function Update({ session, selfUser, prevProduct }) {
         </Box>
       </Section>
       <Section
-        title="위험 구역"
+        title='위험 구역'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push({
               pathname: '/products/delete',
               query: { id: store.id },

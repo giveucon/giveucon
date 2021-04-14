@@ -2,14 +2,14 @@ import React from 'react';
 import { useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import jsQR from "jsqr";
+import jsQR from 'jsqr';
 
 export default function Scanner() {
 
   useEffect(() => {
-    const video = document.createElement("video");
-    const canvasElement = document.getElementById("canvas");
-    const canvas = canvasElement.getContext("2d");
+    const video = document.createElement('video');
+    const canvasElement = document.getElementById('canvas');
+    const canvas = canvasElement.getContext('2d');
     function drawLine(begin, end, color) {
       canvas.beginPath();
       canvas.moveTo(begin.x, begin.y);
@@ -21,10 +21,10 @@ export default function Scanner() {
     navigator
     .mediaDevices
     .getUserMedia({ video: { 
-      facingMode: "environment" } })
+      facingMode: 'environment' } })
     .then((stream) => {
       video.srcObject = stream;
-      video.setAttribute("playsinline", true);
+      video.setAttribute('playsinline', true);
       video.play();
       requestAnimationFrame(tick);
 
@@ -35,13 +35,13 @@ export default function Scanner() {
         canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
         const imageData = canvas.getImageData(0, 0, video.videoWidth, video.videoHeight);
         const code = jsQR(imageData.data, imageData.width, imageData.height, {
-          inversionAttempts: "dontInvert",
+          inversionAttempts: 'dontInvert',
         });
         if (code) {
-          drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
-          drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
-          drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
-          drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+          drawLine(code.location.topLeftCorner, code.location.topRightCorner, '#FF3B58');
+          drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
+          drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
+          drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
           alert(code.data)
           return
         }
@@ -51,10 +51,10 @@ export default function Scanner() {
   });
 
   return (
-    <Container maxWidth="sm">
-      <Box style={{positions: "responsive"}}> 
+    <Container maxWidth='sm'>
+      <Box style={{positions: 'responsive'}}> 
         hello
-        <canvas id="canvas" width="720" height="480" hidden></canvas>
+        <canvas id='canvas' width='720' height='480' hidden></canvas>
       </Box>
     </Container>
   );

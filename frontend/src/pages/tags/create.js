@@ -17,7 +17,7 @@ const postTag = async (session, tag) => {
         name: tag.name,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -39,7 +39,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Create({ session, selfUser }) {
   const router = useRouter();
   const [tag, setTag] = useState({
-    name: "",
+    name: '',
   });
   const [tagError, setTagError] = useState({
     name: false,
@@ -48,26 +48,26 @@ function Create({ session, selfUser }) {
     <Layout title={`태그 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="태그 생성"
+        title='태그 생성'
       >
         <Box paddingY={1}>
           <TextField
-            name="name"
+            name='name'
             value={tag.name}
             error={tagError.name}
             fullWidth
-            label="태그 이름"
+            label='태그 이름'
             onChange={(event) => {
               setTag(prevTag => ({ ...prevTag, name: event.target.value }));
             }}
             required
           />
         </Box>
-        <Box display="flex" justifyContent="flex-end">
+        <Box display='flex' justifyContent='flex-end'>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await postTag(session, tag);
               if (response.status === 201) {

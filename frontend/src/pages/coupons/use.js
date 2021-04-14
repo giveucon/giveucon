@@ -15,7 +15,7 @@ const getCoupon = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -36,7 +36,7 @@ const getCouponQR = async (session, context) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         params,
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -54,7 +54,7 @@ const getProduct = async (session, coupon) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${coupon.product}`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': 'Bearer ' + session.accessToken,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -90,7 +90,7 @@ function Use({ session, selfUser, coupon, couponQR, product }) {
         title={product.name}
       >
         <Card>
-          <Box display="flex" justifyContent="center" style={{positions: "responsive"}}> 
+          <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
             <QRCode
               value={JSON.stringify(couponQR)}
               size={400}
@@ -101,9 +101,9 @@ function Use({ session, selfUser, coupon, couponQR, product }) {
       </Section>
       <Box marginY={1}>
         <Button
-          color="primary"
+          color='primary'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.back()}
         >
           뒤로가기

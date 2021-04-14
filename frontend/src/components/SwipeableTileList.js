@@ -7,7 +7,7 @@ const styles = {
     position: 'relative',
   },
   container: {
-    maxWidth: "50%",
+    maxWidth: '50%',
   },
 };
 

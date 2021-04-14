@@ -34,17 +34,17 @@ class MyDocument extends Document {
   render() {
     const kakaoKey = process.env.KAKAO_CLIENT_ID;
     return (
-      <Html lang="en" dir="ltr">
+      <Html lang='en' dir='ltr'>
         <Head>
-          <meta charSet="utf-8" />
+          <meta charSet='utf-8' />
           {/* PWA primary color */}
           <meta
-            name="theme-color"
+            name='theme-color'
             content={lightTheme.palette.primary.main}
           />
           <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+            rel='stylesheet'
+            href='https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap'
           />
         </Head>
         <body>

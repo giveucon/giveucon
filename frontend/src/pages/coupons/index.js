@@ -21,7 +21,7 @@ const getCouponList = async (session, context) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/`, {
         params,
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -47,14 +47,14 @@ function Index({ session, selfUser, couponList }) {
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="쿠폰 목록"
+        title='쿠폰 목록'
       >
         <Grid container>
           {couponList && couponList.map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
                 title={`쿠폰 이름`}
-                image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
                 actions={[
                   <IconButton><DirectionsIcon /></IconButton>,
                   <IconButton><CropFreeIcon /></IconButton>

@@ -13,20 +13,20 @@ function Error404({}) {
     <Layout title={`404 오류 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="404 오류"
+        title='404 오류'
       >
         <ArticleBox
-          title="페이지를 찾을 수 없습니다."
-          image="https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif"
-          content={"페이지가 자신의 행복을 찾아 떠났습니다."}
+          title='페이지를 찾을 수 없습니다.'
+          image='https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif'
+          content={'페이지가 자신의 행복을 찾아 떠났습니다.'}
           defaultExpanded={true}
         />
       </Section>
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.back()}
         >
           뒤로가기
@@ -34,9 +34,9 @@ function Error404({}) {
       </Box>
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.push(`/`)}
         >
           홈으로 가기

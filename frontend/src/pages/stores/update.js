@@ -18,15 +18,15 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 const useStyles = makeStyles({
   RedButton: {
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -36,7 +36,7 @@ const getStore = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -54,7 +54,7 @@ const getTagList = async (session) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/tags/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -76,7 +76,7 @@ const putStore = async (session, store) => {
         tags: store.tags,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -115,20 +115,20 @@ function Update({ session, selfUser, prevStore, tagList }) {
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게 수정"
+        title='가게 수정'
       >
       </Section>
       <Section
-        title="기본 정보"
+        title='기본 정보'
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name='username'
             value={store.name}
             error={storeError.name}
             fullWidth
-            label="가게 이름"
+            label='가게 이름'
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, name: event.target.value }));
             }}
@@ -137,11 +137,11 @@ function Update({ session, selfUser, prevStore, tagList }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name='email'
             value={store.description}
             error={storeError.description}
             fullWidth
-            label="가게 설명"
+            label='가게 설명'
             multiline
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, description: event.target.value }));
@@ -170,17 +170,17 @@ function Update({ session, selfUser, prevStore, tagList }) {
                 {option.name}
               </React.Fragment>
             )}
-            style={{ minWidth: "2rem" }}
+            style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label="태그" placeholder="태그" />
+              <TextField {...params} label='태그' placeholder='태그' />
             )}
           />
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await putStore(session, store);
               if (response.status === 200) {
@@ -208,14 +208,14 @@ function Update({ session, selfUser, prevStore, tagList }) {
         </Box>
       </Section>
       <Section
-        title="위험 구역"
+        title='위험 구역'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push({
               pathname: '/stores/delete',
               query: { id: store.id },

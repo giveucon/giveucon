@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -28,7 +28,7 @@ const getCoupon = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -46,7 +46,7 @@ const deleteCoupon = async (session, coupon) => {
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${coupon.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -72,7 +72,7 @@ function Delete({ session, selfUser, coupon }) {
   return (
     <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="쿠폰 삭제"
+        title='쿠폰 삭제'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -82,7 +82,7 @@ function Delete({ session, selfUser, coupon }) {
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await deleteCoupon(session, coupon);
               if (response.status === 200) {
@@ -98,9 +98,9 @@ function Delete({ session, selfUser, coupon }) {
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => {router.back()}}
           >
             뒤로가기

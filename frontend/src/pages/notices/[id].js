@@ -11,7 +11,7 @@ const getCentralNotice = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -41,7 +41,7 @@ function Id({ session, selfUser, notice }) {
         <ArticleBox
           title={notice.article.title}
           subtitle={new Date(notice.article.created_at).toLocaleDateString()}
-          image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+          image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
           content={notice.article.content}
         >
         </ArticleBox>

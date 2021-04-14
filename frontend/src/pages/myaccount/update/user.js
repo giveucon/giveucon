@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -38,7 +38,7 @@ const putSelfUser = async (session, selfUser) => {
         dark_mode: selfUser.dark_mode,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -79,20 +79,20 @@ function User({ session, prevSelfUser }) {
     <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="사용자 설정"
+        title='사용자 설정'
       >
       </Section>
       <Section
-        title="사용자 정보"
+        title='사용자 정보'
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name='email'
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label="이메일"
+            label='이메일'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: event.target.value }));
             }}
@@ -101,11 +101,11 @@ function User({ session, prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name='username'
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label="유저네임"
+            label='유저네임'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: event.target.value }));
             }}
@@ -114,11 +114,11 @@ function User({ session, prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="last_name"
+            name='last_name'
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label="성"
+            label='성'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, last_name: event.target.value }));
             }}
@@ -127,11 +127,11 @@ function User({ session, prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="first_name"
+            name='first_name'
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label="이름"
+            label='이름'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, first_name: event.target.value }));
             }}
@@ -143,23 +143,23 @@ function User({ session, prevSelfUser }) {
             <FormControlLabel
             control={
               <Checkbox
-                name="dark_mode"
-                color="primary"
+                name='dark_mode'
+                color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />
             }
-            label="다크 모드"
+            label='다크 모드'
             />
           </FormGroup>
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await putSelfUser(session, selfUser);
               if (response.status === 200) {
@@ -198,14 +198,14 @@ function User({ session, prevSelfUser }) {
         </Box>
       </Section>
       <Section
-        title="위험 구역"
+        title='위험 구역'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push('/myaccount/delete')}
           >
             계정 탈퇴

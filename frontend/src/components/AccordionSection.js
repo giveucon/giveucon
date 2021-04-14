@@ -16,7 +16,7 @@ export default function AccordionSection({ children=null, defaultExpanded=false,
   return (
     <Accordion defaultExpanded expanded={expanded} onChange={handleAccordionChange()}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant='h6'>{title}</Typography>
       </AccordionSummary>
       <Divider />
       <AccordionDetails>

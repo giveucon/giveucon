@@ -17,7 +17,7 @@ const getCoupon = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -35,7 +35,7 @@ const getProduct = async (session, coupon) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${coupon.product}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -71,7 +71,7 @@ function Id({ session, selfUser, coupon, product }) {
       >
         <BusinessCard
           title={product.description}
-          image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+          image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
           onClick={() => alert( 'Tapped' )}
           menuItems={
             <MenuItem>Menu Item</MenuItem>
@@ -82,9 +82,9 @@ function Id({ session, selfUser, coupon, product }) {
         <>
           <Box marginY={1}>
             <Button
-              color="primary"
+              color='primary'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push({
                 pathname: '/coupons/use',
                 query: { id: coupon.id },

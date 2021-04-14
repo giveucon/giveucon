@@ -1,5 +1,5 @@
 import React from 'react';
-import { signOut } from "next-auth/client";
+import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -34,7 +34,7 @@ function Logout({ session, selfUser }) {
   return (
     <Layout title={`로그아웃 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="로그아웃"
+        title='로그아웃'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -44,9 +44,9 @@ function Logout({ session, selfUser }) {
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => {
-              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/' })
               router.push(`/login`)
             }}
           >
@@ -55,9 +55,9 @@ function Logout({ session, selfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => {router.back()}}
           >
             뒤로가기

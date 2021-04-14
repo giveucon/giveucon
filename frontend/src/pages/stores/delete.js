@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -28,7 +28,7 @@ const getStore = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -46,7 +46,7 @@ const deleteStore = async (session, store) => {
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -72,7 +72,7 @@ function Delete({ session, selfUser, store }) {
   return (
     <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="가게 삭제"
+        title='가게 삭제'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -82,7 +82,7 @@ function Delete({ session, selfUser, store }) {
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await deleteStore(session, store);
               if (response.status === 200) {
@@ -98,9 +98,9 @@ function Delete({ session, selfUser, store }) {
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => {router.back()}}
           >
             뒤로가기

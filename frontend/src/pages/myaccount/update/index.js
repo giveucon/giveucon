@@ -23,18 +23,18 @@ function Index({ session, selfUser }) {
     <Layout title={`설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="설정"
+        title='설정'
       >
       </Section>
       <Section
-        title="설정"
+        title='설정'
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
-            color="default"
+            color='default'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push(`/myaccount/update/user`)}
           >
             사용자 설정

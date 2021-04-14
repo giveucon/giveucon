@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
-import { getSession } from "next-auth/client";
+import { getSession } from 'next-auth/client';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -20,7 +20,7 @@ const getSelfAccount = async (session) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/accounts/self/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -44,7 +44,7 @@ const postSelfUser = async (session, selfUser) => {
         dark_mode: selfUser.dark_mode,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -70,8 +70,8 @@ function Create({ session, selfAccount }) {
   const [selfUser, setSelfUser] = useState({
     email: selfAccount.email,
     user_name: selfAccount.username,
-    first_name: "",
-    last_name: "",
+    first_name: '',
+    last_name: '',
     dark_mode: false,
   });
   const [selfUserError, setSelfUserError] = useState({
@@ -84,20 +84,20 @@ function Create({ session, selfAccount }) {
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="사용자 생성"
+        title='사용자 생성'
       >
       </Section>
       <Section
-        title="로그인 정보"
+        title='로그인 정보'
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name='email'
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label="이메일"
+            label='이메일'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: event.target.value }));
             }}
@@ -106,11 +106,11 @@ function Create({ session, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="user_name"
+            name='user_name'
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label="유저네임"
+            label='유저네임'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: event.target.value }));
             }}
@@ -119,11 +119,11 @@ function Create({ session, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="last_name"
+            name='last_name'
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label="성"
+            label='성'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, last_name: event.target.value }));
             }}
@@ -132,11 +132,11 @@ function Create({ session, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="first_name"
+            name='first_name'
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label="이름"
+            label='이름'
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, first_name: event.target.value }));
             }}
@@ -148,23 +148,23 @@ function Create({ session, selfAccount }) {
             <FormControlLabel
             control={
               <Checkbox
-                name="dark_mode"
-                color="primary"
+                name='dark_mode'
+                color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />
             }
-            label="다크 모드"
+            label='다크 모드'
             />
           </FormGroup>
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await postSelfUser(session, selfUser);
               console.log(response);

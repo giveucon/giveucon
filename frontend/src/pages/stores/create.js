@@ -15,15 +15,15 @@ import Section from '../../components/Section'
 import jsonToFormData from '../jsonToFormData'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 const getTagList = async (session) => {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/tags/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -78,15 +78,15 @@ function Create({ session, selfUser, tagList }) {
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게 생성"
+        title='가게 생성'
       >
         <Box paddingY={1}>
           <TextField
-            name="name"
+            name='name'
             value={store.name}
             error={storeError.name}
             fullWidth
-            label="가게 이름"
+            label='가게 이름'
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, name: event.target.value }));
             }}
@@ -95,11 +95,11 @@ function Create({ session, selfUser, tagList }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="description"
+            name='description'
             value={store.description}
             error={storeError.description}
             fullWidth
-            label="가게 설명"
+            label='가게 설명'
             multiline
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, description: event.target.value }));
@@ -109,13 +109,13 @@ function Create({ session, selfUser, tagList }) {
         </Box>
         <Box paddingY={1}>
           <form
-            className="uploader"
-            encType="multipart/form-data"
+            className='uploader'
+            encType='multipart/form-data'
           >
             <input
-              type="file"
-              name="photo"
-              accept="image/*"
+              type='file'
+              name='photo'
+              accept='image/*'
               multiple
               onChange={(event) => {
                 setStore(prevStore => ({ ...prevStore, images: event.target.files }));
@@ -145,17 +145,17 @@ function Create({ session, selfUser, tagList }) {
                 {option.name}
               </React.Fragment>
             )}
-            style={{ minWidth: "2rem" }}
+            style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label="태그" placeholder="태그" />
+              <TextField {...params} label='태그' placeholder='태그' />
             )}
           />
         </Box>
-        <Box display="flex" justifyContent="flex-end">
+        <Box display='flex' justifyContent='flex-end'>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await postStore(session, jsonToFormData(store));
               if (response.status === 201) {

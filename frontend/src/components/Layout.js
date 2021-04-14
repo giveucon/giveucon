@@ -1,4 +1,4 @@
-import Head from "next/head";
+import Head from 'next/head';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -6,11 +6,11 @@ import BottomNavBar from './BottomNavBar'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
-    maxWidth: "100%",
+    height: '100vh',
+    maxWidth: '100%',
   },
   childrenBox: {
-    position: "relative",
+    position: 'relative',
   },
 }));
 
@@ -20,9 +20,9 @@ export default function Layout({ bottomNav=true, children, title }) {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
-      <Container maxWidth="xs">
+      <Container maxWidth='xs'>
         <Box className={classes.childrenBox} mb={bottomNav ? 10 : 0}>
           {children}
         </Box>

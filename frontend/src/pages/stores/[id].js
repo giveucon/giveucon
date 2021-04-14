@@ -25,7 +25,7 @@ const getStore = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -46,7 +46,7 @@ const getProductList = async (session, store) => {
           store: store.id,
         },
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -69,21 +69,21 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 
 const storeNotices = [
   <BusinessCard
-    title="가게 준비중입니다."
+    title='가게 준비중입니다.'
     maxTitleLength={20}
-    image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+    image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
     onClick={() => alert( 'Tapped' )}
   />,
   <BusinessCard
-    title="가게 준비중입니다."
+    title='가게 준비중입니다.'
     maxTitleLength={20}
-    image="https://cdn.pixabay.com/photo/2018/09/25/23/40/baukran-3703469_960_720.jpg"
+    image='https://cdn.pixabay.com/photo/2018/09/25/23/40/baukran-3703469_960_720.jpg'
     onClick={() => alert( 'Tapped' )}
   />,
   <BusinessCard
-    title="가게 준비중입니다."
+    title='가게 준비중입니다.'
     maxTitleLength={20}
-    image="https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg"
+    image='https://cdn.pixabay.com/photo/2016/03/09/09/17/computer-1245714_960_720.jpg'
     onClick={() => alert( 'Tapped' )}
   />,
 ]
@@ -103,14 +103,14 @@ function Id({ session, selfUser, store, productList }) {
           {storeNotices}
         </SwipeableBusinessCardList>
         <ArticleBox
-          title="가게 설명"
+          title='가게 설명'
           content={store.description}
           defaultExpanded={false}
           onClick={() => alert( 'Tapped' )}
         />
       </Section>
       <Section
-        title="상품"
+        title='상품'
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
@@ -119,8 +119,8 @@ function Id({ session, selfUser, store, productList }) {
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
-                subtitle={item.price.toLocaleString('ko-KR') + "원"}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}
@@ -131,7 +131,7 @@ function Id({ session, selfUser, store, productList }) {
         </Grid>
       </Section>
       <Section
-        title="가게 위치"
+        title='가게 위치'
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
         <Card>
@@ -140,9 +140,9 @@ function Id({ session, selfUser, store, productList }) {
       </Section>
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
         >
           경로 검색
@@ -152,9 +152,9 @@ function Id({ session, selfUser, store, productList }) {
         <>
           <Box marginY={1}>
             <Button
-              color="primary"
+              color='primary'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push({
                 pathname: '/products/create',
                 query: { id: store.id },
@@ -165,9 +165,9 @@ function Id({ session, selfUser, store, productList }) {
           </Box>
           <Box marginY={1}>
             <Button
-              color="default"
+              color='default'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push({
                 pathname: '/stores/update',
                 query: { id: store.id },

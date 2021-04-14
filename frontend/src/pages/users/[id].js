@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,7 @@ const getUser = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -48,11 +48,11 @@ function Id({ session, selfUser, user }) {
       <UserProfileSection
         name={user.user_name}
         subtitle={user.email}
-        image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+        image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
       >
       </UserProfileSection>
       <Section
-        title="소유한 가게"
+        title='소유한 가게'
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
       >
       </Section>
@@ -60,9 +60,9 @@ function Id({ session, selfUser, user }) {
         <>
           <Box marginY={1}>
             <Button
-              color="default"
+              color='default'
               fullWidth
-              variant="contained"
+              variant='contained'
               onClick={() => router.push('/myaccount')}
             >
               내 계정으로 이동

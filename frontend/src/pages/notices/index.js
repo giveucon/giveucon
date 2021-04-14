@@ -18,7 +18,7 @@ const getCentralNoticeList = async (session) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -44,25 +44,25 @@ function Index({ session, selfUser, noticeList }) {
     <Layout title={`공지사항 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="공지사항"
+        title='공지사항'
       />
       <Section
         titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
-        title="최신 공지사항"
+        title='최신 공지사항'
       >
         <SwipeableBusinessCardList autoplay={true}>
           {noticeList.slice(0, 2).map((item, index) => {
             return <BusinessCard
               key={index}
               title={item.article.title}
-              image="https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg"
+              image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
               onClick={() => router.push(`/notices/${item.id}`)}
             />
           })}
         </SwipeableBusinessCardList>
       </Section>
       <Section
-        title="전체 공지사항"
+        title='전체 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
       >
         {noticeList.map((item, index) => (

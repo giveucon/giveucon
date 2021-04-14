@@ -15,7 +15,7 @@ const getProduct = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -33,7 +33,7 @@ const getStore = async (session, product) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.store}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -55,7 +55,7 @@ const postCoupon = async (session, selfUser, product) => {
         product: product.id,
       }, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': 'Bearer ' + session.accessToken,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -85,8 +85,8 @@ function Charge({ session, selfUser, product, store }) {
         title={product.name}
       >
         <ArticleBox
-          title="쿠폰 구매"
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          title='쿠폰 구매'
+          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
           content={product.description}
           onClick={() => alert( 'Tapped' )}
         />
@@ -94,9 +94,9 @@ function Charge({ session, selfUser, product, store }) {
       { (selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await postCoupon(session, selfUser, product);
               if (response.status === 200) {
@@ -113,9 +113,9 @@ function Charge({ session, selfUser, product, store }) {
       )}
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.back()}
         >
           뒤로가기

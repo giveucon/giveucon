@@ -19,7 +19,7 @@ const getStoreList = async (session) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -40,7 +40,7 @@ const getSelfStoreList = async (session, selfUser) => {
           user: selfUser.id,
         },
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -73,11 +73,11 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
     <Layout title={`가게 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title="가게"
+          title='가게'
         >
         </Section>
         <Section
-          title="내 가게"
+          title='내 가게'
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
           titleSuffix={
             <IconButton 
@@ -94,7 +94,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
-                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                  image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
                   onClick={() => router.push(`/stores/${item.id}` )}
                 />
               </Grid>
@@ -102,7 +102,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           </Grid>
         </Section>
         <Section
-          title="모든 가게"
+          title='모든 가게'
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
@@ -111,7 +111,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
-                  image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                  image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>
                   ]}
@@ -125,9 +125,9 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           <>
             <Box marginY={1}>
               <Button
-                color="primary"
+                color='primary'
                 fullWidth
-                variant="contained"
+                variant='contained'
                 onClick={() => router.push(`/stores/create`)}
               >
                 새 가게 추가

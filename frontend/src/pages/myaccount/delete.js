@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { signOut } from "next-auth/client";
+import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     background: '#f44336',
     color: 'white',
     '&:hover': {
-       background: "#aa2e25",
+       background: '#aa2e25',
     },
   },
 });
@@ -29,7 +29,7 @@ const deleteSelfUser = async (session, selfUser) => {
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${selfuser.id}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -54,7 +54,7 @@ function Delete({ session, selfUser }) {
   return (
     <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title="계정 탈퇴"
+        title='계정 탈퇴'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -64,11 +64,11 @@ function Delete({ session, selfUser }) {
           <Button
             className={classes.RedButton}
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await deleteSelfUser(session, selfUser);
               if (response.status === 200) {
-                signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+                signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/' })
                 toast.success('계정 탈퇴가 완료되었습니다.');
               } else {
                 toast.error('계정 탈퇴 중 오류가 발생했습니다.');
@@ -80,9 +80,9 @@ function Delete({ session, selfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => {router.back()}}
           >
             뒤로가기

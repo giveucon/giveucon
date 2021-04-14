@@ -17,7 +17,7 @@ const getStore = async (session, context) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.store}/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -39,7 +39,7 @@ const getProductList = async (session, context) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/`, {
         params,
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -66,15 +66,15 @@ function Index({ session, selfUser, storeList, store }) {
     <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="상품 목록"
+        title='상품 목록'
       >
         <Grid container>
           {storeList && storeList.map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
-                subtitle={item.price.toLocaleString('ko-KR') + "원"}
-                image="https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg"
+                subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}
@@ -87,9 +87,9 @@ function Index({ session, selfUser, storeList, store }) {
       { store && (selfUser.id === store.user) && (
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push({
               pathname: '/products/create',
               query: { id: store.id },

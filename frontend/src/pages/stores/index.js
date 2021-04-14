@@ -19,7 +19,7 @@ const getStoreList = async (session, context) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         params,
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -40,7 +40,7 @@ const getUser = async (session, context) => {
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/`, {
         params,
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -67,14 +67,14 @@ function Index({ session, selfUser, storeList, user }) {
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="가게 목록"
+        title='가게 목록'
       >
         <Grid container>
           {storeList && storeList.map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
                 title={item.name}
-                image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+                image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
                 onClick={() => router.push(`/stores/${item.id}`)}
                 menuItems={
                   <MenuItem>Menu Item</MenuItem>
@@ -87,9 +87,9 @@ function Index({ session, selfUser, storeList, user }) {
       { user && (user.id === selfUser.id) && (
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={() => router.push(`/stores/create`)}
           >
             새 가게 추가

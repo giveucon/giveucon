@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { getSession } from "next-auth/client";
+import { getSession } from 'next-auth/client';
 
 const getSelfUser = async (session) => {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/self/`, {
         headers: {
-          'Authorization': "Bearer " + session.accessToken,
+          'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
           'accept': 'application/json'
         }
@@ -28,7 +28,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       return {
         redirect: {
           permanent: false,
-          destination: "/login",
+          destination: '/login',
         },
         props: {}
       };
@@ -40,7 +40,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       return {
         redirect: {
           permanent: false,
-          destination: "/users/create",
+          destination: '/users/create',
         },
         props: {}
       }
