@@ -70,8 +70,8 @@ function Create({ session, selfAccount }) {
   const [selfUser, setSelfUser] = useState({
     email: selfAccount.email,
     user_name: selfAccount.username,
-    first_name: '',
-    last_name: '',
+    first_name: null,
+    last_name: null,
     dark_mode: false,
   });
   const [selfUserError, setSelfUserError] = useState({

@@ -39,7 +39,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Create({ session, selfUser }) {
   const router = useRouter();
   const [tag, setTag] = useState({
-    name: '',
+    name: null,
   });
   const [tagError, setTagError] = useState({
     name: false,

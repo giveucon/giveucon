@@ -54,7 +54,7 @@ function RootApp({ Component, pageProps }) {
           <CssBaseline />
           <Toaster 
             toastOptions={{
-              className: '',
+              className: null,
               style: {
                 borderRadius: '1.5rem'
               },

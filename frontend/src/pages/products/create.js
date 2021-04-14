@@ -63,8 +63,8 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 function Create({ session, selfUser, store }) {
   const router = useRouter();
   const [product, setProduct] = useState({
-    name: '',
-    description: '',
+    name: null,
+    description: null,
     price: 0,
     duration: 0,
     store: store.id,
