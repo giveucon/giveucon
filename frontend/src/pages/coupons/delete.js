@@ -85,7 +85,7 @@ function Delete({ session, selfUser, coupon }) {
             variant='contained'
             onClick={async () => {
               const response = await deleteCoupon(session, coupon);
-              if (response.status === 200) {
+              if (response.status === 204) {
                 router.push(`/stores/home`);
                 toast.success('쿠폰이 삭제되었습니다.');
               } else {

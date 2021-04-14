@@ -67,7 +67,7 @@ function Delete({ session, selfUser }) {
             variant='contained'
             onClick={async () => {
               const response = await deleteSelfUser(session, selfUser);
-              if (response.status === 200) {
+              if (response.status === 204) {
                 signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/' })
                 toast.success('계정 탈퇴가 완료되었습니다.');
               } else {

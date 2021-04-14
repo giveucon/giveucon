@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import Uppy from '@uppy/core'
+import { Dashboard, useUppy } from '@uppy/react'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import ImageIcon from '@material-ui/icons/Image';
+import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -38,9 +45,8 @@ const getTagList = async (session) => {
 
 const postStore = async (session, store) => {
   try {
-    console.log(store);
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, store, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, jsonToFormData(store), {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'multipart/form-data',
@@ -62,6 +68,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   }
 })
 
+
 function Create({ session, selfUser, tagList }) {
   const router = useRouter();
   const [store, setStore] = useState({
@@ -74,11 +81,26 @@ function Create({ session, selfUser, tagList }) {
     name: false,
     description: false,
   });
+
+  const uppy = useUppy(() => {
+    return new Uppy()
+    .on('file-added', (file) => {
+      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+    })
+    .on('file-removed', (file, reason) => {
+      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+    })
+  })
+
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title='가게 생성'
+      />
+      <Section
+        title='기본 정보'
+        titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -108,23 +130,6 @@ function Create({ session, selfUser, tagList }) {
           />
         </Box>
         <Box paddingY={1}>
-          <form
-            className='uploader'
-            encType='multipart/form-data'
-          >
-            <input
-              type='file'
-              name='photo'
-              accept='image/*'
-              multiple
-              onChange={(event) => {
-                setStore(prevStore => ({ ...prevStore, images: event.target.files }));
-                console.log(event.target.files);
-              }}
-            />
-          </form>
-        </Box>
-        <Box paddingY={1}>
           <Autocomplete
             multiple
             options={tagList}
@@ -151,13 +156,27 @@ function Create({ session, selfUser, tagList }) {
             )}
           />
         </Box>
+      </Section>
+      <Section
+        title='이미지'
+        titlePrefix={<IconButton><ImageIcon /></IconButton>}
+      >
+        <Box paddingY={1}>
+          <Dashboard
+            uppy={uppy}
+            height={'20rem'}
+            hideCancelButton
+            hideUploadButton
+          />
+        </Box>
+      </Section>
         <Box display='flex' justifyContent='flex-end'>
           <Button
             color='primary'
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await postStore(session, jsonToFormData(store));
+              const response = await postStore(session, store);
               if (response.status === 201) {
                 router.push(`/stores/${response.data.id}`);
                 toast.success('가게가 생성되었습니다.');
@@ -182,7 +201,6 @@ function Create({ session, selfUser, tagList }) {
             제출
           </Button>
         </Box>
-      </Section>
     </Layout>
   );
 }

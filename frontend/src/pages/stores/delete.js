@@ -85,7 +85,7 @@ function Delete({ session, selfUser, store }) {
             variant='contained'
             onClick={async () => {
               const response = await deleteStore(session, store);
-              if (response.status === 200) {
+              if (response.status === 204) {
                 router.push(`/stores/home`);
                 toast.success('가게가 삭제되었습니다.');
               } else {

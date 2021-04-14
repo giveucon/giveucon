@@ -85,7 +85,7 @@ function Delete({ session, selfUser, product }) {
             variant='contained'
             onClick={async () => {
               const response = await deleteProduct(session, product);
-              if (response.status === 200) {
+              if (response.status === 204) {
                 router.push(`/stores/${product.store}`);
                 toast.success('상품이 삭제되었습니다.');
               } else {
