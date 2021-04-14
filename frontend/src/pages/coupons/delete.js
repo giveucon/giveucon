@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
-import { getSession } from "next-auth/client";
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -85,7 +85,12 @@ function Delete({ session, selfUser, coupon }) {
             variant="contained"
             onClick={async () => {
               const response = await deleteCoupon(session, coupon);
-              router.push(`/stores/home`);
+              if (response.status === 200) {
+                router.push(`/stores/home`);
+                toast.success('쿠폰이 삭제되었습니다.');
+              } else {
+                toast.error('쿠폰 삭제 중 오류가 발생했습니다.');
+              }
             }}
           >
             쿠폰 삭제

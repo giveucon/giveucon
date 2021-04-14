@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { signOut } from "next-auth/client";
 import { useRouter } from 'next/router'
@@ -66,7 +67,12 @@ function Delete({ session, selfUser }) {
             variant="contained"
             onClick={async () => {
               const response = await deleteSelfUser(session, selfUser);
-              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+              if (response.status === 200) {
+                signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/" })
+                toast.success('계정 탈퇴가 완료되었습니다.');
+              } else {
+                toast.error('계정 탈퇴 중 오류가 발생했습니다.');
+              }
             }}
           >
             계정 탈퇴

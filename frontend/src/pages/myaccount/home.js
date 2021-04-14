@@ -1,4 +1,5 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -145,6 +146,18 @@ function Home({ session, selfUser }) {
             onClick={() => router.push(`/sandbox/scanner`)}
           >
             QR 스캐너
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color="default"
+            fullWidth
+            variant="contained"
+            onClick={() => {
+              toast.success('Hello World');
+            }}
+          >
+            React-Hot-Toast Test
           </Button>
         </Box>
       </Section>

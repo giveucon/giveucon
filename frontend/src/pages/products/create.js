@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
@@ -146,7 +147,12 @@ function Create({ session, selfUser, store }) {
             variant="contained"
             onClick={async () => {
               const response = await postProduct(session, product);
-              router.push(`/products/${response.data.id}`);
+              if (response.status === 201) {
+                router.push(`/products/${response.data.id}`);
+                toast.success('상품이 생성되었습니다.');
+              } else {
+                toast.error('상품 생성 중 오류가 발생했습니다.');
+              }
             }}
           >
             제출

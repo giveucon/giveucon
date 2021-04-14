@@ -1,4 +1,5 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
@@ -98,7 +99,12 @@ function Charge({ session, selfUser, product, store }) {
             variant="contained"
             onClick={async () => {
               const response = await postCoupon(session, selfUser, product);
-              router.push(`/coupons/${response.data.id}`);
+              if (response.status === 200) {
+                router.push(`/coupons/${response.data.id}`);
+                toast.success('상품 결재가 완료되었습니다.');
+              } else {
+                toast.error('상품 결재 중 오류가 발생했습니다.');
+              }
             }}
           >
             쿠폰 구매

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
@@ -82,7 +83,12 @@ function Create({ session, selfUser }) {
             variant="contained"
             onClick={async () => {
               const response = await postStore(session, store);
-              router.push(`/stores/${response.id}`);
+              if (response.status === 201) {
+                router.push(`/stores/${response.id}`);
+                toast.success('가게가 생성되었습니다.');
+              } else {
+                toast.error('가게 생성 중 오류가 발생했습니다.');
+              }
             }}
           >
             제출

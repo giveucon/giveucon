@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -160,7 +161,12 @@ function Update({ session, selfUser, prevProduct }) {
             variant="contained"
             onClick={async () => {
               const response = await putProduct(session, product);
-              router.push(`/products/${response.data.id}`);
+              if (response.status === 200) {
+                router.push(`/products/${response.data.id}`);
+                toast.success('상품이 업데이트 되었습니다.');
+              } else {
+                toast.error('상품 업데이트 중 오류가 발생했습니다.');
+              }
             }}
           >
             제출

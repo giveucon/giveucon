@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import { getSession } from "next-auth/client";
@@ -167,7 +168,10 @@ function Create({ session, selfAccount }) {
             onClick={async () => {
               const response = await postSelfUser(session, selfUser);
               console.log(response);
-              if (response.status === 200) router.push('/myaccount/home');
+              if (response.status === 201) {
+                router.push(`/myaccounts/home`);
+                toast.success('계정이 생성되었습니다.');
+              }
               else if (response.status === 400) {
                 if (response.data.email) setValueError({ ...valueError, email: true });
                 else setValueError({ ...valueError, email: false });
@@ -177,6 +181,8 @@ function Create({ session, selfAccount }) {
                 else setValueError({ ...valueError, first_name: false });
                 if (response.data.last_name) setValueError({ ...valueError, last_name: true });
                 else setValueError({ ...valueError, last_name: false });
+              } else {
+                toast.error('계정 생성 중 오류가 발생했습니다.');
               }
             }}
           >

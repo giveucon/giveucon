@@ -148,7 +148,7 @@ function Id({ session, selfUser, store, productList }) {
           경로 검색
         </Button>
       </Box>
-      { selfUser.id === store.owner && (
+      { selfUser.id === store.user && (
         <>
           <Box marginY={1}>
             <Button

@@ -1,4 +1,5 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -84,7 +85,12 @@ function Delete({ session, selfUser, product }) {
             variant="contained"
             onClick={async () => {
               const response = await deleteProduct(session, product);
-              router.push(`/stores/${product.store}`);
+              if (response.status === 200) {
+                router.push(`/stores/${product.store}`);
+                toast.success('상품이 삭제되었습니다.');
+              } else {
+                toast.error('상품 삭제 중 오류가 발생했습니다.');
+              }
             }}
           >
             가게 삭제

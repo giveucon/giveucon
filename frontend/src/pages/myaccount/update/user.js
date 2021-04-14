@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -151,7 +152,12 @@ function User({ session, prevSelfUser }) {
             variant="contained"
             onClick={async () => {
               const response = await putSelfUser(session, selfUser);
-              router.push('/myaccount/update');
+              if (response.status === 200) {
+                router.push('/myaccount/update');
+                toast.success('사용자 계정이 업데이트 되었습니다.');
+              } else {
+                toast.error('사용자 계정 업데이트 중 오류가 발생했습니다.');
+              }
             }}
           >
             제출

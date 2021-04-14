@@ -3,7 +3,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Provider as NextAuthProvider } from 'next-auth/client';
-import { ThemeProvider, makeStyles } from '@material-ui/styles';
+import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from '@material-ui/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -51,6 +52,14 @@ function RootApp({ Component, pageProps }) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
+          <Toaster 
+            toastOptions={{
+              className: '',
+              style: {
+                borderRadius: "1.5rem"
+              },
+            }}
+          />
           <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
             <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color="primary" />
           </Backdrop>
