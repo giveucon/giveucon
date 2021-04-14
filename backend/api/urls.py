@@ -37,5 +37,7 @@ urlpatterns = [
     path('coupons/<int:pk>/', CouponDetailView.as_view()),
 
     path('tags/', TagListView.as_view()),
-    path('tags/<int:pk>', TagDetailView.as_view())
+    path('tags/<int:pk>', TagDetailView.as_view()),
+
+    path('reviews/', ReviewListView.as_view())
 ]

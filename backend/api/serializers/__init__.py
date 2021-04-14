@@ -8,3 +8,4 @@ from .coupon_serializer import CouponSerializer
 from .central_notice_serializer import CentralNoticeSerializer
 from .store_notice_serializer import StoreNoticeSerializer
 from .tag_serializer import TagSerializer
+from .review_serializer import ReviewSerializer
