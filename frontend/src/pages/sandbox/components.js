@@ -13,15 +13,16 @@ import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import ListItemCard from '../../components/ListItemCard';
 import ProductBox from '../../components/ProductBox';
-import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
-import SwipeableTiles from '../../components/SwipeableTiles';
+import ReviewBox from '../../components/ReviewBox';
+import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
+import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
 import UserProfileBox from '../../components/UserProfileBox';
 import UserProfileSection from '../../components/UserProfileSection';
 
 export default function Components() {
 
-  const swipeableBusinessCards = [
+  const swipeableBusinessCardList = [
     <BusinessCard
       title="Swipeable Business Card 1"
       image="https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg"
@@ -48,7 +49,7 @@ export default function Components() {
     />
   ]
 
-  const swipeableTiles = [
+  const swipeableTileList = [
     <Tile
       title="Swipeable Tile 1"
       image="https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg"
@@ -243,33 +244,49 @@ export default function Components() {
       </Section>
 
       <Section
-        title="SwipeableBusinessCards"
+        title="ReviewBox"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <SwipeableBusinessCards>
-          {swipeableBusinessCards}
-        </SwipeableBusinessCards>
+        <ReviewBox
+          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
+          title="Review Box"
+          subtitle="Review Author"
+          content="Excellent"
+          score={4}
+          actions={<Button>Edit</Button>}
+          onClick={() => alert( 'Tapped' )}
+        />
       </Section>
 
       <Section
-        title="SwipeableBusinessCards - with Autoplay"
+        title="SwipeableBusinessCardList"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <SwipeableBusinessCards autoplay={true} interval={5000}>
-          {swipeableBusinessCards}
-        </SwipeableBusinessCards>
+        <SwipeableBusinessCardList>
+          {swipeableBusinessCardList}
+        </SwipeableBusinessCardList>
       </Section>
 
       <Section
-        title="SwipeableTiles"
+        title="SwipeableBusinessCardList - with Autoplay"
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <SwipeableTiles>
-          {swipeableTiles}
-        </SwipeableTiles>
+        <SwipeableBusinessCardList autoplay={true} interval={5000}>
+          {swipeableBusinessCardList}
+        </SwipeableBusinessCardList>
+      </Section>
+
+      <Section
+        title="SwipeableTileList"
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <SwipeableTileList>
+          {swipeableTileList}
+        </SwipeableTileList>
       </Section>
 
       <Section

@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-class SwipeableBusinessCard extends React.Component {
+class SwipeableBusinessCardList extends React.Component {
 
   state = {
     index: 0,
@@ -52,4 +52,4 @@ class SwipeableBusinessCard extends React.Component {
   }
 }
 
-export default SwipeableBusinessCard;
+export default SwipeableBusinessCardList;

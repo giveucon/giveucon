@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-class SwipeableTiles extends React.Component {
+class SwipeableTileList extends React.Component {
 
   render() {
     const children = React.Children.map(this.props.children, child => {
@@ -31,4 +31,4 @@ class SwipeableTiles extends React.Component {
   }
 }
 
-export default SwipeableTiles;
+export default SwipeableTileList;

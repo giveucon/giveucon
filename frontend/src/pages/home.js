@@ -13,8 +13,8 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import BusinessCard from '../components/BusinessCard'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
-import SwipeableBusinessCards from '../components/SwipeableBusinessCards';
-import SwipeableTiles from '../components/SwipeableTiles';
+import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
+import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
 import withAuthServerSideProps from './withAuthServerSideProps'
 
@@ -48,7 +48,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
   }
 })
 
-const geoRecommendCoupons = [
+const geoRecommendedCouponList = [
   <Tile
     title="첫 번째 쿠폰"
     subtitle="10,000원"
@@ -98,7 +98,7 @@ function Home({ session, selfUser, centralNoticeList }) {
             </Badge>
           </IconButton>
         ]}>
-        <SwipeableBusinessCards autoplay={true}>
+        <SwipeableBusinessCardList autoplay={true}>
           {centralNoticeList.slice(0, 2).map((item, index) => {
             return <BusinessCard
               key={index}
@@ -107,15 +107,15 @@ function Home({ session, selfUser, centralNoticeList }) {
               onClick={() => router.push(`/notices/${item.id}` )}
             />
           })}
-        </SwipeableBusinessCards>
+        </SwipeableBusinessCardList>
       </Section>
       <Section
         title="주변에서 사용할 수 있음"
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
-        <SwipeableTiles>
-          {geoRecommendCoupons}
-        </SwipeableTiles>
+        <SwipeableTileList>
+          {geoRecommendedCouponList}
+        </SwipeableTileList>
       </Section>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -17,9 +17,9 @@ function RootApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = prefersDarkMode ? darkTheme : lightTheme;
 
-  const [pageLoading, setPageLoading] = React.useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleStart = () => { setPageLoading(true); };
     const handleComplete = () => { setPageLoading(false); };
 
@@ -36,7 +36,7 @@ function RootApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>My page</title>
+        <title>{`${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"

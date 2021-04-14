@@ -10,7 +10,7 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import BusinessCard from '../../components/BusinessCard';
 import ListItemCard from '../../components/ListItemCard';
-import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
+import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCentralNoticeList = async (session) => {
@@ -50,7 +50,7 @@ function Index({ session, selfUser, noticeList }) {
         titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
         title="최신 공지사항"
       >
-        <SwipeableBusinessCards autoplay={true}>
+        <SwipeableBusinessCardList autoplay={true}>
           {noticeList.slice(0, 2).map((item, index) => {
             return <BusinessCard
               key={index}
@@ -59,7 +59,7 @@ function Index({ session, selfUser, noticeList }) {
               onClick={() => router.push(`/notices/${item.id}`)}
             />
           })}
-        </SwipeableBusinessCards>
+        </SwipeableBusinessCardList>
       </Section>
       <Section
         title="전체 공지사항"
