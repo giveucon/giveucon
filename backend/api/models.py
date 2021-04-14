@@ -63,7 +63,7 @@ class Store(models.Model):
     public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
     images = models.ManyToManyField(Image, blank=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     def __str__(self):
         return f"[{self.id}] {self.name}"
 
