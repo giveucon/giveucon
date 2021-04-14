@@ -69,6 +69,12 @@ function Create({ session, selfUser, store }) {
     duration: 0,
     store: store.id,
   });
+  const [productError, setProductError] = useState({
+    name: false,
+    description: false,
+    price: false,
+    duration: false,
+  });
   return (
     <Layout title={`상품 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -77,65 +83,61 @@ function Create({ session, selfUser, store }) {
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="name"
             value={product.name}
+            error={productError.name}
             fullWidth
             label="이름"
             onChange={(event) => {
-              setProduct({ ...product, name: event.target.value });
+              setProduct(prevProduct => ({ ...prevProduct, name: event.target.value }));
             }}
             required
           />
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="email"
+            name="description"
             value={product.description}
+            error={productError.description}
             fullWidth
             label="설명"
             multiline
             onChange={(event) => {
-              setProduct({ ...product, description: event.target.value });
+              setProduct(prevProduct => ({ ...prevProduct, description: event.target.value }));
             }}
             required
           />
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="price"
             value={product.price}
+            error={productError.price}
             fullWidth
             label="가격"
             type="number"
             onChange={(event) => {
-              setProduct({ ...product, price: event.target.value });
+              setProduct(prevProduct => ({ ...prevProduct, price: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  원
-                </InputAdornment>
-              ),
+              endAdornment: (<InputAdornment position="end">원</InputAdornment>),
             }}
             required
           />
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="username"
+            name="duration"
             value={product.duration}
+            error={productError.duration}
             fullWidth
             type="number"
             label="유효기간"
             onChange={(event) => {
-              setProduct({ ...product, duration: event.target.value });
+              setProduct(prevProduct => ({ ...prevProduct, duration: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  일
-                </InputAdornment>
-              ),
+              endAdornment: (<InputAdornment position="end">일</InputAdornment>),
             }}
             required
           />
@@ -150,6 +152,28 @@ function Create({ session, selfUser, store }) {
               if (response.status === 201) {
                 router.push(`/products/${response.data.id}`);
                 toast.success('상품이 생성되었습니다.');
+              } else if (response.status === 400) {
+                if (response.data.name) {
+                  setProductError(prevProductError => ({...prevProductError, name: true}));
+                } else {
+                  setProductError(prevProductError => ({...prevProductError, name: false}));
+                }
+                if (response.data.description) {
+                  setProductError(prevProductError => ({...prevProductError, description: true}));
+                } else {
+                  setProductError(prevProductError => ({...prevProductError, description: false}));
+                }
+                if (response.data.price) {
+                  setProductError(prevProductError => ({...prevProductError, price: true}));
+                } else {
+                  setProductError(prevProductError => ({...prevProductError, price: false}));
+                }
+                if (response.data.duration) {
+                  setProductError(prevProductError => ({...prevProductError, duration: true}));
+                } else {
+                  setProductError(prevProductError => ({...prevProductError, duration: false}));
+                }
+                toast.error('입력란을 확인하세요.');
               } else {
                 toast.error('상품 생성 중 오류가 발생했습니다.');
               }

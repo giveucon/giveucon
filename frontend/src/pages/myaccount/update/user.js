@@ -69,6 +69,12 @@ function User({ session, prevSelfUser }) {
     last_name: prevSelfUser.last_name,
     dark_mode: prevSelfUser.dark_mode,
   });
+  const [selfUserError, setSelfUserError] = useState({
+    email: false,
+    user_name: false,
+    first_name: false,
+    last_name: false,
+  });
   return (
     <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -82,24 +88,26 @@ function User({ session, prevSelfUser }) {
       >
         <Box paddingY={1}>
           <TextField
-            name="username"
-            value={selfUser.user_name}
+            name="email"
+            value={selfUser.email}
+            error={selfUserError.email}
             fullWidth
-            label="유저네임"
+            label="이메일"
             onChange={(event) => {
-              setSelfUser({ ...selfUser, user_name: event.target.value });
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: event.target.value }));
             }}
             required
           />
         </Box>
         <Box paddingY={1}>
           <TextField
-            name="email"
-            value={selfUser.email}
+            name="username"
+            value={selfUser.user_name}
+            error={selfUserError.user_name}
             fullWidth
-            label="이메일"
+            label="유저네임"
             onChange={(event) => {
-              setSelfUser({ ...selfUser, email: event.target.value });
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: event.target.value }));
             }}
             required
           />
@@ -108,10 +116,11 @@ function User({ session, prevSelfUser }) {
           <TextField
             name="last_name"
             value={selfUser.last_name}
+            error={selfUserError.last_name}
             fullWidth
             label="성"
             onChange={(event) => {
-              setSelfUser({ ...selfUser, last_name: event.target.value });
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, last_name: event.target.value }));
             }}
             required
           />
@@ -120,10 +129,11 @@ function User({ session, prevSelfUser }) {
           <TextField
             name="first_name"
             value={selfUser.first_name}
+            error={selfUserError.first_name}
             fullWidth
             label="이름"
             onChange={(event) => {
-              setSelfUser({ ...selfUser, first_name: event.target.value });
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, first_name: event.target.value }));
             }}
             required
           />
@@ -137,7 +147,7 @@ function User({ session, prevSelfUser }) {
                 color="primary"
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
-                  setSelfUser({ ...selfUser, dark_mode: event.target.checked });
+                  setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />
             }
@@ -154,9 +164,32 @@ function User({ session, prevSelfUser }) {
               const response = await putSelfUser(session, selfUser);
               if (response.status === 200) {
                 router.push('/myaccount/update');
-                toast.success('사용자 계정이 업데이트 되었습니다.');
+                toast.success('계정이 업데이트 되었습니다.');
+              } 
+              else if (response.status === 400) {
+                if (response.data.email) {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: true}));
+                } else {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: false}));
+                }
+                if (response.data.user_name) {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: true}));
+                } else {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: false}));
+                }
+                if (response.data.first_name) {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: true}));
+                } else {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: false}));
+                }
+                if (response.data.last_name) {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: true}));
+                } else {
+                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: false}));
+                }
+                toast.error('입력란을 확인하세요.');
               } else {
-                toast.error('사용자 계정 업데이트 중 오류가 발생했습니다.');
+                toast.error('계정 업데이트 중 오류가 발생했습니다.');
               }
             }}
           >
