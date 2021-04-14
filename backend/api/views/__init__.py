@@ -4,6 +4,8 @@ from .article_detail_view import ArticleDetailView
 from .central_notice_list_view import CentralNoticeListView
 from .central_notice_detail_view import CentralNoticeDetailView
 from .self_account_detail_view import SelfAccountDetailView
+from .store_notice_detail_view import StoreNoticeDetailView
+from .store_notice_list_view import StoreNoticeListView
 from .account_list_view import AccountListView
 from .self_user_detail_view import SelfUserDetailView
 from .user_detail_view import UserDetailView

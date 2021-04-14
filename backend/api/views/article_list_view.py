@@ -9,10 +9,8 @@ from ..services import UserService
 class ArticleListView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    def create(self, request, *args, **kwargs):
-        user = UserService.get_current_user(request)
-        images = request.data.getlist('images')
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+    def perform_create(self, serializer):
+        user = UserService.get_current_user(self.request)
+        images = self.request.data.getlist('images')
         serializer.save(user=user, images=images)
-        return Response(serializer.data)

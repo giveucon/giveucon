@@ -9,9 +9,7 @@ from ..services import UserService
 class CouponListView(generics.ListCreateAPIView):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer
-    def create(self, request, *args, **kwargs):
-        user = UserService.get_current_user(request)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+    def perform_create(self, serializer):
+        user = UserService.get_current_user(self.request)
         serializer.save(user=user)
-        return Response(serializer.data)

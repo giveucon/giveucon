@@ -50,6 +50,11 @@ class Article(models.Model):
     def __str__(self):
         return f"[{self.id}] {self.title}"
 
+class Tag(models.Model):
+    name = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    def __str__(self):
+        return f"[{self.id}] {self.name}"
+
 class Store(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
@@ -58,6 +63,7 @@ class Store(models.Model):
     public_key = models.CharField(max_length=128, blank=False, null=False, unique=True)
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='store')
     images = models.ManyToManyField(Image, blank=True)
+    tags = models.ManyToManyField(Tag)
     def __str__(self):
         return f"[{self.id}] {self.name}"
 
@@ -77,27 +83,6 @@ class Product(models.Model):
         unique_together = ('name', 'store')
     def __str__(self):
         return f"[{self.id}] {self.name}"
-
-class Tag(models.Model):
-    name = models.CharField(max_length=255, blank=False, null=False, unique=True)
-    def __str__(self):
-        return f"[{self.id}] {self.name}"
-
-class StoreTag(models.Model):
-    store = models.ForeignKey(
-        Store,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='store_tag'
-    )
-    tag = models.ForeignKey(
-        Tag,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='store_tag'
-    )
-    class Meta:
-        unique_together = ('store', 'tag')
 
 class MenuItem(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
