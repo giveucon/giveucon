@@ -18,7 +18,7 @@ import Section from '../../components/Section'
 const getSelfAccount = async (session) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/accounts/self`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/accounts/self/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',

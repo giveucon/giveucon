@@ -22,7 +22,7 @@ import withAuthServerSideProps from './withAuthServerSideProps'
 const getCentralNoticeList = async (session) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',

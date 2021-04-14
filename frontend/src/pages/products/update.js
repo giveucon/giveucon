@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 const getProduct = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -66,9 +66,9 @@ const putProduct = async (session, product) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevProduct = await getProduct(session, context)
+  const prevProductResponse = await getProduct(session, context)
   return {
-    props: { session, selfUser, prevProduct },
+    props: { session, selfUser, prevProduct: prevProductResponse.data },
   }
 })
 

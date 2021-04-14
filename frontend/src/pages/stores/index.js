@@ -16,7 +16,7 @@ const getStoreList = async (session, context) => {
     let params = new Object;
     if (context.query.user) { params.user = context.query.user };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -37,7 +37,7 @@ const getUser = async (session, context) => {
     let params = new Object;
     if (context.query.user) { params.user = context.query.user };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,

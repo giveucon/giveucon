@@ -5,14 +5,21 @@ import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const useStyles = makeStyles({
   RedButton: {
@@ -27,7 +34,25 @@ const useStyles = makeStyles({
 const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
+        headers: {
+          'Authorization': "Bearer " + session.accessToken,
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        }
+      }
+    );
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error(error);
+    return { status: error.response.status, data: error.response.data }
+  }
+};
+
+const getTagList = async (session) => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/tags/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -45,10 +70,10 @@ const getStore = async (session, context) => {
 const putStore = async (session, store) => {
   try {
     const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}/`, {
         name: store.name,
         description: store.description,
-        user: store.user,
+        tags: store.tags,
       }, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
@@ -65,20 +90,22 @@ const putStore = async (session, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevStore = await getStore(session, context)
+  const prevStoreResponse = await getStore(session, context)
+  const tagListResponse = await getTagList(session)
   return {
-    props: { session, selfUser, prevStore },
+    props: { session, selfUser, prevStore: prevStoreResponse.data, tagList: tagListResponse.data },
   }
 })
 
-function Update({ session, selfUser, prevStore }) {
+function Update({ session, selfUser, prevStore, tagList }) {
   const router = useRouter();
   const classes = useStyles();
   const [store, setStore] = useState({
     id: prevStore.id,
     name: prevStore.name,
     description: prevStore.description,
-    user: prevStore.user,
+    images: prevStore.images,
+    tags: prevStore.tags,
   });
   const [storeError, setStoreError] = useState({
     name: false,
@@ -117,9 +144,36 @@ function Update({ session, selfUser, prevStore }) {
             label="가게 설명"
             multiline
             onChange={(event) => {
-              setStore(prevStore => ({ ...store, description: event.target.value }));
+              setStore(prevStore => ({ ...prevStore, description: event.target.value }));
             }}
             required
+          />
+        </Box>
+        <Box paddingY={1}>
+          <Autocomplete
+            multiple
+            options={tagList}
+            disableCloseOnSelect
+            getOptionLabel={(option) => option.name}
+            onChange={(event, value) => {
+              setStore(prevStore => ({ ...prevStore, tags: value.map(value => value.id) }));
+              console.log(value.map(value => value.id));
+            }}
+            renderOption={(option, { selected }) => (
+              <React.Fragment>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.name}
+              </React.Fragment>
+            )}
+            style={{ minWidth: "2rem" }}
+            renderInput={(params) => (
+              <TextField {...params} label="태그" placeholder="태그" />
+            )}
           />
         </Box>
         <Box marginY={1}>

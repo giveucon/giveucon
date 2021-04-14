@@ -17,13 +17,13 @@ import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
-import SwipeableBusinessCards from '../../components/SwipeableBusinessCards';
+import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const getStore = async (session, context) => {
 const getProductList = async (session, store) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/`, {
         params: {
           store: store.id,
         },
@@ -99,9 +99,9 @@ function Id({ session, selfUser, store, productList }) {
         backButton
         title={store.name}
       >
-        <SwipeableBusinessCards autoplay={true}>
+        <SwipeableBusinessCardList autoplay={true}>
           {storeNotices}
-        </SwipeableBusinessCards>
+        </SwipeableBusinessCardList>
         <ArticleBox
           title="가게 설명"
           content={store.description}

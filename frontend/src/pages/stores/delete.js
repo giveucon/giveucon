@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const getStore = async (session, context) => {
 const deleteStore = async (session, store) => {
   try {
     const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',

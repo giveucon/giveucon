@@ -18,7 +18,7 @@ const getCouponList = async (session, context) => {
     if (context.query.store) { params.store = context.query.store };
     if (context.query.product) { params.store = context.query.product };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,

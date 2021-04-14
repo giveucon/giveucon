@@ -15,7 +15,7 @@ import withAuthServerSideProps from '../withAuthServerSideProps'
 const getStore = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.store}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.store}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const getProductList = async (session, context) => {
     if (context.query.user) { params.user = context.query.user };
     if (context.query.store) { params.store = context.query.store };
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,

@@ -13,7 +13,7 @@ import withAuthServerSideProps from '../withAuthServerSideProps'
 const getCoupon = async (session, context) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const getCouponQR = async (session, context) => {
     let params = new Object;
     params.type = `qr`;
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
         params,
         headers: {
           'Authorization': "Bearer " + session.accessToken,

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import jsQR from "jsqr";
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
 
 import Layout from '../../components/Layout';
 import Section from '../../components/Section'
@@ -33,7 +32,7 @@ const putCouponScan = async (session, qrData) => {
 const getCoupon = async (session, qrData) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${qrData.id}`, {
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${qrData.id}/`, {
         headers: {
           'Authorization': "Bearer " + session.accessToken,
           'Content-Type': 'application/json',

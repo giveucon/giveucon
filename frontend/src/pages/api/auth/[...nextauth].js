@@ -73,7 +73,7 @@ const settings = {
         try {
           const response = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/social/login/kakao`,
+            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/social/login/kakao/`,
             {
               access_token: accessToken, // note the differences in key and value variable names
             },

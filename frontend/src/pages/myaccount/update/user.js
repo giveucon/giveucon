@@ -52,9 +52,9 @@ const putSelfUser = async (session, selfUser) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevSelfUser = selfUser
+  const prevSelfUserResponse = selfUser
   return {
-    props: { session, prevSelfUser },
+    props: { session, prevSelfUser: prevSelfUserResponse.data },
   }
 })
 
