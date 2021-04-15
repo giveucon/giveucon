@@ -148,8 +148,6 @@ function Create({ session, selfUser, store }) {
                 setProductError(prevProductError => ({...prevProductError, duration: false}));
               }
               toast.error('입력란을 확인하세요.');
-            } else {
-              toast.error('상품 생성 중 오류가 발생했습니다.');
             }
           }}
         >

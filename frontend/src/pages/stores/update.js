@@ -182,8 +182,6 @@ function Update({ session, selfUser, prevStore, tagList }) {
                 setStoreError(prevStoreError => ({...prevStoreError, description: false}));
               }
               toast.error('입력란을 확인하세요.');
-            } else {
-              toast.error('가게 업데이트 중 오류가 발생했습니다.');
             }
           }}
         >

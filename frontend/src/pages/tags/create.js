@@ -69,8 +69,6 @@ function Create({ session, selfUser }) {
                 setTagError(prevTagError => ({...prevTagError, name: false}));
               }
               toast.error('입력란을 확인하세요.');
-            } else {
-              toast.error('태그 생성 중 오류가 발생했습니다.');
             }
           }}
         >

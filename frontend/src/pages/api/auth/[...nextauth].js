@@ -77,6 +77,9 @@ const settings = {
               access_token: accessToken, // note the differences in key and value variable names
             },
           );
+          user.accessToken = socialLoginResponse.data.access_token;
+          user.refreshToken = socialLoginResponse.data.refresh_token;
+
           const tokenRefreshResponse = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
             `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
@@ -96,6 +99,7 @@ const settings = {
           console.log('Refresh Token : ' + user.refreshToken);
           console.log('Access Token Expiry : ' + user.accessTokenExpiry);
           console.log('Refresh Token Expiry : ' + user.refreshTokenExpiry);
+
           return true; // return true if everything went well
         } catch (error) {
           console.log('[...nextauth].js async signIn called, ERROR OCCURRED');
@@ -112,14 +116,12 @@ const settings = {
         /*
         try {
           await axios.post(
-            // tip: use a seperate .ts file or json file to store such URL endpoints
             `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`, {
               token: user.accessToken,
             },
           );
         } catch (error) {
           const tokenRefreshResponse = await axios.post(
-            // tip: use a seperate .ts file or json file to store such URL endpoints
             `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
               refresh: user.refreshToken,
             },
@@ -143,13 +145,13 @@ const settings = {
           token.accessTokenExpiry = user.accessTokenExpiry;
           token.refreshTokenExpiry = user.refreshTokenExpiry;
         }
+        */
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.accessTokenLifetime = user.accessTokenLifetime;
         token.refreshTokenLifetime = user.refreshTokenLifetime;
         token.accessTokenExpiry = user.accessTokenExpiry;
         token.refreshTokenExpiry = user.refreshTokenExpiry;
-        */
       }
       return token;
     },
@@ -158,18 +160,17 @@ const settings = {
       console.log('[...nextauth].js : async session called');
       try {
         await axios.post(
-          // tip: use a seperate .ts file or json file to store such URL endpoints
           `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`, {
             token: token.accessToken,
           },
         );
       } catch (error) {
         const tokenRefreshResponse = await axios.post(
-          // tip: use a seperate .ts file or json file to store such URL endpoints
           `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
             refresh: token.refreshToken,
           },
         );
+
         token.accessToken = tokenRefreshResponse.data.access;
         token.refreshToken = tokenRefreshResponse.data.refresh;
         token.accessTokenLifetime = tokenRefreshResponse.data.access_lifetime;
@@ -220,7 +221,7 @@ const settings = {
       console.log('[...nextauth].js : error event occurred');
       console.log(message);
     },
-  }
+  },
 };
 
 export default (req, res) =>

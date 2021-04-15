@@ -56,8 +56,6 @@ function Delete({ session, selfUser, coupon }) {
               if (response.status === 204) {
                 router.push(`/coupons/`);
                 toast.success('쿠폰이 삭제되었습니다.');
-              } else {
-                toast.error('쿠폰 삭제 중 오류가 발생했습니다.');
               }
             }}
           >

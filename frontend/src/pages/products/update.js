@@ -163,8 +163,6 @@ function Update({ session, selfUser, prevProduct }) {
                 setProductError(prevProductError => ({...prevProductError, duration: false}));
               }
               toast.error('입력란을 확인하세요.');
-            } else {
-              toast.error('상품 업데이트 중 오류가 발생했습니다.');
             }
           }}
         >

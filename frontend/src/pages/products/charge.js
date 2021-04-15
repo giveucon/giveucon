@@ -60,8 +60,6 @@ function Charge({ session, selfUser, product, store }) {
               if (response.status === 200) {
                 router.push(`/coupons/${response.data.id}/`);
                 toast.success('상품 결재가 완료되었습니다.');
-              } else {
-                toast.error('상품 결재 중 오류가 발생했습니다.');
               }
             }}
           >

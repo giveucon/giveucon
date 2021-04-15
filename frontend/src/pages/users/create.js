@@ -168,8 +168,6 @@ function Create({ session, selfAccount }) {
                 setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: false}));
               }
               toast.error('입력란을 확인하세요.');
-            } else {
-              toast.error('계정 생성 중 오류가 발생했습니다.');
             }
           }}
         >

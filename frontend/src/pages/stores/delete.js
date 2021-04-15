@@ -56,8 +56,6 @@ function Delete({ session, selfUser, store }) {
               if (response.status === 204) {
                 router.push(`/stores/`);
                 toast.success('가게가 삭제되었습니다.');
-              } else {
-                toast.error('가게 삭제 중 오류가 발생했습니다.');
               }
             }}
           >

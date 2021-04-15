@@ -56,8 +56,6 @@ function Delete({ session, selfUser, product }) {
               if (response.status === 204) {
                 router.push(`/stores/${product.store}/`);
                 toast.success('상품이 삭제되었습니다.');
-              } else {
-                toast.error('상품 삭제 중 오류가 발생했습니다.');
               }
             }}
           >
