@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import Box from '@material-ui/core/Box';
 
 const styles = {
 
@@ -24,7 +25,11 @@ class SwipeableTileList extends React.Component {
     return (
       <div style={styles.root}>
         <SwipeableViews enableMouseEvents style={styles.root} containerStyle={styles.container}>
-          {children}
+          {React.Children.map(children, child => (
+            <Box margin={1}>
+              {child}
+            </Box>
+          ))}
         </SwipeableViews>
       </div>
     );

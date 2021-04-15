@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-import ArticleBox from '../../components/ArticleBox';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
@@ -84,12 +84,11 @@ function Charge({ session, selfUser, product, store }) {
         backButton
         title={product.name}
       >
-        <ArticleBox
-          title='쿠폰 구매'
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-          content={product.description}
-          onClick={() => alert( 'Tapped' )}
-        />
+        <Box>
+          <Typography variant='h5'>{product.name}</Typography>
+          <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+          <Typography variant='body1'>{product.description}</Typography>
+        </Box>
       </Section>
       { (selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>

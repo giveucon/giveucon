@@ -56,7 +56,7 @@ function Home({ session, selfUser, couponList }) {
           titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
           titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
         >
-          <Grid container>
+          <Grid container spacing={1}>
             {couponList && couponList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile

@@ -54,7 +54,7 @@ export default function BusinessCard({ actions=null, image=null, title=null, men
   };
   
   return (
-    <Box margin={0.5} className={classes.root}>
+    <Box className={classes.root}>
       <Card>
         <Box className={classes.actionAreaWrapper}>
           <CardActionArea onClick={onClick}>

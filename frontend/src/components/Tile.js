@@ -59,7 +59,7 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
   };
   
   return (
-    <Box margin={0.5} className={classes.root}>
+    <Box className={classes.root}>
       <Card>
         <Box className={classes.actionAreaWrapper}>
           <CardActionArea onClick={onClick}>

@@ -72,7 +72,7 @@ function Create({ session, selfUser }) {
           onClick={async () => {
             const response = await postTag(session, tag);
             if (response.status === 201) {
-              // router.push(`/stores/${response.id}`);
+              // router.push(`/tags/${response.id}`);
               toast.success('태그가 생성되었습니다.');
             } 
             else if (response.status === 400) {

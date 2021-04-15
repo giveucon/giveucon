@@ -1,8 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
@@ -49,23 +51,30 @@ function Index({ session, selfUser, noticeList }) {
       <Section
         titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
         title='최신 공지사항'
+        padding={false}
       >
-        <SwipeableBusinessCardList autoplay={true}>
-          {noticeList.slice(0, 2).map((item, index) => {
-            return <BusinessCard
-              key={index}
-              title={item.article.title}
-              image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
-              onClick={() => router.push(`/notices/${item.id}`)}
-            />
-          })}
-        </SwipeableBusinessCardList>
+        { noticeList && (noticeList.length > 0) ? (
+          <SwipeableBusinessCardList autoplay={true}>
+            {noticeList.slice(0, 2).map((item, index) => {
+              return <BusinessCard
+                key={index}
+                title={item.article.title}
+                image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
+                onClick={() => router.push(`/notices/${item.id}`)}
+              />
+            })}
+          </SwipeableBusinessCardList>
+        ) : (
+          <Box padding={1}>
+            <Typography>공지사항이 없습니다.</Typography>
+          </Box>
+        )}
       </Section>
       <Section
         title='전체 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
       >
-        {noticeList.map((item, index) => (
+        { noticeList && (noticeList.length > 0) ? noticeList.map((item, index) => (
           <Grid item xs={12} key={index}>
             <ListItemCard
               primary={item.article.title}
@@ -73,7 +82,9 @@ function Index({ session, selfUser, noticeList }) {
               onClick={() => router.push(`/notices/${item.id}`)}
             />
           </Grid>
-        ))}
+        )) : (
+          <Typography>공지사항이 없습니다.</Typography>
+        )}
       </Section>
     </Layout>
   );

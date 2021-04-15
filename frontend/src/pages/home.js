@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
+import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import HomeIcon from '@material-ui/icons/Home';
@@ -98,23 +99,27 @@ function Home({ session, selfUser, centralNoticeList }) {
             </Badge>
           </IconButton>
         ]}
+        padding={false}
       >
         {centralNoticeList && (centralNoticeList.length > 0) && (
           <SwipeableBusinessCardList autoplay={true}>
-            {centralNoticeList.slice(0, 2).map((item, index) => {
-              return <BusinessCard
-                key={index}
-                title={item.article.title}
-                image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
-                onClick={() => router.push(`/notices/${item.id}` )}
-              />
-            })}
+            { centralNoticeList && (centralNoticeList.length > 0) && 
+              (centralNoticeList.slice(0, 2).map((item, index) => {
+                return <BusinessCard
+                  key={index}
+                  title={item.article.title}
+                  image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
+                  onClick={() => router.push(`/notices/${item.id}` )}
+                />
+              }))
+            }
           </SwipeableBusinessCardList>
         )}
       </Section>
       <Section
         title='주변에서 사용할 수 있음'
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
+        padding={false}
       >
         <SwipeableTileList>
           {geoRecommendedCouponList}

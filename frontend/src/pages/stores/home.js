@@ -89,7 +89,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
             </IconButton>
           }
         >
-          <Grid container>
+          <Grid container spacing={1}>
             {selfStoreList && selfStoreList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
@@ -106,7 +106,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         >
-          <Grid container>
+          <Grid container spacing={1}>
             {selfStoreList && selfStoreList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile

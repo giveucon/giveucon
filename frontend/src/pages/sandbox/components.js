@@ -12,7 +12,6 @@ import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import ListItemCard from '../../components/ListItemCard';
-import ProductBox from '../../components/ProductBox';
 import ReviewBox from '../../components/ReviewBox';
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../../components/SwipeableTileList';
@@ -92,6 +91,32 @@ export default function Components() {
       >
         <Typography variant='h5'>Section children</Typography>
       </Section>
+
+      <Section
+        title='Section - without padding'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<IconButton><MenuIcon /></IconButton>}
+        padding={false}
+      >
+        <Typography variant='h5'>I have no padding!</Typography>
+      </Section>
+
+      <AccordionSection
+        title='AccordionSection'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        defaultExpanded={true}
+      >
+        <Typography variant='h5'>AccordionBox children</Typography>
+      </AccordionSection>
+
+      <AccordionSection
+        title='AccordionSection - without padding'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        defaultExpanded={true}
+        padding={false}
+      >
+        <Typography variant='h5'>I have no padding!</Typography>
+      </AccordionSection>
       
       <Section title='Buttons'>
         <Button variant='contained'>Default</Button>
@@ -126,13 +151,6 @@ export default function Components() {
         <Typography variant='caption'>Caption</Typography>
         <Typography variant='overline'>Overline</Typography>
       </Section>
-
-      <AccordionSection
-        title='AccordionSection'
-        defaultExpanded={true}
-      >
-        <Typography variant='h5'>AccordionBox children</Typography>
-      </AccordionSection>
 
       <Section
         title='ArticleBox'
@@ -224,21 +242,6 @@ export default function Components() {
           primary='ListItemCard primary'
           secondary='ListItemCard secondary'
           suffix={<Button>Edit</Button>}
-          onClick={() => alert( 'Tapped' )}
-        />
-      </Section>
-
-      <Section
-        title='ProductBox'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-      >
-        <ProductBox
-          name='Product name'
-          price={10000}
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-          content='ArticleBox Content ArticleBox Content ArticleBox Content '
-          actions={<Button>Edit</Button>}
           onClick={() => alert( 'Tapped' )}
         />
       </Section>

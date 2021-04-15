@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-import ProductBox from '../../components/ProductBox';
+import BusinessCard from '../../components/BusinessCard';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
@@ -61,13 +62,16 @@ function Id({ session, selfUser, product, store }) {
         backButton
         title={product.name}
       >
-        <ProductBox
-          name={product.name}
-          price={product.price}
-          image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
-          content={product.description}
-          onClick={() => alert( 'Tapped' )}
-        />
+        <Box display={true ? 'block' : 'none'}>
+          <BusinessCard
+            image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+          />
+        </Box>
+        <Box paddingTop={1}>
+          <Typography variant='h5'>{product.name}</Typography>
+          <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+          <Typography variant='body1'>{product.description}</Typography>
+        </Box>
       </Section>
       { (selfUser.id !== store.owner) && (store.id === product.store) && (
         <>

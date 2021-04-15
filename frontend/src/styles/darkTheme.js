@@ -21,6 +21,7 @@ const theme = createMuiTheme({
     }),
     MuiAccordionSummary: createStyles({
       root: {
+        padding: '0rem 1rem 0rem 0.5rem',
         minHeight: '0rem',
         '&$expanded': {
           minHeight: '0rem',
