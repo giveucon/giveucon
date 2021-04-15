@@ -11,10 +11,7 @@ class UserListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    def perform_create(self, serializer):
         with transaction.atomic():
             user = serializer.save()
-            AccountUser.objects.create(account=request.user, user=user)
-        return Response(serializer.data)
+            AccountUser.objects.create(account=self.request.user, user=user)
