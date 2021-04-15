@@ -18,7 +18,7 @@ const putCouponScan = async (session, qrData) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -36,7 +36,7 @@ const getCoupon = async (session, qrData) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -103,7 +103,7 @@ function Scan({ session, selfUser }) {
               }
             )
             video.srcObject = null;
-            router.push(`/coupons/${qrData.coupon}`)
+            router.push(`/coupons/${qrData.coupon}/`)
           }
         }
       }

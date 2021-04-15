@@ -28,7 +28,7 @@ const getStore = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -49,7 +49,7 @@ const getProductList = async (session, store) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -86,7 +86,7 @@ function Id({ session, selfUser, store, productList }) {
               return <BusinessCard
                 key={index}
                 image={item.image}
-                onClick={() => router.push(`/images/${item.id}` )}
+                onClick={() => router.push(`/images/${item.id}/` )}
               />
             })}
           </SwipeableBusinessCardList>
@@ -107,7 +107,7 @@ function Id({ session, selfUser, store, productList }) {
                 <ListItemCard
                   title={item.name}
                   subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  // onClick={() => router.push(`/stores/notices/${item.id}`)}
+                  // onClick={() => router.push(`/stores/notices/${item.id}/`)}
                 />
               </Grid>
             ))}
@@ -134,7 +134,7 @@ function Id({ session, selfUser, store, productList }) {
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}
-                onClick={() => router.push(`/products/${item.id}`)}
+                onClick={() => router.push(`/products/${item.id}/`)}
               />
             </Grid>
           ))}
@@ -166,7 +166,7 @@ function Id({ session, selfUser, store, productList }) {
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/products/create',
+                pathname: '/products/create/',
                 query: { id: store.id },
               })}
             >
@@ -179,7 +179,7 @@ function Id({ session, selfUser, store, productList }) {
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/stores/update',
+                pathname: '/stores/update/',
                 query: { id: store.id },
               })}
             >

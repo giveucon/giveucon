@@ -14,9 +14,9 @@ function Index({ session }) {
 
   useEffect(() => {
     if (session) {
-      router.push('/home');
+      router.push('/home/');
     } else {
-      router.push('/login');
+      router.push('/login/');
     }
   },[])
 

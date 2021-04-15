@@ -22,7 +22,7 @@ const getSelfAccount = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -46,7 +46,7 @@ const postSelfUser = async (session, selfUser) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -170,7 +170,7 @@ function Create({ session, selfAccount }) {
             const response = await postSelfUser(session, selfUser);
             console.log(response);
             if (response.status === 201) {
-              router.push(`/myaccounts/home`);
+              router.push(`/myaccounts/home/`);
               toast.success('계정이 생성되었습니다.');
             }
             else if (response.status === 400) {

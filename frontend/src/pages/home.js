@@ -27,7 +27,7 @@ const getCentralNoticeList = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -90,7 +90,7 @@ function Home({ session, selfUser, centralNoticeList }) {
         title='홈'
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
-          <IconButton onClick={() => router.push('/notices')}>
+          <IconButton onClick={() => router.push('/notices/')}>
             <AnnouncementIcon />
           </IconButton>,
           <IconButton>
@@ -109,7 +109,7 @@ function Home({ session, selfUser, centralNoticeList }) {
                   key={index}
                   title={item.article.title}
                   image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
-                  onClick={() => router.push(`/notices/${item.id}` )}
+                  onClick={() => router.push(`/notices/${item.id}/` )}
                 />
               }))
             }

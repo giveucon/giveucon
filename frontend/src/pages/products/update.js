@@ -30,7 +30,7 @@ const getProduct = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -54,7 +54,7 @@ const putProduct = async (session, product) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -165,7 +165,7 @@ function Update({ session, selfUser, prevProduct }) {
           onClick={async () => {
             const response = await putProduct(session, product);
             if (response.status === 200) {
-              router.push(`/products/${response.data.id}`);
+              router.push(`/products/${response.data.id}/`);
               toast.success('상품이 업데이트 되었습니다.');
             } else if (response.status === 400) {
               if (response.data.name) {

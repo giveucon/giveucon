@@ -1,17 +1,16 @@
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router'
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
+import AlertBox from '../../components/AlertBox'
 import BusinessCard from '../../components/BusinessCard';
+import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
+import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
@@ -22,7 +21,7 @@ const getCentralNoticeList = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -65,9 +64,7 @@ function Index({ session, selfUser, noticeList }) {
             })}
           </SwipeableBusinessCardList>
         ) : (
-          <Box padding={1}>
-            <Typography>공지사항이 없습니다.</Typography>
-          </Box>
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
       <Section
@@ -79,11 +76,11 @@ function Index({ session, selfUser, noticeList }) {
             <ListItemCard
               primary={item.article.title}
               secondary={new Date(item.article.created_at).toLocaleDateString()}
-              onClick={() => router.push(`/notices/${item.id}`)}
+              onClick={() => router.push(`/notices/${item.id}/`)}
             />
           </Grid>
         )) : (
-          <Typography>공지사항이 없습니다.</Typography>
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
     </Layout>

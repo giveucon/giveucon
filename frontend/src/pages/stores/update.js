@@ -44,7 +44,7 @@ const getStore = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -62,7 +62,7 @@ const getTagList = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -210,7 +210,7 @@ function Update({ session, selfUser, prevStore, tagList }) {
           onClick={async () => {
             const response = await putStore(session, store);
             if (response.status === 200) {
-              router.push(`/stores/${response.data.id}`);
+              router.push(`/stores/${response.data.id}/`);
               toast.success('가게가 업데이트 되었습니다.');
             } else if (response.status === 400) {
               if (response.data.name) {
@@ -242,7 +242,7 @@ function Update({ session, selfUser, prevStore, tagList }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/stores/delete',
+              pathname: '/stores/delete/',
               query: { id: store.id },
             })}
           >

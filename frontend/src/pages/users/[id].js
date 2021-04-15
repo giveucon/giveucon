@@ -18,7 +18,7 @@ const getUser = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -61,7 +61,7 @@ function Id({ session, selfUser, user }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount')}
+            onClick={() => router.push('/myaccount/')}
           >
             내 계정으로 이동
           </Button>

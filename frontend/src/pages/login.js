@@ -35,7 +35,7 @@ function Login({ session }) {
 
   useEffect(() => {
     if (session) {
-      router.push('/home');
+      router.push('/home/');
     }
   },[])
 
@@ -76,7 +76,6 @@ function Login({ session }) {
     </>
   );
 }
-
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)

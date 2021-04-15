@@ -29,7 +29,7 @@ const deleteSelfUser = async (session, selfUser) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -64,7 +64,7 @@ function Delete({ session, selfUser }) {
             onClick={async () => {
               const response = await deleteSelfUser(session, selfUser);
               if (response.status === 204) {
-                signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/' })
+                signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/` })
                 toast.success('계정 탈퇴가 완료되었습니다.');
               } else {
                 toast.error('계정 탈퇴 중 오류가 발생했습니다.');

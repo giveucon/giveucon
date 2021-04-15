@@ -28,7 +28,7 @@ const getProduct = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -46,7 +46,7 @@ const deleteProduct = async (session, product) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -82,7 +82,7 @@ function Delete({ session, selfUser, product }) {
             onClick={async () => {
               const response = await deleteProduct(session, product);
               if (response.status === 204) {
-                router.push(`/stores/${product.store}`);
+                router.push(`/stores/${product.store}/`);
                 toast.success('상품이 삭제되었습니다.');
               } else {
                 toast.error('상품 삭제 중 오류가 발생했습니다.');

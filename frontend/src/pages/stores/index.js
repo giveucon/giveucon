@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
@@ -21,7 +22,7 @@ const getStoreList = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -42,7 +43,7 @@ const getUser = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -69,20 +70,24 @@ function Index({ session, selfUser, storeList, user }) {
         backButton
         title='가게 목록'
       >
-        <Grid container>
-          {storeList && storeList.map((item, index) => (
-            <Grid item xs={6} key={index}>
-              <Tile
-                title={item.name}
-                image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-                onClick={() => router.push(`/stores/${item.id}`)}
-                menuItems={
-                  <MenuItem>Menu Item</MenuItem>
-                }
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {storeList && (storeList.length > 0) ? (
+          <Grid container>
+            {storeList.map((item, index) => (
+              <Grid item xs={6} key={index}>
+                <Tile
+                  title={item.name}
+                  image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+                  onClick={() => router.push(`/stores/${item.id}/`)}
+                  menuItems={
+                    <MenuItem>Menu Item</MenuItem>
+                  }
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <AlertBox content='가게가 없습니다.' variant='information' />
+        )}
       </Section>
       { user && (user.id === selfUser.id) && (
         <Box marginY={1}>
@@ -90,7 +95,7 @@ function Index({ session, selfUser, storeList, user }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/stores/create`)}
+            onClick={() => router.push(`/stores/create/`)}
           >
             새 가게 추가
           </Button>

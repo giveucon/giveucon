@@ -18,7 +18,7 @@ const getStore = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -42,7 +42,7 @@ const postProduct = async (session, product) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -151,7 +151,7 @@ function Create({ session, selfUser, store }) {
           onClick={async () => {
             const response = await postProduct(session, product);
             if (response.status === 201) {
-              router.push(`/products/${response.data.id}`);
+              router.push(`/products/${response.data.id}/`);
               toast.success('상품이 생성되었습니다.');
             } else if (response.status === 400) {
               if (response.data.name) {

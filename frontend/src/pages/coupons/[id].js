@@ -19,7 +19,7 @@ const getCoupon = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -37,7 +37,7 @@ const getProduct = async (session, coupon) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -85,7 +85,7 @@ function Id({ session, selfUser, coupon, product }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/coupons/use',
+              pathname: '/coupons/use/',
               query: { id: coupon.id },
             })}
           >

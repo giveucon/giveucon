@@ -32,7 +32,7 @@ const getTagList = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -67,7 +67,6 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
     props: { session, selfUser, tagList: tagListResponse.data },
   }
 })
-
 
 function Create({ session, selfUser, tagList }) {
   const router = useRouter();
@@ -178,7 +177,7 @@ function Create({ session, selfUser, tagList }) {
           onClick={async () => {
             const response = await postStore(session, store);
             if (response.status === 201) {
-              router.push(`/stores/${response.data.id}`);
+              router.push(`/stores/${response.data.id}/`);
               toast.success('가게가 생성되었습니다.');
             } 
             else if (response.status === 400) {

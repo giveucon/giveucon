@@ -8,7 +8,7 @@ const getSelfUser = async (session) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -28,7 +28,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       return {
         redirect: {
           permanent: false,
-          destination: '/login',
+          destination: '/login/',
         },
         props: {}
       };
@@ -40,7 +40,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       return {
         redirect: {
           permanent: false,
-          destination: '/users/create',
+          destination: '/users/create/',
         },
         props: {}
       }

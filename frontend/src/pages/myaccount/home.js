@@ -55,7 +55,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/stores',
+              pathname: '/stores/',
               query: { user: selfUser.id },
             })}
           >
@@ -68,7 +68,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/products',
+              pathname: '/products/',
               query: { user: selfUser.id },
             })}
           >
@@ -81,7 +81,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/coupons',
+              pathname: '/coupons/',
               query: { user: selfUser.id },
             })}
           >
@@ -98,7 +98,7 @@ function Home({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/notices`)}
+            onClick={() => router.push(`/notices/`)}
           >
             공지사항
           </Button>
@@ -108,7 +108,7 @@ function Home({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/myaccount/update`)}
+            onClick={() => router.push(`/myaccount/update/`)}
           >
             설정
           </Button>
@@ -118,7 +118,7 @@ function Home({ session, selfUser }) {
             className={classes.RedButton}
             fullWidth
             variant='contained'
-            onClick={() => {router.push(`/logout`)}}
+            onClick={() => {router.push(`/logout/`)}}
           >
             로그아웃
           </Button>
@@ -133,7 +133,7 @@ function Home({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => {router.push(`/sandbox/components`)}}
+            onClick={() => {router.push(`/sandbox/components/`)}}
           >
             컴포넌트
           </Button>
@@ -143,7 +143,7 @@ function Home({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/sandbox/scanner`)}
+            onClick={() => router.push(`/sandbox/scanner/`)}
           >
             QR 스캐너
           </Button>

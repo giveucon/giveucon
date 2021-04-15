@@ -40,7 +40,7 @@ const putSelfUser = async (session, selfUser) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -164,7 +164,7 @@ function User({ session, prevSelfUser }) {
           onClick={async () => {
             const response = await putSelfUser(session, selfUser);
             if (response.status === 200) {
-              router.push('/myaccount/update');
+              router.push('/myaccount/update/');
               toast.success('계정이 업데이트 되었습니다.');
             } 
             else if (response.status === 400) {
@@ -206,7 +206,7 @@ function User({ session, prevSelfUser }) {
             className={classes.RedButton}
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount/delete')}
+            onClick={() => router.push('/myaccount/delete/')}
           >
             계정 탈퇴
           </Button>

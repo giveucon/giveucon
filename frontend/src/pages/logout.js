@@ -46,8 +46,8 @@ function Logout({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => {
-              signOut({ callbackUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/' })
-              router.push(`/login`)
+              signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/` })
+              router.push(`/login/`)
             }}
           >
             로그아웃

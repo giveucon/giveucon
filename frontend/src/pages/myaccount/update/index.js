@@ -34,7 +34,7 @@ function Index({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/myaccount/update/user`)}
+            onClick={() => router.push(`/myaccount/update/user/`)}
           >
             사용자 설정
           </Button>

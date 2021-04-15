@@ -17,7 +17,7 @@ const getProduct = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -35,7 +35,7 @@ const getStore = async (session, product) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -80,7 +80,7 @@ function Id({ session, selfUser, product, store }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/products/charge',
+              pathname: '/products/charge/',
               query: { id: product.id },
             })}
           >
@@ -93,7 +93,7 @@ function Id({ session, selfUser, product, store }) {
           color='default'
           fullWidth
           variant='contained'
-          onClick={() => router.push(`/stores/${store.id}`,)}
+          onClick={() => router.push(`/stores/${store.id}/`,)}
         >
           상점으로 이동
         </Button>
@@ -105,7 +105,7 @@ function Id({ session, selfUser, product, store }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/products/update',
+              pathname: '/products/update/',
               query: { id: product.id },
             })}
           >

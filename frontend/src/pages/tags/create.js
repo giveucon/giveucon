@@ -19,7 +19,7 @@ const postTag = async (session, tag) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -72,7 +72,7 @@ function Create({ session, selfUser }) {
           onClick={async () => {
             const response = await postTag(session, tag);
             if (response.status === 201) {
-              // router.push(`/tags/${response.id}`);
+              // router.push(`/tags/${response.id}/`);
               toast.success('태그가 생성되었습니다.');
             } 
             else if (response.status === 400) {

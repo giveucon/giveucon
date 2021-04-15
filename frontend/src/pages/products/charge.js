@@ -17,7 +17,7 @@ const getProduct = async (session, context) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -35,7 +35,7 @@ const getStore = async (session, product) => {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -57,7 +57,7 @@ const postCoupon = async (session, selfUser, product) => {
         headers: {
           'Authorization': 'Bearer ' + session.accessToken,
           'Content-Type': 'application/json',
-          'accept': 'application/json'
+          'Accept': 'application/json'
         }
       }
     );
@@ -99,7 +99,7 @@ function Charge({ session, selfUser, product, store }) {
             onClick={async () => {
               const response = await postCoupon(session, selfUser, product);
               if (response.status === 200) {
-                router.push(`/coupons/${response.data.id}`);
+                router.push(`/coupons/${response.data.id}/`);
                 toast.success('상품 결재가 완료되었습니다.');
               } else {
                 toast.error('상품 결재 중 오류가 발생했습니다.');
