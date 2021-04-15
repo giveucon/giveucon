@@ -1,8 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
-import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import HomeIcon from '@material-ui/icons/Home';
@@ -38,6 +36,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
 
 const geoRecommendedCouponList = [
   <Tile
+    key={1}
     title='첫 번째 쿠폰'
     subtitle='10,000원'
     image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
@@ -48,6 +47,7 @@ const geoRecommendedCouponList = [
     ]}
   />,
   <Tile
+    key={2}
     title='두 번째 쿠폰'
     subtitle='20,000원'
     image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
@@ -58,6 +58,7 @@ const geoRecommendedCouponList = [
     ]}
   />,
   <Tile
+    key={3}
     title='세 번째 쿠폰'
     subtitle='30,000원'
     image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'

@@ -17,16 +17,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView
-)
-
+from rest_framework_simplejwt.views import TokenVerifyView
+from .views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/rest-auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path('api/rest-auth/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
+    path('api/rest-auth/token/obtain/', TokenObtainPairView.as_view(), name='token-obtain'),
+    path('api/rest-auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    # path("api/rest-auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
     path('api/rest-auth/register/', include('dj_rest_auth.registration.urls')),
     path('api/all-auth/', include('allauth.urls')),
     path("api/", include("api.urls")),  # our own views

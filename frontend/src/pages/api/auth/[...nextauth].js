@@ -71,21 +71,31 @@ const settings = {
     
         // make a POST request to the DRF backend
         try {
-          const response = await axios.post(
+          const socialLoginResponse = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/social/login/kakao/`,
-            {
+            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/social/login/kakao/`, {
               access_token: accessToken, // note the differences in key and value variable names
+            },
+          );
+          const tokenRefreshResponse = await axios.post(
+            // tip: use a seperate .ts file or json file to store such URL endpoints
+            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
+              refresh: socialLoginResponse.data.refresh_token,
             },
           );
     
           // extract the returned token from the DRF backend and add it to the `user` object
-          const { access_token, refresh_token } = response.data;
-          user.accessToken = access_token;
-          user.refreshToken = refresh_token;
+          user.accessToken = tokenRefreshResponse.data.access;
+          user.refreshToken = tokenRefreshResponse.data.refresh;
+          user.accessTokenLifetime = tokenRefreshResponse.data.access_lifetime;
+          user.refreshTokenLifetime = tokenRefreshResponse.data.refresh_lifetime;
+          user.accessTokenExpiry = tokenRefreshResponse.data.access_expiry;
+          user.refreshTokenExpiry = tokenRefreshResponse.data.refresh_expiry;
           console.log('[...nextauth].js async signIn called');
-          console.log('Access token : ' + user.accessToken);
-          console.log('Refresh token : ' + user.refreshToken);
+          console.log('Access Token : ' + user.accessToken);
+          console.log('Refresh Token : ' + user.refreshToken);
+          console.log('Access Token Expiry : ' + user.accessTokenExpiry);
+          console.log('Refresh Token Expiry : ' + user.refreshTokenExpiry);
           return true; // return true if everything went well
         } catch (error) {
           console.log('[...nextauth].js async signIn called, ERROR OCCURRED');
@@ -98,37 +108,48 @@ const settings = {
     
     async jwt(token, user, account, profile, isNewUser) {
       console.log('[...nextauth].js : async jwt called');
-      if (user?.accessToken) {
+      if (user && user.accessToken) {
         /*
         try {
           await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`,
-            {
+            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`, {
               token: user.accessToken,
             },
           );
         } catch (error) {
-          const response = await axios.post(
+          const tokenRefreshResponse = await axios.post(
             // tip: use a seperate .ts file or json file to store such URL endpoints
-            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`,
-            {
+            `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
               refresh: user.refreshToken,
             },
           );
-          const { access, refresh } = response.data;
-          user.accessToken = access;
-          user.refreshToken = refresh;
+          user.accessToken = tokenRefreshResponse.data.access;
+          user.refreshToken = tokenRefreshResponse.data.refresh;
+          user.accessTokenLifetime = tokenRefreshResponse.data.access_lifetime;
+          user.refreshTokenLifetime = tokenRefreshResponse.data.refresh_lifetime;
+          user.accessTokenExpiry = tokenRefreshResponse.data.access_expiry;
+          user.refreshTokenExpiry = tokenRefreshResponse.data.refresh_expiry;
           console.log('[...nextauth].js : Tokens refreshed');
           console.log('Access token : ' + user.accessToken);
           console.log('Refresh token : ' + user.refreshToken);
+          console.log('Access Token Expiry : ' + user.accessTokenExpiry);
+          console.log('Refresh Token Expiry : ' + user.refreshTokenExpiry);
         } finally {
-          token.accessToken = user.accessToken
-          token.refreshToken = user.refreshToken
+          token.accessToken = user.accessToken;
+          token.refreshToken = user.refreshToken;
+          token.accessTokenLifetime = user.accessTokenLifetime;
+          token.refreshTokenLifetime = user.refreshTokenLifetime;
+          token.accessTokenExpiry = user.accessTokenExpiry;
+          token.refreshTokenExpiry = user.refreshTokenExpiry;
         }
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+        token.accessTokenLifetime = user.accessTokenLifetime;
+        token.refreshTokenLifetime = user.refreshTokenLifetime;
+        token.accessTokenExpiry = user.accessTokenExpiry;
+        token.refreshTokenExpiry = user.refreshTokenExpiry;
         */
-        token.accessToken = user.accessToken
-        token.refreshToken = user.refreshToken
       }
       return token;
     },
@@ -138,29 +159,44 @@ const settings = {
       try {
         await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`,
-          {
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/verify/`, {
             token: token.accessToken,
           },
         );
       } catch (error) {
-        const response = await axios.post(
+        const tokenRefreshResponse = await axios.post(
           // tip: use a seperate .ts file or json file to store such URL endpoints
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`,
-          {
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}api/rest-auth/token/refresh/`, {
             refresh: token.refreshToken,
           },
         );
-        const { access, refresh } = response.data;
-        token.accessToken = access;
-        token.refreshToken = refresh;
+        token.accessToken = tokenRefreshResponse.data.access;
+        token.refreshToken = tokenRefreshResponse.data.refresh;
+        token.accessTokenLifetime = tokenRefreshResponse.data.access_lifetime;
+        token.refreshTokenLifetime = tokenRefreshResponse.data.refresh_lifetime;
+        token.accessTokenExpiry = tokenRefreshResponse.data.access_expiry;
+        token.refreshTokenExpiry = tokenRefreshResponse.data.refresh_expiry;
         console.log('[...nextauth].js : Tokens refreshed');
         console.log('Access token : ' + token.accessToken);
         console.log('Refresh token : ' + token.refreshToken);
+        console.log('Access Token Expiry : ' + token.accessTokenExpiry);
+        console.log('Refresh Token Expiry : ' + token.refreshTokenExpiry);
       } finally {
-        session.accessToken = token.accessToken
-        session.refreshToken = token.refreshToken
+        session.accessToken = token.accessToken;
+        session.refreshToken = token.refreshToken;
+        session.accessTokenLifetime = token.accessTokenLifetime;
+        session.refreshTokenLifetime = token.refreshTokenLifetime;
+        session.accessTokenExpiry = token.accessTokenExpiry;
+        session.refreshTokenExpiry = token.refreshTokenExpiry;
       }
+      /*
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
+      session.accessTokenLifetime = token.accessTokenLifetime;
+      session.refreshTokenLifetime = token.refreshTokenLifetime;
+      session.accessTokenExpiry = token.accessTokenExpiry;
+      session.refreshTokenExpiry = token.refreshTokenExpiry;
+      */
       return session;
     },
   },

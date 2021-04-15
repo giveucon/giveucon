@@ -171,7 +171,8 @@ export default function Components() {
         titleSuffix={<Button>Edit</Button>}
       >
         <ArticleBox
-          title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title '
+          title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title'
+          subtitle='ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle'
           image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
           content='ArticleBox Content ArticleBox Content ArticleBox Content '
           onClick={() => alert( 'Tapped' )}
@@ -185,7 +186,7 @@ export default function Components() {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
             <BusinessCard
               title='Tile'
@@ -310,7 +311,7 @@ export default function Components() {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={6}>
             <Tile
               title='Tile'
