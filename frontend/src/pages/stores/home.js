@@ -83,6 +83,7 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           title='모든 가게'
           titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
           titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+          padding={false}
         >
           {storeList && (storeList.length > 0) ? (
             <SwipeableTileList>

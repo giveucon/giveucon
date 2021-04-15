@@ -142,7 +142,7 @@ function Create({ session, selfAccount }) {
           variant='contained'
           onClick={async () => {
             const response = await postSelfUser(session, selfUser);
-            if (response.status === 200) {
+            if (response.status === 201) {
               router.push(`/myaccounts/home/`);
               toast.success('계정이 생성되었습니다.');
             }
