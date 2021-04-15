@@ -105,7 +105,7 @@ const theme = createMuiTheme({
       color: 'inherit',
     },
     MuiPaper: {
-      elevation: 3,
+      elevation: 2,
     },
   },
 });

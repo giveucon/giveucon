@@ -160,49 +160,49 @@ function Create({ session, selfAccount }) {
             />
           </FormGroup>
         </Box>
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const response = await postSelfUser(session, selfUser);
-              console.log(response);
-              if (response.status === 201) {
-                router.push(`/myaccounts/home`);
-                toast.success('계정이 생성되었습니다.');
-              }
-              else if (response.status === 400) {
-                if (response.data.email) {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: true}));
-                } else {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: false}));
-                }
-                if (response.data.user_name) {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: true}));
-                } else {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: false}));
-                }
-                if (response.data.first_name) {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: true}));
-                } else {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: false}));
-                }
-                if (response.data.last_name) {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: true}));
-                } else {
-                  setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: false}));
-                }
-                toast.error('입력란을 확인하세요.');
-              } else {
-                toast.error('계정 생성 중 오류가 발생했습니다.');
-              }
-            }}
-          >
-            제출
-          </Button>
-        </Box>
       </Section>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={async () => {
+            const response = await postSelfUser(session, selfUser);
+            console.log(response);
+            if (response.status === 201) {
+              router.push(`/myaccounts/home`);
+              toast.success('계정이 생성되었습니다.');
+            }
+            else if (response.status === 400) {
+              if (response.data.email) {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: true}));
+              } else {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: false}));
+              }
+              if (response.data.user_name) {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: true}));
+              } else {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: false}));
+              }
+              if (response.data.first_name) {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: true}));
+              } else {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: false}));
+              }
+              if (response.data.last_name) {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: true}));
+              } else {
+                setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: false}));
+              }
+              toast.error('입력란을 확인하세요.');
+            } else {
+              toast.error('계정 생성 중 오류가 발생했습니다.');
+            }
+          }}
+        >
+          제출
+        </Button>
+      </Box>
     </Layout>
   );
 }

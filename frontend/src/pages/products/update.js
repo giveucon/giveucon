@@ -156,47 +156,47 @@ function Update({ session, selfUser, prevProduct }) {
             required
           />
         </Box>
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const response = await putProduct(session, product);
-              if (response.status === 200) {
-                router.push(`/products/${response.data.id}`);
-                toast.success('상품이 업데이트 되었습니다.');
-              } else if (response.status === 400) {
-                if (response.data.name) {
-                  setProductError(prevProductError => ({...prevProductError, name: true}));
-                } else {
-                  setProductError(prevProductError => ({...prevProductError, name: false}));
-                }
-                if (response.data.description) {
-                  setProductError(prevProductError => ({...prevProductError, description: true}));
-                } else {
-                  setProductError(prevProductError => ({...prevProductError, description: false}));
-                }
-                if (response.data.price) {
-                  setProductError(prevProductError => ({...prevProductError, price: true}));
-                } else {
-                  setProductError(prevProductError => ({...prevProductError, price: false}));
-                }
-                if (response.data.duration) {
-                  setProductError(prevProductError => ({...prevProductError, duration: true}));
-                } else {
-                  setProductError(prevProductError => ({...prevProductError, duration: false}));
-                }
-                toast.error('입력란을 확인하세요.');
-              } else {
-                toast.error('상품 업데이트 중 오류가 발생했습니다.');
-              }
-            }}
-          >
-            제출
-          </Button>
-        </Box>
       </Section>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={async () => {
+            const response = await putProduct(session, product);
+            if (response.status === 200) {
+              router.push(`/products/${response.data.id}`);
+              toast.success('상품이 업데이트 되었습니다.');
+            } else if (response.status === 400) {
+              if (response.data.name) {
+                setProductError(prevProductError => ({...prevProductError, name: true}));
+              } else {
+                setProductError(prevProductError => ({...prevProductError, name: false}));
+              }
+              if (response.data.description) {
+                setProductError(prevProductError => ({...prevProductError, description: true}));
+              } else {
+                setProductError(prevProductError => ({...prevProductError, description: false}));
+              }
+              if (response.data.price) {
+                setProductError(prevProductError => ({...prevProductError, price: true}));
+              } else {
+                setProductError(prevProductError => ({...prevProductError, price: false}));
+              }
+              if (response.data.duration) {
+                setProductError(prevProductError => ({...prevProductError, duration: true}));
+              } else {
+                setProductError(prevProductError => ({...prevProductError, duration: false}));
+              }
+              toast.error('입력란을 확인하세요.');
+            } else {
+              toast.error('상품 업데이트 중 오류가 발생했습니다.');
+            }
+          }}
+        >
+          제출
+        </Button>
+      </Box>
       <Section
         title='위험 구역'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}

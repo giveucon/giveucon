@@ -170,37 +170,37 @@ function Create({ session, selfUser, tagList }) {
           />
         </Box>
       </Section>
-        <Box display='flex' justifyContent='flex-end'>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const response = await postStore(session, store);
-              if (response.status === 201) {
-                router.push(`/stores/${response.data.id}`);
-                toast.success('가게가 생성되었습니다.');
-              } 
-              else if (response.status === 400) {
-                if (response.data.name) {
-                  setStoreError(prevStoreError => ({...prevStoreError, name: true}));
-                } else {
-                  setStoreError(prevStoreError => ({...prevStoreError, name: false}));
-                }
-                if (response.data.description) {
-                  setStoreError(prevStoreError => ({...prevStoreError, description: true}));
-                } else {
-                  setStoreError(prevStoreError => ({...prevStoreError, description: false}));
-                }
-                toast.error('입력란을 확인하세요.');
+      <Box display='flex' justifyContent='flex-end'>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={async () => {
+            const response = await postStore(session, store);
+            if (response.status === 201) {
+              router.push(`/stores/${response.data.id}`);
+              toast.success('가게가 생성되었습니다.');
+            } 
+            else if (response.status === 400) {
+              if (response.data.name) {
+                setStoreError(prevStoreError => ({...prevStoreError, name: true}));
               } else {
-                toast.error('가게 생성 중 오류가 발생했습니다.');
+                setStoreError(prevStoreError => ({...prevStoreError, name: false}));
               }
-            }}
-          >
-            제출
-          </Button>
-        </Box>
+              if (response.data.description) {
+                setStoreError(prevStoreError => ({...prevStoreError, description: true}));
+              } else {
+                setStoreError(prevStoreError => ({...prevStoreError, description: false}));
+              }
+              toast.error('입력란을 확인하세요.');
+            } else {
+              toast.error('가게 생성 중 오류가 발생했습니다.');
+            }
+          }}
+        >
+          제출
+        </Button>
+      </Box>
     </Layout>
   );
 }

@@ -97,17 +97,20 @@ function Home({ session, selfUser, centralNoticeList }) {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-        ]}>
-        <SwipeableBusinessCardList autoplay={true}>
-          {centralNoticeList.slice(0, 2).map((item, index) => {
-            return <BusinessCard
-              key={index}
-              title={item.article.title}
-              image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
-              onClick={() => router.push(`/notices/${item.id}` )}
-            />
-          })}
-        </SwipeableBusinessCardList>
+        ]}
+      >
+        {centralNoticeList && (centralNoticeList.length > 0) && (
+          <SwipeableBusinessCardList autoplay={true}>
+            {centralNoticeList.slice(0, 2).map((item, index) => {
+              return <BusinessCard
+                key={index}
+                title={item.article.title}
+                image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
+                onClick={() => router.push(`/notices/${item.id}` )}
+              />
+            })}
+          </SwipeableBusinessCardList>
+        )}
       </Section>
       <Section
         title='주변에서 사용할 수 있음'

@@ -63,33 +63,33 @@ function Create({ session, selfUser }) {
             required
           />
         </Box>
-        <Box display='flex' justifyContent='flex-end'>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const response = await postTag(session, tag);
-              if (response.status === 201) {
-                // router.push(`/stores/${response.id}`);
-                toast.success('태그가 생성되었습니다.');
-              } 
-              else if (response.status === 400) {
-                if (response.data.name) {
-                  setTagError(prevTagError => ({...prevTagError, name: true}));
-                } else {
-                  setTagError(prevTagError => ({...prevTagError, name: false}));
-                }
-                toast.error('입력란을 확인하세요.');
-              } else {
-                toast.error('태그 생성 중 오류가 발생했습니다.');
-              }
-            }}
-          >
-            제출
-          </Button>
-        </Box>
       </Section>
+      <Box display='flex' justifyContent='flex-end'>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={async () => {
+            const response = await postTag(session, tag);
+            if (response.status === 201) {
+              // router.push(`/stores/${response.id}`);
+              toast.success('태그가 생성되었습니다.');
+            } 
+            else if (response.status === 400) {
+              if (response.data.name) {
+                setTagError(prevTagError => ({...prevTagError, name: true}));
+              } else {
+                setTagError(prevTagError => ({...prevTagError, name: false}));
+              }
+              toast.error('입력란을 확인하세요.');
+            } else {
+              toast.error('태그 생성 중 오류가 발생했습니다.');
+            }
+          }}
+        >
+          제출
+        </Button>
+      </Box>
     </Layout>
   );
 }
