@@ -201,19 +201,19 @@ function Update({ session, selfUser, prevProduct }) {
         title='위험 구역'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
-        <Box marginY={1}>
-          <Button
-            className={classes.RedButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/products/delete',
-              query: { id: store.id },
-            })}
-          >
-            상품 삭제
-          </Button>
-        </Box>
+      <Box marginY={1}>
+        <Button
+          className={classes.RedButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/products/delete',
+            query: { id: store.id },
+          })}
+        >
+          가게 삭제
+        </Button>
+      </Box>
       </Section>
     </Layout>
   );

@@ -55,12 +55,12 @@ function Login({ session }) {
           <Section
             title='환영합니다!'
           >
-            <Box paddingY={5}>
+            <Box marginY={5}>
               <Typography align='center' color='textPrimary' variant='h3'>
                 giveUcon
               </Typography>
             </Box>
-            <Box margin={1}>
+            <Box marginY={1}>
               <Button
                 className={classes.kakaoButton}
                 fullWidth

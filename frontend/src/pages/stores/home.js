@@ -122,18 +122,16 @@ function Home({ session, selfUser, storeList, selfStoreList }) {
           </Grid>
         </Section>
         {selfUser && (
-          <>
-            <Box marginY={1}>
-              <Button
-                color='primary'
-                fullWidth
-                variant='contained'
-                onClick={() => router.push(`/stores/create`)}
-              >
-                새 가게 추가
-              </Button>
-            </Box>
-          </>
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push(`/stores/create`)}
+            >
+              새 가게 추가
+            </Button>
+          </Box>
         )}
       </Layout>
     </>

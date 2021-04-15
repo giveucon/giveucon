@@ -5,10 +5,8 @@ import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import WarningIcon from '@material-ui/icons/Warning';
 
+import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
@@ -72,12 +70,10 @@ function Delete({ session, selfUser, store }) {
   return (
     <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
+        backButton
         title='가게 삭제'
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
-        <Box marginY={1}>
-          <Typography>경고: 이 작업 후에는 되돌릴 수 없습니다.</Typography>
-        </Box>
+        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -86,7 +82,7 @@ function Delete({ session, selfUser, store }) {
             onClick={async () => {
               const response = await deleteStore(session, store);
               if (response.status === 204) {
-                router.push(`/stores/home`);
+                router.push(`/stores/`);
                 toast.success('가게가 삭제되었습니다.');
               } else {
                 toast.error('가게 삭제 중 오류가 발생했습니다.');

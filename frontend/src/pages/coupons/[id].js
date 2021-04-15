@@ -79,21 +79,19 @@ function Id({ session, selfUser, coupon, product }) {
         />
       </Section>
       { selfUser.id === coupon.user && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color='primary'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/coupons/use',
-                query: { id: coupon.id },
-              })}
-            >
-              쿠폰 사용
-            </Button>
-          </Box>
-        </>
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/coupons/use',
+              query: { id: coupon.id },
+            })}
+          >
+            쿠폰 사용
+          </Button>
+        </Box>
       )}
     </Layout>
   );

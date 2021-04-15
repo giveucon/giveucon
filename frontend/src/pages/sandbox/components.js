@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Layout from '../../components/Layout';
 import Section from '../../components/Section';
 import AccordionSection from '../../components/AccordionSection';
+import AlertBox from '../../components/AlertBox';
 import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
@@ -150,6 +151,18 @@ export default function Components() {
         <Typography variant='button'>Button</Typography>
         <Typography variant='caption'>Caption</Typography>
         <Typography variant='overline'>Overline</Typography>
+      </Section>
+
+      <Section
+        title='AlertBox'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+      >
+        <AlertBox content='AlertBox Information' variant='information' />
+        <AlertBox content='AlertBox Success' variant='success' />
+        <AlertBox content='AlertBox Question' variant='question' />
+        <AlertBox content='AlertBox Warning' variant='warning' />
+        <AlertBox content='AlertBox Error' variant='error' />
       </Section>
 
       <Section

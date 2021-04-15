@@ -12,7 +12,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
-import ArticleBox from '../../components/ArticleBox';
 import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'

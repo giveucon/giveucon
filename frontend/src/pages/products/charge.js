@@ -90,7 +90,7 @@ function Charge({ session, selfUser, product, store }) {
           <Typography variant='body1'>{product.description}</Typography>
         </Box>
       </Section>
-      { (selfUser.id !== store.owner) && (store.id === product.store) && (
+      {(selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='primary'

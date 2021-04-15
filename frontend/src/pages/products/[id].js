@@ -74,21 +74,19 @@ function Id({ session, selfUser, product, store }) {
         </Box>
       </Section>
       { (selfUser.id !== store.owner) && (store.id === product.store) && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color='primary'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/products/charge',
-                query: { id: product.id },
-              })}
-            >
-              쿠폰 구매
-            </Button>
-          </Box>
-        </>
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/products/charge',
+              query: { id: product.id },
+            })}
+          >
+            쿠폰 구매
+          </Button>
+        </Box>
       )}
       <Box marginY={1}>
         <Button
@@ -101,21 +99,19 @@ function Id({ session, selfUser, product, store }) {
         </Button>
       </Box>
       { (selfUser.id === store.owner) && (store.id === product.store) && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/products/update',
-                query: { id: product.id },
-              })}
-            >
-              상품 정보 수정
-            </Button>
-          </Box>
-        </>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/products/update',
+              query: { id: product.id },
+            })}
+          >
+            상품 정보 수정
+          </Button>
+        </Box>
       )}
     </Layout>
   );

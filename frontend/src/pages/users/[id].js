@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -57,18 +56,16 @@ function Id({ session, selfUser, user }) {
       >
       </Section>
       { selfUser.id === user.id && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push('/myaccount')}
-            >
-              내 계정으로 이동
-            </Button>
-          </Box>
-        </>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/myaccount')}
+          >
+            내 계정으로 이동
+          </Button>
+        </Box>
       )}
     </Layout>
   );

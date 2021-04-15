@@ -64,7 +64,7 @@ function Create({ session, selfUser }) {
           />
         </Box>
       </Section>
-      <Box display='flex' justifyContent='flex-end'>
+      <Box marginY={1}>
         <Button
           color='primary'
           fullWidth

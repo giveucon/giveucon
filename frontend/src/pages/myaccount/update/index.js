@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
