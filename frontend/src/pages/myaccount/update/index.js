@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -14,7 +13,7 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
-  }
+  };
 })
 
 function Index({ session, selfUser }) {
@@ -23,19 +22,19 @@ function Index({ session, selfUser }) {
     <Layout title={`설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title="설정"
+        title='설정'
       >
       </Section>
       <Section
-        title="설정"
+        title='설정'
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
-            color="default"
+            color='default'
             fullWidth
-            variant="contained"
-            onClick={() => router.push(`/myaccount/update/user`)}
+            variant='contained'
+            onClick={() => router.push(`/myaccount/update/user/`)}
           >
             사용자 설정
           </Button>

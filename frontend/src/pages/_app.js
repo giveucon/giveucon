@@ -38,8 +38,8 @@ function RootApp({ Component, pageProps }) {
       <Head>
         <title>{`${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
         <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
         />
       </Head>
       <NextAuthProvider
@@ -54,14 +54,14 @@ function RootApp({ Component, pageProps }) {
           <CssBaseline />
           <Toaster 
             toastOptions={{
-              className: '',
+              className: null,
               style: {
-                borderRadius: "1.5rem"
+                borderRadius: '1.5rem'
               },
             }}
           />
           <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
-            <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color="primary" />
+            <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
           </Backdrop>
           <Component {...pageProps} />
         </ThemeProvider>

@@ -11,37 +11,37 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: "100%",
+    maxWidth: '100%',
   },
   actions: {
-    position: "absolute",
-    bottom: "0.5rem",
-    right: "0.5rem",
-    backgroundColor: "rgba(255, 255, 255, 1)",
-    borderRadius: "1.5rem",
+    position: 'absolute',
+    bottom: '0.5rem',
+    right: '0.5rem',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+    borderRadius: '1.5rem',
     boxShadow: theme.shadows[3],
   },
   actionAreaWrapper: {
-    position: "relative",
+    position: 'relative',
   },
   media: {
-    paddingTop: "100%", // 1:1,
-    // paddingTop: "56.25%", // 16:9,
+    paddingTop: '100%', // 1:1,
+    // paddingTop: '56.25%', // 16:9,
   },
   titleOnly: {
-    lineHeight: "1.5em",
-    height: "3em",
-    overflow: "hidden",
+    lineHeight: '1.5em',
+    height: '3em',
+    overflow: 'hidden',
   },
   title: {
-    lineHeight: "1.5em",
-    height: "1.5em",
-    overflow: "hidden",
+    lineHeight: '1.5em',
+    height: '1.5em',
+    overflow: 'hidden',
   },
   subtitle: {
-    lineHeight: "1.5em",
-    height: "1.5em",
-    overflow: "hidden",
+    lineHeight: '1.5em',
+    height: '1.5em',
+    overflow: 'hidden',
   },
 }));
 
@@ -59,7 +59,7 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
   };
   
   return (
-    <Box margin={0.5} className={classes.root}>
+    <Box className={classes.root}>
       <Card>
         <Box className={classes.actionAreaWrapper}>
           <CardActionArea onClick={onClick}>
@@ -71,8 +71,8 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
           </CardActionArea>
           <Box
             className={classes.actions}
-            display={(actions || menuItems) ? "flex" : "none"}
-            justifyContent="flex-end"
+            display={(actions || menuItems) ? 'flex' : 'none'}
+            justifyContent='flex-end'
           >
             {actions}
             { menuItems ? (
@@ -83,17 +83,17 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
             }
           </Box>
         </Box>
-        <Box display={(title && !subtitle) ? "block" : "none"}>
+        <Box display={(title && !subtitle) ? 'block' : 'none'}>
           <Box paddingX={1} paddingY={1}>
-            <Typography variant="subtitle1" className={classes.titleOnly}>{title}</Typography>
+            <Typography variant='subtitle1' className={classes.titleOnly}>{title}</Typography>
           </Box>
         </Box>
-        <Box display={(title && subtitle) ? "block" : "none"}>
+        <Box display={(title && subtitle) ? 'block' : 'none'}>
           <Box paddingX={1} paddingTop={1}>
-            <Typography variant="subtitle1" className={classes.title}>{title}</Typography>
+            <Typography variant='subtitle1' className={classes.title}>{title}</Typography>
           </Box>
           <Box paddingX={1} paddingBottom={1.25}>
-            <Typography variant="subtitle2" className={classes.subtitle}>{subtitle}</Typography>
+            <Typography variant='subtitle2' className={classes.subtitle}>{subtitle}</Typography>
           </Box>
         </Box>
         <Menu

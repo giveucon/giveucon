@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
     media: {
-      paddingTop: "42.86%", // 21:9,
-      // paddingTop: "56.25%", // 16:9,
+      paddingTop: '42.86%', // 21:9,
+      // paddingTop: '56.25%', // 16:9,
     },
   }));
 
@@ -23,16 +23,16 @@ export default function ReviewBox({ actions=null, content=null, image=null, titl
 
   return (
     <Box paddingX={1}>
-      <Typography variant="h5">
+      <Typography variant='h5'>
         {title}
       </Typography>
-      <Box alignItems="center" display="flex" justifyContent="flex-start">
+      <Box alignItems='center' display='flex' justifyContent='flex-start'>
         <Box marginRight={1}>
-          <Typography variant="subtitle1">
+          <Typography variant='subtitle1'>
             {subtitle}
           </Typography>
         </Box>
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation='vertical' flexItem />
         <Box marginLeft={1}>
           <Rating
             value={score}
@@ -40,7 +40,7 @@ export default function ReviewBox({ actions=null, content=null, image=null, titl
           />
         </Box>
       </Box>
-      <Box display={image ? "block" : "none"} paddingY={1}>
+      <Box display={image ? 'block' : 'none'} paddingY={1}>
         <Card>
           <CardActionArea onClick={onClick}>
             <CardMedia
@@ -52,10 +52,10 @@ export default function ReviewBox({ actions=null, content=null, image=null, titl
         </Card>
       </Box>
       <Box paddingY={1}>
-        <Typography variant="body1">
+        <Typography variant='body1'>
           {content}
         </Typography>
-        <Box display="flex" justifyContent="flex-end" paddingX={0.5}>
+        <Box display='flex' justifyContent='flex-end' paddingX={0.5}>
           {actions}
         </Box>
       </Box>

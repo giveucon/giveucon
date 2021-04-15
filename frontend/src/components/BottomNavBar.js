@@ -47,7 +47,7 @@ export default function BottomNavBar() {
   });
   return (
       <AppBar className={classes.appBar}>
-        <Container maxWidth="xs">
+        <Container maxWidth='xs'>
           <BottomNavigation
             className={classes.bottomNavigation}
             value={router.pathname.split('/')[1] || 'home'}

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(7.5),
     },
     paperWrapper: {
-      position: "relative",
+      position: 'relative',
     },
     media: {
       paddingTop: '100%', // 1:1,
@@ -40,25 +40,25 @@ export default function UserProfileSection({ actions=null, children, image=null,
   return (
     <Box className={classes.root} marginBottom={2}>
       <Box className={classes.paperWrapper}>
-        <Box className={classes.avatarWrapper} display="flex" justifyContent="center">
+        <Box className={classes.avatarWrapper} display='flex' justifyContent='center'>
           <IconButton className={classes.avatarIconButton}>
             <Avatar alt={name} className={classes.avatar} src={image} />
           </IconButton>
         </Box>
         <Paper>
-          <Box display={(name || subtitle || actions) ? 'block' : "none"} paddingTop={10} paddingBottom={2}>
-            <Box display={name ? 'flex' : "none"} justifyContent="center">
-              <Typography variant="h4">{name}</Typography>
+          <Box display={(name || subtitle || actions) ? 'block' : 'none'} paddingTop={10} paddingBottom={2}>
+            <Box display={name ? 'flex' : 'none'} justifyContent='center'>
+              <Typography variant='h4'>{name}</Typography>
             </Box>
-            <Box display={subtitle ? 'flex' : "none"} justifyContent="center">
-              <Typography variant="h5">{subtitle}</Typography>
+            <Box display={subtitle ? 'flex' : 'none'} justifyContent='center'>
+              <Typography variant='h5'>{subtitle}</Typography>
             </Box>
-            <Box display={actions ? 'flex' : "none"} justifyContent="center">
+            <Box display={actions ? 'flex' : 'none'} justifyContent='center'>
               {actions}
             </Box>
           </Box>
           <Divider />
-          <Box display={children ? 'block' : "none"} padding={2}>
+          <Box display={children ? 'block' : 'none'} padding={2}>
             {children}
           </Box>
         </Paper>

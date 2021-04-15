@@ -1,79 +1,38 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-import ArticleBox from '../../components/ArticleBox';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getProduct = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}`, {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
 const getStore = async (session, product) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.store}`, {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
 };
 
 const postCoupon = async (session, selfUser, product) => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/`, {
-        used: false,
-        user: selfUser.id,
-        product: product.id,
-      }, {
-        headers: {
-          'Authorization': "Bearer " + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const data = {
+    used: false,
+    user: selfUser.id,
+    product: product.id,
+  };
+  return await requestToBackend(session, `api/coupons/`, 'post', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context)
-  const storeResponse = await getStore(session, productResponse.data)
+  const productResponse = await getProduct(session, context);
+  const storeResponse = await getStore(session, productResponse.data);
   return {
     props: { session, selfUser, product: productResponse.data, store: storeResponse.data },
-  }
+  };
 })
 
 function Charge({ session, selfUser, product, store }) {
@@ -84,23 +43,22 @@ function Charge({ session, selfUser, product, store }) {
         backButton
         title={product.name}
       >
-        <ArticleBox
-          title="쿠폰 구매"
-          image="https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg"
-          content={product.description}
-          onClick={() => alert( 'Tapped' )}
-        />
+        <Box>
+          <Typography variant='h5'>{product.name}</Typography>
+          <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+          <Typography variant='body1'>{product.description}</Typography>
+        </Box>
       </Section>
-      { (selfUser.id !== store.owner) && (store.id === product.store) && (
+      {(selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
-            color="primary"
+            color='primary'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={async () => {
               const response = await postCoupon(session, selfUser, product);
               if (response.status === 200) {
-                router.push(`/coupons/${response.data.id}`);
+                router.push(`/coupons/${response.data.id}/`);
                 toast.success('상품 결재가 완료되었습니다.');
               } else {
                 toast.error('상품 결재 중 오류가 발생했습니다.');
@@ -113,9 +71,9 @@ function Charge({ session, selfUser, product, store }) {
       )}
       <Box marginY={1}>
         <Button
-          color="default"
+          color='default'
           fullWidth
-          variant="contained"
+          variant='contained'
           onClick={() => router.back()}
         >
           뒤로가기

@@ -22,21 +22,21 @@ function FabTest({ session, selfUser }) {
     <Layout title={`플로팅 액션 버튼 테스트 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title="플로팅 액션 버튼 테스트"
+          title='플로팅 액션 버튼 테스트'
         >
         <Grid container>
           {[...Array(10).keys()].map((item, index) => (
             <Grid item xs={6} key={index}>
               <Tile
-                title="Tile"
-                image="https://cdn.pixabay.com/photo/2015/07/29/12/08/hot-air-balloon-865819_960_720.jpg"
+                title='Tile'
+                image='https://cdn.pixabay.com/photo/2015/07/29/12/08/hot-air-balloon-865819_960_720.jpg'
               />
             </Grid>
           ))}
         </Grid>
         </Section>
         <Fab
-          color="primary"
+          color='primary'
           onClick={() => alert( 'Tapped' )}
         >
           <AddIcon />

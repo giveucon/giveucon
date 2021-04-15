@@ -1,7 +1,7 @@
 /*global kakao*/ 
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const KakaoMaps = styled.div`
   box-sizing: border-box;
@@ -13,15 +13,15 @@ class KakaoMapBox extends React.Component{
 
     componentDidMount() {
       const { latitude, longitude } = this.props;
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       script.async = true;
       script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY + "&autoload=false";
+        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY + '&autoload=false';
       document.head.appendChild(script);
 
       script.onload = () => {
         kakao.maps.load(() => {
-          let container = document.getElementById("kakao_map");
+          let container = document.getElementById('kakao_map');
           let options = {
             center: new window.kakao.maps.LatLng(latitude, longitude),
             level: 7
@@ -38,7 +38,7 @@ class KakaoMapBox extends React.Component{
     render(){
       return(
         <Box>
-          <KakaoMaps id="kakao_map" />
+          <KakaoMaps id='kakao_map' />
         </Box>
       )
     }

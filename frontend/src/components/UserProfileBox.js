@@ -21,14 +21,14 @@ export default function UserProfileBox({ image=null, name=null, onClick=null, su
 
   return (
     <CardActionArea onClick={onClick}>
-      <Box alignItems="center" display="flex" justifyContent="center" padding={2}>
+      <Box alignItems='center' display='flex' justifyContent='center' padding={2}>
         <Box paddingX={2}>
           <Avatar alt={name} className={classes.avatar} src={image} />
         </Box>
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation='vertical' flexItem />
         <Box paddingX={2}>
-          <Typography variant="h5">{name}</Typography>
-          <Typography variant="subtitle1">{subtitle}</Typography>
+          <Typography variant='h5'>{name}</Typography>
+          <Typography variant='subtitle1'>{subtitle}</Typography>
         </Box>
       </Box>
     </CardActionArea>

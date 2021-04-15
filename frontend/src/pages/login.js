@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { signIn, getSession } from "next-auth/client";
-import Head from "next/head";
+import { signIn, getSession } from 'next-auth/client';
+import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -11,20 +11,20 @@ import Section from '../components/Section'
 
 const useStyles = makeStyles({
   background: {
-    height: "100vh",
-    backgroundImage: "url(https://cdn.pixabay.com/photo/2014/07/30/18/26/grocery-store-405522_960_720.jpg)",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
+    height: '100vh',
+    backgroundImage: 'url(https://cdn.pixabay.com/photo/2014/07/30/18/26/grocery-store-405522_960_720.jpg)',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
   },
   title: {
-    color: "Black",
+    color: 'Black',
   },
   kakaoButton: {
-    background: "#ffeb3b",
-    color: "Black",
+    background: '#ffeb3b',
+    color: 'Black',
     '&:hover': {
-       background: "#b2a429",
+       background: '#b2a429',
     },
   },
 });
@@ -35,7 +35,7 @@ function Login({ session }) {
 
   useEffect(() => {
     if (session) {
-      router.push('/home');
+      router.push('/home/');
     }
   },[])
 
@@ -43,29 +43,29 @@ function Login({ session }) {
     <>
       <Head>
         <title>{`로그인 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Box
         className={classes.background}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
       >
-        <Box style={{ minHeight: "8rem", minWidth: "16rem" }}>
+        <Box style={{ minHeight: '8rem', minWidth: '16rem' }}>
           <Section
-            title="환영합니다!"
+            title='환영합니다!'
           >
-            <Box paddingY={5}>
-              <Typography align="center" color="textPrimary" variant="h3">
+            <Box marginY={5}>
+              <Typography align='center' color='textPrimary' variant='h3'>
                 giveUcon
               </Typography>
             </Box>
-            <Box margin={1}>
+            <Box marginY={1}>
               <Button
                 className={classes.kakaoButton}
                 fullWidth
-                variant="contained"
-                onClick={() => signIn("kakao")}
+                variant='contained'
+                onClick={() => signIn('kakao')}
               >
                 카카오 계정으로 로그인
               </Button>
@@ -76,7 +76,6 @@ function Login({ session }) {
     </>
   );
 }
-
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)

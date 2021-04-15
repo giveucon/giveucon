@@ -1,6 +1,8 @@
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
+import Box from '@material-ui/core/Box';
+
 import Pagination from './Pagination';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -42,7 +44,11 @@ class SwipeableBusinessCardList extends React.Component {
           interval={interval ? interval : 5000}
           onChangeIndex={this.handleChangeIndex}
         >
-          {children}
+          {React.Children.map(children, child => (
+            <Box margin={1}>
+              {child}
+            </Box>
+          ))}
         </AutoPlaySwipeableViews>
         {children.length > 1 && (
           <Pagination dots={children.length} index={index} onChangeIndex={this.handleChangeIndex} />

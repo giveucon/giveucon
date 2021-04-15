@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
     media: {
-      paddingTop: "42.86%", // 21:9,
-      // paddingTop: "56.25%", // 16:9,
+      paddingTop: '42.86%', // 21:9,
+      // paddingTop: '56.25%', // 16:9,
     },
   }));
 
@@ -31,7 +31,7 @@ export default function ArticleBox({ children=null, content=null, defaultExpande
 
   return (
     <Box paddingX={0.5}>
-      <Box display={image ? "block" : "none"} paddingY={1}>
+      <Box display={image ? 'block' : 'none'} paddingY={1}>
         <Card>
           <CardActionArea onClick={onClick}>
             <CardMedia
@@ -46,14 +46,14 @@ export default function ArticleBox({ children=null, content=null, defaultExpande
         <Accordion defaultExpanded expanded={expanded} onChange={handleAccordionChange()}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box paddingY={1}>
-              <Typography variant="h6">{title}</Typography>
-              <Typography variant="body2">{subtitle}</Typography>
+              <Typography variant='h6'>{title}</Typography>
+              <Typography variant='body2'>{subtitle}</Typography>
             </Box>
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
             <Box paddingX={2} paddingY={1}>
-              <Typography variant="body1">{content}</Typography>
+              <Typography variant='body1'>{content}</Typography>
             </Box>
             <Box paddingY={1}>
               {children}

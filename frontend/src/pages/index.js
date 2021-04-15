@@ -6,7 +6,7 @@ import withAuthServerSideProps from './withAuthServerSideProps'
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session },
-  }
+  };
 })
 
 function Index({ session }) {
@@ -14,9 +14,9 @@ function Index({ session }) {
 
   useEffect(() => {
     if (session) {
-      router.push('/home');
+      router.push('/home/');
     } else {
-      router.push('/login');
+      router.push('/login/');
     }
   },[])
 

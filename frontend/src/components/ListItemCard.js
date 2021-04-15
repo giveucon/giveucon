@@ -18,27 +18,27 @@ export default function ListItemCard({ onClick=null, primary=null, prefix=null, 
     <Box marginY={1}>
       <Card>
         <Box
-          alignItems="center"
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-start"
+          alignItems='center'
+          display='flex'
+          flexDirection='row'
+          justifyContent='flex-start'
         >
-          <Box display={prefix ? "block" : "none"}>
+          <Box display={prefix ? 'block' : 'none'}>
             {prefix}
           </Box>
             <CardActionArea onClick={onClick}>
               <Box
-                display={(primary || secondary) ? "block" : "none"}
+                display={(primary || secondary) ? 'block' : 'none'}
                 paddingLeft={prefix ? 0 : 2}
                 paddingRight={suffix ? 0 : 2}
                 flexGrow={1}
                 paddingY={1}
               >
-                <Typography variant="body1">{primary}</Typography>
-                <Typography variant="body2">{secondary}</Typography>
+                <Typography variant='body1'>{primary}</Typography>
+                <Typography variant='body2'>{secondary}</Typography>
               </Box>
             </CardActionArea>
-          <Box display={suffix ? "block" : "none"} flexShrink={0}>
+          <Box display={suffix ? 'block' : 'none'} flexShrink={0}>
             {suffix}
           </Box>
         </Box>
