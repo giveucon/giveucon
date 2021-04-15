@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,34 +11,21 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCouponList = async (session, selfUser) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/`, {
-        params: {
-          user: selfUser.id,
-        },
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const params = {
+    user: selfUser.id,
+  };
+  return await requestToBackend(session, 'api/coupons/', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const selfCouponListResponse = await getCouponList(session, selfUser)
+  const selfCouponListResponse = await getCouponList(session, selfUser);
   return {
     props: { session, selfUser, selfCouponList: selfCouponListResponse.data },
-  }
+  };
 })
 
 function Home({ session, selfUser, selfCouponList }) {

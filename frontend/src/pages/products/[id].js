@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,50 +7,23 @@ import Typography from '@material-ui/core/Typography';
 import BusinessCard from '../../components/BusinessCard';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getProduct = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
 const getStore = async (session, product) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${product.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context)
-  const storeResponse = await getStore(session, productResponse.data)
+  const productResponse = await getProduct(session, context);
+  const storeResponse = await getStore(session, productResponse.data);
   return {
     props: { session, selfUser, product: productResponse.data, store: storeResponse.data },
-  }
+  };
 })
 
 function Id({ session, selfUser, product, store }) {
@@ -98,7 +70,7 @@ function Id({ session, selfUser, product, store }) {
           상점으로 이동
         </Button>
       </Box>
-      { (selfUser.id === store.owner) && (store.id === product.store) && (
+      { (selfUser.id === store.user) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='default'

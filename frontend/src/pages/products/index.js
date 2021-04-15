@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -11,54 +10,27 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStore = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.store}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
 const getProductList = async (session, context) => {
-  try {
-    let params = new Object;
-    if (context.query.user) { params.user = context.query.user };
-    if (context.query.store) { params.store = context.query.store };
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/`, {
-        params,
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const params = {
+    user = context.query.user || null,
+    store = context.query.store || null,
+  };
+  return await requestToBackend(session, 'api/products', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productListResponse = await getProductList(session, context)
-  const storeResponse = await getStore(session, context)
+  const productListResponse = await getProductList(session, context);
+  const storeResponse = await getStore(session, context);
   return {
     props: { session, selfUser, productList: productListResponse.data, store: storeResponse.data },
-  }
+  };
 })
 
 function Index({ session, selfUser, productList, store }) {

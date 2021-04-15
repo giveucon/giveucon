@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import jsQR from 'jsqr';
 import Box from '@material-ui/core/Box';
@@ -7,50 +6,24 @@ import Card from '@material-ui/core/Card';
 
 import Layout from '../../components/Layout';
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const putCouponScan = async (session, qrData) => {
-  try {
-    const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/scan/`, {
-        qr_data: qrData,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const data = {
+    qr_data: qrData
+  };
+  return await requestToBackend(session, 'api/coupons/scan/', 'put', 'json', data, null);
 };
 
 const getCoupon = async (session, qrData) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${qrData.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${qrData.id}`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
-  }
+  };
 })
 
 function Scan({ session, selfUser }) {

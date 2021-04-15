@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
-  }
+  };
 })
 
 function Home({ session, selfUser }) {

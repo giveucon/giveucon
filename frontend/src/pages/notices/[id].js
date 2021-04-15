@@ -1,34 +1,20 @@
 import React from 'react';
-import axios from 'axios';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCentralNotice = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const noticeResponse = await getCentralNotice(session, context)
+  const noticeResponse = await getCentralNotice(session, context);
   return {
     props: { session, selfUser, notice: noticeResponse.data },
-  }
+  };
 })
 
 function Id({ session, selfUser, notice }) {

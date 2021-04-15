@@ -14,55 +14,29 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 
-const getSelfAccount = async (session) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/accounts/self/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+const getSelfAccount = async (session, context) => {
+  return await requestToBackend(session, 'api/accounts/self/', 'get', 'json');
 };
 
 const postSelfUser = async (session, selfUser) => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/`, {
-        email: selfUser.email,
-        user_name: selfUser.user_name,
-        first_name: selfUser.first_name,
-        last_name: selfUser.last_name,
-        dark_mode: selfUser.dark_mode,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const data = {
+    email: selfUser.email,
+    user_name: selfUser.user_name,
+    first_name: selfUser.first_name,
+    last_name: selfUser.last_name,
+    dark_mode: selfUser.dark_mode,
+  };
+  return await requestToBackend(session, 'api/users/', 'post', 'json', data, null);
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  const selfAccountResponse = await getSelfAccount(session)
+  const session = await getSession(context);
+  const selfAccountResponse = await getSelfAccount(session);
   return {
     props: { session, selfAccount: selfAccountResponse.data }
-  }
+  };
 }
 
 function Create({ session, selfAccount }) {
@@ -168,8 +142,7 @@ function Create({ session, selfAccount }) {
           variant='contained'
           onClick={async () => {
             const response = await postSelfUser(session, selfUser);
-            console.log(response);
-            if (response.status === 201) {
+            if (response.status === 200) {
               router.push(`/myaccounts/home/`);
               toast.success('계정이 생성되었습니다.');
             }

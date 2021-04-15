@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/client';
+import requestToBackend from './requestToBackend';
 
 const getSelfUser = async (session) => {
   try {
@@ -28,19 +29,20 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
       return {
         redirect: {
           permanent: false,
-          destination: '/login/',
+          destination: 'login/',
         },
         props: {}
       };
     }
     
-    const selfUserResponse = await getSelfUser(session);
+    // const selfUserResponse = await getSelfUser(session);
+    const selfUserResponse = await requestToBackend(session, 'api/users/self/', 'get', 'json');
     // If account founded but no user models linked
     if (selfUserResponse.status === 404) {
       return {
         redirect: {
           permanent: false,
-          destination: '/users/create/',
+          destination: 'users/create/',
         },
         props: {}
       }
@@ -51,6 +53,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
     if (getServerSidePropsFunc) {
       return {
         props: {
+          session,
           selfUser,
           ...((await getServerSidePropsFunc(context, session, selfUser)).props || {}),
         },
@@ -59,6 +62,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
 
     return {
       props: {
+        session,
         selfUser,
       },
     }

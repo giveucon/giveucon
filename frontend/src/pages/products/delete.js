@@ -1,6 +1,5 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -9,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const useStyles = makeStyles({
@@ -22,46 +22,18 @@ const useStyles = makeStyles({
 });
 
 const getProduct = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
 const deleteProduct = async (session, product) => {
-  try {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${product.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${product.id}/`, 'delete', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context)
+  const productResponse = await getProduct(session, context);
   return {
     props: { session, selfUser, product: productResponse.data },
-  }
+  };
 })
 
 function Delete({ session, selfUser, product }) {
@@ -89,7 +61,7 @@ function Delete({ session, selfUser, product }) {
               }
             }}
           >
-            가게 삭제
+            상품 삭제
           </Button>
         </Box>
         <Box marginY={1}>

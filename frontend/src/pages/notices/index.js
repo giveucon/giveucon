@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,31 +11,18 @@ import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCentralNoticeList = async (session) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const noticeListResponse = await getCentralNoticeList(session)
+  const noticeListResponse = await getCentralNoticeList(session);
   return {
     props: { session, selfUser, noticeList: noticeListResponse.data },
-  }
+  };
 })
 
 function Index({ session, selfUser, noticeList }) {

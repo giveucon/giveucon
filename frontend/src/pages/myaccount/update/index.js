@@ -13,7 +13,7 @@ import withAuthServerSideProps from '../../withAuthServerSideProps'
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
-  }
+  };
 })
 
 function Index({ session, selfUser }) {

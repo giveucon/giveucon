@@ -17,36 +17,23 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
+import requestToBackend from './requestToBackend'
 import withAuthServerSideProps from './withAuthServerSideProps'
 
 
 const getCentralNoticeList = async (session) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/central-notices/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const centralNoticeListResponse = await getCentralNoticeList(session)
+  const centralNoticeListResponse = await getCentralNoticeList(session);
   return {
     props: { 
       session,
       selfUser,
       centralNoticeList: centralNoticeListResponse.data
     },
-  }
+  };
 })
 
 const geoRecommendedCouponList = [

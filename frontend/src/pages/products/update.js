@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const useStyles = makeStyles({
@@ -24,52 +25,25 @@ const useStyles = makeStyles({
 });
 
 const getProduct = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
 const putProduct = async (session, product) => {
-  try {
-    const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${product.id}/`, {
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        duration: product.duration + ' 00',
-        store: product.store,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const data = {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    duration: product.duration + ' 00',
+    store: product.store,
+  };
+  return await requestToBackend(session, `api/products/${product.id}/`, 'put', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevProductResponse = await getProduct(session, context)
+  const prevProductResponse = await getProduct(session, context);
   return {
     props: { session, selfUser, prevProduct: prevProductResponse.data },
-  }
+  };
 })
 
 function Update({ session, selfUser, prevProduct }) {
@@ -208,10 +182,10 @@ function Update({ session, selfUser, prevProduct }) {
           variant='contained'
           onClick={() => router.push({
             pathname: '/products/delete',
-            query: { id: store.id },
+            query: { id: product.id },
           })}
         >
-          가게 삭제
+          상품 삭제
         </Button>
       </Box>
       </Section>

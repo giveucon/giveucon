@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -15,6 +14,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
+import requestToBackend from '../../requestToBackend'
 import withAuthServerSideProps from '../../withAuthServerSideProps'
 
 const useStyles = makeStyles({
@@ -28,34 +28,21 @@ const useStyles = makeStyles({
 });
 
 const putSelfUser = async (session, selfUser) => {
-  try {
-    const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${selfuser.id}/`, {
-        email: selfUser.email,
-        user_name: selfUser.user_name,
-        first_name: selfUser.first_name,
-        last_name: selfUser.last_name,
-        dark_mode: selfUser.dark_mode,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const data = {
+    email: selfUser.email,
+    user_name: selfUser.user_name,
+    first_name: selfUser.first_name,
+    last_name: selfUser.last_name,
+    dark_mode: selfUser.dark_mode,
+  };
+  return await requestToBackend(session, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevSelfUser = selfUser
+  const prevSelfUser = selfUser;
   return {
     props: { session, prevSelfUser: prevSelfUser },
-  }
+  };
 })
 
 function User({ session, prevSelfUser }) {

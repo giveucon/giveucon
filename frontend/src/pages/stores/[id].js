@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -12,6 +11,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
+import AlertBox from '../../components/AlertBox';
 import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'
@@ -19,53 +19,26 @@ import ListItemCard from '../../components/ListItemCard'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStore = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
 };
 
 const getProductList = async (session, store) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/`, {
-        params: {
-          store: store.id,
-        },
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  const params = {
+    store: store.id
+  };
+  return await requestToBackend(session, 'api/products/', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeResponse = await getStore(session, context)
-  const productListResponse = await getProductList(session, storeResponse.data)
+  const storeResponse = await getStore(session, context);
+  const productListResponse = await getProductList(session, storeResponse.data);
   return {
     props: { session, selfUser, store: storeResponse.data, productList: productListResponse.data },
-  }
+  };
 })
 
 const latitude = 37.506502;
@@ -100,7 +73,7 @@ function Id({ session, selfUser, store, productList }) {
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
-        { store.notices && (store.notices.length > 0) ? (
+        {store.notices && (store.notices.length > 0) ? (
           <Grid container spacing={1}>
             {store.notices.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
@@ -113,9 +86,7 @@ function Id({ session, selfUser, store, productList }) {
             ))}
           </Grid>
         ) : (
-        <Box margin={0.5}>
-          <Typography>공지사항이 없습니다.</Typography>
-        </Box>
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
       <Section
@@ -123,22 +94,26 @@ function Id({ session, selfUser, store, productList }) {
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
       >
-        <Grid container spacing={1}>
-          {productList.map((item, index) => (
-            <Grid item xs={6} key={index}>
-              <Tile
-                margin={false}
-                title={item.name}
-                subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-                actions={[
-                  <IconButton><FavoriteIcon /></IconButton>
-                ]}
-                onClick={() => router.push(`/products/${item.id}/`)}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {productList && (productList.length > 0) ? (
+          <Grid container spacing={1}>
+            {productList && productList.map((item, index) => (
+              <Grid item xs={6} key={index}>
+                <Tile
+                  margin={false}
+                  title={item.name}
+                  subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                  image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+                  actions={[
+                    <IconButton><FavoriteIcon /></IconButton>
+                  ]}
+                  onClick={() => router.push(`/products/${item.id}/`)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <AlertBox content='상품이 없습니다.' variant='information' />
+        )}
       </Section>
       <Section
         title='가게 위치'

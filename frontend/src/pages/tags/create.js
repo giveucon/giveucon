@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,32 +7,20 @@ import TextField from '@material-ui/core/TextField';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const postTag = async (session, tag) => {
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/tags/`, {
-        name: tag.name,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
+  const data = {
+    name: tag.name,
   }
+  return await requestToBackend(session, 'api/tags/', 'post', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
-  }
+  };
 })
 
 function Create({ session, selfUser }) {

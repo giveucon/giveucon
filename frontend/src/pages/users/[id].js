@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,31 +8,18 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileSection from '../../components/UserProfileSection';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getUser = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/users/${context.query.id}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const userResponse = await getUser(session, context)
+  const userResponse = await getUser(session, context);
   return {
     props: { session, selfUser, user: userResponse.data },
-  }
+  };
 })
 
 function Id({ session, selfUser, user }) {

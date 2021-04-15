@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -14,50 +13,23 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getStoreList = async (session) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, 'api/stores/', 'get', 'json');
 };
 
 const getSelfStoreList = async (session, selfUser) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/`, {
-        params: {
-          user: selfUser.id,
-        },
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
+  const params = {
+    user: selfUser.id,
   }
+  return await requestToBackend(session, 'api/stores/', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeListResponse = await getStoreList(session)
-  const selfStoreListResponse = await getSelfStoreList(session, selfUser)
+  const storeListResponse = await getStoreList(session);
+  const selfStoreListResponse = await getSelfStoreList(session, selfUser);
   return {
     props: {
       session,
@@ -65,7 +37,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
       storeList: storeListResponse.data,
       selfStoreList: selfStoreListResponse.data
     },
-  }
+  };
 })
 
 function Home({ session, selfUser, storeList, selfStoreList }) {

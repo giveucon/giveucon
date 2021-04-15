@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Uppy from '@uppy/core'
@@ -22,6 +21,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import jsonToFormData from '../jsonToFormData'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
@@ -38,65 +38,23 @@ const useStyles = makeStyles({
 });
 
 const getStore = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
 };
 
 const getTagList = async (session) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/tags/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, 'api/tags/', 'get', 'json');
 };
 
 const putStore = async (session, store) => {
-  try {
-    const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/stores/${store.id}/`, jsonToFormData(store), {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, 'api/stores/', 'put', 'multipart', jsonToFormData(store), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevStoreResponse = await getStore(session, context)
-  const tagListResponse = await getTagList(session)
+  const prevStoreResponse = await getStore(session, context);
+  const tagListResponse = await getTagList(session);
   return {
     props: { session, selfUser, prevStore: prevStoreResponse.data, tagList: tagListResponse.data },
-  }
+  };
 })
 
 function Update({ session, selfUser, prevStore, tagList }) {

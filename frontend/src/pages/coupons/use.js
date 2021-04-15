@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router'
 import QRCode from 'qrcode.react';
 import Box from '@material-ui/core/Box';
@@ -8,77 +7,36 @@ import Card from '@material-ui/core/Card';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const getCoupon = async (session, context) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/coupons/${context.query.id}/`, 'get', 'json');
 };
 
 const getCouponQR = async (session, context) => {
-  try {
-    let params = new Object;
-    params.type = `qr`;
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/coupons/${context.query.id}/`, {
-        params,
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  let params = new Object;
+  params.type = `qr`;
+  return await requestToBackend(session, `api/coupons/${context.query.id}/`, 'get', 'json', null, params);
 };
 
 const getProduct = async (session, coupon) => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/products/${coupon.product}`, {
-        headers: {
-          'Authorization': 'Bearer ' + session.accessToken,
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        }
-      }
-    );
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
+  return await requestToBackend(session, `api/products/${coupon.product}`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponResponse = await getCoupon(session, context)
-  const couponQRResponse = await getCouponQR(session, context)
-  const productResponse = await getProduct(session, couponResponse.data)
+  const couponResponse = await getCoupon(session, context);
+  const couponQRResponse = await getCouponQR(session, context);
+  const productResponse = await getProduct(session, couponResponse.data);
   return {
     props: {
       session,
       selfUser,
       coupon: couponResponse.data,
       couponQR: couponQRResponse.data,
-      product: productResponse.data },
-  }
+      product: productResponse.data
+    },
+  };
 })
 
 function Use({ session, selfUser, coupon, couponQR, product }) {
