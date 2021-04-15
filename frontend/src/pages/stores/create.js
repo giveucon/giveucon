@@ -108,7 +108,6 @@ function Create({ session, selfUser, tagList }) {
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {
               setStore(prevStore => ({ ...prevStore, tags: value.map(value => value.id) }));
-              console.log(value.map(value => value.id));
             }}
             renderOption={(option, { selected }) => (
               <React.Fragment>

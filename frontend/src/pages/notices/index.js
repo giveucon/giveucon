@@ -38,7 +38,7 @@ function Index({ session, selfUser, noticeList }) {
         title='최신 공지사항'
         padding={false}
       >
-        { noticeList && (noticeList.length > 0) ? (
+        {noticeList && (noticeList.length > 0) ? (
           <SwipeableBusinessCardList autoplay={true}>
             {noticeList.slice(0, 2).map((item, index) => {
               return <BusinessCard

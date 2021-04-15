@@ -14,7 +14,5 @@ export default function jsonToFormData(jsonData) {
       formData.append(jsonItemKey, jsonItemValue);
     }
   }
-  console.log(formData.entries());
-
   return formData;
 }

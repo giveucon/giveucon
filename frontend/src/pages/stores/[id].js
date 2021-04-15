@@ -3,10 +3,12 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
+import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ChatIcon from '@material-ui/icons/Chat';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
@@ -53,7 +55,7 @@ function Id({ session, selfUser, store, productList }) {
         title={store.name}
         padding={false}
       >
-        { store.images && (
+        {store.images && (store.images.length > 0) && (
           <SwipeableBusinessCardList autoplay={true}>
             {store.images.map((item, index) => {
               return <BusinessCard
@@ -64,14 +66,30 @@ function Id({ session, selfUser, store, productList }) {
             })}
           </SwipeableBusinessCardList>
         )}
+        {store.tags && (store.tags.length > 0) && (
+          <Box padding={1}>
+            {
+              store.tags.map((item, index) => (
+                <Chip
+                  key={index}
+                  label={item.name}
+                  color='primary'
+                  size='small'
+                  variant='outlined'
+                  // onClick={() => router.push(`/tags/${item.id}/`)}
+                />
+              ))
+            }
+          </Box>
+        )}
         <Box padding={1}>
           <Typography>{store.description}</Typography>
         </Box>
       </Section>
       <Section
         title='공지사항'
-        titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
-        titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+        titlePrefix={<IconButton><ChatIcon /></IconButton>}
+        titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
         {store.notices && (store.notices.length > 0) ? (
           <Grid container spacing={1}>
@@ -92,7 +110,7 @@ function Id({ session, selfUser, store, productList }) {
       <Section
         title='상품'
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
-        titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+        titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
         {productList && (productList.length > 0) ? (
           <Grid container spacing={1}>
