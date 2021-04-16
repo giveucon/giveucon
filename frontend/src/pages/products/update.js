@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
+import Uppy from '@uppy/core'
+import { Dashboard, useUppy } from '@uppy/react'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
+import ImageIcon from '@material-ui/icons/Image';
+import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
@@ -29,14 +35,15 @@ const getProduct = async (session, context) => {
 };
 
 const putProduct = async (session, product) => {
-  const data = {
+  const processedProduct = {
     name: product.name,
     description: product.description,
     price: product.price,
     duration: product.duration + ' 00',
+    images: product.images,
     store: product.store,
   };
-  return await requestToBackend(session, `api/products/${product.id}/`, 'put', 'json', data, null);
+  return await requestToBackend(session, `api/products/${product.id}/`, 'put', 'multipart', jsonToFormData(processedProduct), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
@@ -55,6 +62,7 @@ function Update({ session, selfUser, prevProduct }) {
     description: prevProduct.description,
     price: prevProduct.price,
     duration: prevProduct.duration,
+    images: prevProduct.images,
     store: prevProduct.store,
   });
   const [productError, setProductError] = useState({
@@ -63,11 +71,26 @@ function Update({ session, selfUser, prevProduct }) {
     price: false,
     duration: false,
   });
+  
+  const uppy = useUppy(() => {
+    return new Uppy()
+    .on('files-added', (files) => {
+      setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
+    })
+    .on('file-removed', (file, reason) => {
+      setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
+    })
+  })
+
   return (
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
         title='상품 수정'
+      />
+      <Section
+        title='기본 정보'
+        titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -128,6 +151,19 @@ function Update({ session, selfUser, prevProduct }) {
               endAdornment: (<InputAdornment position='end'>일</InputAdornment>),
             }}
             required
+          />
+        </Box>
+      </Section>
+      <Section
+        title='이미지'
+        titlePrefix={<IconButton><ImageIcon /></IconButton>}
+      >
+        <Box paddingY={1}>
+          <Dashboard
+            uppy={uppy}
+            height={'20rem'}
+            hideCancelButton
+            hideUploadButton
           />
         </Box>
       </Section>

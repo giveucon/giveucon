@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from ..models import User, AccountUser, Store
+from ..models import User, Store
 from ..serializers import StoreSerializer
 from ..services import UserService
 

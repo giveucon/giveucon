@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import BusinessCard from '../../components/BusinessCard';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
@@ -33,13 +34,20 @@ function Id({ session, selfUser, product, store }) {
       <Section
         backButton
         title={product.name}
+        padding={false}
       >
-        <Box display={true ? 'block' : 'none'}>
-          <BusinessCard
-            image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
-          />
-        </Box>
-        <Box paddingTop={1}>
+        {product.images && (product.images.length > 0) && (
+          <SwipeableBusinessCardList autoplay={true}>
+            {product.images.map((item, index) => {
+              return <BusinessCard
+                key={index}
+                image={item.image}
+                onClick={() => router.push(`/images/${item.id}/` )}
+              />
+            })}
+          </SwipeableBusinessCardList>
+        )}
+        <Box padding={1}>
           <Typography variant='h5'>{product.name}</Typography>
           <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
           <Typography variant='body1'>{product.description}</Typography>
