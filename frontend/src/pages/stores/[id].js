@@ -125,7 +125,7 @@ function Id({ session, selfUser, store, productList }) {
                   margin={false}
                   title={item.name}
                   subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>
                   ]}

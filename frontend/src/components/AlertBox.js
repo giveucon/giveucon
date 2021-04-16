@@ -8,7 +8,6 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
