@@ -23,7 +23,7 @@ const getCentralNoticeList = async (session) => {
   return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(session);
   return {
     props: { 
@@ -78,7 +78,7 @@ function Home({ session, selfUser, centralNoticeList }) {
         title='홈'
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
-          <IconButton onClick={() => router.push('/notices/')}>
+          <IconButton onClick={() => router.push('/central-notices/')}>
             <AnnouncementIcon />
           </IconButton>,
           <IconButton>
@@ -97,7 +97,7 @@ function Home({ session, selfUser, centralNoticeList }) {
                   key={index}
                   title={item.article.title}
                   image='https://cdn.pixabay.com/photo/2015/07/28/20/55/tools-864983_960_720.jpg'
-                  onClick={() => router.push(`/notices/${item.id}/` )}
+                  onClick={() => router.push(`/central-notices/${item.id}/` )}
                 />
               }))
             }

@@ -9,13 +9,13 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
   }
 })
 
-function Home({ session, selfUser }) {
+function Index({ session, selfUser }) {
   const router = useRouter();
   return (
     <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -35,4 +35,4 @@ function Home({ session, selfUser }) {
   );
 }
 
-export default Home;
+export default Index;

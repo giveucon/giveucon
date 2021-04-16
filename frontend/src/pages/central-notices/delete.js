@@ -1,6 +1,5 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -22,24 +21,29 @@ const useStyles = makeStyles({
   },
 });
 
-const deleteSelfUser = async (session, selfUser) => {
-  return await requestToBackend(session, `api/users/${selfUser.id}/`, 'delete', 'json');
+const getCentralNotice = async (session, context) => {
+  return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+const deleteCentralNotice = async (session, centralNotice) => {
+  return await requestToBackend(session, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps('staff', async (context, session, selfUser) => {
+  const centralNoticeResponse = await getCentralNotice(session, context);
   return {
-    props: { session, selfUser },
-  }
+    props: { session, selfUser, centralNotice: centralNoticeResponse.data },
+  };
 })
 
-function Delete({ session, selfUser }) {
+function Delete({ session, selfUser, centralNotice }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='계정 탈퇴'
+        title='공지사항 삭제'
       >
         <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
         <Box marginY={1}>
@@ -48,14 +52,14 @@ function Delete({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteSelfUser(session, selfUser);
+              const response = await deleteCentralNotice(session, centralNotice);
               if (response.status === 204) {
-                signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/` })
-                toast.success('계정 탈퇴가 완료되었습니다.');
+                router.push(`/central-notices/`);
+                toast.success('공지사항이 삭제되었습니다.');
               }
             }}
           >
-            계정 탈퇴
+            공지사항 삭제
           </Button>
         </Box>
         <Box marginY={1}>

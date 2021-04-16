@@ -37,6 +37,7 @@ function RootApp({ Component, pageProps }) {
     <>
       <Head>
         <title>{`${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <link rel="icon" href="/favicon.ico" />
         <meta
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'

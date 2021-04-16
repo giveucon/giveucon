@@ -10,7 +10,7 @@ import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
 import withAuthServerSideProps from '../../withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
   };

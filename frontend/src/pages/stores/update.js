@@ -49,7 +49,7 @@ const putStore = async (session, store) => {
   return await requestToBackend(session, 'api/stores/', 'put', 'multipart', jsonToFormData(store), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const prevStoreResponse = await getStore(session, context);
   const tagListResponse = await getTagList(session);
   return {

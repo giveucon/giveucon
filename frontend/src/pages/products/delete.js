@@ -29,7 +29,7 @@ const deleteProduct = async (session, product) => {
   return await requestToBackend(session, `api/products/${product.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const productResponse = await getProduct(session, context);
   return {
     props: { session, selfUser, product: productResponse.data },

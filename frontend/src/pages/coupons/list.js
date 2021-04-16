@@ -21,14 +21,14 @@ const getCouponList = async (session, context) => {
   return await requestToBackend(session, 'api/coupons/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const couponListResponse = await getCouponList(session, context)
   return {
     props: { session, selfUser, couponList: couponListResponse.data },
   };
 })
 
-function Index({ session, selfUser, couponList }) {
+function List({ session, selfUser, couponList }) {
   const router = useRouter();
   return (
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -63,4 +63,4 @@ function Index({ session, selfUser, couponList }) {
   );
 }
 
-export default Index;
+export default List;

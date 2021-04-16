@@ -38,7 +38,7 @@ const putSelfUser = async (session, selfUser) => {
   return await requestToBackend(session, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const prevSelfUser = selfUser;
   return {
     props: { session, prevSelfUser: prevSelfUser },

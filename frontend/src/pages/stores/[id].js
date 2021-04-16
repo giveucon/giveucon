@@ -35,7 +35,7 @@ const getProductList = async (session, store) => {
   return await requestToBackend(session, 'api/products/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const storeResponse = await getStore(session, context);
   const productListResponse = await getProductList(session, storeResponse.data);
   return {
@@ -55,17 +55,22 @@ function Id({ session, selfUser, store, productList }) {
         title={store.name}
         padding={false}
       >
-        {store.images && (store.images.length > 0) && (
-          <SwipeableBusinessCardList autoplay={true}>
-            {store.images.map((item, index) => {
-              return <BusinessCard
-                key={index}
-                image={item.image}
-                onClick={() => router.push(`/images/${item.id}/` )}
+        <SwipeableBusinessCardList autoplay={true}>
+          {store.images && (store.images.length > 0) ?
+              (store.images.map((item, index) => {
+                return <BusinessCard
+                  key={index}
+                  image={item.image}
+                  onClick={() => router.push(`/images/${item.id}/` )}
+                />
+              })
+            ) : (
+              <BusinessCard
+                image='/no_image.png'
               />
-            })}
-          </SwipeableBusinessCardList>
-        )}
+            )
+          }
+        </SwipeableBusinessCardList>
         {store.tags && (store.tags.length > 0) && (
           <Box padding={1}>
             {

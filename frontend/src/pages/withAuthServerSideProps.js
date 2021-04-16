@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/client';
 import requestToBackend from './requestToBackend';
 
-export default function withAuthServerSideProps(getServerSidePropsFunc) {
+export default function withAuthServerSideProps(authType, getServerSidePropsFunction) {
   return async (context) => {
 
     // Get session from NextAuth
@@ -33,13 +33,25 @@ export default function withAuthServerSideProps(getServerSidePropsFunc) {
     }
     const selfUser = selfUserResponse.data;
 
+    if (authType === 'staff') {
+      if (selfUser.staff === false) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: '/unauthorized/',
+          },
+          props: {}
+        }
+      }
+    }
+
     // Return props after execute server side functions
-    if (getServerSidePropsFunc) {
+    if (getServerSidePropsFunction) {
       return {
         props: {
           session,
           selfUser,
-          ...((await getServerSidePropsFunc(context, session, selfUser)).props || {}),
+          ...((await getServerSidePropsFunction(context, session, selfUser)).props || {}),
         },
       }
     }

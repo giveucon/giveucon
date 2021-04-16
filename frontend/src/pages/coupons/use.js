@@ -24,7 +24,7 @@ const getProduct = async (session, coupon) => {
   return await requestToBackend(session, `api/products/${coupon.product}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const couponResponse = await getCoupon(session, context);
   const couponQRResponse = await getCouponQR(session, context);
   const productResponse = await getProduct(session, couponResponse.data);

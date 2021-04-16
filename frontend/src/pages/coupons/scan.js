@@ -20,7 +20,7 @@ const getCoupon = async (session, qrData) => {
   return await requestToBackend(session, `api/products/${qrData.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
   };

@@ -19,7 +19,7 @@ const getStore = async (session, product) => {
   return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const productResponse = await getProduct(session, context);
   const storeResponse = await getStore(session, productResponse.data);
   return {
@@ -36,17 +36,22 @@ function Id({ session, selfUser, product, store }) {
         title={product.name}
         padding={false}
       >
-        {product.images && (product.images.length > 0) && (
-          <SwipeableBusinessCardList autoplay={true}>
-            {product.images.map((item, index) => {
-              return <BusinessCard
-                key={index}
-                image={item.image}
-                onClick={() => router.push(`/images/${item.id}/` )}
+        <SwipeableBusinessCardList autoplay={true}>
+          {product.images && (product.images.length > 0) ?
+              (product.images.map((item, index) => {
+                return <BusinessCard
+                  key={index}
+                  image={item.image}
+                  onClick={() => router.push(`/images/${item.id}/` )}
+                />
+              })
+            ) : (
+              <BusinessCard
+                image='/no_image.png'
               />
-            })}
-          </SwipeableBusinessCardList>
-        )}
+            )
+          }
+        </SwipeableBusinessCardList>
         <Box padding={1}>
           <Typography variant='h5'>{product.name}</Typography>
           <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>

@@ -29,7 +29,7 @@ const deleteCoupon = async (session, coupon) => {
   return await requestToBackend(session, `api/coupons/${coupon.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const couponResponse = await getCoupon(session, context);
   return {
     props: { session, selfUser, coupon: couponResponse.data },

@@ -24,13 +24,13 @@ const useStyles = makeStyles({
   },
 });
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
   };
 })
 
-function Home({ session, selfUser }) {
+function Index({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -55,7 +55,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/stores/',
+              pathname: '/stores/list/',
               query: { user: selfUser.id },
             })}
           >
@@ -68,7 +68,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/products/',
+              pathname: '/products/list/',
               query: { user: selfUser.id },
             })}
           >
@@ -81,7 +81,7 @@ function Home({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/coupons/',
+              pathname: '/coupons/list/',
               query: { user: selfUser.id },
             })}
           >
@@ -98,7 +98,7 @@ function Home({ session, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/notices/`)}
+            onClick={() => router.push(`/central-notices/`)}
           >
             공지사항
           </Button>
@@ -145,7 +145,7 @@ function Home({ session, selfUser }) {
             variant='contained'
             onClick={() => router.push(`/sandbox/scanner/`)}
           >
-            QR 스캐너
+            QR코드 스캐너
           </Button>
         </Box>
         <Box marginY={1}>
@@ -157,7 +157,7 @@ function Home({ session, selfUser }) {
               toast.success('Hello World');
             }}
           >
-            React-Hot-Toast Test
+            React-Hot-Toast 테스트
           </Button>
         </Box>
       </Section>
@@ -165,4 +165,4 @@ function Home({ session, selfUser }) {
   );
 }
 
-export default Home;
+export default Index;

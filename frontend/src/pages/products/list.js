@@ -13,27 +13,31 @@ import Tile from '../../components/Tile';
 import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
-};
-
 const getProductList = async (session, context) => {
   const params = {
-    user = context.query.user || null,
-    store = context.query.store || null,
+    user: context.query.user || null,
+    store: context.query.store || null,
   };
   return await requestToBackend(session, 'api/products', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+const getStore = async (session, context) => {
+  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
   const productListResponse = await getProductList(session, context);
-  const storeResponse = await getStore(session, context);
+  const storeResponse = context.query.store && await getStore(session, context);
   return {
-    props: { session, selfUser, productList: productListResponse.data, store: storeResponse.data },
+    props: {
+      session,
+      selfUser,
+      productList: productListResponse.data,
+      store: context.query.store ? storeResponse.data : null },
   };
 })
 
-function Index({ session, selfUser, productList, store }) {
+function List({ session, selfUser, productList, store }) {
   const router = useRouter();
   return (
     <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -43,12 +47,12 @@ function Index({ session, selfUser, productList, store }) {
       >
         {productList && (productList.length > 0) ? (
           <Grid container spacing={1}>
-            {productList.map((item, index) => (
+            {productList && productList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
                   subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>
                   ]}
@@ -80,4 +84,4 @@ function Index({ session, selfUser, productList, store }) {
   );
 }
 
-export default Index;
+export default List;
