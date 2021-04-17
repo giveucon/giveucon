@@ -96,7 +96,11 @@ function Home({ session, selfUser, centralNoticeList }) {
                 return <BusinessCard
                   key={index}
                   title={item.article.title}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                  image={
+                    item.images && (item.images.length > 0)
+                    ? item.images[0].image
+                    : '/no_image.png'
+                  }
                   onClick={() => router.push(`/central-notices/${item.id}/` )}
                 />
               }))

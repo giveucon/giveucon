@@ -19,7 +19,14 @@ import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
 const postCentralNotice = async (session, centralNotice) => {
-  return await requestToBackend(session, 'api/central-notices/', 'post', 'multipart', jsonToFormData(centralNotice), null);
+  const processedCentralNotice = {
+    article: {
+      title: centralNotice.title,
+      content: centralNotice.content,
+      images: centralNotice.images,
+    },
+  };
+  return await requestToBackend(session, 'api/central-notices/', 'post', 'multipart', jsonToFormData(processedCentralNotice), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps('staff', async (context, session, selfUser) => {

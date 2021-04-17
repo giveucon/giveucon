@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers
+
 from .image_serializer import ImageSerializer
 from ..models import Article, Image
 
@@ -13,7 +14,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = validated_data.pop('user')
         images_data = validated_data.pop('images')
-        print(images_data)
         with transaction.atomic():
             images = Image.objects.bulk_create([Image() for _ in images_data])
             for i in range(len(images)):

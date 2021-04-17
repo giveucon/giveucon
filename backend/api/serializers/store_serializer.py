@@ -3,13 +3,12 @@ from django.db import transaction
 from hashlib import sha256
 from rest_framework.serializers import ModelSerializer
 
-from .image_serializer import ImageSerializer
 from .tag_serializer import TagSerializer
+from .image_serializer import ImageSerializer
 from ..models import Store, Image
 
 class StoreSerializer(ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Store
         read_only_fields = ('user',)
@@ -18,7 +17,7 @@ class StoreSerializer(ModelSerializer):
     def create(self, validated_data):
         user = validated_data.pop('user')
         images_data = validated_data.pop('images')
-        tags_data = validated_data.pop('tags')
+        tags = validated_data.pop('tags')
         private_key = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1, hashfunc=sha256)
         public_key = private_key.get_verifying_key()
 
@@ -30,9 +29,6 @@ class StoreSerializer(ModelSerializer):
             images = Image.objects.bulk_create([Image() for _ in images_data])
             for i in range(len(images)):
                 images[i].image.save(images_data[i].name, images_data[i])
-            tags = Tag.objects.bulk_create([Tag() for _ in tags_data])
-            for i in range(len(tags)):
-                tags[i].tag.save(tags_data[i].name, tags_data[i])
             store.save()
             store.images.set(images)
             store.tags.set(tags)

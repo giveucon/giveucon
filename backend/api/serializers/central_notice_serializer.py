@@ -9,6 +9,7 @@ class CentralNoticeSerializer(ModelSerializer):
     class Meta:
         model = CentralNotice
         fields = '__all__'
+        
     def create(self, validated_data):
         article_data = validated_data.pop('article')
         user = validated_data.pop('user')
