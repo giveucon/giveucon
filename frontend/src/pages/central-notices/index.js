@@ -20,7 +20,7 @@ const getCentralNoticeList = async (session) => {
   return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(session);
   return {
     props: { session, selfUser, centralNoticeList: centralNoticeListResponse.data },
@@ -66,8 +66,8 @@ function Index({ session, selfUser, centralNoticeList }) {
         { centralNoticeList && (centralNoticeList.length > 0) ? centralNoticeList.map((item, index) => (
           <Grid item xs={12} key={index}>
             <ListItemCard
-              primary={item.article.title}
-              secondary={new Date(item.article.created_at).toLocaleDateString()}
+              title={item.article.title}
+              subtitle={new Date(item.article.created_at).toLocaleDateString()}
               onClick={() => router.push(`/central-notices/${item.id}/`)}
             />
           </Grid>

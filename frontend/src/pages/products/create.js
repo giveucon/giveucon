@@ -35,8 +35,17 @@ const postProduct = async (session, product) => {
   return await requestToBackend(session, '/api/products/', 'post', 'multipart', jsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeResponse = await getStore(session, context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   return {
     props: { session, selfUser, store: storeResponse.data },
   };

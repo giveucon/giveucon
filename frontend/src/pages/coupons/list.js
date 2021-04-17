@@ -21,7 +21,7 @@ const getCouponList = async (session, context) => {
   return await requestToBackend(session, 'api/coupons/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const couponListResponse = await getCouponList(session, context)
   return {
     props: { session, selfUser, couponList: couponListResponse.data },

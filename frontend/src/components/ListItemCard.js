@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function ListItemCard({ onClick=null, primary=null, prefix=null, secondary=null, suffix=null }) {
+export default function ListItemCard({ onClick=null, title=null, prefix=null, subtitle=null, suffix=null }) {
   const classes = useStyles();
   return (
     <Box marginY={1}>
@@ -28,14 +28,14 @@ export default function ListItemCard({ onClick=null, primary=null, prefix=null, 
           </Box>
             <CardActionArea onClick={onClick}>
               <Box
-                display={(primary || secondary) ? 'block' : 'none'}
+                display={(title || subtitle) ? 'block' : 'none'}
                 paddingLeft={prefix ? 0 : 2}
                 paddingRight={suffix ? 0 : 2}
                 flexGrow={1}
                 paddingY={1}
               >
-                <Typography variant='body1'>{primary}</Typography>
-                <Typography variant='body2'>{secondary}</Typography>
+                <Typography variant='h6'>{title}</Typography>
+                <Typography variant='subtitle2'>{subtitle}</Typography>
               </Box>
             </CardActionArea>
           <Box display={suffix ? 'block' : 'none'} flexShrink={0}>

@@ -26,7 +26,7 @@ const deleteSelfUser = async (session, selfUser) => {
   return await requestToBackend(session, `api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {
     props: { session, selfUser },
   }

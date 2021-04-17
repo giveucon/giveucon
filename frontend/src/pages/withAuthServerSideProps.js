@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/client';
 import requestToBackend from './requestToBackend';
 
-export default function withAuthServerSideProps(authType, getServerSidePropsFunction) {
+export default function withAuthServerSideProps(getServerSidePropsFunction, authType, keyword) {
   return async (context) => {
 
     // Get session from NextAuth
@@ -18,7 +18,6 @@ export default function withAuthServerSideProps(authType, getServerSidePropsFunc
       };
     }
     
-    // const selfUserResponse = await getSelfUser(session);
     const selfUserResponse = await requestToBackend(session, 'api/users/self/', 'get', 'json');
 
     // If account founded but no user models linked
@@ -32,18 +31,6 @@ export default function withAuthServerSideProps(authType, getServerSidePropsFunc
       }
     }
     const selfUser = selfUserResponse.data;
-
-    if (authType === 'staff') {
-      if (selfUser.staff === false) {
-        return {
-          redirect: {
-            permanent: false,
-            destination: '/unauthorized/',
-          },
-          props: {}
-        }
-      }
-    }
 
     // Return props after execute server side functions
     if (getServerSidePropsFunction) {

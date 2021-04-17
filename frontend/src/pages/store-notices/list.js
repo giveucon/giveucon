@@ -12,32 +12,33 @@ import Tile from '../../components/Tile';
 import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const getStoreList = async (session, context) => {
+const getStoreNoticeList = async (session, context) => {
   const params = {
     user: context.query.user || null,
+    store: context.query.store || null,
   };
   return await requestToBackend(session, 'api/stores', 'get', 'json', null, params);
 };
 
-const getUser = async (session, context) => {
-  return await requestToBackend(session, `api/users/${context.query.user}/`, 'get', 'json');
+const getStore = async (session, context) => {
+  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeListResponse = await getStoreList(session, context);
-  const userResponse = await getUser(session, context);
+  const storeListResponse = await getStoreNoticeList(session, context);
+  const storeResponse = await getStore(session, context);
   return {
-    props: { session, selfUser, storeList: storeListResponse.data, user: userResponse.data },
+    props: { session, selfUser, storeList: storeListResponse.data, store: storeResponse.data },
   };
 })
 
-function List({ session, selfUser, storeList, user }) {
+function List({ session, selfUser, storeList, store }) {
   const router = useRouter();
   return (
-    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 공지사항 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게 목록'
+        title='가게 공지사항 목록'
       >
         {storeList && (storeList.length > 0) ? (
           <Grid container>
@@ -46,7 +47,7 @@ function List({ session, selfUser, storeList, user }) {
                 <Tile
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/stores/${item.id}/`)}
+                  onClick={() => router.push(`/store-notices/${item.id}/`)}
                   menuItems={
                     <MenuItem>Menu Item</MenuItem>
                   }
@@ -58,15 +59,18 @@ function List({ session, selfUser, storeList, user }) {
           <AlertBox content='가게가 없습니다.' variant='information' />
         )}
       </Section>
-      { user && (user.id === selfUser.id) && (
+      { store && (store.user === selfUser.id) && (
         <Box marginY={1}>
           <Button
             color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/stores/create/`)}
+            onClick={() => router.push({
+              pathname: '/store-notices/create/',
+              query: { store: store.id },
+            })}
           >
-            새 가게 추가
+            새 가게 공지사항 추가
           </Button>
         </Box>
       )}

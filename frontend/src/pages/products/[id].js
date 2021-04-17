@@ -19,7 +19,7 @@ const getStore = async (session, product) => {
   return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const productResponse = await getProduct(session, context);
   const storeResponse = await getStore(session, productResponse.data);
   return {

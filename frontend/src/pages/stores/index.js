@@ -27,7 +27,7 @@ const getSelfStoreList = async (session, selfUser) => {
   return await requestToBackend(session, 'api/stores/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeListResponse = await getStoreList(session);
   const selfStoreListResponse = await getSelfStoreList(session, selfUser);
   return {

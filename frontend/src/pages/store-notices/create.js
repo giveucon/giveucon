@@ -18,19 +18,25 @@ import jsonToFormData from '../jsonToFormData'
 import requestToBackend from '../requestToBackend'
 import withAuthServerSideProps from '../withAuthServerSideProps'
 
-const postCentralNotice = async (session, centralNotice) => {
-  const processedCentralNotice = {
+const getStore = async (session, context) => {
+  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
+const postStoreNotice = async (session, storeNotice) => {
+  const processedStoreNotice = {
     article: {
-      title: centralNotice.title,
-      content: centralNotice.content,
-      images: centralNotice.images,
+      title: storeNotice.title,
+      content: storeNotice.content,
+      images: storeNotice.images,
     },
+    store: storeNotice.store,
   };
-  return await requestToBackend(session, 'api/central-notices/', 'post', 'multipart', jsonToFormData(processedCentralNotice), null);
+  return await requestToBackend(session, 'api/store-notices/', 'post', 'multipart', jsonToFormData(processedStoreNotice), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  if (!selfUser.staff) {
+  const storeResponse = await getStore(session, context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
       redirect: {
         permanent: false,
@@ -40,18 +46,19 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
     }
   }
   return {
-    props: { session, selfUser },
+    props: { session, selfUser, store: storeResponse.data },
   }
 })
 
-function Create({ session, selfUser }) {
+function Create({ session, selfUser, store }) {
   const router = useRouter();
-  const [centralNotice, setCentralNotice] = useState({
+  const [storeNotice, setStoreNotice] = useState({
     title: null,
     content: null,
     images: [],
+    store: store.id
   });
-  const [centralNoticeError, setCentralNoticeError] = useState({
+  const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
     content: false,
   });
@@ -59,18 +66,18 @@ function Create({ session, selfUser }) {
   const uppy = useUppy(() => {
     return new Uppy()
     .on('file-added', (file) => {
-      setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, images: uppy.getFiles().map((file) => file.data) }));
+      setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
     .on('file-removed', (file, reason) => {
-      setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, images: uppy.getFiles().map((file) => file.data) }));
+      setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
 
   return (
-    <Layout title={`공지사항 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 공지사항 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='공지사항 추가'
+        title='가게 공지사항 추가'
       />
       <Section
         title='기본 정보'
@@ -79,12 +86,12 @@ function Create({ session, selfUser }) {
         <Box paddingY={1}>
           <TextField
             name='title'
-            value={centralNotice.title}
-            error={centralNoticeError.title}
+            value={storeNotice.title}
+            error={storeNoticeError.title}
             fullWidth
             label='제목'
             onChange={(event) => {
-              setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, title: event.target.value }));
+              setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, title: event.target.value }));
             }}
             required
           />
@@ -92,13 +99,13 @@ function Create({ session, selfUser }) {
         <Box paddingY={1}>
           <TextField
             name='content'
-            value={centralNotice.content}
-            error={centralNoticeError.content}
+            value={storeNotice.content}
+            error={storeNoticeError.content}
             fullWidth
             label='내용'
             multiline
             onChange={(event) => {
-              setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, content: event.target.value }));
+              setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, content: event.target.value }));
             }}
             required
           />
@@ -123,22 +130,22 @@ function Create({ session, selfUser }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postCentralNotice(session, centralNotice);
+            const response = await postStoreNotice(session, storeNotice);
             console.log(response.data);
             if (response.status === 201) {
-              router.push(`/central-notices/${response.data.id}/`);
-              toast.success('공지사항이 생성되었습니다.');
+              router.push(`/store-notices/${response.data.id}/`);
+              toast.success('가게 공지사항이 생성되었습니다.');
             } 
             else if (response.status === 400) {
               if (response.data.title) {
-                setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: true}));
+                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: true}));
               } else {
-                setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: false}));
+                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: false}));
               }
               if (response.data.content) {
-                setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: true}));
+                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: true}));
               } else {
-                setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: false}));
+                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: false}));
               }
               toast.error('입력란을 확인하세요.');
             }

@@ -15,7 +15,7 @@ const getUser = async (session, context) => {
   return await requestToBackend(session, `api/users/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const userResponse = await getUser(session, context);
   return {
     props: { session, selfUser, user: userResponse.data },

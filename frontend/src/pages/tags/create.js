@@ -17,7 +17,16 @@ const postTag = async (session, tag) => {
   return await requestToBackend(session, 'api/tags/', 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps('staff', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   return {
     props: { session, selfUser },
   };

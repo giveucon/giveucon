@@ -21,17 +21,22 @@ const useStyles = makeStyles({
   },
 });
 
-const getCoupon = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}`, 'get', 'json');
+const getStoreNotice = async (session, context) => {
+  return await requestToBackend(session, `api/store-notices/${context.query.id}/`, 'get', 'json');
 };
 
-const deleteCoupon = async (session, coupon) => {
-  return await requestToBackend(session, `api/coupons/${coupon.id}/`, 'delete', 'json');
+const getStore = async (session, StoreNotice) => {
+  return await requestToBackend(session, `api/stores/${StoreNotice.store}/`, 'get', 'json');
+};
+
+const deleteStoreNotice = async (session, storeNotice) => {
+  return await requestToBackend(session, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponResponse = await getCoupon(session, context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+  const storeNoticeResponse = await getStoreNotice(session, context);
+  const storeResponse = await getStore(session, storeNoticeResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
       redirect: {
         permanent: false,
@@ -41,18 +46,18 @@ export const getServerSideProps = withAuthServerSideProps(async (context, sessio
     }
   }
   return {
-    props: { session, selfUser, coupon: couponResponse.data },
+    props: { session, selfUser, storeNotice: storeNoticeResponse.data },
   };
 })
 
-function Delete({ session, selfUser, coupon }) {
+function Delete({ session, selfUser, storeNotice }) {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='쿠폰 삭제'
+        title='가게 공지사항 삭제'
       >
         <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
         <Box marginY={1}>
@@ -61,14 +66,14 @@ function Delete({ session, selfUser, coupon }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteCoupon(session, coupon);
+              const response = await deleteStoreNotice(session, storeNotice);
               if (response.status === 204) {
-                router.push(`/coupons/`);
-                toast.success('쿠폰이 삭제되었습니다.');
+                router.push(`/stores/${storeNotice.store}/`);
+                toast.success('가게 공지사항이 삭제되었습니다.');
               }
             }}
           >
-            가게 삭제
+            가게 공지사항 삭제
           </Button>
         </Box>
         <Box marginY={1}>

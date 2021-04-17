@@ -34,6 +34,10 @@ const getProduct = async (session, context) => {
   return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
+const getStore = async (session, product) => {
+  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
+};
+
 const putProduct = async (session, product) => {
   const processedProduct = {
     name: product.name,
@@ -46,12 +50,22 @@ const putProduct = async (session, product) => {
   return await requestToBackend(session, `api/products/${product.id}/`, 'put', 'multipart', jsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const prevProductResponse = await getProduct(session, context);
+  const storeResponse = await getStore(session, prevProductResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   return {
     props: { session, selfUser, prevProduct: prevProductResponse.data },
   };
-})
+}, 'product', context.query.id)
 
 function Update({ session, selfUser, prevProduct }) {
   const router = useRouter();

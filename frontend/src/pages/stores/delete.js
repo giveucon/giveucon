@@ -29,8 +29,17 @@ const deleteStore = async (session, store) => {
   return await requestToBackend(session, `api/stores/${store.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeResponse = await getStore(session, context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   return {
     props: { session, selfUser, store: storeResponse.data },
   };

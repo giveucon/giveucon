@@ -20,8 +20,17 @@ const getProduct = async (session, coupon) => {
   return await requestToBackend(session, `api/products/${coupon.product}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const couponResponse = await getCoupon(session, context);
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   const productResponse = await getProduct(session, couponResponse.data);
   return {
     props: { session, selfUser, coupon: couponResponse.data, product: productResponse.data },

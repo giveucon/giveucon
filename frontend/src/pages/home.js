@@ -23,7 +23,7 @@ const getCentralNoticeList = async (session) => {
   return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(session);
   return {
     props: { 

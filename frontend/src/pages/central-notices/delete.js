@@ -29,7 +29,16 @@ const deleteCentralNotice = async (session, centralNotice) => {
   return await requestToBackend(session, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('staff', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   const centralNoticeResponse = await getCentralNotice(session, context);
   return {
     props: { session, selfUser, centralNotice: centralNoticeResponse.data },

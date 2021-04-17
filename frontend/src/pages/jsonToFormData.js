@@ -20,7 +20,7 @@ function jsonToFormDataRecursive(jsonObject, formData, parentKey) {
       }
 
       console.log(key);
-      if (value instanceof FileList || value.constructor.name === 'FileList') {
+      if (value instanceof FileList) {
           for (var j = 0; j < value.length; j++) {
               formData.append(propName, value.item(j));
           }

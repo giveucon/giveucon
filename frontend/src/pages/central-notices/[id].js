@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
@@ -12,7 +13,7 @@ const getCentralNotice = async (session, context) => {
   return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const centralNoticeResponse = await getCentralNotice(session, context);
   return {
     props: { session, selfUser, centralNotice: centralNoticeResponse.data },
@@ -20,6 +21,7 @@ export const getServerSideProps = withAuthServerSideProps('user', async (context
 })
 
 function Id({ session, selfUser, centralNotice }) {
+  const router = useRouter();
   return (
     <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

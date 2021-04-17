@@ -6,15 +6,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../components/AlertBox'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
-import withAuthServerSideProps from './withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  };
-})
-
-function Unauthorized({ session, selfUser }) {
+function Unauthorized({}) {
   const router = useRouter();
   return (
     <Layout title={`권한 없음 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

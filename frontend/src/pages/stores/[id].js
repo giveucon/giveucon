@@ -28,6 +28,13 @@ const getStore = async (session, context) => {
   return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
 };
 
+const getStoreNoticeList = async (session, store) => {
+  const params = {
+    store: store.id
+  };
+  return await requestToBackend(session, 'api/store-notices/', 'get', 'json', null, params);
+};
+
 const getProductList = async (session, store) => {
   const params = {
     store: store.id
@@ -35,18 +42,26 @@ const getProductList = async (session, store) => {
   return await requestToBackend(session, 'api/products/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const storeResponse = await getStore(session, context);
+  const storeNoticeListResponse = await getStoreNoticeList(session, storeResponse.data);
   const productListResponse = await getProductList(session, storeResponse.data);
+  console.log(storeNoticeListResponse.data);
   return {
-    props: { session, selfUser, store: storeResponse.data, productList: productListResponse.data },
+    props: {
+      session,
+      selfUser,
+      store: storeResponse.data,
+      storeNoticeList: storeNoticeListResponse.data,
+      productList: productListResponse.data,
+    },
   };
 })
 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ session, selfUser, store, productList }) {
+function Id({ session, selfUser, store, storeNoticeList, productList }) {
   const router = useRouter();
   return (
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -92,18 +107,18 @@ function Id({ session, selfUser, store, productList }) {
         </Box>
       </Section>
       <Section
-        title='공지사항'
+        title='가게 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
         titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
-        {store.notices && (store.notices.length > 0) ? (
+        {storeNoticeList && (storeNoticeList.length > 0) ? (
           <Grid container spacing={1}>
-            {store.notices.slice(0, 4).map((item, index) => (
+            {storeNoticeList.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
                 <ListItemCard
-                  title={item.name}
-                  subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  // onClick={() => router.push(`/stores/notices/${item.id}/`)}
+                  title={item.article.title}
+                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                  onClick={() => router.push(`/store-notices/${item.id}/`)}
                 />
               </Grid>
             ))}
@@ -177,8 +192,21 @@ function Id({ session, selfUser, store, productList }) {
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/stores/update/',
+                pathname: '/store-notices/create/',
                 query: { id: store.id },
+              })}
+            >
+              가게 공지사항 추가
+            </Button>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/stores/update/',
+                query: { store: store.id },
               })}
             >
               가게 정보 수정

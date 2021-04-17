@@ -8,7 +8,7 @@ const getImage = async (session, context) => {
   return await requestToBackend(session, `api/images/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const imageResponse = await getImage(session, context);
   console.log(imageResponse.data);
   return {

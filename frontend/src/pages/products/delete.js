@@ -25,12 +25,26 @@ const getProduct = async (session, context) => {
   return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
 };
 
+const getStore = async (session, product) => {
+  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
+};
+
 const deleteProduct = async (session, product) => {
   return await requestToBackend(session, `api/products/${product.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps('user', async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   const productResponse = await getProduct(session, context);
+  const storeResponse = await getStore(session, productResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
   return {
     props: { session, selfUser, product: productResponse.data },
   };
