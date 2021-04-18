@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getStoreNotice = async (session, context) => {
   return await requestToBackend(session, `api/store-notices/${context.query.id}/`, 'get', 'json');

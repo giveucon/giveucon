@@ -14,8 +14,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
-import requestToBackend from '../../requestToBackend'
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import requestToBackend from '../../functions/requestToBackend'
+import withAuthServerSideProps from '../../functions/withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {

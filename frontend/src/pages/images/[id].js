@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getImage = async (session, context) => {
   return await requestToBackend(session, `api/images/${context.query.id}/`, 'get', 'json');

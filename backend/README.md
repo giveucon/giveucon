@@ -49,10 +49,13 @@ cd [project_root_directory_here]/backend/giveucon
 then create secrets.py:
 
 ```
-DJANGO_BASE_URL = "http://127.0.0.1:8000"
+DJANGO_BASE_URL = 'http://127.0.0.1:8000'
 DJANGO_DEBUG = True
-DJANGO_SIMPLE_JWT_SIGNING_KEY = "some_string_here"
-DJANGO_SECRET_KEY = "your_django_secert_key_here"
+DJANGO_FRONTEND_BASE_URL = 'http://127.0.0.1:3000'
+DJANGO_KAKAO_APP_REST_API_KEY = 'your_kakao_app_rest_api_key_here'
+DJANGO_SIMPLE_JWT_SIGNING_KEY = 'some_string_here'
+DJANGO_SECRET_KEY = 'your_django_secert_key_here'
+
 ```
 
 Move back to backend root directory:
@@ -122,6 +125,12 @@ password: your_admin_password_here
 password: your_admin_password_here
 ```
 
+Set Django social applications:
+
+```
+python manage.py setsocialapplications
+```
+
 ## Launch
 
 Launch backend:
@@ -129,35 +138,4 @@ Launch backend:
 ```
 cd [project_root_directory_here]/backend
 python manage.py runserver
-```
-
-
-## Setting Up Backend
-
-Go to backend Django admin page:
-
-```
-http://127.0.0.1:8000/admin
-```
-
-Go to Sites tab, then modify domain name and display name of
-
-```
-example.com
-```
-
-to
-
-```
-127.0.0.1:8000
-```
-
-Go to Social applications tab and create new application
-
-```
-Provider: Kakao
-Name: Kakao
-Client id: [your_kakao_app_rest_api_key_here]
-Secret key: [some_string_here]
-Sites - Chosen sites: 127.0.0.1:8000
 ```

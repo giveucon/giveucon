@@ -13,8 +13,8 @@ import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getCentralNoticeList = async (session) => {
   return await requestToBackend(session, 'api/central-notices/', 'get', 'json');

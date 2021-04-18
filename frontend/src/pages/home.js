@@ -15,8 +15,8 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
-import requestToBackend from './requestToBackend'
-import withAuthServerSideProps from './withAuthServerSideProps'
+import requestToBackend from './functions/requestToBackend'
+import withAuthServerSideProps from './functions/withAuthServerSideProps'
 
 
 const getCentralNoticeList = async (session) => {

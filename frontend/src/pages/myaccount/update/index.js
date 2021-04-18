@@ -8,7 +8,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
-import withAuthServerSideProps from '../../withAuthServerSideProps'
+import withAuthServerSideProps from '../../functions/withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {

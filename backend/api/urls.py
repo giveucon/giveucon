@@ -39,5 +39,5 @@ urlpatterns = [
     path('tags/', TagListView.as_view()),
     path('tags/<int:pk>', TagDetailView.as_view()),
 
-    path('reviews/', ReviewListView.as_view())
+    path('reviews/', ReviewListView.as_view()),
 ]

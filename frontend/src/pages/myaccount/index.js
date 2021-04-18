@@ -12,7 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const useStyles = makeStyles({
   RedButton: {
@@ -128,6 +128,16 @@ function Index({ session, selfUser }) {
         title='개발자 도구'
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
       >
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push(`/initialize/`)}
+          >
+            데이터베이스 생성
+          </Button>
+        </Box>
         <Box marginY={1}>
           <Button
             color='default'

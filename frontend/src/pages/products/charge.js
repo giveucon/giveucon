@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getProduct = async (session, context) => {
   return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');

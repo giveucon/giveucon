@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-from .secrets import DJANGO_BASE_URL, DJANGO_DEBUG, DJANGO_SIMPLE_JWT_SIGNING_KEY, DJANGO_SECRET_KEY
+from .secrets import *
 import os
 # import json, os, sys
 

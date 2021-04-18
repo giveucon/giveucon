@@ -7,7 +7,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {

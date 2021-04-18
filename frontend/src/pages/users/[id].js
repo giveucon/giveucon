@@ -8,8 +8,8 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileSection from '../../components/UserProfileSection';
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getUser = async (session, context) => {
   return await requestToBackend(session, `api/users/${context.query.id}/`, 'get', 'json');

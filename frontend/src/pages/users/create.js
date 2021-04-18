@@ -14,21 +14,14 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../requestToBackend'
+import requestToBackend from '../functions/requestToBackend'
 
 const getSelfAccount = async (session, context) => {
   return await requestToBackend(session, 'api/accounts/self/', 'get', 'json');
 };
 
 const postSelfUser = async (session, selfUser) => {
-  const data = {
-    email: selfUser.email,
-    user_name: selfUser.user_name,
-    first_name: selfUser.first_name,
-    last_name: selfUser.last_name,
-    dark_mode: selfUser.dark_mode,
-  };
-  return await requestToBackend(session, 'api/users/', 'post', 'json', data, null);
+  return await requestToBackend(session, 'api/users/', 'post', 'json', selfUser, null);
 };
 
 export async function getServerSideProps(context) {
@@ -143,7 +136,7 @@ function Create({ session, selfAccount }) {
           onClick={async () => {
             const response = await postSelfUser(session, selfUser);
             if (response.status === 201) {
-              router.push(`/myaccounts/home/`);
+              router.push(`/myaccount/`);
               toast.success('계정이 생성되었습니다.');
             }
             else if (response.status === 400) {

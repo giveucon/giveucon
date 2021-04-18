@@ -13,8 +13,8 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getStoreList = async (session) => {
   return await requestToBackend(session, 'api/stores/', 'get', 'json');

@@ -9,8 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Layout from '../../components/Layout'
 import BusinessCard from '../../components/BusinessCard';
 import Section from '../../components/Section'
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getCoupon = async (session, context) => {
   return await requestToBackend(session, `api/coupons/${context.query.id}`, 'get', 'json');

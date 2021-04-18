@@ -15,9 +15,9 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../jsonToFormData'
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import jsonToFormData from '../functions/jsonToFormData'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const getStore = async (session, context) => {
   return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');

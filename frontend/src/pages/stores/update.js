@@ -20,9 +20,9 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../jsonToFormData'
-import requestToBackend from '../requestToBackend'
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import jsonToFormData from '../functions/jsonToFormData'
+import requestToBackend from '../functions/requestToBackend'
+import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
