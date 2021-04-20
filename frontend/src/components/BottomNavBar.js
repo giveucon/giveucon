@@ -29,11 +29,11 @@ export default function BottomNavBar() {
   const classes = useStyles();
   let key = 0;
   const defaultActions = [
-    ['홈', 'home/', <HomeOutlinedIcon />],
-    ['내 지갑', 'mywallet/', <AccountBalanceWalletOutlinedIcon />],
-    ['가게', 'stores/', <StorefrontIcon />],
-    ['거래', 'trades/', <LocalMallOutlinedIcon />],
-    ['내 계정', 'myaccount/', <AccountCircleOutlinedIcon />]
+    ['홈', 'home', <HomeOutlinedIcon />],
+    ['내 지갑', 'mywallet', <AccountBalanceWalletOutlinedIcon />],
+    ['가게', 'stores', <StorefrontIcon />],
+    ['거래', 'trades', <LocalMallOutlinedIcon />],
+    ['내 계정', 'myaccount', <AccountCircleOutlinedIcon />]
   ].map(([label, value, icon]) => {
       return (
         <BottomNavigationAction

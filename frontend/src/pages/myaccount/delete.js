@@ -12,15 +12,15 @@ import Section from '../../components/Section'
 import requestToBackend from '../functions/requestToBackend'
 import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   RedButton: {
-    background: '#f44336',
+    background: theme.palette.error.main,
     color: 'white',
     '&:hover': {
-       background: '#aa2e25',
+       background: theme.palette.error.dark,
     },
   },
-});
+}));
 
 const deleteSelfUser = async (session, selfUser) => {
   return await requestToBackend(session, `api/users/${selfUser.id}/`, 'delete', 'json');

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from django.db import connections, utils
+from django.db import connections
 
 class Command(BaseCommand):
     help = 'Sets sites and social applications for providing Kakao OAuth2'

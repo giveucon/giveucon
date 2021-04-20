@@ -20,15 +20,15 @@ import jsonToFormData from '../functions/jsonToFormData'
 import requestToBackend from '../functions/requestToBackend'
 import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   RedButton: {
-    background: '#f44336',
+    background: theme.palette.error.main,
     color: 'white',
     '&:hover': {
-       background: '#aa2e25',
+       background: theme.palette.error.dark,
     },
   },
-});
+}));
 
 const getCentralNotice = async (session, context) => {
   return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');

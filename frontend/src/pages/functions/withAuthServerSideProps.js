@@ -21,7 +21,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
     const selfUserResponse = await requestToBackend(session, 'api/users/self/', 'get', 'json');
 
     // If account founded but no user models linked
-    if (selfUserResponse.status === 404) {
+    if (selfUserResponse.status === (403 || 404)) {
       return {
         redirect: {
           permanent: false,

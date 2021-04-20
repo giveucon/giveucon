@@ -14,15 +14,15 @@ import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
 import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   RedButton: {
-    background: '#f44336',
+    background: theme.palette.error.main,
     color: 'white',
     '&:hover': {
-       background: '#aa2e25',
+       background: theme.palette.error.dark,
     },
   },
-});
+}));
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {

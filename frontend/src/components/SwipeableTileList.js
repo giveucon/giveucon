@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Box from '@material-ui/core/Box';
 
 const styles = {
-
   root: {
     position: 'relative',
   },

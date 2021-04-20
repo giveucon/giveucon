@@ -242,19 +242,19 @@ export default function Components() {
         titleSuffix={<Button>Edit</Button>}
       >
         <ListItemCard
-          primary='ListItemCard primary'
-          secondary='ListItemCard secondary'
+          title='ListItemCard primary'
+          subtitle='ListItemCard secondary'
           onClick={() => alert( 'Tapped' )}
         />
         <ListItemCard
-          primary='ListItemCard primary'
-          secondary='ListItemCard secondary'
+          title='ListItemCard primary'
+          subtitle='ListItemCard secondary'
           prefix={<IconButton><MenuIcon /></IconButton>}
           onClick={() => alert( 'Tapped' )}
         />
         <ListItemCard
-          primary='ListItemCard primary'
-          secondary='ListItemCard secondary'
+          title='ListItemCard primary'
+          subtitle='ListItemCard secondary'
           suffix={<Button>Edit</Button>}
           onClick={() => alert( 'Tapped' )}
         />
@@ -280,6 +280,7 @@ export default function Components() {
         title='SwipeableBusinessCardList'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
+        padding={false}
       >
         <SwipeableBusinessCardList>
           {swipeableBusinessCardList}
@@ -290,6 +291,7 @@ export default function Components() {
         title='SwipeableBusinessCardList - with Autoplay'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
+        padding={false}
       >
         <SwipeableBusinessCardList autoplay={true} interval={5000}>
           {swipeableBusinessCardList}
@@ -300,6 +302,7 @@ export default function Components() {
         title='SwipeableTileList'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
+        padding={false}
       >
         <SwipeableTileList>
           {swipeableTileList}

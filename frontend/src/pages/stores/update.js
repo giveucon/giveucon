@@ -27,15 +27,15 @@ import withAuthServerSideProps from '../functions/withAuthServerSideProps'
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   RedButton: {
-    background: '#f44336',
+    background: theme.palette.error.main,
     color: 'white',
     '&:hover': {
-       background: '#aa2e25',
+       background: theme.palette.error.dark,
     },
   },
-});
+}));
 
 const getStore = async (session, context) => {
   return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
