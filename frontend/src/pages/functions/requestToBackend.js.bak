@@ -1,5 +1,27 @@
 import axios from 'axios';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import toast from 'react-hot-toast';
+import Refresh from '../session/refresh'
+
+const socialLoginRefresh = async () => {
+  try {
+    const cookies = parseCookies();
+    console.log(cookies);
+    const session = cookies.giveucon;
+    const response = await axios({
+      url: 'api/rest-auth/token/refresh/',
+      method: 'post',
+      baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
+      data: {
+        refresh: session.refresh_token,
+      }
+    })
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error(error);
+    return { status: error.response.status, data: error.response.data }
+  }
+};
 
 const jsonRequest = async (session, url, method, data, params) => {
   try {
@@ -9,7 +31,7 @@ const jsonRequest = async (session, url, method, data, params) => {
       baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
       data,
       headers: {
-        'Authorization': `Bearer ${session.accessToken}`,
+        'Authorization': `Bearer ${session.access_token}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
@@ -30,7 +52,7 @@ const multipartRequest = async (session, url, method, data, params) => {
       baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
       data,
       headers: {
-        'Authorization': `Bearer ${session.accessToken}`,
+        'Authorization': `Bearer ${session.access_token}`,
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json'
       },
@@ -43,7 +65,23 @@ const multipartRequest = async (session, url, method, data, params) => {
   }
 };
 
-export default async function requestToBackend(session, url, method, contentType, data=null, params=null) {
+export default async function requestToBackend( url, method, contentType, data=null, params=null) {
+
+  const loginRefreshResponse = await socialLoginRefresh();
+  const giveuconToken = {
+    'access_token': loginRefreshResponse.data.access,
+    'refresh_token': loginRefreshResponse.data.refresh,
+    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
+    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
+    'access_token_expiry': loginRefreshResponse.data.access_expiry,
+    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+  };
+  setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  })
+  console.log('requestToBackend.js: Token refreshed');
+
   let response = null;
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);

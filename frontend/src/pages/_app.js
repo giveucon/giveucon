@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { Provider as NextAuthProvider } from 'next-auth/client';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@material-ui/styles';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -43,30 +42,22 @@ function RootApp({ Component, pageProps }) {
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
         />
       </Head>
-      <NextAuthProvider
-        session={pageProps.session}
-        options={{ 
-          clientMaxAge: 60,   // Re-fetch session if cache is older than 60 seconds
-          keepAlive: 5 * 60   // Send keepAlive message every 5 minutes
-        }}
-      >
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Toaster 
-            toastOptions={{
-              className: null,
-              style: {
-                borderRadius: '1.5rem'
-              },
-            }}
-          />
-          <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
-            <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
-          </Backdrop>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </NextAuthProvider>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <Toaster 
+          toastOptions={{
+            className: null,
+            style: {
+              borderRadius: '1.5rem'
+            },
+          }}
+        />
+        <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
+          <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
+        </Backdrop>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   );
 }

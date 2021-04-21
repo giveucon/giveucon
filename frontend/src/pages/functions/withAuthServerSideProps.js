@@ -1,14 +1,14 @@
 import { getSession } from 'next-auth/client';
-import requestToBackend from './requestToBackend';
+import nookies from 'nookies'
+import backendSWRFetcher from './backendSWRFetcher';
 
 export default function withAuthServerSideProps(getServerSidePropsFunction, authType, keyword) {
-  return async (context) => {
+  return async (ctx) => {
 
-    // Get session from NextAuth
-    const session = await getSession(context);
+    const cookies = nookies.get(ctx);
 
     // If session is not found
-    if (session === null) {
+    if (!cookies.giveucon) {
       return {
         redirect: {
           permanent: false,
@@ -18,7 +18,8 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
       };
     }
     
-    const selfUserResponse = await requestToBackend(session, 'api/users/self/', 'get', 'json');
+    const session = JSON.parse(cookies.giveucon);
+    const selfUserResponse = await backendSWRFetcher('api/users/self/', 'get', 'json');
 
     // If account founded but no user models linked
     if (selfUserResponse.status === (403 || 404)) {
@@ -38,7 +39,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
         props: {
           session,
           selfUser,
-          ...((await getServerSidePropsFunction(context, session, selfUser)).props || {}),
+          ...((await getServerSidePropsFunction(ctx, session, selfUser)).props || {}),
         },
       }
     }
