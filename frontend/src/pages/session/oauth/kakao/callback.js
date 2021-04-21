@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import nookies from 'nookies'
 import axios from 'axios';
 
 const getTokens = async (code) => {
@@ -10,7 +11,7 @@ const getTokens = async (code) => {
       params: {
         grant_type: 'authorization_code',
         client_id: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
-        redirect_uri: process.env.NEXTAUTH_URL + 'oauth/kakao/callback/',
+        redirect_uri: process.env.NEXTAUTH_URL + 'session/oauth/kakao/callback/',
         code,
         client_secret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
       }
@@ -57,34 +58,32 @@ const socialLoginRefresh = async (refresh_token) => {
 };
 
 export async function getServerSideProps(ctx) {
-  if (ctx.res) {
-    const tokenResponse = await getTokens(ctx.query.code);
-    const loginResponse = await socialLogin(tokenResponse.data.access_token);
-    console.log(loginResponse.data);
-    const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
-    
-    return { 
-      props: {
-        loginRefreshResponse
-      } 
-    };
-  }
+  const tokenResponse = await getTokens(ctx.query.code);
+  const loginResponse = await socialLogin(tokenResponse.data.access_token);
+  const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
+  
+  const giveuconToken = {
+    'access_token': loginRefreshResponse.data.access,
+    'refresh_token': loginRefreshResponse.data.refresh,
+    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
+    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
+    'access_token_expiry': loginRefreshResponse.data.access_expiry,
+    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+  };
+  console.log(giveuconToken);
+  nookies.set(ctx, 'giveucon', JSON.stringify(giveuconToken), {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  })
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/',
+    },
+    props: {}
+  };
 }
 
-export default function Callback({ loginRefreshResponse }) {
-  useEffect(() => {
-    console.log(loginRefreshResponse);
-    const backendToken = {
-      'access_token': loginRefreshResponse.data.access,
-      'refresh_token': loginRefreshResponse.data.refresh,
-      'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
-      'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
-      'access_token_expiry': loginRefreshResponse.data.access_expiry,
-      'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
-    };
-    localStorage.clear();
-    localStorage.setItem('giveucon', JSON.stringify(backendToken));
-    console.log(JSON.parse(localStorage.getItem('giveucon')));
-  }, [])
-  return null;
+export default async function Callback() {
+
 }
