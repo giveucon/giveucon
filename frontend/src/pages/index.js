@@ -1,23 +1,11 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 
-import withAuthServerSideProps from './functions/withAuthServerSideProps'
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session },
-  };
-})
-
-function Index({ session }) {
+function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      router.push('/home/');
-    } else {
-      router.push('/login/');
-    }
+    router.push('/home/');
   },[])
 
   return ( null );

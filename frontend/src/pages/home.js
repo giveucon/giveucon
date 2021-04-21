@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,6 +8,8 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import useSWR from 'swr';
 
 import BusinessCard from '../components/BusinessCard'
 import Layout from '../components/Layout'
@@ -15,24 +17,8 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
-import requestToBackend from './functions/requestToBackend'
+import backendSWRFetcher from './functions/backendSWRFetcher'
 import withAuthServerSideProps from './functions/withAuthServerSideProps'
-
-
-const getCentralNoticeList = async (session) => {
-  return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const centralNoticeListResponse = await getCentralNoticeList(session);
-  return {
-    props: { 
-      session,
-      selfUser,
-      centralNoticeList: centralNoticeListResponse.data
-    },
-  };
-})
 
 const geoRecommendedCouponList = [
   <Tile
@@ -70,7 +56,16 @@ const geoRecommendedCouponList = [
   />
 ]
 
-function Home({ session, selfUser, centralNoticeList }) {
+function Home() {
+  useEffect(() => {
+    const cookies = parseCookies()
+    console.log(cookies);
+    const session = JSON.parse(cookies.giveucon);
+  });
+  const {data: centralNoticeList, error: centralNoticeListError} = useSWR(
+    [`api/central-notices/`, 'get', 'json', null, null],
+     (url, method, contentType, data, params) => backendSWRFetcher(url, method, contentType, data, params)
+  );
   const router = useRouter();
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -91,7 +86,7 @@ function Home({ session, selfUser, centralNoticeList }) {
       >
         {centralNoticeList && (centralNoticeList.length > 0) && (
           <SwipeableBusinessCardList autoplay={true}>
-            { centralNoticeList && (centralNoticeList.length > 0) && 
+            {centralNoticeList && (centralNoticeList.length > 0) && 
               (centralNoticeList.slice(0, 2).map((item, index) => {
                 return <BusinessCard
                   key={index}

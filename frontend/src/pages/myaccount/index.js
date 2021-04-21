@@ -8,11 +8,17 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CodeIcon from '@material-ui/icons/Code';
 import SettingsIcon from '@material-ui/icons/Settings';
+import useSWR from 'swr';
+import axios from 'axios';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
 import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import backendSWRFetcher from '../functions/backendSWRFetcher'
+
+import refresh from '../session/refresh'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -24,15 +30,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  };
-})
+/*
+const selfUserFetcher = async (url, method, contentType, data, params) => {
+  const session = await refresh();
+  return await axios({
+    url,
+    data: null,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'multipart/form-data',
+      'Accept': 'application/json'
+    },
+    params: null,
+  }).then(res => res.data);
+}
+*/
 
-function Index({ session, selfUser }) {
+function Index() {
+  const {data: selfUser, error: selfUserError} = useSWR(
+    [`api/users/self/`, 'get', 'json', null, null],
+     (url, method, contentType, data, params) => backendSWRFetcher(url, method, contentType, data, params)
+  );
   const router = useRouter();
   const classes = useStyles();
+
+  if (selfUserError) return <div>failed to load</div>
+  if (!selfUser) return <div>loading...</div>
   return (
     <Layout title={`내 계정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -45,8 +69,8 @@ function Index({ session, selfUser }) {
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <UserProfileBox
-          name={selfUser.user_name}
-          subtitle={selfUser.email}
+          name={selfUser?.user_name || 'Hi'}
+          subtitle={selfUser?.email || 'HIHIHI'}
           image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
         />
         <Box marginY={1}>

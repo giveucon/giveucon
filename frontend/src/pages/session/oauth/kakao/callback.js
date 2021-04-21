@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import nookies from 'nookies'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { setCookie } from 'nookies'
 import axios from 'axios';
 
 const getTokens = async (code) => {
@@ -61,29 +62,28 @@ export async function getServerSideProps(ctx) {
   const tokenResponse = await getTokens(ctx.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
-  
-  const giveuconToken = {
-    'access_token': loginRefreshResponse.data.access,
-    'refresh_token': loginRefreshResponse.data.refresh,
-    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
-    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
-    'access_token_expiry': loginRefreshResponse.data.access_expiry,
-    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
-  };
-  console.log(giveuconToken);
-  nookies.set(ctx, 'giveucon', JSON.stringify(giveuconToken), {
-    maxAge: 30 * 24 * 60 * 60,
-    path: '/',
-  })
+  console.log(loginRefreshResponse.data);
   return {
-    redirect: {
-      permanent: false,
-      destination: '/',
-    },
-    props: {}
+    props: {loginRefresh: loginRefreshResponse.data}
   };
 }
 
-export default async function Callback() {
-
+export default function Callback({loginRefresh}) {
+  const router = useRouter();
+  const giveuconToken = {
+    'access_token': loginRefresh.access,
+    'refresh_token': loginRefresh.refresh,
+    'access_token_lifetime': loginRefresh.access_lifetime,
+    'refresh_token_lifetime': loginRefresh.refresh_lifetime,
+    'access_token_expiry': loginRefresh.access_expiry,
+    'refresh_token_expiry': loginRefresh.refresh_expiry,
+  };
+  useEffect(() => {
+    setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    });
+    router.push('/');
+  });
+  return null;
 }
