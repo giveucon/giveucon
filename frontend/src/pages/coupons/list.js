@@ -9,27 +9,36 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getCouponList = async (session, context) => {
-  const params = {
-    user: context.query.user || null,
-    store: context.query.store || null,
-    product: context.query.product || null,
-  };
-  return await requestToBackend(session, 'api/coupons/', 'get', 'json', null, params);
-};
+function List({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponListResponse = await getCouponList(session, context)
-  return {
-    props: { session, selfUser, couponList: couponListResponse.data },
-  };
-})
-
-function List({ session, selfUser, couponList }) {
   const router = useRouter();
+  const [couponList, setCouponList] = useState(null);
+  const [user, setUser] = useState(null);
+  const [store, setStore] = useState(null);
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const couponListResponse = await requestToBackend('api/coupons/', 'get', 'json', null, {
+        user: router.query.user || null,
+        store: router.query.store || null,
+        product: router.query.product || null,
+      });
+      const userResponse = await requestToBackend(`api/users/${router.query.user}`, 'get', 'json', null, null);
+      const storeResponse = await requestToBackend(`api/stores/${router.query.store}`, 'get', 'json', null, null);
+      const productResponse = await requestToBackend(`api/products/${router.query.product}`, 'get', 'json', null, null);
+      setCouponList(couponListResponse.data);
+      setUser(userResponse.data);
+      setStore(storeResponse.data);
+      setProduct(productResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!productList) return <div>loading...</div>
+
   return (
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -63,4 +72,4 @@ function List({ session, selfUser, couponList }) {
   );
 }
 
-export default List;
+export default withAuth(List);

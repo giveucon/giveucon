@@ -1,22 +1,24 @@
 import React from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router'
 
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getImage = async (session, context) => {
-  return await requestToBackend(session, `api/images/${context.query.id}/`, 'get', 'json');
-};
+function Id({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const imageResponse = await getImage(session, context);
-  console.log(imageResponse.data);
-  return {
-    props: { session, selfUser, image: imageResponse.data },
-  };
-})
+  const router = useRouter();
+  const [image, setImage] = useState(null);
 
-function Id({ session, selfUser, image }) {
+  useEffect(() => {
+    const fetch = async () => {
+      const imageResponse = await requestToBackend(`api/images/${router.query.id}`, 'get', 'json', null, null);
+      setImage(imageResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!image) return <div>loading...</div>
+
   return (
     <>
       <Head>
@@ -33,4 +35,4 @@ function Id({ session, selfUser, image }) {
   );
 }
 
-export default Id;
+export default withAuth(Id);

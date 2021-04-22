@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,36 +9,26 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Layout from '../../components/Layout'
 import BusinessCard from '../../components/BusinessCard';
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getCoupon = async (session, context) => {
-  return await requestToBackend(session, `api/coupons/${context.query.id}`, 'get', 'json');
-};
+function Id({ selfUser }) {
 
-const getProduct = async (session, coupon) => {
-  return await requestToBackend(session, `api/products/${coupon.product}`, 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponResponse = await getCoupon(session, context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  const productResponse = await getProduct(session, couponResponse.data);
-  return {
-    props: { session, selfUser, coupon: couponResponse.data, product: productResponse.data },
-  };
-})
-
-function Id({ session, selfUser, coupon, product }) {
   const router = useRouter();
+  const [coupon, setCoupon] = useState(null);
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const couponResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
+      const productResponse = await requestToBackend(`api/products/${couponResponse.data.id}`, 'get', 'json', null, null);
+      setCoupon(couponResponse.data);
+      setProduct(productResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!coupon || !product) return <div>loading...</div>
+
   return (
     <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -78,4 +68,4 @@ function Id({ session, selfUser, coupon, product }) {
   );
 }
 
-export default Id;
+export default withAuth(Id);

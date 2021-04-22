@@ -14,8 +14,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
-import requestToBackend from '../../functions/requestToBackend'
-import withAuthServerSideProps from '../../functions/withAuthServerSideProps'
+import requestToBackend from '../../../utils/requestToBackend'
+import withAuth from '../../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putSelfUser = async (session, selfUser) => {
+const putSelfUser = async (selfUser) => {
   const data = {
     email: selfUser.email,
     user_name: selfUser.user_name,
@@ -35,17 +35,10 @@ const putSelfUser = async (session, selfUser) => {
     last_name: selfUser.last_name,
     dark_mode: selfUser.dark_mode,
   };
-  return await requestToBackend(session, `/api/users/${selfUser.id}/`, 'put', 'json', data);
+  return await requestToBackend(`/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevSelfUser = selfUser;
-  return {
-    props: { session, prevSelfUser: prevSelfUser },
-  };
-})
-
-function User({ session, prevSelfUser }) {
+function User({ selfUser: prevSelfUser }) {
   const router = useRouter();
   const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
@@ -149,7 +142,7 @@ function User({ session, prevSelfUser }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putSelfUser(session, selfUser);
+            const response = await putSelfUser(selfUser);
             if (response.status === 200) {
               router.push('/myaccount/update/');
               toast.success('계정이 업데이트 되었습니다.');
@@ -201,4 +194,4 @@ function User({ session, prevSelfUser }) {
   );
 }
 
-export default User;
+export default withAuth(User);

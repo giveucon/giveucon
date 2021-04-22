@@ -14,11 +14,11 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const postCentralNotice = async (session, centralNotice) => {
+const postCentralNotice = async (centralNotice) => {
   const processedCentralNotice = {
     article: {
       title: centralNotice.title,
@@ -26,23 +26,8 @@ const postCentralNotice = async (session, centralNotice) => {
       images: centralNotice.images,
     },
   };
-  return await requestToBackend(session, 'api/central-notices/', 'post', 'multipart', jsonToFormData(processedCentralNotice), null);
+  return await requestToBackend('api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  if (!selfUser.staff) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser },
-  }
-})
 
 function Create({ session, selfUser }) {
   const router = useRouter();
@@ -123,7 +108,7 @@ function Create({ session, selfUser }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postCentralNotice(session, centralNotice);
+            const response = await postCentralNotice(centralNotice);
             console.log(response.data);
             if (response.status === 201) {
               router.push(`/central-notices/${response.data.id}/`);
@@ -151,4 +136,4 @@ function Create({ session, selfUser }) {
   );
 }
 
-export default Create;
+export default withAuth(Create);

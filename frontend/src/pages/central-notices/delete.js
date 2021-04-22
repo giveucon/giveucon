@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,33 +21,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCentralNotice = async (session, context) => {
-  return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
+const deleteCentralNotice = async (centralNotice) => {
+  return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
 
-const deleteCentralNotice = async (session, centralNotice) => {
-  return await requestToBackend(session, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
-};
+function Delete({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  if (!selfUser.staff) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  const centralNoticeResponse = await getCentralNotice(session, context);
-  return {
-    props: { session, selfUser, centralNotice: centralNoticeResponse.data },
-  };
-})
-
-function Delete({ session, selfUser, centralNotice }) {
   const router = useRouter();
   const classes = useStyles();
+
+  const [centralNotice, setCentralNotice] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      setCentralNotice(centralNoticeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!centralNotice) return <div>loading...</div>
+
   return (
     <Layout title={`공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -61,7 +54,7 @@ function Delete({ session, selfUser, centralNotice }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteCentralNotice(session, centralNotice);
+              const response = await deleteCentralNotice(centralNotice);
               if (response.status === 204) {
                 router.push(`/central-notices/`);
                 toast.success('공지사항이 삭제되었습니다.');
@@ -86,4 +79,4 @@ function Delete({ session, selfUser, centralNotice }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);

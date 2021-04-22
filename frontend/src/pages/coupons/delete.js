@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,33 +21,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCoupon = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}`, 'get', 'json');
+const deleteCoupon = async (coupon) => {
+  return await requestToBackend(`api/coupons/${coupon.id}/`, 'delete', 'json');
 };
 
-const deleteCoupon = async (session, coupon) => {
-  return await requestToBackend(session, `api/coupons/${coupon.id}/`, 'delete', 'json');
-};
+function Delete({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const couponResponse = await getCoupon(session, context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, coupon: couponResponse.data },
-  };
-})
-
-function Delete({ session, selfUser, coupon }) {
   const router = useRouter();
   const classes = useStyles();
+  const [coupon, setCoupon] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const couponResponse = await requestToBackend(`api/coupons/${router.query.id}`, 'get', 'json', null, null);
+      setCoupon(couponResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!coupon) return <div>loading...</div>
+
   return (
     <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -61,7 +53,7 @@ function Delete({ session, selfUser, coupon }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteCoupon(session, coupon);
+              const response = await deleteCoupon(coupon);
               if (response.status === 204) {
                 router.push(`/coupons/`);
                 toast.success('쿠폰이 삭제되었습니다.');
@@ -86,4 +78,4 @@ function Delete({ session, selfUser, coupon }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);
