@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,8 +17,9 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -30,15 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
-};
-
-const getStore = async (session, product) => {
-  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
-};
-
-const putProduct = async (session, product) => {
+const putProduct = async (product) => {
   const processedProduct = {
     name: product.name,
     description: product.description,
@@ -47,44 +40,21 @@ const putProduct = async (session, product) => {
     images: product.images,
     store: product.store,
   };
-  return await requestToBackend(session, `api/products/${product.id}/`, 'put', 'multipart', jsonToFormData(processedProduct), null);
+  return await requestToBackend(`api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevProductResponse = await getProduct(session, context);
-  const storeResponse = await getStore(session, prevProductResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, prevProduct: prevProductResponse.data },
-  };
-}, 'product', context.query.id)
+function Update({ selfUser }) {
 
-function Update({ session, selfUser, prevProduct }) {
   const router = useRouter();
   const classes = useStyles();
-  const [product, setProduct] = useState({
-    id: prevProduct.id,
-    name: prevProduct.name,
-    description: prevProduct.description,
-    price: prevProduct.price,
-    duration: prevProduct.duration,
-    images: prevProduct.images,
-    store: prevProduct.store,
-  });
+  const [product, setProduct] = useState(null);
   const [productError, setProductError] = useState({
     name: false,
     description: false,
     price: false,
     duration: false,
   });
+  const [store, setStore] = useState(null);
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -95,6 +65,17 @@ function Update({ session, selfUser, prevProduct }) {
       setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
+
+  useEffect(() => {
+    const fetch = async () => {
+      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      setProduct(productResponse.data);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!product || !store) return <div>loading...</div>
 
   return (
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -187,7 +168,7 @@ function Update({ session, selfUser, prevProduct }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putProduct(session, product);
+            const response = await putProduct(product);
             if (response.status === 200) {
               router.push(`/products/${response.data.id}/`);
               toast.success('상품이 업데이트 되었습니다.');
@@ -241,4 +222,4 @@ function Update({ session, selfUser, prevProduct }) {
   );
 }
 
-export default Update;
+export default withAuth(Update);

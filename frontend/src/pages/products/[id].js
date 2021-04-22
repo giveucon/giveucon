@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,27 +8,26 @@ import BusinessCard from '../../components/BusinessCard';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getProduct = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
-};
+function Id({ selfUser }) {
 
-const getStore = async (session, product) => {
-  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context);
-  const storeResponse = await getStore(session, productResponse.data);
-  return {
-    props: { session, selfUser, product: productResponse.data, store: storeResponse.data },
-  };
-})
-
-function Id({ session, selfUser, product, store }) {
   const router = useRouter();
+  const [product, setProduct] = useState(null);
+  const [store, setStore] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      setProduct(productResponse.data);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!product || !store) return <div>loading...</div>
+
   return (
     <Layout title={`${product.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -102,4 +101,4 @@ function Id({ session, selfUser, product, store }) {
   );
 }
 
-export default Id;
+export default withAuth(Id);

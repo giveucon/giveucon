@@ -21,7 +21,7 @@ function List({ selfUser }) {
   useEffect(() => {
     const fetch = async () => {
       const storeListResponse = await requestToBackend('api/stores/', 'get', 'json', null, {
-        user: router.query.user || null
+        user: router.query.user || null,
       });
       const userResponse = await requestToBackend(`api/users/${router.query.user}`, 'get', 'json', null, null);
       setStoreList(storeListResponse.data);

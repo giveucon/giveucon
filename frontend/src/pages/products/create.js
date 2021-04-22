@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import Uppy from '@uppy/core'
@@ -15,15 +15,11 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
-};
-
-const postProduct = async (session, product) => {
+const postProduct = async (product) => {
   const processedProduct = {
     name: product.name,
     description: product.description,
@@ -32,34 +28,19 @@ const postProduct = async (session, product) => {
     images: product.images,
     store: product.store,
   };
-  return await requestToBackend(session, '/api/products/', 'post', 'multipart', jsonToFormData(processedProduct), null);
+  return await requestToBackend('/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeResponse = await getStore(session, context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, store: storeResponse.data },
-  };
-})
-
-function Create({ session, selfUser, store }) {
+function Create({ selfUser }) {
   const router = useRouter();
+  const [store, setStore] = useState(null);
   const [product, setProduct] = useState({
     name: null,
     description: null,
     price: 0,
     duration: 0,
     images: [],
-    store: store.id,
+    store: null,
   });
   const [productError, setProductError] = useState({
     name: false,
@@ -77,6 +58,16 @@ function Create({ session, selfUser, store }) {
       setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeResponse = await requestToBackend(`api/stores/${router.query.store}`, 'get', 'json', null, null);
+      setStore(storeResponse.data);
+      setProduct(prevProduct => ({ ...prevProduct, store: storeResponse.data.id }));
+    }
+    fetch();
+  }, []);
+  if (!store) return <div>loading...</div>
 
   return (
     <Layout title={`상품 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -169,7 +160,7 @@ function Create({ session, selfUser, store }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postProduct(session, product);
+            const response = await postProduct(product);
             if (response.status === 201) {
               router.push(`/products/${response.data.id}/`);
               toast.success('상품이 생성되었습니다.');
@@ -206,4 +197,4 @@ function Create({ session, selfUser, store }) {
   );
 }
 
-export default Create;
+export default withAuth(Create);
