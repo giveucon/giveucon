@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useRouter } from 'next/router'
-import { getSession } from 'next-auth/client';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -11,22 +9,21 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import useSWR from 'swr';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import backendFetcher from '../functions/backendFetcher'
-
+import fetchFromBackend from '../../utils/fetchFromBackend'
 
 const getSelfAccount = async () => {
-  return await backendFetcher('api/accounts/self/', 'get', 'json', null, null);
+  return await fetchFromBackend('api/accounts/self/', 'get', 'json', null, null);
 };
 
 const postSelfUser = async (selfUser) => {
-  return await backendFetcher('api/users/', 'post', 'json', selfUser, null);
+  return await fetchFromBackend('api/users/', 'post', 'json', selfUser, null);
 };
 
-const useFetch = () => {
+function Create() {
+  const router = useRouter();
   const [selfUser, setSelfUser] = useState({
     email: null,
     user_name: null,
@@ -34,20 +31,6 @@ const useFetch = () => {
     last_name: null,
     dark_mode: false,
   });
-  useEffect(async () => {
-    const selfAccountResponse = await getSelfAccount();
-    setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: selfAccountResponse.data.email }));
-    setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: selfAccountResponse.data.username }));
-  }, []);
-
-  return selfUser;
-};
-
-function Create() {
-  const router = useRouter();
-  const remoteName = useFetch();
-  
-  const [selfUser, setSelfUser] = useState(remoteName);
   const [selfUserError, setSelfUserError] = useState({
     email: false,
     user_name: false,
@@ -55,14 +38,17 @@ function Create() {
     last_name: false,
   });
 
-  useEffect(
-    () => {
-      console.log("inside effect");
-      setSelfUser(remoteName);
-    },
-    [remoteName]
-  );
-
+  useEffect(() => {
+    const fetchSelfAccount = async () => {
+      const selfAccountResponse = await getSelfAccount();
+      setSelfUser(prevSelfUser => ({
+        ...prevSelfUser,
+        email: selfAccountResponse.data.email,
+        user_name: selfAccountResponse.data.username
+      }));
+    }
+    fetchSelfAccount();
+  },[]);
 
   return (
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

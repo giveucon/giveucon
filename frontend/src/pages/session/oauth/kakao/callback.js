@@ -12,7 +12,7 @@ const getTokens = async (code) => {
       params: {
         grant_type: 'authorization_code',
         client_id: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
-        redirect_uri: process.env.NEXTAUTH_URL + 'session/oauth/kakao/callback/',
+        redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + 'session/oauth/kakao/callback/',
         code,
         client_secret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
       }
@@ -62,7 +62,6 @@ export async function getServerSideProps(ctx) {
   const tokenResponse = await getTokens(ctx.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
-  console.log(loginRefreshResponse.data);
   return {
     props: {loginRefresh: loginRefreshResponse.data}
   };
@@ -80,8 +79,8 @@ export default function Callback({loginRefresh}) {
   };
   useEffect(() => {
     setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
+      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     });
     router.push('/');
   });

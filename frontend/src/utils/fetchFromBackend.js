@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { parseCookies, setCookie } from 'nookies'
 import toast from 'react-hot-toast';
-import refresh from '../session/refresh'
+
+import refreshSession from './refreshSession';
 
 const jsonRequest = async (session, url, method, data, params) => {
   return await axios({
@@ -41,9 +41,9 @@ const multipartRequest = async (session, url, method, data, params) => {
   });
 }
 
-export default async function backendFetcher(url, method, contentType, data=null, params=null) {
+export default async function fetchFromBackend(url, method, contentType, data=null, params=null) {
 
-  const session = await refresh();
+  const session = await refreshSession();
 
   let response = null;
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
