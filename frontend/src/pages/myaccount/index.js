@@ -1,6 +1,6 @@
 import React from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Index({ selfUser }) {
+function Index({ authLoading, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -37,10 +37,11 @@ function Index({ selfUser }) {
       <Section
         title='내 정보'
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
+        loading={authLoading}
       >
         <UserProfileBox
-          name={selfUser.user_name}
-          subtitle={selfUser.email}
+          name={selfUser?.user_name}
+          subtitle={selfUser?.email}
           image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
         />
         <Box marginY={1}>
@@ -50,7 +51,7 @@ function Index({ selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/stores/list/',
-              query: { user: selfUser.id },
+              query: { user: selfUser?.id },
             })}
           >
             내 가게
@@ -63,7 +64,7 @@ function Index({ selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/products/list/',
-              query: { user: selfUser.id },
+              query: { user: selfUser?.id },
             })}
           >
             내 상품
@@ -76,7 +77,7 @@ function Index({ selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupons/list/',
-              query: { user: selfUser.id },
+              query: { user: selfUser?.id },
             })}
           >
             내 쿠폰
@@ -86,6 +87,7 @@ function Index({ selfUser }) {
       <Section
         title='관리'
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        loading={authLoading}
       >
         <Box marginY={1}>
           <Button
@@ -121,6 +123,7 @@ function Index({ selfUser }) {
       <Section
         title='개발자 도구'
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
+        loading={authLoading}
       >
         <Box marginY={1}>
           <Button
