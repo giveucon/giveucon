@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { parseCookies, setCookie } from 'nookies'
 
-const socialLoginRefresh = async (session) => {
+const requestRefreshTokens = async (session) => {
   try {
     const response = await axios({
       url: 'api/rest-auth/token/refresh/',
@@ -18,11 +18,10 @@ const socialLoginRefresh = async (session) => {
   }
 };
 
-export default async function refresh() {
+export default async function refreshSession() {
   const cookies = parseCookies()
   const session = JSON.parse(cookies.giveucon);
-  console.log(session);
-  const loginRefreshResponse = await socialLoginRefresh(session);
+  const loginRefreshResponse = await requestRefreshTokens(session);
   const giveuconToken = {
     'access_token': loginRefreshResponse.data.access,
     'refresh_token': loginRefreshResponse.data.refresh,
@@ -32,9 +31,10 @@ export default async function refresh() {
     'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
   };
   setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
-    maxAge: 30 * 24 * 60 * 60,
-    path: '/',
+    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
   })
   console.log('refresh.js : Token refreshed');
+  console.log(giveuconToken);
   return giveuconToken;
 }

@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../components/AlertBox'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
-import withAuthServerSideProps from './functions/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {

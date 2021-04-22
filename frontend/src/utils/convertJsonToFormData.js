@@ -8,7 +8,7 @@ function isJsonObject(val) {
   return !isArray(val) && typeof val === 'object' && !!val && !(val instanceof Blob) && !(val instanceof Date);
 }
 
-function jsonToFormDataRecursive(jsonObject, formData, parentKey) {
+function convertJsonToFormDataRecursive(jsonObject, formData, parentKey) {
   
   for (const key in jsonObject) {
 
@@ -40,9 +40,9 @@ function jsonToFormDataRecursive(jsonObject, formData, parentKey) {
   return formData;
 }
 
-export default function jsonToFormData(jsonObject) {
+export default function convertJsonToFormData(jsonObject) {
   let formData = new FormData();
-  jsonToFormDataRecursive(jsonObject, formData);
+  convertJsonToFormDataRecursive(jsonObject, formData);
   /*
   for (var pair of formData.entries()) {
     console.log(pair[0]+ ', ' + pair[1]); 

@@ -16,8 +16,8 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
-import backendFetcher from './functions/backendFetcher'
-import withAuth from './functions/withAuth'
+import fetchFromBackend from '../utils/fetchFromBackend'
+import withAuth from '../utils/withAuth'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -55,13 +55,13 @@ const geoRecommendedCouponList = [
   />
 ]
 
-function Home() {
-  const {data: centralNoticeList, error: centralNoticeListError} = useSWR(
-    [`api/central-notices/`, 'get', 'json', null, null],
-     (url, method, contentType, data, params) => backendFetcher(url, method, contentType, data, params)
-  );
+function Home({ selfUser }) {
   const router = useRouter();
-  if (centralNoticeListError) return <div>failed to load</div>
+  const {data: centralNoticeList, error: centralNoticeListSWRError} = useSWR(
+    [`api/central-notices/`, 'get', 'json', null, null],
+     (url, method, contentType, data, params) => fetchFromBackend(url, method, contentType, data, params)
+  );
+  if (centralNoticeListSWRError) return <div>failed to load</div>
   if (!centralNoticeList) return <div>loading...</div>
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
