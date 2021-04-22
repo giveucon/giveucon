@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,8 +17,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import jsonToFormData from '../jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -30,15 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreNotice = async (session, context) => {
-  return await requestToBackend(session, `api/store-notices/${context.query.id}/`, 'get', 'json');
-};
-
-const getStore = async (session, StoreNotice) => {
-  return await requestToBackend(session, `api/stores/${StoreNotice.store}/`, 'get', 'json');
-};
-
-const putStoreNotice = async (session, storeNotice) => {
+const putStoreNotice = async (storeNotice) => {
   const processedStoreNotice = {
     article: {
       title: storeNotice.title,
@@ -47,36 +39,14 @@ const putStoreNotice = async (session, storeNotice) => {
     },
     store: storeNotice.store,
   };
-  return await requestToBackend(session, 'api/store-notices/', 'put', 'multipart', jsonToFormData(processedStoreNotice), null);
+  return await requestToBackend('api/store-notices/', 'put', 'multipart', jsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevStoreNoticeResponse = await getStoreNotice(session, context);
-  const storeResponse = await getStore(session, prevStoreNoticeResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
-  };
-})
+function Update({ selfUser }) {
 
-function Update({ session, selfUser, prevStoreNotice }) {
   const router = useRouter();
   const classes = useStyles();
-  const [storeNotice, setStoreNotice] = useState({
-    id: prevStoreNotice.id,
-    title: prevStoreNotice.title,
-    content: prevStoreNotice.content,
-    images: prevStoreNotice.images,
-    store: prevStoreNotice.store,
-  });
+  const [storeNotice, setStoreNotice] = useState(null);
   const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
     content: false,
@@ -91,6 +61,15 @@ function Update({ session, selfUser, prevStoreNotice }) {
       setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
+      setStoreNotice(storeNoticeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!storeNotice) return <div>loading...</div>
 
   return (
     <Layout title={`가게 공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -149,7 +128,7 @@ function Update({ session, selfUser, prevStoreNotice }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStoreNotice(session, storeNotice);
+            const response = await putStoreNotice(storeNotice);
             if (response.status === 200) {
               router.push(`/store-notices/${response.data.id}/`);
               toast.success('가게 공지사항이 업데이트 되었습니다.');
@@ -193,4 +172,4 @@ function Update({ session, selfUser, prevStoreNotice }) {
   );
 }
 
-export default Update;
+export default withAuth(Update);

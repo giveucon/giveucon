@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,31 +9,29 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getStoreNoticeList = async (session, context) => {
-  const params = {
-    user: context.query.user || null,
-    store: context.query.store || null,
-  };
-  return await requestToBackend(session, 'api/stores', 'get', 'json', null, params);
-};
+function List({ selfUser }) {
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeListResponse = await getStoreNoticeList(session, context);
-  const storeResponse = await getStore(session, context);
-  return {
-    props: { session, selfUser, storeList: storeListResponse.data, store: storeResponse.data },
-  };
-})
-
-function List({ session, selfUser, storeList, store }) {
   const router = useRouter();
+  const [storeNotice, setStoreNotice] = useState(null);
+  const [store, setStore] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeNoticeResponse = await requestToBackend('api/store-notices', 'get', 'json', null, {
+        user: router.query.user || null,
+        store: router.query.store || null,
+      });
+      const storeResponse = await requestToBackend(`api/stores/${router.query.id}/`, 'get', 'json', null, null);
+      setStoreNotice(storeNoticeResponse.data);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!storeNotice || !store) return <div>loading...</div>
+
   return (
     <Layout title={`가게 공지사항 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -78,4 +76,4 @@ function List({ session, selfUser, storeList, store }) {
   );
 }
 
-export default List;
+export default withAuth(List);

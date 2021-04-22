@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,38 +21,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreNotice = async (session, context) => {
-  return await requestToBackend(session, `api/store-notices/${context.query.id}/`, 'get', 'json');
+const deleteStoreNotice = async (storeNotice) => {
+  return await requestToBackend(`api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 };
 
-const getStore = async (session, StoreNotice) => {
-  return await requestToBackend(session, `api/stores/${StoreNotice.store}/`, 'get', 'json');
-};
+function Delete({ selfUser }) {
 
-const deleteStoreNotice = async (session, storeNotice) => {
-  return await requestToBackend(session, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeNoticeResponse = await getStoreNotice(session, context);
-  const storeResponse = await getStore(session, storeNoticeResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, storeNotice: storeNoticeResponse.data },
-  };
-})
-
-function Delete({ session, selfUser, storeNotice }) {
   const router = useRouter();
   const classes = useStyles();
+  const [storeNotice, setStoreNotice] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
+      setStoreNotice(storeNoticeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!storeNotice) return <div>loading...</div>
+
   return (
     <Layout title={`가게 공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -66,7 +53,7 @@ function Delete({ session, selfUser, storeNotice }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteStoreNotice(session, storeNotice);
+              const response = await deleteStoreNotice(storeNotice);
               if (response.status === 204) {
                 router.push(`/stores/${storeNotice.store}/`);
                 toast.success('가게 공지사항이 삭제되었습니다.');
@@ -91,4 +78,4 @@ function Delete({ session, selfUser, storeNotice }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);

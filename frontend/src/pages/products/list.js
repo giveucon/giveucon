@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -10,35 +10,32 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getProductList = async (session, context) => {
-  const params = {
-    user: context.query.user || null,
-    store: context.query.store || null,
-  };
-  return await requestToBackend(session, 'api/products', 'get', 'json', null, params);
-};
+function List({ selfUser }) {
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productListResponse = await getProductList(session, context);
-  const storeResponse = context.query.store && await getStore(session, context);
-  return {
-    props: {
-      session,
-      selfUser,
-      productList: productListResponse.data,
-      store: context.query.store ? storeResponse.data : null },
-  };
-})
-
-function List({ session, selfUser, productList, store }) {
   const router = useRouter();
+  const [productList, setProductList] = useState(null);
+  const [user, setUser] = useState(null);
+  const [store, setStore] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const productListResponse = await requestToBackend('api/products/', 'get', 'json', null, {
+        user: router.query.user || null,
+        store: router.query.store || null,
+      });
+      const userResponse = await requestToBackend(`api/users/${router.query.user}`, 'get', 'json', null, null);
+      const storeResponse = await requestToBackend(`api/stores/${router.query.store}`, 'get', 'json', null, null);
+      setProductList(productListResponse.data);
+      setUser(userResponse.data);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!productList) return <div>loading...</div>
+
   return (
     <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -84,4 +81,4 @@ function List({ session, selfUser, productList, store }) {
   );
 }
 
-export default List;
+export default withAuth(List);

@@ -181,7 +181,7 @@ function Id({ selfUser }) {
               variant='contained'
               onClick={() => router.push({
                 pathname: '/store-notices/create/',
-                query: { id: store.id },
+                query: { store: store.id },
               })}
             >
               가게 공지사항 추가

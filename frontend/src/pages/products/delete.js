@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,38 +21,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
+const deleteProduct = async (product) => {
+  return await requestToBackend(`api/products/${product.id}/`, 'delete', 'json');
 };
 
-const getStore = async (session, product) => {
-  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
-};
+function Delete({ selfUser }) {
 
-const deleteProduct = async (session, product) => {
-  return await requestToBackend(session, `api/products/${product.id}/`, 'delete', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context);
-  const storeResponse = await getStore(session, productResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, product: productResponse.data },
-  };
-})
-
-function Delete({ session, selfUser, product }) {
   const router = useRouter();
   const classes = useStyles();
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+      setProduct(productResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!product) return <div>loading...</div>
+
   return (
     <Layout title={`상품 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -66,7 +53,7 @@ function Delete({ session, selfUser, product }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteProduct(session, product);
+              const response = await deleteProduct(product);
               if (response.status === 204) {
                 router.push(`/stores/${product.store}/`);
                 toast.success('상품이 삭제되었습니다.');
@@ -91,4 +78,4 @@ function Delete({ session, selfUser, product }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);

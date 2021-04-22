@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,25 +11,25 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getCouponList = async (session, selfUser) => {
-  const params = {
-    user: selfUser.id,
-  };
-  return await requestToBackend(session, 'api/coupons/', 'get', 'json', null, params);
-};
+function Index({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const selfCouponListResponse = await getCouponList(session, selfUser);
-  return {
-    props: { session, selfUser, selfCouponList: selfCouponListResponse.data },
-  };
-})
-
-function Index({ session, selfUser, selfCouponList }) {
   const router = useRouter();
+  const [selfCouponList, setSelfCouponList] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const selfCouponListResponse = await requestToBackend('api/coupons/', 'get', 'json', null, {
+        user: selfUser.id
+      });
+      setSelfCouponList(selfCouponListResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!selfCouponList) return <div>loading...</div>
+
   return (
     <>
     <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -68,4 +68,4 @@ function Index({ session, selfUser, selfCouponList }) {
   );
 }
 
-export default Index;
+export default withAuth(Index);

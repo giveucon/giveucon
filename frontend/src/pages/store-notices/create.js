@@ -14,15 +14,11 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.store}/`, 'get', 'json');
-};
-
-const postStoreNotice = async (session, storeNotice) => {
+const postStoreNotice = async (storeNotice) => {
   const processedStoreNotice = {
     article: {
       title: storeNotice.title,
@@ -31,26 +27,11 @@ const postStoreNotice = async (session, storeNotice) => {
     },
     store: storeNotice.store,
   };
-  return await requestToBackend(session, 'api/store-notices/', 'post', 'multipart', jsonToFormData(processedStoreNotice), null);
+  return await requestToBackend('api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeResponse = await getStore(session, context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, store: storeResponse.data },
-  }
-})
+function Create({ selfUser }) {
 
-function Create({ session, selfUser, store }) {
   const router = useRouter();
   const [storeNotice, setStoreNotice] = useState({
     title: null,
@@ -130,7 +111,7 @@ function Create({ session, selfUser, store }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postStoreNotice(session, storeNotice);
+            const response = await postStoreNotice(storeNotice);
             console.log(response.data);
             if (response.status === 201) {
               router.push(`/store-notices/${response.data.id}/`);
@@ -158,4 +139,4 @@ function Create({ session, selfUser, store }) {
   );
 }
 
-export default Create;
+export default withAuth(Create);

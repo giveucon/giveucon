@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
@@ -7,36 +7,35 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getProduct = async (session, context) => {
-  return await requestToBackend(session, `api/products/${context.query.id}/`, 'get', 'json');
-};
-
-const getStore = async (session, product) => {
-  return await requestToBackend(session, `api/stores/${product.store}/`, 'get', 'json');
-};
-
-const postCoupon = async (session, selfUser, product) => {
+const postCoupon = async (selfUser, product) => {
   const data = {
     used: false,
     user: selfUser.id,
     product: product.id,
   };
-  return await requestToBackend(session, `api/coupons/`, 'post', 'json', data, null);
+  return await requestToBackend(`api/coupons/`, 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const productResponse = await getProduct(session, context);
-  const storeResponse = await getStore(session, productResponse.data);
-  return {
-    props: { session, selfUser, product: productResponse.data, store: storeResponse.data },
-  };
-})
+function Charge({ selfUser }) {
 
-function Charge({ session, selfUser, product, store }) {
   const router = useRouter();
+  const [product, setProduct] = useState(null);
+  const [store, setStore] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      setProduct(productResponse.data);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!product || !store) return <div>loading...</div>
+
   return (
     <Layout title={`${product.name} 구매 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -56,7 +55,7 @@ function Charge({ session, selfUser, product, store }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await postCoupon(session, selfUser, product);
+              const response = await postCoupon(selfUser, product);
               if (response.status === 200) {
                 router.push(`/coupons/${response.data.id}/`);
                 toast.success('상품 결재가 완료되었습니다.');
@@ -81,4 +80,4 @@ function Charge({ session, selfUser, product, store }) {
   );
 }
 
-export default Charge;
+export default withAuth(Charge);
