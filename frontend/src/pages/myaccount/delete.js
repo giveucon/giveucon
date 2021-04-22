@@ -1,6 +1,5 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -9,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -22,19 +21,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteSelfUser = async (session, selfUser) => {
-  return await requestToBackend(session, `api/users/${selfUser.id}/`, 'delete', 'json');
+const deleteSelfUser = async (selfUser) => {
+  return await requestToBackend(`api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  }
-})
+function Delete({ selfUser }) {
 
-function Delete({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
+
   return (
     <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -48,9 +43,9 @@ function Delete({ session, selfUser }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteSelfUser(session, selfUser);
+              const response = await deleteSelfUser(selfUser);
               if (response.status === 204) {
-                signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/` })
+                router.push('/session/logout');
                 toast.success('계정 탈퇴가 완료되었습니다.');
               }
             }}
@@ -73,4 +68,4 @@ function Delete({ session, selfUser }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);

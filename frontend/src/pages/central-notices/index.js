@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -13,22 +13,23 @@ import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getCentralNoticeList = async (session) => {
-  return await requestToBackend(session, 'api/central-notices/', 'get', 'json');
-};
+function Index({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const centralNoticeListResponse = await getCentralNoticeList(session);
-  return {
-    props: { session, selfUser, centralNoticeList: centralNoticeListResponse.data },
-  };
-})
-
-function Index({ session, selfUser, centralNoticeList }) {
   const router = useRouter();
+  const [centralNoticeList, setCentralNoticeList] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
+      setCentralNoticeList(centralNoticeListResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!centralNoticeList) return <div>loading...</div>
+
   return (
     <Layout title={`공지사항 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -91,4 +92,4 @@ function Index({ session, selfUser, centralNoticeList }) {
   );
 }
 
-export default Index;
+export default withAuth(Index);

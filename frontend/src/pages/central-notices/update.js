@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,9 +16,9 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -30,11 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCentralNotice = async (session, context) => {
-  return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
-};
-
-const putCentralNotice = async (session, centralNotice) => {
+const putCentralNotice = async (centralNotice) => {
   const processedCentralNotice = {
     article: {
       title: centralNotice.title,
@@ -42,34 +38,14 @@ const putCentralNotice = async (session, centralNotice) => {
       images: centralNotice.images,
     },
   };
-  return await requestToBackend(session, 'api/central-notices/', 'put', 'multipart', jsonToFormData(processedCentralNotice), null);
+  return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  if (!selfUser.staff) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  const prevCentralNoticeResponse = await getCentralNotice(session, context);
-  return {
-    props: { session, selfUser, prevCentralNotice: prevCentralNoticeResponse.data },
-  };
-})
+function Update({ selfUser }) {
 
-function Update({ session, selfUser, prevCentralNotice }) {
   const router = useRouter();
   const classes = useStyles();
-  const [centralNotice, setCentralNotice] = useState({
-    id: prevCentralNotice.id,
-    title: prevCentralNotice.title,
-    content: prevCentralNotice.content,
-    images: prevCentralNotice.images,
-  });
+  const [centralNotice, setCentralNotice] = useState(null);
   const [centralNoticeError, setCentralNoticeError] = useState({
     title: false,
     content: false,
@@ -84,6 +60,15 @@ function Update({ session, selfUser, prevCentralNotice }) {
       setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
+
+  useEffect(() => {
+    const fetch = async () => {
+      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      setCentralNotice(centralNoticeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!centralNotice) return <div>loading...</div>
 
   return (
     <Layout title={`공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -142,7 +127,7 @@ function Update({ session, selfUser, prevCentralNotice }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putCentralNotice(session, centralNotice);
+            const response = await putCentralNotice(centralNotice);
             if (response.status === 200) {
               router.push(`/central-notices/${response.data.id}/`);
               toast.success('공지사항이 업데이트 되었습니다.');
@@ -186,4 +171,4 @@ function Update({ session, selfUser, prevCentralNotice }) {
   );
 }
 
-export default Update;
+export default withAuth(Update);

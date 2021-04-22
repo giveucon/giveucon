@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -6,22 +6,23 @@ import Button from '@material-ui/core/Button';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getCentralNotice = async (session, context) => {
-  return await requestToBackend(session, `api/central-notices/${context.query.id}/`, 'get', 'json');
-};
+function Id({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const centralNoticeResponse = await getCentralNotice(session, context);
-  return {
-    props: { session, selfUser, centralNotice: centralNoticeResponse.data },
-  };
-})
-
-function Id({ session, selfUser, centralNotice }) {
   const router = useRouter();
+  const [centralNotice, setCentralNotice] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      setCentralNotice(centralNoticeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!centralNotice) return <div>loading...</div>
+
   return (
     <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -59,4 +60,4 @@ function Id({ session, selfUser, centralNotice }) {
   );
 }
 
-export default Id;
+export default withAuth(Id);

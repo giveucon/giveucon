@@ -6,27 +6,21 @@ import Card from '@material-ui/core/Card';
 
 import Layout from '../../components/Layout';
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const putCouponScan = async (session, qrData) => {
+const putCouponScan = async (qrData) => {
   const data = {
     qr_data: qrData
   };
-  return await requestToBackend(session, 'api/coupons/scan/', 'put', 'json', data, null);
+  return await requestToBackend('api/coupons/scan/', 'put', 'json', data, null);
 };
 
-const getCoupon = async (session, qrData) => {
-  return await requestToBackend(session, `api/products/${qrData.id}`, 'get', 'json');
+const getCoupon = async (qrData) => {
+  return await requestToBackend(`api/products/${qrData.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  };
-})
-
-function Scan({ session, selfUser }) {
+function Scan({ selfUser }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -43,10 +37,10 @@ function Scan({ session, selfUser }) {
       canvas.stroke();
     }
 
-    async function verifyQRData(session, qrData) {
-      const couponScanResponse = await putCouponScan(session, qrData);
+    async function verifyQRData(qrData) {
+      const couponScanResponse = await putCouponScan(qrData);
       if (couponScanResponse.status === 200) {
-        const couponResponse = await getCoupon(session, qrData);
+        const couponResponse = await getCoupon(qrData);
         if (couponResponse.status === 200) return true;
         else return false;
       }
@@ -67,7 +61,7 @@ function Scan({ session, selfUser }) {
           drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
           const qrData = JSON.parse(code.data)
-          if (verifyQRData(session, qrData) === true) {
+          if (verifyQRData(qrData) === true) {
             console.log(video.srcObject.getTracks())
             video.srcObject.getTracks().forEach(
               track => {
@@ -108,4 +102,4 @@ function Scan({ session, selfUser }) {
   );
 }
 
-export default Scan;
+export default withAuth(Scan);

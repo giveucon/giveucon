@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Index({ selfUserResponse }) {
+function Index({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -39,8 +39,8 @@ function Index({ selfUserResponse }) {
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <UserProfileBox
-          name={selfUserResponse.data.user_name}
-          subtitle={selfUserResponse.data.email}
+          name={selfUser.user_name}
+          subtitle={selfUser.email}
           image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
         />
         <Box marginY={1}>
@@ -50,7 +50,7 @@ function Index({ selfUserResponse }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/stores/list/',
-              query: { user: selfUserResponse.data.id },
+              query: { user: selfUser.id },
             })}
           >
             내 가게
@@ -63,7 +63,7 @@ function Index({ selfUserResponse }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/products/list/',
-              query: { user: selfUserResponse.data.id },
+              query: { user: selfUser.id },
             })}
           >
             내 상품
@@ -76,7 +76,7 @@ function Index({ selfUserResponse }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupons/list/',
-              query: { user: selfUserResponse.data.id },
+              query: { user: selfUser.id },
             })}
           >
             내 쿠폰
