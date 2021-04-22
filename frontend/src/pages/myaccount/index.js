@@ -16,7 +16,8 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileBox from '../../components/UserProfileBox'
 import withAuthServerSideProps from '../functions/withAuthServerSideProps'
-import backendSWRFetcher from '../functions/backendSWRFetcher'
+import backendFetcher from '../functions/backendFetcher'
+import withAuth from '../functions/withAuth'
 
 import refresh from '../session/refresh'
 
@@ -50,7 +51,7 @@ const selfUserFetcher = async (url, method, contentType, data, params) => {
 function Index() {
   const {data: selfUser, error: selfUserError} = useSWR(
     [`api/users/self/`, 'get', 'json', null, null],
-     (url, method, contentType, data, params) => backendSWRFetcher(url, method, contentType, data, params)
+     (url, method, contentType, data, params) => backendFetcher(url, method, contentType, data, params)
   );
   const router = useRouter();
   const classes = useStyles();
@@ -69,8 +70,8 @@ function Index() {
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <UserProfileBox
-          name={selfUser?.user_name || 'Hi'}
-          subtitle={selfUser?.email || 'HIHIHI'}
+          name={selfUser.data.user_name}
+          subtitle={selfUser.data.email}
           image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
         />
         <Box marginY={1}>
@@ -80,7 +81,7 @@ function Index() {
             variant='contained'
             onClick={() => router.push({
               pathname: '/stores/list/',
-              query: { user: selfUser.id },
+              query: { user: selfUser.data.id },
             })}
           >
             내 가게
@@ -199,4 +200,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default withAuth(Index);

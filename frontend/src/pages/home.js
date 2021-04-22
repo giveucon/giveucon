@@ -8,7 +8,6 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import useSWR from 'swr';
 
 import BusinessCard from '../components/BusinessCard'
@@ -17,8 +16,8 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
-import backendSWRFetcher from './functions/backendSWRFetcher'
-import withAuthServerSideProps from './functions/withAuthServerSideProps'
+import backendFetcher from './functions/backendFetcher'
+import withAuth from './functions/withAuth'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -57,16 +56,13 @@ const geoRecommendedCouponList = [
 ]
 
 function Home() {
-  useEffect(() => {
-    const cookies = parseCookies()
-    console.log(cookies);
-    const session = JSON.parse(cookies.giveucon);
-  });
   const {data: centralNoticeList, error: centralNoticeListError} = useSWR(
     [`api/central-notices/`, 'get', 'json', null, null],
-     (url, method, contentType, data, params) => backendSWRFetcher(url, method, contentType, data, params)
+     (url, method, contentType, data, params) => backendFetcher(url, method, contentType, data, params)
   );
   const router = useRouter();
+  if (centralNoticeListError) return <div>failed to load</div>
+  if (!centralNoticeList) return <div>loading...</div>
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -116,4 +112,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withAuth(Home);

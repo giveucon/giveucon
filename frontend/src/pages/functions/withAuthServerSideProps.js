@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/client';
 import nookies from 'nookies'
-import backendSWRFetcher from './backendSWRFetcher';
+import backendFetcher from './backendFetcher';
 
 export default function withAuthServerSideProps(getServerSidePropsFunction, authType, keyword) {
   return async (ctx) => {
@@ -19,7 +19,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
     }
     
     const session = JSON.parse(cookies.giveucon);
-    const selfUserResponse = await backendSWRFetcher('api/users/self/', 'get', 'json');
+    const selfUserResponse = await backendFetcher('api/users/self/', 'get', 'json');
 
     // If account founded but no user models linked
     if (selfUserResponse.status === (403 || 404)) {

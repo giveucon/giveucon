@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/router'
@@ -11,42 +11,59 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import useSWR from 'swr';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
+import backendFetcher from '../functions/backendFetcher'
 
-const getSelfAccount = async (session, context) => {
-  return await requestToBackend(session, 'api/accounts/self/', 'get', 'json');
+
+const getSelfAccount = async () => {
+  return await backendFetcher('api/accounts/self/', 'get', 'json', null, null);
 };
 
-const postSelfUser = async (session, selfUser) => {
-  return await requestToBackend(session, 'api/users/', 'post', 'json', selfUser, null);
+const postSelfUser = async (selfUser) => {
+  return await backendFetcher('api/users/', 'post', 'json', selfUser, null);
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  const selfAccountResponse = await getSelfAccount(session);
-  return {
-    props: { session, selfAccount: selfAccountResponse.data }
-  };
-}
-
-function Create({ session, selfAccount }) {
-  const router = useRouter();
+const useFetch = () => {
   const [selfUser, setSelfUser] = useState({
-    email: selfAccount.email,
-    user_name: selfAccount.username,
+    email: null,
+    user_name: null,
     first_name: null,
     last_name: null,
     dark_mode: false,
   });
+  useEffect(async () => {
+    const selfAccountResponse = await getSelfAccount();
+    setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: selfAccountResponse.data.email }));
+    setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: selfAccountResponse.data.username }));
+  }, []);
+
+  return selfUser;
+};
+
+function Create() {
+  const router = useRouter();
+  const remoteName = useFetch();
+  
+  const [selfUser, setSelfUser] = useState(remoteName);
   const [selfUserError, setSelfUserError] = useState({
     email: false,
     user_name: false,
     first_name: false,
     last_name: false,
   });
+
+  useEffect(
+    () => {
+      console.log("inside effect");
+      setSelfUser(remoteName);
+    },
+    [remoteName]
+  );
+
+
   return (
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -65,6 +82,9 @@ function Create({ session, selfAccount }) {
             error={selfUserError.email}
             fullWidth
             label='이메일'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: event.target.value }));
             }}
@@ -78,6 +98,9 @@ function Create({ session, selfAccount }) {
             error={selfUserError.user_name}
             fullWidth
             label='유저네임'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: event.target.value }));
             }}
@@ -91,6 +114,9 @@ function Create({ session, selfAccount }) {
             error={selfUserError.last_name}
             fullWidth
             label='성'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, last_name: event.target.value }));
             }}
@@ -104,6 +130,9 @@ function Create({ session, selfAccount }) {
             error={selfUserError.first_name}
             fullWidth
             label='이름'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, first_name: event.target.value }));
             }}
@@ -134,7 +163,7 @@ function Create({ session, selfAccount }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postSelfUser(session, selfUser);
+            const response = await postSelfUser(selfUser);
             if (response.status === 201) {
               router.push(`/myaccount/`);
               toast.success('계정이 생성되었습니다.');

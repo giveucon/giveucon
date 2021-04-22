@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  };
-})
-
 function Logout({ session, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
@@ -41,10 +35,7 @@ function Logout({ session, selfUser }) {
             className={classes.RedButton}
             fullWidth
             variant='contained'
-            onClick={() => {
-              signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/` })
-              router.push(`/login/`)
-            }}
+            onClick={() => router.push('/session/logout')}
           >
             로그아웃
           </Button>

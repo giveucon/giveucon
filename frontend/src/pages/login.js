@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { signIn, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -65,7 +64,7 @@ function Login({ session }) {
                 className={classes.kakaoButton}
                 fullWidth
                 variant='contained'
-                onClick={() => signIn('kakao')}
+                onClick={() => router.push('/session/login')}
               >
                 카카오 계정으로 로그인
               </Button>
@@ -75,13 +74,6 @@ function Login({ session }) {
       </Box>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  return {
-    props: { session }
-  }
 }
 
 export default Login;
