@@ -15,7 +15,11 @@ const jsonRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(res => res.data);
+  }).then(res => {
+    return {status: res.status, data: res.data}
+  }).catch(error => {
+    return {status: error.response.status, data: error.response.data}
+  });
 }
 
 const multipartRequest = async (session, url, method, data, params) => {
@@ -30,10 +34,14 @@ const multipartRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(res => res.data);
+  }).then(res => {
+    return {status: res.status, data: res.data}
+  }).catch(error => {
+    return {status: error.response.status, data: error.response.data}
+  });
 }
 
-export default async function backendSWRFetcher(url, method, contentType, data=null, params=null) {
+export default async function backendFetcher(url, method, contentType, data=null, params=null) {
 
   const session = await refresh();
 
