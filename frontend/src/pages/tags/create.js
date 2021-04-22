@@ -7,32 +7,17 @@ import TextField from '@material-ui/core/TextField';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const postTag = async (session, tag) => {
+const postTag = async (tag) => {
   const data = {
     name: tag.name,
   }
-  return await requestToBackend(session, 'api/tags/', 'post', 'json', data, null);
+  return await requestToBackend('api/tags/', 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  if (!selfUser.staff) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser },
-  };
-})
-
-function Create({ session, selfUser }) {
+function Create({ selfUserResponse }) {
   const router = useRouter();
   const [tag, setTag] = useState({
     name: null,
@@ -66,7 +51,7 @@ function Create({ session, selfUser }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postTag(session, tag);
+            const response = await postTag(tag);
             if (response.status === 201) {
               // router.push(`/tags/${response.id}/`);
               toast.success('태그가 생성되었습니다.');
@@ -88,4 +73,4 @@ function Create({ session, selfUser }) {
   );
 }
 
-export default Create;
+export default withAuth(Create);

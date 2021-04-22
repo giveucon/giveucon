@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,9 +20,9 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -37,49 +37,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
+const putStore = async (store) => {
+  return await requestToBackend(`api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
 };
 
-const getTagList = async (session) => {
-  return await requestToBackend(session, 'api/tags/', 'get', 'json');
-};
-
-const putStore = async (session, store) => {
-  return await requestToBackend(session, 'api/stores/', 'put', 'multipart', jsonToFormData(store), null);
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const prevStoreResponse = await getStore(session, context);
-  if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  const tagListResponse = await getTagList(session);
-  return {
-    props: { session, selfUser, prevStore: prevStoreResponse.data, tagList: tagListResponse.data },
-  };
-})
-
-function Update({ session, selfUser, prevStore, tagList }) {
+function Update({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
-  const [store, setStore] = useState({
-    id: prevStore.id,
-    name: prevStore.name,
-    description: prevStore.description,
-    images: prevStore.images,
-    tags: prevStore.tags,
-  });
+  const [store, setStore] = useState(null);
   const [storeError, setStoreError] = useState({
     name: false,
     description: false,
   });
+  const [tagList, setTagList] = useState(null);
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -90,6 +60,18 @@ function Update({ session, selfUser, prevStore, tagList }) {
       setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeResponse = await requestToBackend(`api/stores/${router.query.store}/`, 'get', 'json', null, null);
+      const tagListResponse = await requestToBackend('api/tags/', 'get', 'json', null, null);
+      setStore(storeResponse.data);
+      setTagList(tagListResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!tagList) return <div>loading...</div>
+  
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -175,7 +157,7 @@ function Update({ session, selfUser, prevStore, tagList }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStore(session, store);
+            const response = await putStore(store);
             if (response.status === 200) {
               router.push(`/stores/${response.data.id}/`);
               toast.success('가게가 업데이트 되었습니다.');
@@ -219,4 +201,4 @@ function Update({ session, selfUser, prevStore, tagList }) {
   );
 }
 
-export default Update;
+export default withAuth(Update);

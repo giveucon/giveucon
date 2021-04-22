@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -21,48 +21,36 @@ import ListItemCard from '../../components/ListItemCard'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
 import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
-
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
-};
-
-const getStoreNoticeList = async (session, store) => {
-  const params = {
-    store: store.id
-  };
-  return await requestToBackend(session, 'api/store-notices/', 'get', 'json', null, params);
-};
-
-const getProductList = async (session, store) => {
-  const params = {
-    store: store.id
-  };
-  return await requestToBackend(session, 'api/products/', 'get', 'json', null, params);
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeResponse = await getStore(session, context);
-  const storeNoticeListResponse = await getStoreNoticeList(session, storeResponse.data);
-  const productListResponse = await getProductList(session, storeResponse.data);
-  console.log(storeNoticeListResponse.data);
-  return {
-    props: {
-      session,
-      selfUser,
-      store: storeResponse.data,
-      storeNoticeList: storeNoticeListResponse.data,
-      productList: productListResponse.data,
-    },
-  };
-})
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ session, selfUser, store, storeNoticeList, productList }) {
+function Id({ selfUser }) {
+
   const router = useRouter();
+  const [store, setStore] = useState(null);
+  const [storeNoticeList, setStoreNoticeList] = useState(null);
+  const [productList, setProductList] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
+      const storeNoticeListResponse = await requestToBackend('api/store-notices/', 'get', 'json', null, {
+        user: storeResponse.data.user
+      });
+      const productListResponse = await requestToBackend('api/products/', 'get', 'json', null, {
+        user: storeResponse.data.user
+      });
+      setStore(storeResponse.data);
+      setStoreNoticeList(storeNoticeListResponse.data);
+      setProductList(productListResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!store || !storeNoticeList || !productList) return <div>loading...</div>
+
   return (
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -218,4 +206,4 @@ function Id({ session, selfUser, store, storeNoticeList, productList }) {
   );
 }
 
-export default Id;
+export default withAuth(Id);

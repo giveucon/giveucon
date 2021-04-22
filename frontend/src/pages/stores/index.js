@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -13,35 +13,28 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getStoreList = async (session) => {
-  return await requestToBackend(session, 'api/stores/', 'get', 'json');
-};
+function Index({ selfUser }) {
 
-const getSelfStoreList = async (session, selfUser) => {
-  const params = {
-    user: selfUser.id,
-  }
-  return await requestToBackend(session, 'api/stores/', 'get', 'json', null, params);
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeListResponse = await getStoreList(session);
-  const selfStoreListResponse = await getSelfStoreList(session, selfUser);
-  return {
-    props: {
-      session,
-      selfUser,
-      storeList: storeListResponse.data,
-      selfStoreList: selfStoreListResponse.data
-    },
-  };
-})
-
-function Index({ session, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
+  const [storeList, setStoreList] = useState(null);
+  const [selfStore, setSelfStore] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeListResponse = await requestToBackend('api/stores/', 'get', 'json', null, null);
+      const selfStoreResponse = await requestToBackend('api/stores/', 'get', 'json', null, {
+        user: selfUser.id
+      });
+      setStoreList(storeListResponse.data);
+      setSelfStore(selfStoreResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!storeList || !selfStore) return <div>loading...</div>
+
   return (
     <>
     <Layout title={`가게 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -63,9 +56,9 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
             </IconButton>
           }
         >
-          {selfStoreList && (selfStoreList.length > 0) ? (
+          {selfStore && (selfStore.length > 0) ? (
             <Grid container spacing={1}>
-              {selfStoreList.map((item, index) => (
+              {selfStore.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
@@ -104,21 +97,19 @@ function Index({ session, selfUser, storeList, selfStoreList }) {
             <AlertBox content='가게가 없습니다.' variant='information' />
           )}
         </Section>
-        {selfUser && (
-          <Box marginY={1}>
-            <Button
-              color='primary'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push(`/stores/create`)}
-            >
-              새 가게 추가
-            </Button>
-          </Box>
-        )}
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push(`/stores/create`)}
+          >
+            새 가게 추가
+          </Button>
+        </Box>
       </Layout>
     </>
   );
 }
 
-export default Index;
+export default withAuth(Index);

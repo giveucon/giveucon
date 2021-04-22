@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,30 +9,28 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getStoreList = async (session, context) => {
-  const params = {
-    user: context.query.user || null,
-  };
-  return await requestToBackend(session, 'api/stores', 'get', 'json', null, params);
-};
+function List({ selfUser }) {
 
-const getUser = async (session, context) => {
-  return await requestToBackend(session, `api/users/${context.query.user}/`, 'get', 'json');
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeListResponse = await getStoreList(session, context);
-  const userResponse = await getUser(session, context);
-  return {
-    props: { session, selfUser, storeList: storeListResponse.data, user: userResponse.data },
-  };
-})
-
-function List({ session, selfUser, storeList, user }) {
   const router = useRouter();
+  const [storeList, setStoreList] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const storeListResponse = await requestToBackend('api/stores/', 'get', 'json', null, {
+        user: router.query.user || null
+      });
+      const userResponse = await requestToBackend(`api/users/${router.query.user}`, 'get', 'json', null, null);
+      setStoreList(storeListResponse.data);
+      setUser(userResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!storeList) return <div>loading...</div>
+
   return (
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -74,4 +72,4 @@ function List({ session, selfUser, storeList, user }) {
   );
 }
 
-export default List;
+export default withAuth(List);

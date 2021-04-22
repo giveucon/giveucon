@@ -25,7 +25,7 @@ function convertJsonToFormDataRecursive(jsonObject, formData, parentKey) {
               formData.append(propName, value.item(j));
           }
       } else if (isArray(value) || isJsonObject(value)) {
-        jsonToFormDataRecursive(value, formData, propName);
+        convertJsonToFormDataRecursive(value, formData, propName);
       } else if (value instanceof Blob) {
         formData.append(propName, value);
       } else if (value instanceof Date) {

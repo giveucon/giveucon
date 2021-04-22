@@ -7,15 +7,9 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import withAuth from '../../utils/withAuth'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  return {
-    props: { session, selfUser },
-  }
-})
-
-function Index({ session, selfUser }) {
+function Index({ selfUserResponse }) {
   const router = useRouter();
   return (
     <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -35,4 +29,4 @@ function Index({ session, selfUser }) {
   );
 }
 
-export default Index;
+export default withAuth(Index);
