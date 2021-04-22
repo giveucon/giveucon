@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,6 +13,10 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
+import Uppy from '@uppy/core'
+import { Dashboard, useUppy } from '@uppy/react'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -90,6 +90,9 @@ function Update({ selfUser }) {
             error={storeError.name}
             fullWidth
             label='가게 이름'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, name: event.target.value }));
             }}
@@ -104,6 +107,9 @@ function Update({ selfUser }) {
             fullWidth
             label='가게 설명'
             multiline
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setStore(prevStore => ({ ...prevStore, description: event.target.value }));
             }}

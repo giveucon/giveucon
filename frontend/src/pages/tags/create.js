@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -38,6 +38,9 @@ function Create({ selfUserResponse }) {
             error={tagError.name}
             fullWidth
             label='태그 이름'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setTag(prevTag => ({ ...prevTag, name: event.target.value }));
             }}

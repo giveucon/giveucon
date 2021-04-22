@@ -54,7 +54,7 @@ const geoRecommendedCouponList = [
   />
 ]
 
-function Home({ selfUser }) {
+function Home({ authLoading, selfUser }) {
 
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(null);
@@ -66,7 +66,6 @@ function Home({ selfUser }) {
     }
     fetch();
   }, []);
-  if (!centralNoticeList) return <div>loading...</div>
 
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -105,6 +104,7 @@ function Home({ selfUser }) {
         )}
       </Section>
       <Section
+        loading={authLoading}
         title='주변에서 사용할 수 있음'
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}

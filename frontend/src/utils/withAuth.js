@@ -9,7 +9,7 @@ export default function withAuth(AuthComponent) {
     constructor(props) {
       super(props)
       this.state = {
-        loading: true,
+        authLoading: true,
         selfUserResponse: null,
       };
     }
@@ -25,16 +25,23 @@ export default function withAuth(AuthComponent) {
         Router.push('/users/create/')
       } else {
         this.setState({ selfUserResponse: selfUserResponse })
-        this.setState({ loading: false })
+        this.setState({ authLoading: false })
       }
     }
     render() {
       return (
         <>
-          {this.state.loading ? (
-            <div>LOADING....</div>
+          {this.state.authLoading ? (
+            <AuthComponent
+              {...this.props}
+              authLoading={this.state.authLoading}
+            />
           ) : (
-            <AuthComponent {...this.props} selfUser={this.state.selfUserResponse.data}/>
+            <AuthComponent
+              {...this.props}
+              authLoading={this.state.authLoading}
+              selfUser={this.state.selfUserResponse.data}
+            />
           )}
         </>
       )

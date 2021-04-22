@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +9,10 @@ import TextField from '@material-ui/core/TextField';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
+import Uppy from '@uppy/core'
+import { Dashboard, useUppy } from '@uppy/react'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -87,6 +87,9 @@ function Update({ selfUser }) {
             error={centralNoticeError.title}
             fullWidth
             label='제목'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, title: event.target.value }));
             }}
@@ -101,6 +104,9 @@ function Update({ selfUser }) {
             fullWidth
             label='내용'
             multiline
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, content: event.target.value }));
             }}

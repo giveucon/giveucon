@@ -11,22 +11,22 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 import convertJsonToFormData from '../utils/convertJsonToFormData'
-import fetchFromBackend from '../utils/fetchFromBackend'
+import requestToBackend from '../utils/requestToBackend'
 import withAuth from '../utils/withAuth'
 
 const postDummyTimeout = async () => {
   await new Promise(r => setTimeout(r, 10));
 };
 
-const postDummyUser = async (session, user) => {
-  return await fetchFromBackend(session, 'api/dummy-users/', 'post', 'json', user, null);
+const postDummyUser = async (user) => {
+  return await requestToBackend('api/dummy-users/', 'post', 'json', user, null);
 };
 
-const postDummyStore = async (session, store) => {
-  return await fetchFromBackend(session, 'api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+const postDummyStore = async (store) => {
+  return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
 };
 
-function Initialize({ session, selfUser }) {
+function Initialize({ selfUser }) {
   const router = useRouter();
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);

@@ -119,6 +119,22 @@ export default function Components() {
         <Typography variant='h5'>I have no padding!</Typography>
       </AccordionSection>
       
+      <Section
+        backButton
+        title='Page Title'
+        titleSuffix={<IconButton><MenuIcon /></IconButton>}
+        loading={true}
+      />
+
+      <Section
+        title='Section'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<IconButton><MenuIcon /></IconButton>}
+        loading={true}
+      >
+        <Typography variant='h5'>Section children</Typography>
+      </Section>
+
       <Section title='Buttons'>
         <Button variant='contained'>Default</Button>
         <Button variant='contained' color='primary'>Primary</Button>

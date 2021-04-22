@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -73,6 +73,9 @@ function User({ selfUser: prevSelfUser }) {
             error={selfUserError.email}
             fullWidth
             label='이메일'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, email: event.target.value }));
             }}
@@ -86,6 +89,9 @@ function User({ selfUser: prevSelfUser }) {
             error={selfUserError.user_name}
             fullWidth
             label='유저네임'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, user_name: event.target.value }));
             }}
@@ -99,6 +105,9 @@ function User({ selfUser: prevSelfUser }) {
             error={selfUserError.last_name}
             fullWidth
             label='성'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, last_name: event.target.value }));
             }}
@@ -112,6 +121,9 @@ function User({ selfUser: prevSelfUser }) {
             error={selfUserError.first_name}
             fullWidth
             label='이름'
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={(event) => {
               setSelfUser(prevSelfUser => ({ ...prevSelfUser, first_name: event.target.value }));
             }}

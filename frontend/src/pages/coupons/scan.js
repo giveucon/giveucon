@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router'
 import jsQR from 'jsqr';
+import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 
