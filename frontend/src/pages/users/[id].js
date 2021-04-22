@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,31 +8,32 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileSection from '../../components/UserProfileSection';
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
-const getUser = async (session, context) => {
-  return await requestToBackend(session, `api/users/${context.query.id}/`, 'get', 'json');
-};
+function Id({ selfUserResponse }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const userResponse = await getUser(session, context);
-  return {
-    props: { session, selfUser, user: userResponse.data },
-  };
-})
-
-function Id({ session, selfUser, user }) {
   const router = useRouter();
+  const [userResponse, setUserResponse] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const userResponse = await requestToBackend(`api/users/${router.query.id}/`, 'get', 'json', null, null);;
+      setUserResponse(userResponse);
+    }
+    fetch();
+  }, []);
+  if (!userResponse) return <div>loading...</div>
+
   return (
-    <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${userResponse.data.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={user.user_name}
+        title={userResponse.data.user_name}
       />
       <UserProfileSection
-        name={user.user_name}
-        subtitle={user.email}
+        name={userResponse.data.user_name}
+        subtitle={userResponse.data.email}
         image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
       >
       </UserProfileSection>
@@ -41,7 +42,7 @@ function Id({ session, selfUser, user }) {
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
       >
       </Section>
-      { selfUser.id === user.id && (
+      { selfUserResponse.data.id === userResponse.data.id && (
         <Box marginY={1}>
           <Button
             color='default'
@@ -55,6 +56,7 @@ function Id({ session, selfUser, user }) {
       )}
     </Layout>
   );
+
 }
 
-export default Id;
+export default withAuth(Id);

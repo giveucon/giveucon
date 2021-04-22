@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
+import axios from 'axios';
 import { useRouter } from 'next/router'
 import { setCookie } from 'nookies'
-import axios from 'axios';
 
 const getTokens = async (code) => {
   try {

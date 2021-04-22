@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import Uppy from '@uppy/core'
@@ -18,29 +18,18 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../functions/jsonToFormData'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
-const getTagList = async (session) => {
-  return await requestToBackend(session, 'api/tags/', 'get', 'json');
+const postStore = async (store) => {
+  return await requestToBackend('api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
 };
 
-const postStore = async (session, store) => {
-  return await requestToBackend(session, 'api/stores/', 'post', 'multipart', jsonToFormData(store), null);
-};
-
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const tagListResponse = await getTagList(session);
-  return {
-    props: { session, selfUser, tagList: tagListResponse.data },
-  }
-})
-
-function Create({ session, selfUser, tagList }) {
+function Create({ selfUser }) {
   const router = useRouter();
   const [store, setStore] = useState({
     name: null,
@@ -52,6 +41,7 @@ function Create({ session, selfUser, tagList }) {
     name: false,
     description: false,
   });
+  const [tagList, setTagList] = useState(null);
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -63,6 +53,15 @@ function Create({ session, selfUser, tagList }) {
     })
   })
 
+  useEffect(() => {
+    const fetch = async () => {
+      const tagListResponse = await requestToBackend('api/tags/', 'get', 'json', null, null);
+      setTagList(tagListResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!tagList) return <div>loading...</div>
+  
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -146,7 +145,7 @@ function Create({ session, selfUser, tagList }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postStore(session, store);
+            const response = await postStore(store);
             if (response.status === 201) {
               router.push(`/stores/${response.data.id}/`);
               toast.success('가게가 생성되었습니다.');
@@ -173,4 +172,4 @@ function Create({ session, selfUser, tagList }) {
   );
 }
 
-export default Create;
+export default withAuth(Create);

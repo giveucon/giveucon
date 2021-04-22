@@ -1,8 +1,8 @@
 import React from 'react';
 import Router from 'next/router'
 
-import fetchFromBackend from './fetchFromBackend'
-import verifySession from './verifySession'
+import requestToBackend from './requestToBackend'
+import refreshSession from './refreshSession'
 
 export default function withAuth(AuthComponent) {
   return class Authenticated extends React.Component {
@@ -10,21 +10,21 @@ export default function withAuth(AuthComponent) {
       super(props)
       this.state = {
         loading: true,
-        selfUser: null,
+        selfUserResponse: null,
       };
     }
     async componentDidMount () {
       // If session is not found
-      const session = await verifySession();
+      const session = await refreshSession();
       if (!session) {
         Router.push('/login/')
       }
-      const selfUserResponse = await fetchFromBackend('api/users/self/', 'get', 'json');
+      const selfUserResponse = await requestToBackend('api/users/self/', 'get', 'json');
       // If account founded but no user models linked
       if (selfUserResponse.status === 404) {
         Router.push('/users/create/')
       } else {
-        this.setState({ selfUser: selfUserResponse.data })
+        this.setState({ selfUserResponse: selfUserResponse })
         this.setState({ loading: false })
       }
     }
@@ -34,7 +34,7 @@ export default function withAuth(AuthComponent) {
           {this.state.loading ? (
             <div>LOADING....</div>
           ) : (
-            <AuthComponent {...this.props} selfUser={this.state.selfUser}/>
+            <AuthComponent {...this.props} selfUser={this.state.selfUserResponse.data}/>
           )}
         </>
       )

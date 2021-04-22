@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -12,14 +12,14 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import fetchFromBackend from '../../utils/fetchFromBackend'
+import requestToBackend from '../../utils/requestToBackend'
 
 const getSelfAccount = async () => {
-  return await fetchFromBackend('api/accounts/self/', 'get', 'json', null, null);
+  return await requestToBackend('api/accounts/self/', 'get', 'json', null, null);
 };
 
 const postSelfUser = async (selfUser) => {
-  return await fetchFromBackend('api/users/', 'post', 'json', selfUser, null);
+  return await requestToBackend('api/users/', 'post', 'json', selfUser, null);
 };
 
 function Create() {

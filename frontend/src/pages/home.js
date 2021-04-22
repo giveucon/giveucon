@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,7 +8,6 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import useSWR from 'swr';
 
 import BusinessCard from '../components/BusinessCard'
 import Layout from '../components/Layout'
@@ -16,7 +15,7 @@ import Section from '../components/Section'
 import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
-import fetchFromBackend from '../utils/fetchFromBackend'
+import requestToBackend from '../utils/requestToBackend'
 import withAuth from '../utils/withAuth'
 
 const geoRecommendedCouponList = [
@@ -56,13 +55,19 @@ const geoRecommendedCouponList = [
 ]
 
 function Home({ selfUser }) {
+
   const router = useRouter();
-  const {data: centralNoticeList, error: centralNoticeListSWRError} = useSWR(
-    [`api/central-notices/`, 'get', 'json', null, null],
-     (url, method, contentType, data, params) => fetchFromBackend(url, method, contentType, data, params)
-  );
-  if (centralNoticeListSWRError) return <div>failed to load</div>
+  const [centralNoticeList, setCentralNoticeList] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
+      setCentralNoticeList(centralNoticeListResponse.data);
+    }
+    fetch();
+  }, []);
   if (!centralNoticeList) return <div>loading...</div>
+
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -82,7 +87,7 @@ function Home({ selfUser }) {
       >
         {centralNoticeList && (centralNoticeList.length > 0) && (
           <SwipeableBusinessCardList autoplay={true}>
-            {centralNoticeList && (centralNoticeList.length > 0) && 
+            {centralNoticeListResponse && (centralNoticeList.length > 0) && 
               (centralNoticeList.slice(0, 2).map((item, index) => {
                 return <BusinessCard
                   key={index}

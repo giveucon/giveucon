@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
 
+import withAuth from '../utils/withAuth'
+
 function Index() {
   const router = useRouter();
 
   useEffect(() => {
     router.push('/home/');
-  },[])
+  }, [])
 
-  return ( null );
+  return null;
 }
 
-export default Index;
+export default withAuth(Index);

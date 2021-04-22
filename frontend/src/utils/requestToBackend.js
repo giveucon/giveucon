@@ -41,7 +41,7 @@ const multipartRequest = async (session, url, method, data, params) => {
   });
 }
 
-export default async function fetchFromBackend(url, method, contentType, data=null, params=null) {
+export default async function requestToBackend(url, method, contentType, data=null, params=null) {
 
   const session = await refreshSession();
 

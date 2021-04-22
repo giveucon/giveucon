@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import requestToBackend from '../functions/requestToBackend'
-import withAuthServerSideProps from '../functions/withAuthServerSideProps'
+import requestToBackend from '../../utils/requestToBackend'
+import withAuth from '../../utils/withAuth'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,33 +21,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (session, context) => {
-  return await requestToBackend(session, `api/stores/${context.query.id}/`, 'get', 'json');
+const deleteStore = async (store) => {
+  return await requestToBackend(`api/stores/${store.id}/`, 'delete', 'json');
 };
 
-const deleteStore = async (session, store) => {
-  return await requestToBackend(session, `api/stores/${store.id}/`, 'delete', 'json');
-};
+function Delete({ selfUser }) {
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
-  const storeResponse = await getStore(session, context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
-  return {
-    props: { session, selfUser, store: storeResponse.data },
-  };
-})
-
-function Delete({ session, selfUser, store }) {
   const router = useRouter();
   const classes = useStyles();
+
+  const [store, setStore] = useState(null);
+  useEffect(() => {
+    const fetch = async () => {
+      const storeResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
+      setStore(storeResponse.data);
+    }
+    fetch();
+  }, []);
+  if (!store) return <div>loading...</div>
+
   return (
     <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -61,7 +53,7 @@ function Delete({ session, selfUser, store }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteStore(session, store);
+              const response = await deleteStore(store);
               if (response.status === 204) {
                 router.push(`/stores/`);
                 toast.success('가게가 삭제되었습니다.');
@@ -86,4 +78,4 @@ function Delete({ session, selfUser, store }) {
   );
 }
 
-export default Delete;
+export default withAuth(Delete);
