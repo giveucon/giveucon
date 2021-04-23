@@ -32,8 +32,8 @@ function List({ selfUser }) {
       setUser(userResponse.data);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
+    selfUser && fetch();
+  }, [selfUser]);
   if (!productList) return <div>loading...</div>
 
   return (
@@ -42,24 +42,35 @@ function List({ selfUser }) {
         backButton
         title='상품 목록'
       >
-        {productList && (productList.length > 0) ? (
+        {productList && (
+          productList && (productList.length > 0) ? (
+            <Grid container spacing={1}>
+              {productList && productList.map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <Tile
+                    title={item.name}
+                    subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    actions={[
+                      <IconButton><FavoriteIcon /></IconButton>
+                    ]}
+                    onClick={() => router.push(`/products/${item.id}/`)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <AlertBox content='상품이 없습니다.' variant='information' />
+          )
+        )}
+        {!productList && (
           <Grid container spacing={1}>
-            {productList && productList.map((item, index) => (
+            {Array.from(Array(4).keys()).map((item, index) => (
               <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  actions={[
-                    <IconButton><FavoriteIcon /></IconButton>
-                  ]}
-                  onClick={() => router.push(`/products/${item.id}/`)}
-                />
+                <Tile skeleton/>
               </Grid>
             ))}
           </Grid>
-        ) : (
-          <AlertBox content='상품이 없습니다.' variant='information' />
         )}
       </Section>
       { store && (selfUser.id === store.user) && (

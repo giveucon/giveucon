@@ -9,6 +9,7 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
+import AlertBox from '../components/AlertBox'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 import SwipeableTileList from '../components/SwipeableTileList';
@@ -62,8 +63,8 @@ function Home({ selfUser }) {
       const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
       setCentralNoticeList(centralNoticeListResponse.data);
     }
-    fetch();
-  }, []);
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -82,11 +83,11 @@ function Home({ selfUser }) {
         ]}
         padding={false}
       >
-        {centralNoticeList && (centralNoticeList.length > 0) && (
-          <SwipeableTileList autoplay={true}>
-            {centralNoticeListResponse && (centralNoticeList.length > 0) && 
-              (centralNoticeList.slice(0, 2).map((item, index) => {
-                return <Tile
+        {centralNoticeList && (
+          centralNoticeList.length > 0 ? (
+            <SwipeableTileList autoplay={true}>
+              {centralNoticeList.slice(0, 2).map((item, index) => (
+                <Tile
                   key={index}
                   title={item.article.title}
                   image={
@@ -96,8 +97,15 @@ function Home({ selfUser }) {
                   }
                   onClick={() => router.push(`/central-notices/${item.id}/` )}
                 />
-              }))
-            }
+              ))}
+            </SwipeableTileList>
+          ) : (
+            <AlertBox content='공지사항이 없습니다.' variant='information' />
+          )
+        )}
+        {!centralNoticeList && (
+          <SwipeableTileList autoplay={true}>
+            <Tile skeleton/>
           </SwipeableTileList>
         )}
       </Section>

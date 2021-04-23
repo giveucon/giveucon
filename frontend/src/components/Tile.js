@@ -95,8 +95,8 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
             </Box>
           </Box>
   
-          {/* Title area */}
-          <Box className={classes.titleArea}>
+          {/* Title and content area */}
+          <Box className={classes.titleArea} display={(title || subtitle) ? 'block' : 'none'}>
             <Box display={(title && !subtitle) ? 'block' : 'none'}>
               <Box paddingX={1} paddingY={1}>
                 <Typography variant='subtitle1' className={classes.titleOnly}>{title}</Typography>

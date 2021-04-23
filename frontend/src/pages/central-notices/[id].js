@@ -19,29 +19,33 @@ function Id({ selfUser }) {
       const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
       setCentralNotice(centralNoticeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!centralNotice) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
-    <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${centralNotice ? centralNotice.article.title : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={centralNotice.article.title}
+        title={centralNotice ? centralNotice.article.title : '로딩중'}
       >
-        <ArticleBox
-          title={centralNotice.article.title}
-          subtitle={new Date(centralNotice.article.created_at).toLocaleDateString()}
-          image={
-            centralNotice.article.images.length > 0
-            ? centralNotice.article.images[0].image
-            : '/no_image.png'
-          }
-          content={centralNotice.article.content}
-        >
+        {centralNotice && (
+          <ArticleBox
+            title={centralNotice.article.title}
+            subtitle={new Date(centralNotice.article.created_at).toLocaleDateString()}
+            image={
+              centralNotice.article.images.length > 0
+              ? centralNotice.article.images[0].image
+              : '/no_image.png'
+            }
+            content={centralNotice.article.content}
+          >
         </ArticleBox>
+        )}
+        {!centralNotice && (
+          <ArticleBox skeleton/>
+        )}
       </Section>
-      {selfUser.staff && (
+      {selfUser && selfUser.staff && (
         <Box marginY={1}>
           <Button
             color='default'

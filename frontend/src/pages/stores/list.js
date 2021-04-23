@@ -27,9 +27,8 @@ function List({ selfUser }) {
       setStoreList(storeListResponse.data);
       setUser(userResponse.data);
     }
-    fetch();
-  }, []);
-  if (!storeList) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -37,26 +36,37 @@ function List({ selfUser }) {
         backButton
         title='가게 목록'
       >
-        {storeList && (storeList.length > 0) ? (
+        {storeList && (
+          (storeList.length > 0) ? (
+            <Grid container spacing={1}>
+              {storeList && storeList.map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <Tile
+                    title={item.name}
+                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    onClick={() => router.push(`/stores/${item.id}/`)}
+                    menuItems={
+                      <MenuItem>Menu Item</MenuItem>
+                    }
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <AlertBox content='가게가 없습니다.' variant='information' />
+          )
+        )}
+        {!storeList && (
           <Grid container spacing={1}>
-            {storeList && storeList.map((item, index) => (
+            {Array.from(Array(4).keys()).map((item, index) => (
               <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/stores/${item.id}/`)}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
-                />
+                <Tile skeleton/>
               </Grid>
             ))}
           </Grid>
-        ) : (
-          <AlertBox content='가게가 없습니다.' variant='information' />
         )}
       </Section>
-      { user && (user.id === selfUser.id) && (
+      {user && (user.id === selfUser.id) && (
         <Box marginY={1}>
           <Button
             color='primary'
