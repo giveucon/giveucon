@@ -8,11 +8,11 @@ import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
 import AlertBox from '../../components/AlertBox'
-import BusinessCard from '../../components/BusinessCard';
+import Tile from '../../components/Tile';
 import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
 import Section from '../../components/Section'
-import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
+import SwipeableTileList from '../../components/SwipeableTileList';
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
@@ -42,9 +42,9 @@ function Index({ selfUser }) {
         padding={false}
       >
         {centralNoticeList && (centralNoticeList.length > 0) ? (
-          <SwipeableBusinessCardList autoplay={true}>
+          <SwipeableTileList autoplay={true}>
             {centralNoticeList.slice(0, 2).map((item, index) => {
-              return <BusinessCard
+              return <Tile
                 key={index}
                 title={item.article.title}
                 image={
@@ -55,7 +55,7 @@ function Index({ selfUser }) {
                 onClick={() => router.push(`/notices/${item.id}`)}
               />
             })}
-          </SwipeableBusinessCardList>
+          </SwipeableTileList>
         ) : (
           <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}

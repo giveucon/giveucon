@@ -22,49 +22,49 @@ function Index({ selfUser }) {
   useEffect(() => {
     const fetch = async () => {
       const selfCouponListResponse = await requestToBackend('api/coupons/', 'get', 'json', null, {
-        user: selfUser.id
+        user: selfUser?.id
       });
       setSelfCouponList(selfCouponListResponse.data);
     }
-    fetch();
-  }, []);
+    if (!selfUser) {
+      fetch();
+    }
+  }, [selfUser]);
   if (!selfCouponList) return <div>loading...</div>
 
   return (
-    <>
     <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
-        <Section
-          backButton
-          title='내 지갑'
-        >
-        </Section>
-        <Section
-          title='내 쿠폰'
-          titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
-          titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
-        >
-          {selfCouponList && (selfCouponList.length > 0) ? (
-            <Grid container spacing={1}>
-              {selfCouponList.map((item, index) => (
-                <Grid item xs={6} key={index}>
-                  <Tile
-                    title={`쿠폰 이름`}
-                    image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
-                    actions={[
-                      <IconButton><DirectionsIcon /></IconButton>,
-                      <IconButton><CropFreeIcon /></IconButton>
-                    ]}
-                    onClick={() => router.push(`/coupons/${item.id}/`)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <AlertBox content='쿠폰이 없습니다.' variant='information' />
-          )}
-        </Section>
-      </Layout>
-    </>
+      <Section
+        backButton
+        title='내 지갑'
+      >
+      </Section>
+      <Section
+        title='내 쿠폰'
+        titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
+        titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
+      >
+        {selfCouponList && (selfCouponList.length > 0) ? (
+          <Grid container spacing={1}>
+            {selfCouponList.map((item, index) => (
+              <Grid item xs={6} key={index}>
+                <Tile
+                  title={`쿠폰 이름`}
+                  image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+                  actions={[
+                    <IconButton><DirectionsIcon /></IconButton>,
+                    <IconButton><CropFreeIcon /></IconButton>
+                  ]}
+                  onClick={() => router.push(`/coupons/${item.id}/`)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <AlertBox content='쿠폰이 없습니다.' variant='information' />
+        )}
+      </Section>
+    </Layout>
   );
 }
 

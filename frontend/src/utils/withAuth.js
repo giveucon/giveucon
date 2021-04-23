@@ -34,12 +34,11 @@ export default function withAuth(AuthComponent) {
           {this.state.authLoading ? (
             <AuthComponent
               {...this.props}
-              authLoading={this.state.authLoading}
+              selfUser={null}
             />
           ) : (
             <AuthComponent
               {...this.props}
-              authLoading={this.state.authLoading}
               selfUser={this.state.selfUserResponse.data}
             />
           )}

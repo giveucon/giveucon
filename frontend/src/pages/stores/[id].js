@@ -14,13 +14,13 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 import AlertBox from '../../components/AlertBox';
-import BusinessCard from '../../components/BusinessCard';
+import Tile from '../../components/Tile';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
-import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
+import SwipeableTileList from '../../components/SwipeableTileList';
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
@@ -49,58 +49,61 @@ function Id({ selfUser }) {
     }
     fetch();
   }, []);
-  if (!store || !storeNoticeList || !productList) return <div>loading...</div>
 
   return (
-    <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${store ? store.name : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={store.name}
+        title={store ? store.name : '로딩중'}
         padding={false}
       >
-        <SwipeableBusinessCardList autoplay={true}>
-          {store.images && (store.images.length > 0) ?
-              (store.images.map((item, index) => {
-                return <BusinessCard
-                  key={index}
-                  image={item.image}
-                  onClick={() => router.push(`/images/${item.id}/` )}
-                />
-              })
-            ) : (
-              <BusinessCard
-                image='/no_image.png'
-              />
-            )
-          }
-        </SwipeableBusinessCardList>
-        {store.tags && (store.tags.length > 0) && (
-          <Box padding={1}>
-            {
-              store.tags.map((item, index) => (
-                <Chip
-                  key={index}
-                  label={item.name}
-                  color='primary'
-                  size='small'
-                  variant='outlined'
-                  // onClick={() => router.push(`/tags/${item.id}/`)}
-                />
-              ))
-            }
-          </Box>
-        )}
-        <Box padding={1}>
-          <Typography>{store.description}</Typography>
-        </Box>
+        {
+          store ? (
+            <>
+              <SwipeableTileList autoplay={true}>
+                {store.images && (store.images.length > 0) ? (
+                  store.images.map((item, index) => {
+                    return <Tile
+                      key={index}
+                      image={item.image}
+                      onClick={() => router.push(`/images/${item.id}/` )}
+                    />})
+                  ) : (
+                    <Tile image='/no_image.png' />
+                  )
+                }
+              </SwipeableTileList>
+              <Box padding={1}>
+                {
+                  store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
+                    <Chip
+                      key={index}
+                      label={item.name}
+                      color='primary'
+                      size='small'
+                      variant='outlined'
+                      // onClick={() => router.push(`/tags/${item.id}/`)}
+                    />
+                  ))
+                }
+              </Box>
+              <Box padding={1}>
+                <Typography>{store.description}</Typography>
+              </Box>
+            </>
+          ) : (
+            <></>
+          )
+        }
       </Section>
       <Section
         title='가게 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
         titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
-        {storeNoticeList && (storeNoticeList.length > 0) ? (
-          <Grid container spacing={1}>
+        {storeNoticeList ? (
+          storeNoticeList.length > 0 ? (
+            <Grid container spacing={1}>
             {storeNoticeList.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
                 <ListItemCard
@@ -111,8 +114,11 @@ function Id({ selfUser }) {
               </Grid>
             ))}
           </Grid>
+          ) : (
+            <AlertBox content='공지사항이 없습니다.' variant='information' />
+          )
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <></>
         )}
       </Section>
       <Section
@@ -120,8 +126,9 @@ function Id({ selfUser }) {
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
-        {productList && (productList.length > 0) ? (
-          <Grid container spacing={1}>
+        {productList ? (
+          productList.length > 0 ? (
+            <Grid container spacing={1}>
             {productList && productList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
@@ -137,8 +144,11 @@ function Id({ selfUser }) {
               </Grid>
             ))}
           </Grid>
+          ) : (
+            <AlertBox content='상품이 없습니다.' variant='information' />
+          )
         ) : (
-          <AlertBox content='상품이 없습니다.' variant='information' />
+          <></>
         )}
       </Section>
       <Section
@@ -159,7 +169,7 @@ function Id({ selfUser }) {
           경로 검색
         </Button>
       </Box>
-      { selfUser.id === store.user && (
+      {selfUser && store && (selfUser.id === store.user) && (
         <>
           <Box marginY={1}>
             <Button
