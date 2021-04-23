@@ -38,7 +38,7 @@ function List({ selfUser }) {
         title='가게 목록'
       >
         {storeList && (storeList.length > 0) ? (
-          <Grid container>
+          <Grid container spacing={1}>
             {storeList && storeList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile

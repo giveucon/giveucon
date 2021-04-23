@@ -20,21 +20,24 @@ const requestRefreshTokens = async (session) => {
 
 export default async function refreshSession() {
   const cookies = parseCookies()
-  const session = JSON.parse(cookies.giveucon);
-  const loginRefreshResponse = await requestRefreshTokens(session);
-  const giveuconToken = {
-    'access_token': loginRefreshResponse.data.access,
-    'refresh_token': loginRefreshResponse.data.refresh,
-    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
-    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
-    'access_token_expiry': loginRefreshResponse.data.access_expiry,
-    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
-  };
-  setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
-    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-  })
-  console.log('refresh.js : Token refreshed');
-  console.log(giveuconToken);
-  return giveuconToken;
+  if (cookies.giveucon) {
+    const session = JSON.parse(cookies.giveucon);
+    const loginRefreshResponse = await requestRefreshTokens(session);
+    const giveuconToken = {
+      'access_token': loginRefreshResponse.data.access,
+      'refresh_token': loginRefreshResponse.data.refresh,
+      'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
+      'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
+      'access_token_expiry': loginRefreshResponse.data.access_expiry,
+      'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+    };
+    setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
+      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+    })
+    console.log('refresh.js : Token refreshed');
+    console.log(giveuconToken);
+    return giveuconToken;
+  }
+  return null;
 }

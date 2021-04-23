@@ -2,6 +2,7 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const KakaoMaps = styled.div`
   box-sizing: border-box;
@@ -35,13 +36,20 @@ class KakaoMapBox extends React.Component{
       };
     }
 
-    render(){
-      return(
+    render() {
+      const { skeleton } = this.props;
+      if (skeleton) {
+        return (
+          <Skeleton animation='wave' variant='rect' width='100%' height='20rem' style={{borderRadius: '1rem'}}/>
+        );
+      } else {
+        return(
         <Box>
           <KakaoMaps id='kakao_map' />
         </Box>
-      )
+      );
     }
+  }
 }
 
 export default KakaoMapBox;

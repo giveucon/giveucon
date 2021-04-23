@@ -10,44 +10,15 @@ import Section from '../../components/Section';
 import AccordionSection from '../../components/AccordionSection';
 import AlertBox from '../../components/AlertBox';
 import ArticleBox from '../../components/ArticleBox';
-import BusinessCard from '../../components/BusinessCard';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import ListItemCard from '../../components/ListItemCard';
 import ReviewBox from '../../components/ReviewBox';
-import SwipeableBusinessCardList from '../../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
 import UserProfileBox from '../../components/UserProfileBox';
 import UserProfileSection from '../../components/UserProfileSection';
 
 export default function Components() {
-
-  const swipeableBusinessCardList = [
-    <BusinessCard
-      title='Swipeable Business Card 1'
-      image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />,
-    <BusinessCard
-      title='Swipeable Business Card 2'
-      image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />,
-    <BusinessCard
-      title='Swipeable Business Card 3'
-      image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />
-  ]
 
   const swipeableTileList = [
     <Tile
@@ -120,20 +91,8 @@ export default function Components() {
       </AccordionSection>
       
       <Section
-        backButton
-        title='Page Title'
-        titleSuffix={<IconButton><MenuIcon /></IconButton>}
-        loading={true}
+        skeleton={true}
       />
-
-      <Section
-        title='Section'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<IconButton><MenuIcon /></IconButton>}
-        loading={true}
-      >
-        <Typography variant='h5'>Section children</Typography>
-      </Section>
 
       <Section title='Buttons'>
         <Button variant='contained'>Default</Button>
@@ -174,6 +133,7 @@ export default function Components() {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
+        <AlertBox skeleton />
         <AlertBox content='AlertBox Information' variant='information' />
         <AlertBox content='AlertBox Success' variant='success' />
         <AlertBox content='AlertBox Question' variant='question' />
@@ -186,6 +146,7 @@ export default function Components() {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
+        <ArticleBox skeleton />
         <ArticleBox
           title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title'
           subtitle='ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle'
@@ -198,57 +159,11 @@ export default function Components() {
       </Section>
 
       <Section
-        title='BusinessCard'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-      >
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <BusinessCard
-              title='Tile'
-              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <BusinessCard
-              title='Tile'
-              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
-              menuItems={
-                [<MenuItem>Menu Item</MenuItem>,<MenuItem>Menu Item</MenuItem>]
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <BusinessCard
-              title='한글한글아름답게한글한글아름답게한글한글아름답게'
-              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
-              actions={
-                <Button>Edit</Button>
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <BusinessCard
-              title='한글한글아름답게한글한글아름답게한글한글아름답게'
-              subtitle='조금조금아름답게조금조금아름답게조금조금아름답게'
-              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
-              actions={
-                <Button>Edit</Button>
-              }
-            />
-          </Grid>
-        </Grid>
-      </Section>
-
-      <Section
         title='KakaoMapBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
+        <KakaoMapBox skeleton />
         <KakaoMapBox latitude={37.506502} longitude={127.053617}/>
       </Section>
 
@@ -257,6 +172,7 @@ export default function Components() {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
+        <ListItemCard skeleton />
         <ListItemCard
           title='ListItemCard primary'
           subtitle='ListItemCard secondary'
@@ -293,28 +209,6 @@ export default function Components() {
       </Section>
 
       <Section
-        title='SwipeableBusinessCardList'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-        padding={false}
-      >
-        <SwipeableBusinessCardList>
-          {swipeableBusinessCardList}
-        </SwipeableBusinessCardList>
-      </Section>
-
-      <Section
-        title='SwipeableBusinessCardList - with Autoplay'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-        padding={false}
-      >
-        <SwipeableBusinessCardList autoplay={true} interval={5000}>
-          {swipeableBusinessCardList}
-        </SwipeableBusinessCardList>
-      </Section>
-
-      <Section
         title='SwipeableTileList'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
@@ -326,11 +220,36 @@ export default function Components() {
       </Section>
 
       <Section
+        title='SwipeableTileList - with Autoplay'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+        padding={false}
+      >
+        <SwipeableTileList autoplay={true} interval={5000}>
+          {swipeableTileList}
+        </SwipeableTileList>
+      </Section>
+
+      <Section
+        title='SwipeableTileList - half'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+        padding={false}
+      >
+        <SwipeableTileList half>
+          {swipeableTileList}
+        </SwipeableTileList>
+      </Section>
+
+      <Section
         title='Tile'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
         <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <Tile skeleton/>
+          </Grid>
           <Grid item xs={6}>
             <Tile
               title='Tile'
@@ -358,7 +277,10 @@ export default function Components() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
+            <Tile skeleton/>
+          </Grid>
+          <Grid item xs={12}>
             <Tile
               title='한글한글아름답게한글한글아름답게한글한글아름답게'
               subtitle='조금조금아름답게조금조금아름답게조금조금아름답게'
@@ -373,6 +295,7 @@ export default function Components() {
       </Section>
 
       <Section title='UserProfileBox'>
+        <UserProfileBox skeleton />
         <UserProfileBox
           name='Username'
           subtitle='Subtitle'

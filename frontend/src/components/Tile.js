@@ -8,10 +8,18 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '100%',
+  },
+  imageArea: {
+    height: '10rem',
+    position: 'relative',
+  },
+  media: {
+    height: '10rem',
   },
   actions: {
     position: 'absolute',
@@ -21,12 +29,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1.5rem',
     boxShadow: theme.shadows[3],
   },
-  actionAreaWrapper: {
+  titleArea: {
+    height: '4rem',
     position: 'relative',
-  },
-  media: {
-    paddingTop: '100%', // 1:1,
-    // paddingTop: '56.25%', // 16:9,
   },
   titleOnly: {
     lineHeight: '1.5em',
@@ -46,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null, subtitle=null }) {
+export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null, skeleton=false, subtitle=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -60,51 +65,66 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
   
   return (
     <Box className={classes.root}>
-      <Card>
-        <Box className={classes.actionAreaWrapper}>
-          <CardActionArea onClick={onClick}>
-            <CardMedia
-              className={classes.media}
-              image={image}
-              title={title}
-            />
-          </CardActionArea>
-          <Box
-            className={classes.actions}
-            display={(actions || menuItems) ? 'flex' : 'none'}
-            justifyContent='flex-end'
+      {
+        skeleton ? (
+          <>
+            <Skeleton animation='wave' variant='rect' width='100%' height='10rem' style={{borderRadius: '1rem'}}/>
+            <Box marginY='1rem'>
+              <Skeleton animation='wave' width='100%' height='1rem' />
+              <Skeleton animation='wave' width='80%' height='1rem' />
+            </Box>
+          </>
+        ) : (
+        <Card>
+          {/* Image and action menus area */}
+          <Box className={classes.imageArea}>
+            <CardActionArea onClick={onClick}>
+              <CardMedia
+                className={classes.media}
+                image={image}
+                title={title}
+              />
+            </CardActionArea>
+            <Box
+              className={classes.actions}
+              display={(actions || menuItems) ? 'flex' : 'none'}
+              justifyContent='flex-end'
+            >
+              {actions}
+              {menuItems && (<IconButton onClick={handleClick}><MoreVertIcon /></IconButton>)}
+            </Box>
+          </Box>
+  
+          {/* Title area */}
+          <Box className={classes.titleArea}>
+            <Box display={(title && !subtitle) ? 'block' : 'none'}>
+              <Box paddingX={1} paddingY={1}>
+                <Typography variant='subtitle1' className={classes.titleOnly}>{title}</Typography>
+              </Box>
+            </Box>
+            <Box display={(title && subtitle) ? 'block' : 'none'}>
+              <Box paddingX={1} paddingTop={1}>
+                <Typography variant='subtitle1' className={classes.title}>{title}</Typography>
+              </Box>
+              <Box paddingX={1} paddingBottom={1.25}>
+                <Typography variant='subtitle2' className={classes.subtitle}>{subtitle}</Typography>
+              </Box>
+            </Box>
+          </Box>
+  
+          {/* Menu definition */}
+          <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
           >
-            {actions}
-            { menuItems ? (
-              <IconButton onClick={handleClick}>
-                <MoreVertIcon />
-              </IconButton>
-              ) : null
-            }
-          </Box>
-        </Box>
-        <Box display={(title && !subtitle) ? 'block' : 'none'}>
-          <Box paddingX={1} paddingY={1}>
-            <Typography variant='subtitle1' className={classes.titleOnly}>{title}</Typography>
-          </Box>
-        </Box>
-        <Box display={(title && subtitle) ? 'block' : 'none'}>
-          <Box paddingX={1} paddingTop={1}>
-            <Typography variant='subtitle1' className={classes.title}>{title}</Typography>
-          </Box>
-          <Box paddingX={1} paddingBottom={1.25}>
-            <Typography variant='subtitle2' className={classes.subtitle}>{subtitle}</Typography>
-          </Box>
-        </Box>
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          {menuItems}
-        </Menu>
-      </Card>
+            {menuItems}
+          </Menu>
+        </Card>
+        )
+      }
+
     </Box>
   );
 }

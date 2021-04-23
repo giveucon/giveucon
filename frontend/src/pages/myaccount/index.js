@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Index({ authLoading, selfUser }) {
+function Index({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (
@@ -37,13 +37,18 @@ function Index({ authLoading, selfUser }) {
       <Section
         title='내 정보'
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
-        loading={authLoading}
       >
-        <UserProfileBox
-          name={selfUser?.user_name}
-          subtitle={selfUser?.email}
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-        />
+        {
+          selfUser ? (
+            <UserProfileBox
+              name={selfUser.user_name}
+              subtitle={selfUser.email}
+              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+            />
+          ) : (
+            <></>
+          )
+        }
         <Box marginY={1}>
           <Button
             color='default'
@@ -51,7 +56,7 @@ function Index({ authLoading, selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/stores/list/',
-              query: { user: selfUser?.id },
+              query: { user: selfUser.id },
             })}
           >
             내 가게
@@ -64,7 +69,7 @@ function Index({ authLoading, selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/products/list/',
-              query: { user: selfUser?.id },
+              query: { user: selfUser.id },
             })}
           >
             내 상품
@@ -77,7 +82,7 @@ function Index({ authLoading, selfUser }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupons/list/',
-              query: { user: selfUser?.id },
+              query: { user: selfUser.id },
             })}
           >
             내 쿠폰
@@ -87,7 +92,6 @@ function Index({ authLoading, selfUser }) {
       <Section
         title='관리'
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
-        loading={authLoading}
       >
         <Box marginY={1}>
           <Button
@@ -123,7 +127,6 @@ function Index({ authLoading, selfUser }) {
       <Section
         title='개발자 도구'
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
-        loading={authLoading}
       >
         <Box marginY={1}>
           <Button

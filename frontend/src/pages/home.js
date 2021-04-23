@@ -9,10 +9,8 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-import BusinessCard from '../components/BusinessCard'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
-import SwipeableBusinessCardList from '../components/SwipeableBusinessCardList';
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
 import requestToBackend from '../utils/requestToBackend'
@@ -54,7 +52,7 @@ const geoRecommendedCouponList = [
   />
 ]
 
-function Home({ authLoading, selfUser }) {
+function Home({ selfUser }) {
 
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(null);
@@ -85,10 +83,10 @@ function Home({ authLoading, selfUser }) {
         padding={false}
       >
         {centralNoticeList && (centralNoticeList.length > 0) && (
-          <SwipeableBusinessCardList autoplay={true}>
+          <SwipeableTileList autoplay={true}>
             {centralNoticeListResponse && (centralNoticeList.length > 0) && 
               (centralNoticeList.slice(0, 2).map((item, index) => {
-                return <BusinessCard
+                return <Tile
                   key={index}
                   title={item.article.title}
                   image={
@@ -100,16 +98,15 @@ function Home({ authLoading, selfUser }) {
                 />
               }))
             }
-          </SwipeableBusinessCardList>
+          </SwipeableTileList>
         )}
       </Section>
       <Section
-        loading={authLoading}
         title='주변에서 사용할 수 있음'
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
-        <SwipeableTileList>
+        <SwipeableTileList half>
           {geoRecommendedCouponList}
         </SwipeableTileList>
       </Section>

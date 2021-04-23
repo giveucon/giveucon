@@ -33,8 +33,7 @@
     "react-hot-toast": "^1.0.2",
     "react-swipeable-views": "^0.13.9",
     "react-swipeable-views-utils": "^0.13.9",
-    "styled-components": "^5.2.1",
-    "swr": "^0.5.5"
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
     "@types/next-auth": "^3.13.0",
