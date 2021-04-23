@@ -31,9 +31,7 @@ function Index({ selfUser }) {
       setStoreList(storeListResponse.data);
       setSelfStoreList(selfStoreListResponse.data);
     }
-    if (!selfUser) {
-      fetch();
-    }
+    selfUser && fetch();
   }, [selfUser]);
 
   return (
@@ -56,24 +54,31 @@ function Index({ selfUser }) {
           </IconButton>
         }
       >
-        {selfStoreList ? (
+        {selfStoreList && (
           selfStoreList.length > 0 ? (
             <Grid container spacing={1}>
-            {selfStoreList.map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/stores/${item.id}/` )}
-                />
-              </Grid>
-            ))}
-          </Grid>
+              {selfStoreList.map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <Tile
+                    title={item.name}
+                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    onClick={() => router.push(`/stores/${item.id}/` )}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           ) : (
             <AlertBox content='가게가 없습니다.' variant='information' />
           )
-        ) : (
-          <></>
+        )}
+        {!selfStoreList && (
+          <Grid container spacing={1}>
+            {Array.from(Array(2).keys()).map((item, index) => (
+              <Grid item xs={6} key={index}>
+                <Tile skeleton />
+              </Grid>
+            ))}
+          </Grid>
         )}
       </Section>
       <Section
@@ -82,10 +87,10 @@ function Index({ selfUser }) {
         titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
         padding={false}
       >
-        {storeList ? (
+        {storeList && (
           storeList.length > 0 ? (
             <SwipeableTileList half>
-            {storeList.slice(0, 10).map((item, index) => {
+              {storeList.slice(0, 10).map((item, index) => {
                 return <Tile
                   key={index}
                   title={item.name}
@@ -95,14 +100,18 @@ function Index({ selfUser }) {
                   ]}
                   onClick={() => router.push(`/stores/${item.id}/`)}
                 />
-              }
-            )}
-          </SwipeableTileList>
+              })}
+            </SwipeableTileList>
           ) : (
             <AlertBox content='가게가 없습니다.' variant='information' />
           )
-        ) : (
-          <></>
+        )}
+        {!storeList && (
+          <SwipeableTileList half>
+            {Array.from(Array(2).keys()).map((item, index) => (
+              <Tile skeleton />
+            ))}
+          </SwipeableTileList>
         )}
       </Section>
       <Box marginY={1}>

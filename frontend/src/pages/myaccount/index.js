@@ -38,17 +38,16 @@ function Index({ selfUser }) {
         title='내 정보'
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
-        {
-          selfUser ? (
-            <UserProfileBox
-              name={selfUser.user_name}
-              subtitle={selfUser.email}
-              image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-            />
-          ) : (
-            <></>
-          )
-        }
+        {selfUser && (
+          <UserProfileBox
+            name={selfUser.user_name}
+            subtitle={selfUser.email}
+            image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+          />
+        )}
+        {!selfUser && (
+          <UserProfileBox skeleton />
+        )}
         <Box marginY={1}>
           <Button
             color='default'

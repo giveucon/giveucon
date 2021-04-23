@@ -9,41 +9,43 @@ export default function withAuth(AuthComponent) {
     constructor(props) {
       super(props)
       this.state = {
-        authLoading: true,
         selfUserResponse: null,
       };
     }
+
     async componentDidMount () {
       // If session is not found
       const session = await refreshSession();
       if (!session) {
         Router.push('/login/')
-      }
-      const selfUserResponse = await requestToBackend('api/users/self/', 'get', 'json');
-      // If account founded but no user models linked
-      if (selfUserResponse.status === 404) {
-        Router.push('/users/create/')
       } else {
-        this.setState({ selfUserResponse: selfUserResponse })
-        this.setState({ authLoading: false })
+        const selfUserResponse = await requestToBackend('api/users/self/', 'get', 'json');
+        // If account founded but no user models linked
+        if (selfUserResponse.status === 404) {
+          Router.push('/users/create/')
+        } else {
+          await new Promise(r => setTimeout(r, 1000)); // For skeleton components test purpose
+          this.setState({ selfUserResponse: selfUserResponse })
+        }
       }
     }
+
     render() {
-      return (
-        <>
-          {this.state.authLoading ? (
-            <AuthComponent
-              {...this.props}
-              selfUser={null}
-            />
-          ) : (
-            <AuthComponent
-              {...this.props}
-              selfUser={this.state.selfUserResponse.data}
-            />
-          )}
-        </>
-      )
+      if (this.state.selfUserResponse) {
+        return (
+          <AuthComponent
+            {...this.props}
+            selfUser={this.state.selfUserResponse.data}
+          />
+        )
+      } else {
+        return (
+          <AuthComponent
+            {...this.props}
+            selfUser={null}
+          />
+        )
+      }
     }
   }
 }
