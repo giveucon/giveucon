@@ -23,7 +23,13 @@ export default async function verifySession() {
   if (cookies.giveucon) {
     const session = JSON.parse(cookies.giveucon);
     const verifyTokensResponse = await requestVerifyTokens(session);
-    if (verifyTokensResponse.status === 200) return session;
+    if (verifyTokensResponse.status === 200) return {
+      valid: true,
+      session
+    };
   }
-  return null;
+  return {
+    valid: false,
+    session: null
+  };
 }

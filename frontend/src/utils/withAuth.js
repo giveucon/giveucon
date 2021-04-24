@@ -3,6 +3,7 @@ import Router from 'next/router'
 
 import requestToBackend from './requestToBackend'
 import refreshSession from './refreshSession'
+import verifySession from './verifySession'
 
 export default function withAuth(AuthComponent) {
   return class Authenticated extends React.Component {
@@ -14,8 +15,9 @@ export default function withAuth(AuthComponent) {
     }
 
     async componentDidMount () {
+      const verifySessionResponse = await verifySession();
+      const session = verifySessionResponse.valid ? verifySessionResponse.session : await refreshSession();
       // If session is not found
-      const session = await refreshSession();
       if (!session) {
         Router.push('/login/')
       } else {
@@ -33,17 +35,11 @@ export default function withAuth(AuthComponent) {
     render() {
       if (this.state.selfUserResponse) {
         return (
-          <AuthComponent
-            {...this.props}
-            selfUser={this.state.selfUserResponse.data}
-          />
+          <AuthComponent {...this.props} selfUser={this.state.selfUserResponse.data} />
         )
       } else {
         return (
-          <AuthComponent
-            {...this.props}
-            selfUser={null}
-          />
+          <AuthComponent {...this.props} selfUser={null} />
         )
       }
     }
