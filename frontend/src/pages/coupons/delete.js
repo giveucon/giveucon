@@ -36,9 +36,8 @@ function Delete({ selfUser }) {
       const couponResponse = await requestToBackend(`api/coupons/${router.query.id}`, 'get', 'json', null, null);
       setCoupon(couponResponse.data);
     }
-    fetch();
-  }, []);
-  if (!coupon) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

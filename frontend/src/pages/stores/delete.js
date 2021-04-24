@@ -36,9 +36,8 @@ function Delete({ selfUser }) {
       const storeResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

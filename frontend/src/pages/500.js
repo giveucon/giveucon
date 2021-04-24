@@ -7,8 +7,10 @@ import AlertBox from '../components/AlertBox'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 
-function Error500({}) {
+function Error500() {
+  
   const router = useRouter();
+
   return (
     <Layout title={`500 오류 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

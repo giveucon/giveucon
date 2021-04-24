@@ -35,9 +35,8 @@ function List({ selfUser }) {
       setStore(storeResponse.data);
       setProduct(productResponse.data);
     }
-    fetch();
-  }, []);
-  if (!productList) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

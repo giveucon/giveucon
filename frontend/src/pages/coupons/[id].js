@@ -25,8 +25,8 @@ function Id({ selfUser }) {
       setCoupon(couponResponse.data);
       setProduct(productResponse.data);
     }
-    fetch();
-  }, []);
+    selfUser && fetch();
+  }, [selfUser]);
   if (!coupon || !product) return <div>loading...</div>
 
   return (

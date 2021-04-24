@@ -67,9 +67,8 @@ function Update({ selfUser }) {
       const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
       setStoreNotice(storeNoticeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!storeNotice) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`가게 공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

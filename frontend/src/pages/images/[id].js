@@ -15,9 +15,8 @@ function Id({ selfUser }) {
       const imageResponse = await requestToBackend(`api/images/${router.query.id}`, 'get', 'json', null, null);
       setImage(imageResponse.data);
     }
-    fetch();
-  }, []);
-  if (!image) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <>

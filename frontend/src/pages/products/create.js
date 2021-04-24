@@ -65,9 +65,8 @@ function Create({ selfUser }) {
       setStore(storeResponse.data);
       setProduct(prevProduct => ({ ...prevProduct, store: storeResponse.data.id }));
     }
-    fetch();
-  }, []);
-  if (!store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`상품 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

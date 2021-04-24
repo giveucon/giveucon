@@ -17,7 +17,8 @@ const postTag = async (tag) => {
   return await requestToBackend('api/tags/', 'post', 'json', data, null);
 };
 
-function Create({ selfUserResponse }) {
+function Create({ selfUser }) {
+
   const router = useRouter();
   const [tag, setTag] = useState({
     name: null,
@@ -25,6 +26,7 @@ function Create({ selfUserResponse }) {
   const [tagError, setTagError] = useState({
     name: false,
   });
+
   return (
     <Layout title={`태그 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

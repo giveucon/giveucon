@@ -9,8 +9,10 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import withAuth from '../../utils/withAuth'
 
-function Index({ selfUserResponse }) {
+function Index({ selfUser }) {
+  
   const router = useRouter();
+
   return (
     <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

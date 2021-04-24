@@ -41,6 +41,12 @@ const putStore = async (store) => {
   return await requestToBackend(`api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
 };
 
+const dummyTagList = [
+  {
+    name: '로딩중'
+  },
+]
+
 function Update({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
@@ -68,10 +74,8 @@ function Update({ selfUser }) {
       setStore(storeResponse.data);
       setTagList(tagListResponse.data);
     }
-    fetch();
-  }, []);
-  if (!tagList) return <div>loading...</div>
-  
+    selfUser && fetch();
+  }, [selfUser]);  
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -119,7 +123,7 @@ function Update({ selfUser }) {
         <Box paddingY={1}>
           <Autocomplete
             multiple
-            options={tagList}
+            options={tagList || dummyTagList}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {

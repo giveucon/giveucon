@@ -29,6 +29,12 @@ const postStore = async (store) => {
   return await requestToBackend('api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
 };
 
+const dummyTagList = [
+  {
+    name: '로딩중'
+  },
+]
+
 function Create({ selfUser }) {
   const router = useRouter();
   const [store, setStore] = useState({
@@ -46,10 +52,10 @@ function Create({ selfUser }) {
   const uppy = useUppy(() => {
     return new Uppy()
     .on('file-added', (file) => {
-      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+      setStore(prevStore => ({...prevStore, images: uppy.getFiles().map((file) => file.data)}));
     })
     .on('file-removed', (file, reason) => {
-      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+      setStore(prevStore => ({...prevStore, images: uppy.getFiles().map((file) => file.data)}));
     })
   })
 
@@ -58,9 +64,8 @@ function Create({ selfUser }) {
       const tagListResponse = await requestToBackend('api/tags/', 'get', 'json', null, null);
       setTagList(tagListResponse.data);
     }
-    fetch();
-  }, []);
-  if (!tagList) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
   
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -83,7 +88,7 @@ function Create({ selfUser }) {
               shrink: true,
             }}
             onChange={(event) => {
-              setStore(prevStore => ({ ...prevStore, name: event.target.value }));
+              setStore(prevStore => ({...prevStore, name: event.target.value}));
             }}
             required
           />
@@ -100,7 +105,7 @@ function Create({ selfUser }) {
               shrink: true,
             }}
             onChange={(event) => {
-              setStore(prevStore => ({ ...prevStore, description: event.target.value }));
+              setStore(prevStore => ({...prevStore, description: event.target.value}));
             }}
             required
           />
@@ -108,11 +113,11 @@ function Create({ selfUser }) {
         <Box paddingY={1}>
           <Autocomplete
             multiple
-            options={tagList}
+            options={tagList || dummyTagList}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {
-              setStore(prevStore => ({ ...prevStore, tags: value.map(value => value.id) }));
+              setStore(prevStore => ({...prevStore, tags: value.map(value => value.id)}));
             }}
             renderOption={(option, { selected }) => (
               <React.Fragment>

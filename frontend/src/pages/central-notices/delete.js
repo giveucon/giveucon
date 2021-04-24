@@ -29,7 +29,6 @@ function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
-
   const [centralNotice, setCentralNotice] = useState(null);
 
   useEffect(() => {
@@ -37,9 +36,8 @@ function Delete({ selfUser }) {
       const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
       setCentralNotice(centralNoticeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!centralNotice) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
