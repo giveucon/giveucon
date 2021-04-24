@@ -48,7 +48,7 @@ function Create() {
       }));
     }
     fetchSelfAccount();
-  },[]);
+  }, []);
 
   return (
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

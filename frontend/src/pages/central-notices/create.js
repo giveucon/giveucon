@@ -29,7 +29,7 @@ const postCentralNotice = async (centralNotice) => {
   return await requestToBackend('api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-function Create({ session, selfUser }) {
+function Create({ selfUser }) {
   const router = useRouter();
   const [centralNotice, setCentralNotice] = useState({
     title: null,

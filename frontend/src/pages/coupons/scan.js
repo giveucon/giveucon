@@ -87,7 +87,7 @@ function Scan({ selfUser }) {
         requestAnimationFrame(tick);
 
       });
-  });
+  }, []);
 
   return (
     <Layout title={`쿠폰 스캔 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

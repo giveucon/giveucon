@@ -28,9 +28,8 @@ function List({ selfUser }) {
       setStoreNotice(storeNoticeResponse.data);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!storeNotice || !store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`가게 공지사항 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

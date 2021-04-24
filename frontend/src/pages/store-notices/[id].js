@@ -22,9 +22,8 @@ function Id({ selfUser }) {
       setStoreNotice(storeNoticeResponse.data);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!storeNotice || !store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`${storeNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

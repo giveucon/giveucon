@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import ArticleBox from '../../components/ArticleBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
@@ -32,23 +33,27 @@ function Charge({ selfUser }) {
       setProduct(productResponse.data);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!product || !store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
-    <Layout title={`${product.name} 구매 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`결재 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={product.name}
+        title={product ? '결재 내용' : '로딩중'}
       >
-        <Box>
-          <Typography variant='h5'>{product.name}</Typography>
-          <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
-          <Typography variant='body1'>{product.description}</Typography>
-        </Box>
+        {product && (
+          <Box>
+            <Typography variant='h5'>{product.name}</Typography>
+            <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+            <Typography variant='body1'>{product.description}</Typography>
+          </Box>
+        )}
+        {!product && (
+          <ArticleBox skeleton/>
+        )}
       </Section>
-      {(selfUser.id !== store.owner) && (store.id === product.store) && (
+      {product && store && (selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='primary'

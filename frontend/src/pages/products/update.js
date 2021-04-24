@@ -73,9 +73,8 @@ function Update({ selfUser }) {
       setProduct(productResponse.data);
       setStore(storeResponse.data);
     }
-    fetch();
-  }, []);
-  if (!product || !store) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

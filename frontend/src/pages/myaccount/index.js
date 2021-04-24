@@ -25,8 +25,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Index({ selfUser }) {
+
   const router = useRouter();
   const classes = useStyles();
+  
   return (
     <Layout title={`내 계정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

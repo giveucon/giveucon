@@ -27,6 +27,7 @@ const postDummyStore = async (store) => {
 };
 
 function Initialize({ selfUser }) {
+  
   const router = useRouter();
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);

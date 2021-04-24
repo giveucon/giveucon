@@ -11,7 +11,9 @@ import Section from '../../../components/Section'
 import withAuth from '../../../utils/withAuth'
 
 function Index({ selfUser }) {
+
   const router = useRouter();
+  
   return (
     <Layout title={`설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

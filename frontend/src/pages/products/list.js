@@ -34,7 +34,6 @@ function List({ selfUser }) {
     }
     selfUser && fetch();
   }, [selfUser]);
-  if (!productList) return <div>loading...</div>
 
   return (
     <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

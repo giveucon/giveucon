@@ -36,9 +36,8 @@ function Delete({ selfUser }) {
       const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
       setProduct(productResponse.data);
     }
-    fetch();
-  }, []);
-  if (!product) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
     <Layout title={`상품 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

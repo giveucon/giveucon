@@ -11,29 +11,28 @@ import UserProfileSection from '../../components/UserProfileSection';
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-function Id({ selfUserResponse }) {
+function Id({ selfUser }) {
 
   const router = useRouter();
-  const [userResponse, setUserResponse] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetch = async () => {
       const userResponse = await requestToBackend(`api/users/${router.query.id}/`, 'get', 'json', null, null);;
-      setUserResponse(userResponse);
+      setUser(userResponse.data);
     }
-    fetch();
-  }, []);
-  if (!userResponse) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
 
   return (
-    <Layout title={`${userResponse.data.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={userResponse.data.user_name}
+        title={user.user_name}
       />
       <UserProfileSection
-        name={userResponse.data.user_name}
-        subtitle={userResponse.data.email}
+        name={user.user_name}
+        subtitle={user.email}
         image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
       >
       </UserProfileSection>
@@ -42,7 +41,7 @@ function Id({ selfUserResponse }) {
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
       >
       </Section>
-      { selfUserResponse.data.id === userResponse.data.id && (
+      { selfUser.data.id === user.id && (
         <Box marginY={1}>
           <Button
             color='default'

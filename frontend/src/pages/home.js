@@ -109,6 +109,7 @@ function Home({ selfUser }) {
           </SwipeableTileList>
         )}
       </Section>
+      
       <Section
         title='주변에서 사용할 수 있음'
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}

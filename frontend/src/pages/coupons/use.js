@@ -28,9 +28,8 @@ function Use({ selfUser }) {
       setCouponQR(couponQRResponse.data);
       setProduct(productResponse.data);
     }
-    fetch();
-  }, []);
-  if (!couponQR || !product) return <div>loading...</div>
+    selfUser && fetch();
+  }, [selfUser]);
   
   return (
     <Layout title={`쿠폰 사용 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
