@@ -18,18 +18,6 @@ import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const postStoreNotice = async (storeNotice) => {
-  const processedStoreNotice = {
-    article: {
-      title: storeNotice.title,
-      content: storeNotice.content,
-      images: storeNotice.images,
-    },
-    store: storeNotice.store,
-  };
-  return await requestToBackend('api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
-};
-
 function Create({ selfUser }) {
 
   const router = useRouter();
@@ -43,6 +31,18 @@ function Create({ selfUser }) {
     title: false,
     content: false,
   });
+  
+  const postStoreNotice = async (storeNotice) => {
+    const processedStoreNotice = {
+      article: {
+        title: storeNotice.title,
+        content: storeNotice.content,
+        images: storeNotice.images,
+      },
+      store: storeNotice.store,
+    };
+    return await requestToBackend('api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+  };
 
   const uppy = useUppy(() => {
     return new Uppy()

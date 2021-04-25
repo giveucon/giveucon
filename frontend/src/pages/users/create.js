@@ -14,14 +14,6 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 
-const getSelfAccount = async () => {
-  return await requestToBackend('api/accounts/self/', 'get', 'json', null, null);
-};
-
-const postSelfUser = async (selfUser) => {
-  return await requestToBackend('api/users/', 'post', 'json', selfUser, null);
-};
-
 function Create() {
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
@@ -37,6 +29,14 @@ function Create() {
     first_name: false,
     last_name: false,
   });
+
+  const getSelfAccount = async () => {
+    return await requestToBackend('api/accounts/self/', 'get', 'json', null, null);
+  };
+  
+  const postSelfUser = async (selfUser) => {
+    return await requestToBackend('api/users/', 'post', 'json', selfUser, null);
+  };
 
   useEffect(() => {
     const fetchSelfAccount = async () => {

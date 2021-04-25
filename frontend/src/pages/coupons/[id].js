@@ -18,16 +18,23 @@ function Id({ selfUser }) {
   const [coupon, setCoupon] = useState(null);
   const [product, setProduct] = useState(null);
 
+  const getCoupon = async () => {
+    return await requestToBackend(`api/coupons/${router.query.id}/`, 'get', 'json', null, null);
+  };
+
+  const getProduct = async (coupon) => {
+    return await requestToBackend(`api/products/${coupon.product}/`, 'get', 'json', null, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const couponResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
-      const productResponse = await requestToBackend(`api/products/${couponResponse.data.id}`, 'get', 'json', null, null);
+      const couponResponse = await getCoupon();
+      const productResponse = await getProduct(couponResponse.data);
       setCoupon(couponResponse.data);
       setProduct(productResponse.data);
     }
     selfUser && fetch();
   }, [selfUser]);
-  if (!coupon || !product) return <div>loading...</div>
 
   return (
     <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

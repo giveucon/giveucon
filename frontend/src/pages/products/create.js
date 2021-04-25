@@ -19,19 +19,8 @@ import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const postProduct = async (product) => {
-  const processedProduct = {
-    name: product.name,
-    description: product.description,
-    price: product.price,
-    duration: product.duration + ' 00',
-    images: product.images,
-    store: product.store,
-  };
-  return await requestToBackend('/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
-};
-
 function Create({ selfUser }) {
+
   const router = useRouter();
   const [store, setStore] = useState(null);
   const [product, setProduct] = useState({
@@ -48,6 +37,18 @@ function Create({ selfUser }) {
     price: false,
     duration: false,
   });
+
+  const postProduct = async (product) => {
+    const processedProduct = {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      duration: product.duration + ' 00',
+      images: product.images,
+      store: product.store,
+    };
+    return await requestToBackend('/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
+  };
 
   const uppy = useUppy(() => {
     return new Uppy()

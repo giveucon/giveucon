@@ -30,18 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putStoreNotice = async (storeNotice) => {
-  const processedStoreNotice = {
-    article: {
-      title: storeNotice.title,
-      content: storeNotice.content,
-      images: storeNotice.images,
-    },
-    store: storeNotice.store,
-  };
-  return await requestToBackend('api/store-notices/', 'put', 'multipart', jsonToFormData(processedStoreNotice), null);
-};
-
 function Update({ selfUser }) {
 
   const router = useRouter();
@@ -51,6 +39,22 @@ function Update({ selfUser }) {
     title: false,
     content: false,
   });
+
+  const getStoreNotice = async () => {
+    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const putStoreNotice = async (storeNotice) => {
+    const processedStoreNotice = {
+      article: {
+        title: storeNotice.title,
+        content: storeNotice.content,
+        images: storeNotice.images,
+      },
+      store: storeNotice.store,
+    };
+    return await requestToBackend('api/store-notices/', 'put', 'multipart', jsonToFormData(processedStoreNotice), null);
+  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -64,7 +68,7 @@ function Update({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
+      const storeNoticeResponse = await getStoreNotice();
       setStoreNotice(storeNoticeResponse.data);
     }
     selfUser && fetch();

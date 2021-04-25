@@ -19,12 +19,16 @@ function Index({ selfUser }) {
   const router = useRouter();
   const [selfCouponList, setSelfCouponList] = useState(null);
 
+  const getCouponList = async (user) => {
+    return await requestToBackend(`api/coupons/`, 'get', 'json', null, {
+      user,
+    });
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const selfCouponListResponse = await requestToBackend('api/coupons/', 'get', 'json', null, {
-        user: selfUser?.id
-      });
-      setSelfCouponList(selfCouponListResponse.data);
+      const selfCouponListResponse = await getCouponList(selfUser.id);
+      setSelfCouponList(selfCouponListResponse.data.results);
     }
     selfUser && fetch();
   }, [selfUser]);

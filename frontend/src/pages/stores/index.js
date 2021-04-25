@@ -22,12 +22,20 @@ function Index({ selfUser }) {
   const [storeList, setStoreList] = useState(null);
   const [selfStoreList, setSelfStoreList] = useState(null);
 
+  const getStoreList = async () => {
+    return await requestToBackend(`api/stores/`, 'get', 'json', null, null);
+  };
+
+  const getSelfStoreList = async (selfUser) => {
+    return await requestToBackend(`api/stores/`, 'get', 'json', null, {
+      user: selfUser.id
+    });
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const storeListResponse = await requestToBackend('api/stores/', 'get', 'json', null, null);
-      const selfStoreListResponse = await requestToBackend('api/stores/', 'get', 'json', null, {
-        user: selfUser?.id
-      });
+      const storeListResponse = await getStoreList();
+      const selfStoreListResponse = await getSelfStoreList(selfUser);
       setStoreList(storeListResponse.data.results);
       setSelfStoreList(selfStoreListResponse.data.results);
     }

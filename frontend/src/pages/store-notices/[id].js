@@ -15,10 +15,18 @@ function Id({ selfUser }) {
   const [storeNotice, setStoreNotice] = useState(null);
   const [store, setStore] = useState(null);
 
+  const getStoreNotice = async () => {
+    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const getStore = async (storeNotice) => {
+    return await requestToBackend(`api/stores/${storeNotice.store}`, 'get', 'json', null, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
-      const storeResponse = await requestToBackend(`api/stores/${storeNoticeResponse.data.store}/`, 'get', 'json', null, null);
+      const storeNoticeResponse = await getStoreNotice();
+      const storeResponse = await getStore(storeNoticeResponse.data);
       setStoreNotice(storeNoticeResponse.data);
       setStore(storeResponse.data);
     }

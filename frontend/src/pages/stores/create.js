@@ -25,10 +25,6 @@ import withAuth from '../../utils/withAuth'
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
-const postStore = async (store) => {
-  return await requestToBackend('api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
-};
-
 const dummyTagList = [
   {
     name: '로딩중'
@@ -36,6 +32,7 @@ const dummyTagList = [
 ]
 
 function Create({ selfUser }) {
+
   const router = useRouter();
   const [store, setStore] = useState({
     name: null,
@@ -49,6 +46,14 @@ function Create({ selfUser }) {
   });
   const [tagList, setTagList] = useState(null);
 
+  const getTagList = async () => {
+    return await requestToBackend('api/tags/', 'get', 'json', null, null);
+  };
+
+  const postStore = async (store) => {
+    return await requestToBackend('api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+  };
+
   const uppy = useUppy(() => {
     return new Uppy()
     .on('file-added', (file) => {
@@ -61,7 +66,7 @@ function Create({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const tagListResponse = await requestToBackend('api/tags/', 'get', 'json', null, null);
+      const tagListResponse = await getTagList();
       setTagList(tagListResponse.data);
     }
     selfUser && fetch();

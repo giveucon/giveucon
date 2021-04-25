@@ -30,17 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putCentralNotice = async (centralNotice) => {
-  const processedCentralNotice = {
-    article: {
-      title: centralNotice.title,
-      content: centralNotice.content,
-      images: centralNotice.images,
-    },
-  };
-  return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
-};
-
 function Update({ selfUser }) {
 
   const router = useRouter();
@@ -51,6 +40,21 @@ function Update({ selfUser }) {
     content: false,
   });
   
+  const getCentralNotice = async () => {
+    return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+  };
+
+  const putCentralNotice = async (centralNotice) => {
+    const processedCentralNotice = {
+      article: {
+        title: centralNotice.title,
+        content: centralNotice.content,
+        images: centralNotice.images,
+      },
+    };
+    return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+  };
+
   const uppy = useUppy(() => {
     return new Uppy()
     .on('files-added', (files) => {
@@ -63,7 +67,7 @@ function Update({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      const centralNoticeResponse = await getCentralNotice();
       setCentralNotice(centralNoticeResponse.data);
     }
     selfUser && fetch();

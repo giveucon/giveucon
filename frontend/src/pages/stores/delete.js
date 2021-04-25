@@ -21,19 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteStore = async (store) => {
-  return await requestToBackend(`api/stores/${store.id}/`, 'delete', 'json');
-};
-
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
 
+  const getStore = async () => {
+    return await requestToBackend(`api/stores/${router.query.id}/`, 'get', 'json');
+  };
+
+  const deleteStore = async (store) => {
+    return await requestToBackend(`api/stores/${store.id}/`, 'delete', 'json');
+  };
+
   const [store, setStore] = useState(null);
   useEffect(() => {
     const fetch = async () => {
-      const storeResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
+      const storeResponse = await getStore();
       setStore(storeResponse.data);
     }
     selfUser && fetch();
