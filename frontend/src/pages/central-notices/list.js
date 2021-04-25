@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -8,24 +9,37 @@ import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
 import AlertBox from '../../components/AlertBox'
-import Tile from '../../components/Tile';
+import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
 import Layout from '../../components/Layout'
 import ListItemCard from '../../components/ListItemCard';
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
+import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-function Index({ selfUser }) {
+function List({ selfUser }) {
 
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(null);
+  const [centralNoticePagination, setCentralNoticePagination] = useState(0);
+  const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(true);
+
+  const getCentralNoticeList = async (page) => {
+    return await requestToBackend('api/central-notices/', 'get', 'json', null, {
+      page
+    });
+  };
+  
+  const getMoreCentralNoticeList = async () => {
+    const centralNoticeListResponse = await getCentralNoticeList(centralNoticePagination + 1);
+    setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
+    setCentralNoticePagination(prevCentralNoticeListPagination => prevCentralNoticeListPagination + 1);
+    if (centralNoticeListResponse.data.next === null) setHasMoreCentralNoticeList(prevHasMoreCentralNoticeList => false);
+  }
 
   useEffect(() => {
-    const fetch = async () => {
-      const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
-      setCentralNoticeList(centralNoticeListResponse.data);
-    }
+    const fetch = async () => await getMoreCentralNoticeList();
     selfUser && fetch();
   }, [selfUser]);
 
@@ -73,17 +87,25 @@ function Index({ selfUser }) {
       >
         {centralNoticeList && (
           (centralNoticeList.length > 0) ? (
-            <Grid container>
-              {centralNoticeList.map((item, index) => (
-                <Grid item xs={12} key={index}>
-                  <ListItemCard
-                    title={item.article.title}
-                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                    onClick={() => router.push(`/central-notices/${item.id}/`)}
-                  />
+            <InfiniteScroll
+              dataLength={centralNoticeList.length}
+              next={getMoreCentralNoticeList}
+              hasMore={hasMoreCentralNoticeList}
+              loader={<InfiniteScrollLoader loading={true} />}
+              endMessage={<InfiniteScrollLoader loading={false} />}
+            >
+             <Grid container>
+                {centralNoticeList.map((item, index) => (
+                  <Grid item xs={12} key={index}>
+                    <ListItemCard
+                      title={item.article.title}
+                      subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                      onClick={() => router.push(`/central-notices/${item.id}/`)}
+                    />
+                  </Grid>
+                ))}
                 </Grid>
-              ))}
-              </Grid>
+              </InfiniteScroll>
             ) : (
             <AlertBox content='공지사항이 없습니다.' variant='information' />
           )
@@ -115,4 +137,4 @@ function Index({ selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default withAuth(List);

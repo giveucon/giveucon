@@ -28,8 +28,8 @@ function Index({ selfUser }) {
       const selfStoreListResponse = await requestToBackend('api/stores/', 'get', 'json', null, {
         user: selfUser?.id
       });
-      setStoreList(storeListResponse.data);
-      setSelfStoreList(selfStoreListResponse.data);
+      setStoreList(storeListResponse.data.results);
+      setSelfStoreList(selfStoreListResponse.data.results);
     }
     selfUser && fetch();
   }, [selfUser]);
@@ -57,7 +57,7 @@ function Index({ selfUser }) {
         {selfStoreList && (
           selfStoreList.length > 0 ? (
             <Grid container spacing={1}>
-              {selfStoreList.map((item, index) => (
+              {selfStoreList.slice(0, 4).map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}

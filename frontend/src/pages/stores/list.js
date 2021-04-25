@@ -34,27 +34,28 @@ function List({ selfUser }) {
   };
 
   const getMoreStoreList = async () => {
-    const storeListResponse = await getStoreList(user, storeListPagination + 1);
-    setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
+    const storeListResponse = await getStoreList(
+      router.query.user,
+      storeListPagination + 1
+    );
+    setStoreList(prevStoreList => (prevStoreList || []).concat(storeListResponse.data.results));
     setStoreListPagination(prevStoreListPagination => prevStoreListPagination + 1);
     if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
   }
 
   useEffect(() => {
     const fetch = async () => {
-      const storeListResponse = await getStoreList(router.query.user, storeListPagination + 1);
-      const userResponse = router.query.user && await getUser(router.query.user);
-      setStoreList(storeListResponse.data.results);
-      setStoreListPagination(prevStoreListPagination => prevStoreListPagination + 1);
-      if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
-      router.query.user && setUser(userResponse.data);
+      await getMoreStoreList();
+      if (router.query.user) {
+        const userResponse = await getUser(router.query.user);
+        setUser(userResponse.data);
+      }
     }
     selfUser && fetch();
   }, [selfUser]);
 
   return (
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
-
         <Section
           backButton
           title='가게 목록'
@@ -62,7 +63,7 @@ function List({ selfUser }) {
           {storeList && (
             (storeList.length > 0) ? (
               <InfiniteScroll
-                dataLength={storeList.length} //This is important field to render the next data
+                dataLength={storeList.length}
                 next={getMoreStoreList}
                 hasMore={hasMoreStoreList}
                 loader={<InfiniteScrollLoader loading={true} />}

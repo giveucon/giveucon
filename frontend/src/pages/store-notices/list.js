@@ -15,19 +15,25 @@ import withAuth from '../../utils/withAuth'
 function List({ selfUser }) {
 
   const router = useRouter();
-  const [storeNotice, setStoreNotice] = useState(null);
-  const [store, setStore] = useState(null);
+  const [storeNoticeList, setStoreNoticeList] = useState(null);
+  const [storeNoticePagination, setStoreNoticePagination] = useState(0);
+  const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(true);
+
+  const getStoreNoticeList = async (page) => {
+    return await requestToBackend('api/store-notices/', 'get', 'json', null, {
+      page
+    });
+  };
+  
+  const getMoreStoreNoticeList = async () => {
+    const storeNoticeListResponse = await getStoreNoticeList(storeNoticePagination + 1);
+    setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));
+    setStoreNoticePagination(prevStoreNoticeListPagination => prevStoreNoticeListPagination + 1);
+    if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(prevHasMoreStoreNoticeList => false);
+  }
 
   useEffect(() => {
-    const fetch = async () => {
-      const storeNoticeResponse = await requestToBackend('api/store-notices', 'get', 'json', null, {
-        user: router.query.user || null,
-        store: router.query.store || null,
-      });
-      const storeResponse = await requestToBackend(`api/stores/${router.query.id}/`, 'get', 'json', null, null);
-      setStoreNotice(storeNoticeResponse.data);
-      setStore(storeResponse.data);
-    }
+    const fetch = async () => await getMoreStoreNoticeList();
     selfUser && fetch();
   }, [selfUser]);
 
@@ -37,23 +43,33 @@ function List({ selfUser }) {
         backButton
         title='가게 공지사항 목록'
       >
-        {storeList && (storeList.length > 0) ? (
-          <Grid container>
-            {storeList && storeList.map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/store-notices/${item.id}/`)}
-                  menuItems={
-                    <MenuItem>Menu Item</MenuItem>
-                  }
-                />
+        {storeList && (
+          (storeList.length > 0) ? (
+            <InfiniteScroll
+              dataLength={storeNoticeList.length}
+              next={getMoreStoreNoticeList}
+              hasMore={hasMoreStoreNoticeList}
+              loader={<InfiniteScrollLoader loading={true} />}
+              endMessage={<InfiniteScrollLoader loading={false} />}
+            >
+              <Grid container>
+                {storeList && storeList.map((item, index) => (
+                  <Grid item xs={6} key={index}>
+                    <Tile
+                      title={item.name}
+                      image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                      onClick={() => router.push(`/store-notices/${item.id}/`)}
+                      menuItems={
+                        <MenuItem>Menu Item</MenuItem>
+                      }
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <AlertBox content='가게가 없습니다.' variant='information' />
+            </InfiniteScroll>
+          ) : (
+            <AlertBox content='가게 공지사항이 없습니다.' variant='information' />
+          )
         )}
       </Section>
       { store && (store.user === selfUser.id) && (

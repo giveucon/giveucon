@@ -99,7 +99,7 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/central-notices/`)}
+            onClick={() => router.push(`/central-notices/list/`)}
           >
             공지사항
           </Button>
