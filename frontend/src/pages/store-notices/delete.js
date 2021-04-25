@@ -21,19 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteStoreNotice = async (storeNotice) => {
-  return await requestToBackend(`api/store-notices/${storeNotice.id}/`, 'delete', 'json');
-};
-
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
   const [storeNotice, setStoreNotice] = useState(null);
 
+  const getStoreNotice = async () => {
+    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const deleteStoreNotice = async (storeNotice) => {
+    return await requestToBackend(`api/store-notices/${storeNotice.id}/`, 'delete', 'json');
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const storeNoticeResponse = await requestToBackend(`api/store-notices/${router.query.id}/`, 'get', 'json', null, null);
+      const storeNoticeResponse = await getStoreNotice();
       setStoreNotice(storeNoticeResponse.data);
     }
     selfUser && fetch();

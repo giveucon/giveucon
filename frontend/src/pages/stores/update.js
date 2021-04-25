@@ -37,10 +37,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putStore = async (store) => {
-  return await requestToBackend(`api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
-};
-
 const dummyTagList = [
   {
     name: '로딩중'
@@ -48,6 +44,7 @@ const dummyTagList = [
 ]
 
 function Update({ selfUser }) {
+
   const router = useRouter();
   const classes = useStyles();
   const [store, setStore] = useState(null);
@@ -56,6 +53,18 @@ function Update({ selfUser }) {
     description: false,
   });
   const [tagList, setTagList] = useState(null);
+
+  const getStore = async () => {
+    return await requestToBackend(`api/stores/${router.query.store}/`, 'get', 'json', null, null);
+  };
+
+  const getTagList = async () => {
+    return await requestToBackend('api/tags/', 'get', 'json', null, null);
+  };
+
+  const putStore = async (store) => {
+    return await requestToBackend(`api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
+  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -69,8 +78,8 @@ function Update({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const storeResponse = await requestToBackend(`api/stores/${router.query.store}/`, 'get', 'json', null, null);
-      const tagListResponse = await requestToBackend('api/tags/', 'get', 'json', null, null);
+      const storeResponse = await getStore();
+      const tagListResponse = await getTagList();
       setStore(storeResponse.data);
       setTagList(tagListResponse.data);
     }

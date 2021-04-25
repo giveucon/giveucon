@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const getCentralNotice = async () => {
+  return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+};
+
 const deleteCentralNotice = async (centralNotice) => {
   return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
@@ -33,7 +37,7 @@ function Delete({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      const centralNoticeResponse = await getCentralNotice();
       setCentralNotice(centralNoticeResponse.data);
     }
     selfUser && fetch();

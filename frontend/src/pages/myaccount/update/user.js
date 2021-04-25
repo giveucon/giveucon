@@ -27,18 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putSelfUser = async (selfUser) => {
-  const data = {
-    email: selfUser.email,
-    user_name: selfUser.user_name,
-    first_name: selfUser.first_name,
-    last_name: selfUser.last_name,
-    dark_mode: selfUser.dark_mode,
-  };
-  return await requestToBackend(`/api/users/${selfUser.id}/`, 'put', 'json', data);
-};
-
 function User({ selfUser: prevSelfUser }) {
+
   const router = useRouter();
   const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
@@ -55,6 +45,18 @@ function User({ selfUser: prevSelfUser }) {
     first_name: false,
     last_name: false,
   });
+  
+  const putSelfUser = async (selfUser) => {
+    const data = {
+      email: selfUser.email,
+      user_name: selfUser.user_name,
+      first_name: selfUser.first_name,
+      last_name: selfUser.last_name,
+      dark_mode: selfUser.dark_mode,
+    };
+    return await requestToBackend(`/api/users/${selfUser.id}/`, 'put', 'json', data);
+  };
+
   return (
     <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

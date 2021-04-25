@@ -10,9 +10,13 @@ function Id({ selfUser }) {
   const router = useRouter();
   const [image, setImage] = useState(null);
 
+  const getImage = async () => {
+    return await requestToBackend(`api/images/${router.query.id}/`, 'get', 'json', null, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const imageResponse = await requestToBackend(`api/images/${router.query.id}`, 'get', 'json', null, null);
+      const imageResponse = await getImage();
       setImage(imageResponse.data);
     }
     selfUser && fetch();

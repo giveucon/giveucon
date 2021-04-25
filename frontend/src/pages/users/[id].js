@@ -13,12 +13,16 @@ import withAuth from '../../utils/withAuth'
 
 function Id({ selfUser }) {
 
+  const getUser = async () => {
+    return await requestToBackend(`api/users/${router.query.id}`, 'get', 'json', null, null);
+  };
+
   const router = useRouter();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetch = async () => {
-      const userResponse = await requestToBackend(`api/users/${router.query.id}/`, 'get', 'json', null, null);;
+      const userResponse = await getUser();
       setUser(userResponse.data);
     }
     selfUser && fetch();

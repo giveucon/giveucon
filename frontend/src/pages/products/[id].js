@@ -17,10 +17,18 @@ function Id({ selfUser }) {
   const [product, setProduct] = useState(null);
   const [store, setStore] = useState(null);
 
+  const getProduct = async () => {
+    return await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const getStore = async (product) => {
+    return await requestToBackend(`api/stores/${product.store}`, 'get', 'json', null, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
-      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      const productResponse = await getProduct();
+      const storeResponse = await getStore(productResponse.data);
       setProduct(prevProduct => productResponse.data);
       setStore(prevStore => storeResponse.data);
     }

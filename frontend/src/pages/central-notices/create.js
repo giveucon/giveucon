@@ -18,18 +18,8 @@ import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const postCentralNotice = async (centralNotice) => {
-  const processedCentralNotice = {
-    article: {
-      title: centralNotice.title,
-      content: centralNotice.content,
-      images: centralNotice.images,
-    },
-  };
-  return await requestToBackend('api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
-};
-
 function Create({ selfUser }) {
+  
   const router = useRouter();
   const [centralNotice, setCentralNotice] = useState({
     title: null,
@@ -40,6 +30,17 @@ function Create({ selfUser }) {
     title: false,
     content: false,
   });
+
+  const postCentralNotice = async (centralNotice) => {
+    const processedCentralNotice = {
+      article: {
+        title: centralNotice.title,
+        content: centralNotice.content,
+        images: centralNotice.images,
+      },
+    };
+    return await requestToBackend('api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+  };
 
   const uppy = useUppy(() => {
     return new Uppy()

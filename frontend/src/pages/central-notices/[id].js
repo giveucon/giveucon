@@ -14,9 +14,13 @@ function Id({ selfUser }) {
   const router = useRouter();
   const [centralNotice, setCentralNotice] = useState(null);
 
+  const getCentralNotice = async () => {
+    return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const centralNoticeResponse = await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+      const centralNoticeResponse = await getCentralNotice();
       setCentralNotice(centralNoticeResponse.data);
     }
     selfUser && fetch();

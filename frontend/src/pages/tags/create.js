@@ -10,13 +10,6 @@ import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const postTag = async (tag) => {
-  const data = {
-    name: tag.name,
-  }
-  return await requestToBackend('api/tags/', 'post', 'json', data, null);
-};
-
 function Create({ selfUser }) {
 
   const router = useRouter();
@@ -26,6 +19,13 @@ function Create({ selfUser }) {
   const [tagError, setTagError] = useState({
     name: false,
   });
+
+  const postTag = async (tag) => {
+    const data = {
+      name: tag.name,
+    }
+    return await requestToBackend('api/tags/', 'post', 'json', data, null);
+  };
 
   return (
     <Layout title={`태그 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

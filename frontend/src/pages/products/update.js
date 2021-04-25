@@ -31,18 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putProduct = async (product) => {
-  const processedProduct = {
-    name: product.name,
-    description: product.description,
-    price: product.price,
-    duration: product.duration + ' 00',
-    images: product.images,
-    store: product.store,
-  };
-  return await requestToBackend(`api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
-};
-
 function Update({ selfUser }) {
 
   const router = useRouter();
@@ -55,6 +43,26 @@ function Update({ selfUser }) {
     duration: false,
   });
   const [store, setStore] = useState(null);
+
+  const getProduct = async () => {
+    return await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const getStore = async (product) => {
+    return await requestToBackend(`api/stores/${product.store}`, 'get', 'json', null, null);
+  };
+
+  const putProduct = async (product) => {
+    const processedProduct = {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      duration: product.duration + ' 00',
+      images: product.images,
+      store: product.store,
+    };
+    return await requestToBackend(`api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
+  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -68,8 +76,8 @@ function Update({ selfUser }) {
 
   useEffect(() => {
     const fetch = async () => {
-      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
-      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      const productResponse = await getProduct();
+      const storeResponse = await getStore(productResponse.data);
       setProduct(productResponse.data);
       setStore(storeResponse.data);
     }

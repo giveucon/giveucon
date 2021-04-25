@@ -20,6 +20,7 @@ function List({ selfUser }) {
   const [couponList, setCouponList] = useState(null);
   const [user, setUser] = useState(null);
   const [store, setStore] = useState(null);
+  const [product, setProduct] = useState(null);
   const [couponListPagination, setCouponListPagination] = useState(0);
   const [hasMoreCouponList, setHasMoreCouponList] = useState(true);
 

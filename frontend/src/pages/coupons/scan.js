@@ -9,19 +9,19 @@ import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const putCouponScan = async (qrData) => {
-  const data = {
-    qr_data: qrData
-  };
-  return await requestToBackend('api/coupons/scan/', 'put', 'json', data, null);
-};
-
-const getCoupon = async (qrData) => {
-  return await requestToBackend(`api/products/${qrData.id}`, 'get', 'json');
-};
-
 function Scan({ selfUser }) {
   const router = useRouter();
+
+  const putCouponScan = async (qrData) => {
+    const data = {
+      qr_data: qrData
+    };
+    return await requestToBackend('api/coupons/scan/', 'put', 'json', data, null);
+  };
+  
+  const getCoupon = async (qrData) => {
+    return await requestToBackend(`api/products/${qrData.id}`, 'get', 'json');
+  };
 
   useEffect(() => {
     const video = document.createElement('video');

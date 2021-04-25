@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteSelfUser = async (selfUser) => {
-  return await requestToBackend(`api/users/${selfUser.id}/`, 'delete', 'json');
-};
-
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
+
+  const deleteSelfUser = async (selfUser) => {
+    return await requestToBackend(`api/users/${selfUser.id}/`, 'delete', 'json');
+  };
 
   return (
     <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

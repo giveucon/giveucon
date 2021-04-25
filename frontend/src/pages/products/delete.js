@@ -21,19 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteProduct = async (product) => {
-  return await requestToBackend(`api/products/${product.id}/`, 'delete', 'json');
-};
-
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
   const [product, setProduct] = useState(null);
 
+  const getProduct = async () => {
+    return await requestToBackend(`api/products/${router.query.id}/`, 'get', 'json');
+  };
+
+  const deleteProduct = async (product) => {
+    return await requestToBackend(`api/products/${product.id}/`, 'delete', 'json');
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+      const productResponse = await getProduct();
       setProduct(productResponse.data);
     }
     selfUser && fetch();

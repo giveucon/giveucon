@@ -21,19 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteCoupon = async (coupon) => {
-  return await requestToBackend(`api/coupons/${coupon.id}/`, 'delete', 'json');
-};
-
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
   const [coupon, setCoupon] = useState(null);
 
+  const getCoupon = async () => {
+    return await requestToBackend(`api/coupons/${router.query.id}/`, 'get', 'json', null, null);
+  };
+
+  const deleteCoupon = async (coupon) => {
+    return await requestToBackend(`api/coupons/${coupon.id}/`, 'delete', 'json');
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const couponResponse = await requestToBackend(`api/coupons/${router.query.id}`, 'get', 'json', null, null);
+      const couponResponse = await getCoupon();
       setCoupon(couponResponse.data);
     }
     selfUser && fetch();

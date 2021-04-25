@@ -11,25 +11,33 @@ import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-const postCoupon = async (selfUser, product) => {
-  const data = {
-    used: false,
-    user: selfUser.id,
-    product: product.id,
-  };
-  return await requestToBackend(`api/coupons/`, 'post', 'json', data, null);
-};
-
 function Charge({ selfUser }) {
 
   const router = useRouter();
   const [product, setProduct] = useState(null);
   const [store, setStore] = useState(null);
 
+  const getProduct = async () => {
+    return await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const getStore = async (product) => {
+    return await requestToBackend(`api/stores/${product.store}`, 'get', 'json', null, null);
+  };
+
+  const postCoupon = async (selfUser, product) => {
+    const data = {
+      used: false,
+      user: selfUser.id,
+      product: product.id,
+    };
+    return await requestToBackend(`api/coupons/`, 'post', 'json', data, null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const productResponse = await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
-      const storeResponse = await requestToBackend(`api/stores/${productResponse.data.store}`, 'get', 'json', null, null);
+      const productResponse = await getProduct();
+      const storeResponse = await getStore(productResponse.data);
       setProduct(productResponse.data);
       setStore(storeResponse.data);
     }

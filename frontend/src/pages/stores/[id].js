@@ -33,15 +33,27 @@ function Id({ selfUser }) {
   const [storeNoticeList, setStoreNoticeList] = useState(null);
   const [productList, setProductList] = useState(null);
 
+  const getStore = async () => {
+    return await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
+  };
+
+  const getStoreNoticeList = async (store) => {
+    return await requestToBackend('api/store-notices/', 'get', 'json', null, {
+      store: store.id
+    });
+  };
+
+  const getProductList = async (store) => {
+    return await requestToBackend('api/products/', 'get', 'json', null, {
+      store: store.id
+    });
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const storeResponse = await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
-      const storeNoticeListResponse = await requestToBackend('api/store-notices/', 'get', 'json', null, {
-        user: storeResponse.data.user
-      });
-      const productListResponse = await requestToBackend('api/products/', 'get', 'json', null, {
-        user: storeResponse.data.user
-      });
+      const storeResponse = await getStore();
+      const storeNoticeListResponse = await getStoreNoticeList(storeResponse.data);
+      const productListResponse = await getProductList(storeResponse.data);
       setStore(storeResponse.data);
       setStoreNoticeList(storeNoticeListResponse.data.results);
       setProductList(productListResponse.data.results);
