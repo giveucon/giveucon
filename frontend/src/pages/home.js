@@ -61,7 +61,7 @@ function Home({ selfUser }) {
   useEffect(() => {
     const fetch = async () => {
       const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
-      setCentralNoticeList(centralNoticeListResponse.data);
+      setCentralNoticeList(centralNoticeListResponse.data.results);
     }
     selfUser && fetch();
   }, [selfUser]);
@@ -72,7 +72,7 @@ function Home({ selfUser }) {
         title='홈'
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
-          <IconButton onClick={() => router.push('/central-notices/')}>
+          <IconButton onClick={() => router.push('/central-notices/list/')}>
             <AnnouncementIcon />
           </IconButton>,
           <IconButton>

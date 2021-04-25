@@ -43,8 +43,8 @@ function Id({ selfUser }) {
         user: storeResponse.data.user
       });
       setStore(storeResponse.data);
-      setStoreNoticeList(storeNoticeListResponse.data);
-      setProductList(productListResponse.data);
+      setStoreNoticeList(storeNoticeListResponse.data.results);
+      setProductList(productListResponse.data.results);
     }
     selfUser && fetch();
   }, [selfUser]);
