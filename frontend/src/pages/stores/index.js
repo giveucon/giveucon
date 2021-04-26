@@ -55,7 +55,7 @@ function Index({ selfUser }) {
         titleSuffix={
           <IconButton 
             onClick={() => router.push({
-              pathname: '/stores/',
+              pathname: '/stores/list/',
               query: { user: selfUser.id },
             })}>
             <ArrowForwardIcon />
@@ -92,7 +92,10 @@ function Index({ selfUser }) {
       <Section
         title='모든 가게'
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
-        titleSuffix={<><IconButton><ArrowForwardIcon /></IconButton></>}
+        titleSuffix={
+          <IconButton onClick={() => router.push('/stores/list/')}>
+            <ArrowForwardIcon />
+          </IconButton>}
         padding={false}
       >
         {storeList && (
