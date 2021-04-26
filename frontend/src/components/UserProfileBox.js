@@ -27,7 +27,7 @@ export default function UserProfileBox({ image=null, name=null, onClick=null, sk
           <Box display='flex' alignItems='center' justifyContent='flex-start' margin='1rem'>
             <Skeleton animation="wave" variant="circle" width='5rem' height='5rem'/>
             <Box flexGrow={1} marginX='1rem'>
-              <Skeleton animation="wave" width='100%' height='1.5rem'/>
+              <Skeleton animation="wave" width='100%' height='1rem'/>
               <Skeleton animation="wave" width='80%' height='1rem'/>
             </Box>
           </Box>
