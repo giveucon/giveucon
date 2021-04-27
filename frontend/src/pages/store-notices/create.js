@@ -16,9 +16,41 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Create({ selfUser }) {
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
+const postStoreNotice = async (storeNotice) => {
+  const processedStoreNotice = {
+    article: {
+      title: storeNotice.title,
+      content: storeNotice.content,
+      images: storeNotice.images,
+    },
+    store: storeNotice.store,
+  };
+  return await requestToBackend(null, 'api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeResponse = await getStore(context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, store: storeResponse.data },
+  }
+})
+
+function Create({ selfUser, store }) {
 
   const router = useRouter();
   const [storeNotice, setStoreNotice] = useState({
@@ -31,18 +63,6 @@ function Create({ selfUser }) {
     title: false,
     content: false,
   });
-  
-  const postStoreNotice = async (storeNotice) => {
-    const processedStoreNotice = {
-      article: {
-        title: storeNotice.title,
-        content: storeNotice.content,
-        images: storeNotice.images,
-      },
-      store: storeNotice.store,
-    };
-    return await requestToBackend('api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
-  };
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -145,4 +165,4 @@ function Create({ selfUser }) {
   );
 }
 
-export default withAuth(Create);
+export default Create;

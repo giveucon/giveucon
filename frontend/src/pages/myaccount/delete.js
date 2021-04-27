@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,14 +21,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const deleteSelfUser = async (context, selfUser) => {
+  return await requestToBackend(context, `api/users/${selfUser.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  return {
+    props: { selfUser },
+  }
+})
+
 function Delete({ selfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
-
-  const deleteSelfUser = async (selfUser) => {
-    return await requestToBackend(`api/users/${selfUser.id}/`, 'delete', 'json');
-  };
 
   return (
     <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -68,4 +74,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

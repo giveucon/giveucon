@@ -7,21 +7,28 @@ import Card from '@material-ui/core/Card';
 import Layout from '../../components/Layout';
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+
+const putCouponScan = async (qrData) => {
+  const data = {
+    qr_data: qrData
+  };
+  return await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', data, null);
+};
+
+const getCoupon = async (qrData) => {
+  return await requestToBackend(null, `api/products/${qrData.id}`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  return {
+    props: { selfUser },
+  };
+})
 
 function Scan({ selfUser }) {
-  const router = useRouter();
 
-  const putCouponScan = async (qrData) => {
-    const data = {
-      qr_data: qrData
-    };
-    return await requestToBackend('api/coupons/scan/', 'put', 'json', data, null);
-  };
-  
-  const getCoupon = async (qrData) => {
-    return await requestToBackend(`api/products/${qrData.id}`, 'get', 'json');
-  };
+  const router = useRouter();
 
   useEffect(() => {
     const video = document.createElement('video');
@@ -102,4 +109,4 @@ function Scan({ selfUser }) {
   );
 }
 
-export default withAuth(Scan);
+export default Scan;

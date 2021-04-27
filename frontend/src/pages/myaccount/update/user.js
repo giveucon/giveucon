@@ -15,7 +15,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
 import requestToBackend from '../../../utils/requestToBackend'
-import withAuth from '../../../utils/withAuth'
+import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -26,6 +26,24 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const putSelfUser = async (selfUser) => {
+  const data = {
+    email: selfUser.email,
+    user_name: selfUser.user_name,
+    first_name: selfUser.first_name,
+    last_name: selfUser.last_name,
+    dark_mode: selfUser.dark_mode,
+  };
+  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const prevSelfUser = selfUser;
+  return {
+    props: { prevSelfUser: prevSelfUser },
+  };
+})
 
 function User({ selfUser: prevSelfUser }) {
 
@@ -45,17 +63,6 @@ function User({ selfUser: prevSelfUser }) {
     first_name: false,
     last_name: false,
   });
-  
-  const putSelfUser = async (selfUser) => {
-    const data = {
-      email: selfUser.email,
-      user_name: selfUser.user_name,
-      first_name: selfUser.first_name,
-      last_name: selfUser.last_name,
-      dark_mode: selfUser.dark_mode,
-    };
-    return await requestToBackend(`/api/users/${selfUser.id}/`, 'put', 'json', data);
-  };
 
   return (
     <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -208,4 +215,4 @@ function User({ selfUser: prevSelfUser }) {
   );
 }
 
-export default withAuth(User);
+export default User;

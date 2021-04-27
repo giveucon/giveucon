@@ -16,7 +16,33 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+
+const postCentralNotice = async (centralNotice) => {
+  const processedCentralNotice = {
+    article: {
+      title: centralNotice.title,
+      content: centralNotice.content,
+      images: centralNotice.images,
+    },
+  };
+  return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser },
+  }
+})
 
 function Create({ selfUser }) {
   
@@ -30,17 +56,6 @@ function Create({ selfUser }) {
     title: false,
     content: false,
   });
-
-  const postCentralNotice = async (centralNotice) => {
-    const processedCentralNotice = {
-      article: {
-        title: centralNotice.title,
-        content: centralNotice.content,
-        images: centralNotice.images,
-      },
-    };
-    return await requestToBackend('api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
-  };
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -143,4 +158,4 @@ function Create({ selfUser }) {
   );
 }
 
-export default withAuth(Create);
+export default Create;

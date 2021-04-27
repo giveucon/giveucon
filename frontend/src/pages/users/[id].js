@@ -9,25 +9,21 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import UserProfileSection from '../../components/UserProfileSection';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Id({ selfUser }) {
+const getUser = async (context) => {
+  return await requestToBackend(context, `api/users/${context.query.id}/`, 'get', 'json');
+};
 
-  const getUser = async () => {
-    return await requestToBackend(`api/users/${router.query.id}`, 'get', 'json', null, null);
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const userResponse = await getUser(context);
+  return {
+    props: { selfUser, user: userResponse.data },
   };
+})
 
+function Id({ selfUser, user }) {
   const router = useRouter();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const userResponse = await getUser();
-      setUser(userResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
   return (
     <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -62,4 +58,4 @@ function Id({ selfUser }) {
 
 }
 
-export default withAuth(Id);
+export default Id;

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { parseCookies } from 'nookies'
+
+import getCookies from './getCookies'
 
 const requestVerifyTokens = async (session) => {
   try {
@@ -18,8 +19,8 @@ const requestVerifyTokens = async (session) => {
   }
 };
 
-export default async function verifySession() {
-  const cookies = parseCookies()
+export default async function verifySession(context) {
+  const cookies = getCookies(context);
   if (cookies.giveucon) {
     const session = JSON.parse(cookies.giveucon);
     const verifyTokensResponse = await requestVerifyTokens(session);

@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,27 +21,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Delete({ selfUser }) {
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
+};
+
+const deleteStore = async (store) => {
+  return await requestToBackend(null, `api/stores/${store.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeResponse = await getStore(context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, store: storeResponse.data },
+  };
+})
+
+function Delete({ selfUser, store }) {
 
   const router = useRouter();
   const classes = useStyles();
-
-  const getStore = async () => {
-    return await requestToBackend(`api/stores/${router.query.id}/`, 'get', 'json');
-  };
-
-  const deleteStore = async (store) => {
-    return await requestToBackend(`api/stores/${store.id}/`, 'delete', 'json');
-  };
-
-  const [store, setStore] = useState(null);
-  useEffect(() => {
-    const fetch = async () => {
-      const storeResponse = await getStore();
-      setStore(storeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`가게 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -81,4 +88,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

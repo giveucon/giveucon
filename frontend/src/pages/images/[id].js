@@ -5,23 +5,20 @@ import { useRouter } from 'next/router'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuth from '../../utils/withAuth'
 
-function Id({ selfUser }) {
+const getImage = async (context) => {
+  return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
+};
 
-  const router = useRouter();
-  const [image, setImage] = useState(null);
-
-  const getImage = async () => {
-    return await requestToBackend(`api/images/${router.query.id}/`, 'get', 'json', null, null);
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const imageResponse = await getImage(context);
+  console.log(imageResponse.data);
+  return {
+    props: { selfUser, image: imageResponse.data },
   };
+})
 
-  useEffect(() => {
-    const fetch = async () => {
-      const imageResponse = await getImage();
-      setImage(imageResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
+function Id({ selfUser, image }) {
+  const router = useRouter();
   return (
     <>
       <Head>

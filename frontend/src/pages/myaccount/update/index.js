@@ -8,7 +8,13 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from '../../../components/Layout'
 import Section from '../../../components/Section'
-import withAuth from '../../../utils/withAuth'
+import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  return {
+    props: { selfUser },
+  };
+})
 
 function Index({ selfUser }) {
 
@@ -40,4 +46,4 @@ function Index({ selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

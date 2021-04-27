@@ -12,19 +12,22 @@ import Layout from '../components/Layout'
 import Section from '../components/Section'
 import convertJsonToFormData from '../utils/convertJsonToFormData'
 import requestToBackend from '../utils/requestToBackend'
-import withAuth from '../utils/withAuth'
+import withAuthServerSideProps from '../utils/withAuthServerSideProps'
 
-const postDummyTimeout = async () => {
-  await new Promise(r => setTimeout(r, 10));
-};
-
-const postDummyUser = async (user) => {
-  return await requestToBackend('api/dummy-users/', 'post', 'json', user, null);
-};
-
-const postDummyStore = async (store) => {
-  return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
-};
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser },
+  };
+})
 
 function Initialize({ selfUser }) {
   
@@ -34,6 +37,18 @@ function Initialize({ selfUser }) {
 
   const dummyTimeout = 200;
   const allRequestCount = dummyTimeout;
+
+  const postDummyTimeout = async () => {
+    await new Promise(r => setTimeout(r, 10));
+  };
+  
+  const postDummyUser = async (user) => {
+    return await requestToBackend('api/dummy-users/', 'post', 'json', user, null);
+  };
+  
+  const postDummyStore = async (store) => {
+    return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+  };
 
   async function InitializeDatabase() {
     setInitializing(true);
@@ -93,4 +108,4 @@ function Initialize({ selfUser }) {
   );
 }
 
-export default withAuth(Initialize);
+export default Initialize;

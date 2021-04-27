@@ -9,32 +9,26 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Id({ selfUser }) {
+const getProduct = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
+};
 
+const getStore = async (context, product) => {
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const productResponse = await getProduct(context);
+  const storeResponse = await getStore(context, productResponse.data);
+  return {
+    props: { selfUser, product: productResponse.data, store: storeResponse.data },
+  };
+})
+
+function Id({ selfUser, product, store }) {
   const router = useRouter();
-  const [product, setProduct] = useState(null);
-  const [store, setStore] = useState(null);
-
-  const getProduct = async () => {
-    return await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const getStore = async (product) => {
-    return await requestToBackend(`api/stores/${product.store}`, 'get', 'json', null, null);
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const productResponse = await getProduct();
-      const storeResponse = await getStore(productResponse.data);
-      setProduct(prevProduct => productResponse.data);
-      setStore(prevStore => storeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
   return (
     <Layout title={`${product ? product.name : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -115,4 +109,4 @@ function Id({ selfUser }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;

@@ -12,47 +12,49 @@ import Layout from '../../components/Layout';
 import Section from '../../components/Section';
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend';
-import withAuth from '../../utils/withAuth';
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps';
 
-function List({ selfUser }) {
+const getStoreList = async (context) => {
+  const params = {
+    user: context.query.user || null,
+  };
+  return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
+};
+
+const getUser = async (context) => {
+  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const initialStoreListResponse = await getStoreList(context);
+  const userResponse = context.query.user ? await getUser(context) : null;
+  return {
+    props: { 
+      selfUser,
+      initialStoreListResponse,
+      user: context.query.user ? userResponse.data : null
+     },
+  };
+})
+
+function List({ selfUser, initialStoreListResponse, user }) {
 
   const router = useRouter();
-  const [storeList, setStoreList] = useState(null);
-  const [user, setUser] = useState(null);
-  const [storeListPagination, setStoreListPagination] = useState(0);
-  const [hasMoreStoreList, setHasMoreStoreList] = useState(true);
-
-  const getStoreList = async (user, page) => {
-    return await requestToBackend('api/stores/', 'get', 'json', null, {
-      user,
-      page,
-    });
-  };
-  
-  const getUser = async (user) => {
-    return await requestToBackend(`api/users/${user}`, 'get', 'json', null, null);
-  };
+  const [storeList, setStoreList] = useState(initialStoreListResponse.data.results);
+  const [storeListPagination, setStoreListPagination] = useState(1);
+  const [hasMoreStoreList, setHasMoreStoreList] = useState(initialStoreListResponse.data.next);
 
   const getMoreStoreList = async () => {
-    const storeListResponse = await getStoreList(
-      router.query.user,
-      storeListPagination + 1
-    );
-    setStoreList(prevStoreList => (prevStoreList || []).concat(storeListResponse.data.results));
+    const params = {
+      user: user.id || null,
+      page: storeListPagination + 1,
+    };
+    const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
+    console.log(storeListResponse.data.results);
+    setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
     setStoreListPagination(prevStoreListPagination => prevStoreListPagination + 1);
     if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
   }
-
-  useEffect(() => {
-    const fetch = async () => {
-      await getMoreStoreList();
-      if (router.query.user) {
-        const userResponse = await getUser(router.query.user);
-        setUser(userResponse.data);
-      }
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -114,4 +116,4 @@ function List({ selfUser }) {
   );
 }
 
-export default withAuth(List);
+export default List;

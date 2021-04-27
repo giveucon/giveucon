@@ -1,5 +1,4 @@
 import React from 'react';
-import { signOut } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -8,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import AlertBox from '../components/AlertBox'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
+import withAuthServerSideProps from '../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -19,7 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Logout({ session, selfUser }) {
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  return {
+    props: { selfUser },
+  };
+})
+
+function Logout({ selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   return (

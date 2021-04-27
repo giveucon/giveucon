@@ -1,7 +1,5 @@
-import { useEffect } from 'react'
 import axios from 'axios';
-import { useRouter } from 'next/router'
-import { setCookie } from 'nookies'
+import nookies from 'nookies'
 
 const getTokens = async (code) => {
   try {
@@ -58,31 +56,31 @@ const socialLoginRefresh = async (refresh_token) => {
   }
 };
 
-export async function getServerSideProps(ctx) {
-  const tokenResponse = await getTokens(ctx.query.code);
+export async function getServerSideProps(context) {
+  const tokenResponse = await getTokens(context.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
+  const giveuconToken = {
+    'access_token': loginRefreshResponse.data.access,
+    'refresh_token': loginRefreshResponse.data.refresh,
+    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
+    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
+    'access_token_expiry': loginRefreshResponse.data.access_expiry,
+    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+  };
+  nookies.set(context,'giveucon', JSON.stringify(giveuconToken), {
+    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+  })
   return {
-    props: {loginRefresh: loginRefreshResponse.data}
+    redirect: {
+      permanent: false,
+      destination: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+    },
+    props: {}
   };
 }
 
-export default function Callback({loginRefresh}) {
-  const router = useRouter();
-  const giveuconToken = {
-    'access_token': loginRefresh.access,
-    'refresh_token': loginRefresh.refresh,
-    'access_token_lifetime': loginRefresh.access_lifetime,
-    'refresh_token_lifetime': loginRefresh.refresh_lifetime,
-    'access_token_expiry': loginRefresh.access_expiry,
-    'refresh_token_expiry': loginRefresh.refresh_expiry,
-  };
-  useEffect(() => {
-    setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
-      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-    });
-    router.push('/');
-  });
-  return null;
+export default function Callback() {
+  
 }
