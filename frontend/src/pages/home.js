@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';

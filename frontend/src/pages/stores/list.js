@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';

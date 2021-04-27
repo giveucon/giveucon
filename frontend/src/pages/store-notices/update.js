@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
