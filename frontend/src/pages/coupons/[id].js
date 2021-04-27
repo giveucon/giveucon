@@ -10,32 +10,35 @@ import Layout from '../../components/Layout'
 import BusinessCard from '../../components/BusinessCard';
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Id({ selfUser }) {
+const getCoupon = async (context) => {
+  return await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
+};
 
-  const router = useRouter();
-  const [coupon, setCoupon] = useState(null);
-  const [product, setProduct] = useState(null);
+const getProduct = async (context, coupon) => {
+  return await requestToBackend(context, `api/products/${coupon.product}`, 'get', 'json');
+};
 
-  const getCoupon = async () => {
-    return await requestToBackend(`api/coupons/${router.query.id}/`, 'get', 'json', null, null);
-  };
-
-  const getProduct = async (coupon) => {
-    return await requestToBackend(`api/products/${coupon.product}/`, 'get', 'json', null, null);
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const couponResponse = await getCoupon();
-      const productResponse = await getProduct(couponResponse.data);
-      setCoupon(couponResponse.data);
-      setProduct(productResponse.data);
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const couponResponse = await getCoupon(context);
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
     }
-    selfUser && fetch();
-  }, [selfUser]);
+  }
+  const productResponse = await getProduct(context, couponResponse.data);
+  return {
+    props: { selfUser, coupon: couponResponse.data, product: productResponse.data },
+  };
+})
 
+function Id({ selfUser, coupon, product }) {
+  const router = useRouter();
   return (
     <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -75,4 +78,4 @@ function Id({ selfUser }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;

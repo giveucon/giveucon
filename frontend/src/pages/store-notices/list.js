@@ -10,32 +10,46 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function List({ selfUser }) {
+const getStoreNoticeList = async (context) => {
+  return await requestToBackend(context, 'api/store-notices/', 'get', 'json', null, {
+    store: context.query.store,
+  });
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const initialStoreNoticeListResponse = await getStoreNoticeList(context);
+  const storeResponse = await getStore(session, initialStoreNoticeListResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, initialStoreNoticeListResponse },
+  };
+})
+
+function List({ selfUser, initialStoreNoticeList }) {
 
   const router = useRouter();
-  const [storeNoticeList, setStoreNoticeList] = useState(null);
-  const [storeNoticePagination, setStoreNoticePagination] = useState(0);
-  const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(true);
+  const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
+  const [storeNoticeListPagination, setStoreNoticeListPagination] = useState(0);
+  const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(initialStoreNoticeListResponse.data.next);
 
-  const getStoreNoticeList = async (page) => {
-    return await requestToBackend('api/store-notices/', 'get', 'json', null, {
-      page
-    });
-  };
-  
   const getMoreStoreNoticeList = async () => {
-    const storeNoticeListResponse = await getStoreNoticeList(storeNoticePagination + 1);
+    const storeNoticeListResponse = await await requestToBackend('api/store-notices/', 'get', 'json', null, {
+      page: storeNoticeListPagination + 1,
+    });
     setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));
-    setStoreNoticePagination(prevStoreNoticeListPagination => prevStoreNoticeListPagination + 1);
+    setStoreNoticeListPagination(prevStoreNoticeListPagination => prevStoreNoticeListPagination + 1);
     if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(prevHasMoreStoreNoticeList => false);
   }
-
-  useEffect(() => {
-    const fetch = async () => await getMoreStoreNoticeList();
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`가게 공지사항 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -91,4 +105,4 @@ function List({ selfUser }) {
   );
 }
 
-export default withAuth(List);
+export default List;

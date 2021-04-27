@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,28 +21,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Delete({ selfUser }) {
+const getProduct = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
+};
+
+const getStore = async (context, product) => {
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+};
+
+const deleteProduct = async (product) => {
+  return await requestToBackend(null, `api/products/${product.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const productResponse = await getProduct(context);
+  const storeResponse = await getStore(context, productResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, product: productResponse.data },
+  };
+})
+
+function Delete({ selfUser, product }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [product, setProduct] = useState(null);
-
-  const getProduct = async () => {
-    return await requestToBackend(`api/products/${router.query.id}/`, 'get', 'json');
-  };
-
-  const deleteProduct = async (product) => {
-    return await requestToBackend(`api/products/${product.id}/`, 'delete', 'json');
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const productResponse = await getProduct();
-      setProduct(productResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
+  
   return (
     <Layout title={`상품 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -81,4 +93,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

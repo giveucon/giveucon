@@ -16,32 +16,43 @@ import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function List({ selfUser }) {
+const getCentralNoticeList = async (context) => {
+  return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const initialCentralNoticeListResponse = await getCentralNoticeList(context);
+  if (!selfUser.staff && (selfUser.id !== centralResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, initialCentralNoticeListResponse },
+  };
+})
+
+function List({ selfUser, initialCentralNoticeListResponse }) {
 
   const router = useRouter();
-  const [centralNoticeList, setCentralNoticeList] = useState(null);
-  const [centralNoticePagination, setCentralNoticePagination] = useState(0);
-  const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(true);
+  const [centralNoticeList, setCentralNoticeList] = useState(initialCentralNoticeListResponse.data.results);
+  const [centralNoticeListPagination, setCentralNoticeListPagination] = useState(0);
+  const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
-  const getCentralNoticeList = async (page) => {
-    return await requestToBackend('api/central-notices/', 'get', 'json', null, {
-      page
-    });
-  };
-  
   const getMoreCentralNoticeList = async () => {
-    const centralNoticeListResponse = await getCentralNoticeList(centralNoticePagination + 1);
+    const centralNoticeListResponse = await await requestToBackend('api/central-notices/', 'get', 'json', null, {
+      page: centralNoticeListPagination + 1,
+    });
     setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
-    setCentralNoticePagination(prevCentralNoticeListPagination => prevCentralNoticeListPagination + 1);
+    setCentralNoticeListPagination(prevCentralNoticeListPagination => prevCentralNoticeListPagination + 1);
     if (centralNoticeListResponse.data.next === null) setHasMoreCentralNoticeList(prevHasMoreCentralNoticeList => false);
   }
-
-  useEffect(() => {
-    const fetch = async () => await getMoreCentralNoticeList();
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`공지사항 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -137,4 +148,4 @@ function List({ selfUser }) {
   );
 }
 
-export default withAuth(List);
+export default List;

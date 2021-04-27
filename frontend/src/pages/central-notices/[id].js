@@ -7,25 +7,21 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Id({ selfUser }) {
+const getCentralNotice = async (context) => {
+  return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
+};
 
-  const router = useRouter();
-  const [centralNotice, setCentralNotice] = useState(null);
-
-  const getCentralNotice = async () => {
-    return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const centralNoticeResponse = await getCentralNotice(context);
+  return {
+    props: { selfUser, centralNotice: centralNoticeResponse.data },
   };
+})
 
-  useEffect(() => {
-    const fetch = async () => {
-      const centralNoticeResponse = await getCentralNotice();
-      setCentralNotice(centralNoticeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
+function Id({ selfUser, centralNotice }) {
+  const router = useRouter();
   return (
     <Layout title={`${centralNotice ? centralNotice.article.title : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -68,4 +64,4 @@ function Id({ selfUser }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;

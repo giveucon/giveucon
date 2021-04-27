@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { parseCookies, setCookie } from 'nookies'
+
+import getCookies from './getCookies'
+import setCookie from './setCookie'
 
 const requestRefreshTokens = async (session) => {
   try {
@@ -18,8 +20,8 @@ const requestRefreshTokens = async (session) => {
   }
 };
 
-export default async function refreshSession() {
-  const cookies = parseCookies()
+export default async function refreshSession(context) {
+  const cookies = getCookies(context);
   if (cookies.giveucon) {
     const session = JSON.parse(cookies.giveucon);
     const loginRefreshResponse = await requestRefreshTokens(session);
@@ -31,7 +33,7 @@ export default async function refreshSession() {
       'access_token_expiry': loginRefreshResponse.data.access_expiry,
       'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
     };
-    setCookie(null, 'giveucon', JSON.stringify(giveuconToken), {
+    setCookie(context, 'giveucon', JSON.stringify(giveuconToken), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     })

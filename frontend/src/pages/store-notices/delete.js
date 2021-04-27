@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,27 +21,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Delete({ selfUser }) {
+const getStoreNotice = async (context) => {
+  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
+};
+
+const getStore = async (context, StoreNotice) => {
+  return await requestToBackend(context, `api/stores/${StoreNotice.store}/`, 'get', 'json');
+};
+
+const deleteStoreNotice = async (storeNotice) => {
+  return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeNoticeResponse = await getStoreNotice(context);
+  const storeResponse = await getStore(context, storeNoticeResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, storeNotice: storeNoticeResponse.data },
+  };
+})
+
+function Delete({ selfUser, storeNotice }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [storeNotice, setStoreNotice] = useState(null);
-
-  const getStoreNotice = async () => {
-    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const deleteStoreNotice = async (storeNotice) => {
-    return await requestToBackend(`api/store-notices/${storeNotice.id}/`, 'delete', 'json');
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeNoticeResponse = await getStoreNotice();
-      setStoreNotice(storeNoticeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`가게 공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -81,4 +93,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

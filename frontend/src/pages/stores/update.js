@@ -22,7 +22,7 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -37,34 +37,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const dummyTagList = [
-  {
-    name: '로딩중'
-  },
-]
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
+};
 
-function Update({ selfUser }) {
+const getTagList = async (context) => {
+  return await requestToBackend(context, 'api/tags/', 'get', 'json');
+};
+
+const putStore = async (store) => {
+  return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const prevStoreResponse = await getStore(context);
+  if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  const tagListResponse = await getTagList(context);
+  return {
+    props: { selfUser, prevStore: prevStoreResponse.data, tagList: tagListResponse.data },
+  };
+})
+
+function Update({ selfUser, prevStore, tagList }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [store, setStore] = useState(null);
+  const [store, setStore] = useState({
+    id: prevStore.id,
+    name: prevStore.name,
+    description: prevStore.description,
+    images: prevStore.images,
+    tags: prevStore.tags,
+  });
   const [storeError, setStoreError] = useState({
     name: false,
     description: false,
   });
-  const [tagList, setTagList] = useState(null);
-
-  const getStore = async () => {
-    return await requestToBackend(`api/stores/${router.query.store}/`, 'get', 'json', null, null);
-  };
-
-  const getTagList = async () => {
-    return await requestToBackend('api/tags/', 'get', 'json', null, null);
-  };
-
-  const putStore = async (store) => {
-    return await requestToBackend(`api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
-  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -75,16 +91,6 @@ function Update({ selfUser }) {
       setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeResponse = await getStore();
-      const tagListResponse = await getTagList();
-      setStore(storeResponse.data);
-      setTagList(tagListResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);  
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -220,4 +226,4 @@ function Update({ selfUser }) {
   );
 }
 
-export default withAuth(Update);
+export default Update;

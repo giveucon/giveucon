@@ -12,27 +12,24 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Index({ selfUser }) {
-
-  const router = useRouter();
-  const [selfCouponList, setSelfCouponList] = useState(null);
-
-  const getCouponList = async (user) => {
-    return await requestToBackend(`api/coupons/`, 'get', 'json', null, {
-      user,
-    });
+const getCouponList = async (context, selfUser) => {
+  const params = {
+    user: selfUser.id,
   };
+  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      const selfCouponListResponse = await getCouponList(selfUser.id);
-      setSelfCouponList(selfCouponListResponse.data.results);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const selfCouponListResponse = await getCouponList(context, selfUser);
+  return {
+    props: { selfUser, selfCouponList: selfCouponListResponse.data.results },
+  };
+})
 
+function Index({ selfUser, selfCouponList }) {
+  const router = useRouter();
   return (
     <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -80,4 +77,4 @@ function Index({ selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

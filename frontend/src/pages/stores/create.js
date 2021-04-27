@@ -20,18 +20,27 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
-const dummyTagList = [
-  {
-    name: '로딩중'
-  },
-]
+const getTagList = async (context) => {
+  return await requestToBackend(context, 'api/tags/', 'get', 'json');
+};
 
-function Create({ selfUser }) {
+const postStore = async (store) => {
+  return await requestToBackend(null, 'api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const tagListResponse = await getTagList(context);
+  return {
+    props: { selfUser, tagList: tagListResponse.data },
+  }
+})
+
+function Create({ selfUser, tagList }) {
 
   const router = useRouter();
   const [store, setStore] = useState({
@@ -44,15 +53,6 @@ function Create({ selfUser }) {
     name: false,
     description: false,
   });
-  const [tagList, setTagList] = useState(null);
-
-  const getTagList = async () => {
-    return await requestToBackend('api/tags/', 'get', 'json', null, null);
-  };
-
-  const postStore = async (store) => {
-    return await requestToBackend('api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
-  };
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -63,14 +63,6 @@ function Create({ selfUser }) {
       setStore(prevStore => ({...prevStore, images: uppy.getFiles().map((file) => file.data)}));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const tagListResponse = await getTagList();
-      setTagList(tagListResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
   
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -118,7 +110,7 @@ function Create({ selfUser }) {
         <Box paddingY={1}>
           <Autocomplete
             multiple
-            options={tagList || dummyTagList}
+            options={tagList}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {
@@ -188,4 +180,4 @@ function Create({ selfUser }) {
   );
 }
 
-export default withAuth(Create);
+export default Create;

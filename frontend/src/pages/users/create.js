@@ -14,11 +14,27 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 
-function Create() {
+const getSelfAccount = async (context) => {
+  return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
+};
+
+const postSelfUser = async (selfUser) => {
+  return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
+};
+
+export async function getServerSideProps(context) {
+  const selfAccountResponse = await getSelfAccount(context);
+  return {
+    props: { selfAccount: selfAccountResponse.data }
+  };
+}
+
+function Create({ selfAccount }) {
+
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
-    email: null,
-    user_name: null,
+    email: selfAccount.email,
+    user_name: selfAccount.username,
     first_name: null,
     last_name: null,
     dark_mode: false,
@@ -29,26 +45,6 @@ function Create() {
     first_name: false,
     last_name: false,
   });
-
-  const getSelfAccount = async () => {
-    return await requestToBackend('api/accounts/self/', 'get', 'json', null, null);
-  };
-  
-  const postSelfUser = async (selfUser) => {
-    return await requestToBackend('api/users/', 'post', 'json', selfUser, null);
-  };
-
-  useEffect(() => {
-    const fetchSelfAccount = async () => {
-      const selfAccountResponse = await getSelfAccount();
-      setSelfUser(prevSelfUser => ({
-        ...prevSelfUser,
-        email: selfAccountResponse.data.email,
-        user_name: selfAccountResponse.data.username
-      }));
-    }
-    fetchSelfAccount();
-  }, []);
 
   return (
     <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

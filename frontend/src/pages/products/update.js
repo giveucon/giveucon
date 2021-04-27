@@ -19,7 +19,7 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -31,38 +31,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Update({ selfUser }) {
+const getProduct = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
+};
+
+const getStore = async (context, product) => {
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+};
+
+const putProduct = async (product) => {
+  const processedProduct = {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    duration: product.duration + ' 00',
+    images: product.images,
+    store: product.store,
+  };
+  return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const prevProductResponse = await getProduct(context);
+  const storeResponse = await getStore(context, prevProductResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, prevProduct: prevProductResponse.data },
+  };
+})
+
+function Update({ selfUser, prevProduct }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState({
+    id: prevProduct.id,
+    name: prevProduct.name,
+    description: prevProduct.description,
+    price: prevProduct.price,
+    duration: prevProduct.duration,
+    images: prevProduct.images,
+    store: prevProduct.store,
+  });
   const [productError, setProductError] = useState({
     name: false,
     description: false,
     price: false,
     duration: false,
   });
-  const [store, setStore] = useState(null);
-
-  const getProduct = async () => {
-    return await requestToBackend(`api/products/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const getStore = async (product) => {
-    return await requestToBackend(`api/stores/${product.store}`, 'get', 'json', null, null);
-  };
-
-  const putProduct = async (product) => {
-    const processedProduct = {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      duration: product.duration + ' 00',
-      images: product.images,
-      store: product.store,
-    };
-    return await requestToBackend(`api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
-  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -73,16 +97,6 @@ function Update({ selfUser }) {
       setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const productResponse = await getProduct();
-      const storeResponse = await getStore(productResponse.data);
-      setProduct(productResponse.data);
-      setStore(storeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -241,4 +255,4 @@ function Update({ selfUser }) {
   );
 }
 
-export default withAuth(Update);
+export default Update;

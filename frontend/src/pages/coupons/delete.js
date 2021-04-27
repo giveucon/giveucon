@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,27 +21,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Delete({ selfUser }) {
+const getCoupon = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.id}`, 'get', 'json');
+};
+
+const deleteCoupon = async (coupon) => {
+  return await requestToBackend(null, `api/coupons/${coupon.id}/`, 'delete', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const couponResponse = await getCoupon(context);
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, coupon: couponResponse.data },
+  };
+})
+
+function Delete({ selfUser, coupon }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [coupon, setCoupon] = useState(null);
-
-  const getCoupon = async () => {
-    return await requestToBackend(`api/coupons/${router.query.id}/`, 'get', 'json', null, null);
-  };
-
-  const deleteCoupon = async (coupon) => {
-    return await requestToBackend(`api/coupons/${coupon.id}/`, 'delete', 'json');
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const couponResponse = await getCoupon();
-      setCoupon(couponResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -81,4 +88,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

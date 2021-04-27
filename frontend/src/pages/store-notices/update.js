@@ -16,9 +16,9 @@ import '@uppy/dashboard/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import jsonToFormData from '../jsonToFormData'
+import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -30,31 +30,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Update({ selfUser }) {
+const getStoreNotice = async (context) => {
+  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
+};
+
+const getStore = async (context, StoreNotice) => {
+  return await requestToBackend(context, `api/stores/${StoreNotice.store}/`, 'get', 'json');
+};
+
+const putStoreNotice = async (storeNotice) => {
+  const processedStoreNotice = {
+    article: {
+      title: storeNotice.title,
+      content: storeNotice.content,
+      images: storeNotice.images,
+    },
+    store: storeNotice.store,
+  };
+  return await requestToBackend(null, 'api/store-notices/', 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const prevStoreNoticeResponse = await getStoreNotice(context);
+  const storeResponse = await getStore(context, prevStoreNoticeResponse.data);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
+  };
+})
+
+function Update({ selfUser, prevStoreNotice }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [storeNotice, setStoreNotice] = useState(null);
+  const [storeNotice, setStoreNotice] = useState({
+    id: prevStoreNotice.id,
+    title: prevStoreNotice.title,
+    content: prevStoreNotice.content,
+    images: prevStoreNotice.images,
+    store: prevStoreNotice.store,
+  });
   const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
     content: false,
   });
-
-  const getStoreNotice = async () => {
-    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const putStoreNotice = async (storeNotice) => {
-    const processedStoreNotice = {
-      article: {
-        title: storeNotice.title,
-        content: storeNotice.content,
-        images: storeNotice.images,
-      },
-      store: storeNotice.store,
-    };
-    return await requestToBackend('api/store-notices/', 'put', 'multipart', jsonToFormData(processedStoreNotice), null);
-  };
   
   const uppy = useUppy(() => {
     return new Uppy()
@@ -65,14 +92,6 @@ function Update({ selfUser }) {
       setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeNoticeResponse = await getStoreNotice();
-      setStoreNotice(storeNoticeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`가게 공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -181,4 +200,4 @@ function Update({ selfUser }) {
   );
 }
 
-export default withAuth(Update);
+export default Update;

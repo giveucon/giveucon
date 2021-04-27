@@ -7,32 +7,26 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import ArticleBox from '../../components/ArticleBox'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Id({ selfUser }) {
+const getStoreNotice = async (context) => {
+  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
+};
 
+const getStore = async (context, storeNotice) => {
+  return await requestToBackend(context, `api/stores/${storeNotice.store}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeNoticeResponse = await getStoreNotice(context);
+  const storeResponse = await getStore(context, storeNoticeResponse.data);
+  return {
+    props: { selfUser, storeNotice: storeNoticeResponse.data, store: storeResponse.data },
+  };
+})
+
+function Id({ selfUser, storeNotice, store }) {
   const router = useRouter();
-  const [storeNotice, setStoreNotice] = useState(null);
-  const [store, setStore] = useState(null);
-
-  const getStoreNotice = async () => {
-    return await requestToBackend(`api/store-notices/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const getStore = async (storeNotice) => {
-    return await requestToBackend(`api/stores/${storeNotice.store}`, 'get', 'json', null, null);
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeNoticeResponse = await getStoreNotice();
-      const storeResponse = await getStore(storeNoticeResponse.data);
-      setStoreNotice(storeNoticeResponse.data);
-      setStore(storeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
   return (
     <Layout title={`${storeNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -62,7 +56,7 @@ function Id({ selfUser }) {
               query: { id: storeNotice.id },
             })}
           >
-            공지사항 수정
+            가게 공지사항 수정
           </Button>
         </Box>
       )}
@@ -70,4 +64,4 @@ function Id({ selfUser }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;

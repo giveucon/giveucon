@@ -21,46 +21,45 @@ import Tile from '../../components/Tile';
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
+};
+
+const getStoreNoticeList = async (context, store) => {
+  const params = {
+    store: store.id
+  };
+  return await requestToBackend(context, 'api/store-notices/', 'get', 'json', null, params);
+};
+
+const getProductList = async (context, store) => {
+  const params = {
+    store: store.id
+  };
+  return await requestToBackend(context, 'api/products/', 'get', 'json', null, params);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeResponse = await getStore(context);
+  const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
+  const productListResponse = await getProductList(context, storeResponse.data);
+  return {
+    props: {
+      selfUser,
+      store: storeResponse.data,
+      storeNoticeList: storeNoticeListResponse.data,
+      productList: productListResponse.data,
+    },
+  };
+})
 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ selfUser }) {
-
+function Id({ selfUser, store, storeNoticeList, productList }) {
   const router = useRouter();
-  const [store, setStore] = useState(null);
-  const [storeNoticeList, setStoreNoticeList] = useState(null);
-  const [productList, setProductList] = useState(null);
-
-  const getStore = async () => {
-    return await requestToBackend(`api/stores/${router.query.id}`, 'get', 'json', null, null);
-  };
-
-  const getStoreNoticeList = async (store) => {
-    return await requestToBackend('api/store-notices/', 'get', 'json', null, {
-      store: store.id
-    });
-  };
-
-  const getProductList = async (store) => {
-    return await requestToBackend('api/products/', 'get', 'json', null, {
-      store: store.id
-    });
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeResponse = await getStore();
-      const storeNoticeListResponse = await getStoreNoticeList(storeResponse.data);
-      const productListResponse = await getProductList(storeResponse.data);
-      setStore(storeResponse.data);
-      setStoreNoticeList(storeNoticeListResponse.data.results);
-      setProductList(productListResponse.data.results);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
   return (
     <Layout title={`${store ? store.name : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -242,4 +241,4 @@ function Id({ selfUser }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;

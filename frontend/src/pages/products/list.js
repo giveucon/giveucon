@@ -13,58 +13,55 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function List({ selfUser }) {
+const getProductList = async (context) => {
+  const params = {
+    user: context.query.user || null,
+    store: context.query.store || null,
+  };
+  return await requestToBackend(context, 'api/products', 'get', 'json', null, params);
+};
+
+const getUser = async (context) => {
+  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
+};
+
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const initialProductListResponse = await getProductList(context);
+  const userResponse = context.query.user && await getUser(context);
+  const storeResponse = context.query.store && await getStore(context);
+  return {
+    props: {
+      selfUser,
+      initialProductListResponse,
+      user: context.query.user ? userResponse.data : null,
+      store: context.query.store ? storeResponse.data : null,
+    },
+  };
+})
+
+function List({ selfUser, initialProductListResponse, user, store }) {
 
   const router = useRouter();
-  const [productList, setProductList] = useState(null);
-  const [user, setUser] = useState(null);
-  const [store, setStore] = useState(null);
+  const [productList, setProductList] = useState(initialProductListResponse.data.results);
   const [productListPagination, setProductListPagination] = useState(0);
-  const [hasMoreProductList, setHasMoreProductList] = useState(true);
-
-  const getProductList = async (user, store, page) => {
-    return await requestToBackend('api/products/', 'get', 'json', null, {
-      user,
-      store,
-      page,
-    });
-  };
-  
-  const getUser = async (user) => {
-    return await requestToBackend(`api/users/${user}`, 'get', 'json', null, null);
-  };
-
-  const getStore = async (store) => {
-    return await requestToBackend(`api/stores/${store}`, 'get', 'json', null, null);
-  };
+  const [hasMoreProductList, setHasMoreProductList] = useState(initialProductListResponse.data.next);
 
   const getMoreProductList = async () => {
-    const productListResponse = await getProductList(
-      router.query.user,
-      router.query.store,
-      productListPagination + 1
-    );
+    const productListResponse = await await requestToBackend('api/products/', 'get', 'json', null, {
+      user: user.id || null,
+      store: store.id || null,
+      page: productListPagination + 1,
+    });
     setProductList(prevProductList => (prevProductList || []).concat(productListResponse.data.results));
     setProductListPagination(prevProductListPagination => prevProductListPagination + 1);
     if (productListPagination.data.next === null) setHasMoreProductList(prevHasMoreProductList => false);
   }
-
-  useEffect(() => {
-    const fetch = async () => {
-      await getMoreProductList();
-      if (router.query.user) {
-        const userResponse = await getUser(router.query.user);
-        setUser(userResponse.data);
-      }
-      if (router.query.store) {
-        const storeResponse = await getStore(router.query.store);
-        setStore(storeResponse.data);
-      }
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -130,4 +127,4 @@ function List({ selfUser }) {
   );
 }
 
-export default withAuth(List);
+export default List;

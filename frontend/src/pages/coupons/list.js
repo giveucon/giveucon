@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,69 +12,63 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function List({ selfUser }) {
+const getCouponList = async (context) => {
+  const params = {
+    user: context.query.user || null,
+    store: context.query.store || null,
+    product: context.query.product || null,
+  };
+  return await requestToBackend(context, 'api/products', 'get', 'json', null, params);
+};
+
+const getUser = async (context) => {
+  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
+};
+
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
+const getProduct = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const initialCouponListResponse = await getCouponList(context);
+  const userResponse = context.query.user && await getUser(context);
+  const storeResponse = context.query.store && await getStore(context);
+  const productResponse = context.query.product && await getProduct(context);
+  return {
+    props: {
+      selfUser,
+      initialCouponListResponse,
+      user: context.query.user ? userResponse.data : null,
+      store: context.query.store ? storeResponse.data : null,
+      product: context.query.product ? productResponse.data : null,
+    },
+  };
+})
+
+function List({ selfUser, initialCouponListResponse, user, store, product }) {
 
   const router = useRouter();
-  const [couponList, setCouponList] = useState(null);
-  const [user, setUser] = useState(null);
-  const [store, setStore] = useState(null);
-  const [product, setProduct] = useState(null);
+  const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
   const [couponListPagination, setCouponListPagination] = useState(0);
-  const [hasMoreCouponList, setHasMoreCouponList] = useState(true);
-
-  const getCouponList = async (user, store, product, page) => {
-    return await requestToBackend('api/coupons/', 'get', 'json', null, {
-      user,
-      store,
-      product,
-      page,
-    });
-  };
-  
-  const getUser = async (user) => {
-    return await requestToBackend(`api/users/${user}`, 'get', 'json', null, null);
-  };
-
-  const getStore = async (store) => {
-    return await requestToBackend(`api/stores/${store}`, 'get', 'json', null, null);
-  };
-
-  const getProduct = async (product) => {
-    return await requestToBackend(`api/products/${product}`, 'get', 'json', null, null);
-  };
+  const [hasMoreCouponList, setHasMoreCouponList] = useState(initialCouponListResponse.data.next);
 
   const getMoreCouponList = async () => {
-    const couponListResponse = await getCouponList(
-      router.query.user,
-      router.query.store,
-      router.query.product,
-      couponListPagination + 1
-    );
+    const couponListResponse = await await requestToBackend('api/coupons/', 'get', 'json', null, {
+      user: user.id || null,
+      store: store.id || null,
+      product: product.id || null,
+      page: couponListPagination + 1,
+    });
     setCouponList(prevCouponList => (prevCouponList || []).concat(couponListResponse.data.results));
     setCouponListPagination(prevCouponListPagination => prevCouponListPagination + 1);
     if (couponListPagination.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
   }
-
-  useEffect(() => {
-    const fetch = async () => {
-      await getMoreCouponList();
-      if (router.query.user) {
-        const userResponse = await getUser(router.query.user);
-        setUser(userResponse.data);
-      }
-      if (router.query.store) {
-        const storeResponse = await getStore(router.query.store);
-        setStore(storeResponse.data);
-      }
-      if (router.query.product) {
-        const productResponse = await getProduct(router.query.product);
-        setProduct(productResponse.data);
-      }
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -85,13 +79,13 @@ function List({ selfUser }) {
         {couponList && (
           (couponList.length > 0) ? (
             <InfiniteScroll
-              dataLength={CouponList.length}
+              dataLength={couponList.length}
               next={getMoreCouponList}
               hasMore={hasMoreCouponList}
               loader={<InfiniteScrollLoader loading={true} />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
-              <Grid container>
+              <Grid container spacing={1}>
                 {couponList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile
@@ -119,4 +113,4 @@ function List({ selfUser }) {
   );
 }
 
-export default withAuth(List);
+export default List;

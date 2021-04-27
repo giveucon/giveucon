@@ -14,34 +14,29 @@ import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Index({ selfUser }) {
+const getStoreList = async (context) => {
+  return await requestToBackend(context, 'api/stores/', 'get', 'json');
+};
 
+const getSelfStoreList = async (context, selfUser) => {
+  const params = {
+    user: selfUser.id,
+  }
+  return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeListResponse = await getStoreList(context);
+  const selfStoreListResponse = await getSelfStoreList(context, selfUser);
+  return {
+    props: { selfUser, storeList: storeListResponse.data, selfStoreList: selfStoreListResponse.data },
+  };
+})
+
+function Index({ selfUser, storeList, selfStoreList }) {
   const router = useRouter();
-  const [storeList, setStoreList] = useState(null);
-  const [selfStoreList, setSelfStoreList] = useState(null);
-
-  const getStoreList = async () => {
-    return await requestToBackend(`api/stores/`, 'get', 'json', null, null);
-  };
-
-  const getSelfStoreList = async (selfUser) => {
-    return await requestToBackend(`api/stores/`, 'get', 'json', null, {
-      user: selfUser.id
-    });
-  };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeListResponse = await getStoreList();
-      const selfStoreListResponse = await getSelfStoreList(selfUser);
-      setStoreList(storeListResponse.data.results);
-      setSelfStoreList(selfStoreListResponse.data.results);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
-
   return (
     <Layout title={`가게 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
@@ -62,10 +57,10 @@ function Index({ selfUser }) {
           </IconButton>
         }
       >
-        {selfStoreList && (
-          selfStoreList.length > 0 ? (
+        {selfStoreList.results && (
+          selfStoreList.results.length > 0 ? (
             <Grid container spacing={1}>
-              {selfStoreList.slice(0, 4).map((item, index) => (
+              {selfStoreList.results.slice(0, 4).map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
@@ -79,7 +74,7 @@ function Index({ selfUser }) {
             <AlertBox content='가게가 없습니다.' variant='information' />
           )
         )}
-        {!selfStoreList && (
+        {!selfStoreList.results && (
           <Grid container spacing={1}>
             {Array.from(Array(2).keys()).map((item, index) => (
               <Grid item xs={6} key={index}>
@@ -98,10 +93,10 @@ function Index({ selfUser }) {
           </IconButton>}
         padding={false}
       >
-        {storeList && (
-          storeList.length > 0 ? (
+        {storeList.results && (
+          storeList.results.length > 0 ? (
             <SwipeableTileList half>
-              {storeList.slice(0, 10).map((item, index) => {
+              {storeList.results.slice(0, 10).map((item, index) => {
                 return <Tile
                   key={index}
                   title={item.name}
@@ -117,7 +112,7 @@ function Index({ selfUser }) {
             <AlertBox content='가게가 없습니다.' variant='information' />
           )
         )}
-        {!storeList && (
+        {!storeList.results && (
           <SwipeableTileList half>
             {Array.from(Array(2).keys()).map((item, index) => (
               <Tile skeleton />
@@ -139,4 +134,4 @@ function Index({ selfUser }) {
   );
 }
 
-export default withAuth(Index);
+export default Index;

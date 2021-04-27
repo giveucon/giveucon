@@ -17,19 +17,50 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-function Create({ selfUser }) {
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
+};
+
+const postProduct = async (product) => {
+  const processedProduct = {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    duration: product.duration + ' 00',
+    images: product.images,
+    store: product.store,
+  };
+  return await requestToBackend(null, '/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const storeResponse = await getStore(context);
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser, store: storeResponse.data },
+  };
+})
+
+function Create({ selfUser, store }) {
 
   const router = useRouter();
-  const [store, setStore] = useState(null);
   const [product, setProduct] = useState({
     name: null,
     description: null,
     price: 0,
     duration: 0,
     images: [],
-    store: null,
+    store: store.id,
   });
   const [productError, setProductError] = useState({
     name: false,
@@ -37,18 +68,6 @@ function Create({ selfUser }) {
     price: false,
     duration: false,
   });
-
-  const postProduct = async (product) => {
-    const processedProduct = {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      duration: product.duration + ' 00',
-      images: product.images,
-      store: product.store,
-    };
-    return await requestToBackend('/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
-  };
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -59,15 +78,6 @@ function Create({ selfUser }) {
       setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const storeResponse = await requestToBackend(`api/stores/${router.query.store}`, 'get', 'json', null, null);
-      setStore(storeResponse.data);
-      setProduct(prevProduct => ({ ...prevProduct, store: storeResponse.data.id }));
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`상품 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -209,4 +219,4 @@ function Create({ selfUser }) {
   );
 }
 
-export default withAuth(Create);
+export default Create;

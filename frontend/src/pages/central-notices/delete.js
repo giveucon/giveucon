@@ -9,7 +9,7 @@ import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,27 +21,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCentralNotice = async () => {
-  return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
+const getCentralNotice = async (context) => {
+  return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
 const deleteCentralNotice = async (centralNotice) => {
-  return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'delete', 'json');
+  return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
 
-function Delete({ selfUser }) {
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  const centralNoticeResponse = await getCentralNotice(context);
+  return {
+    props: { selfUser, centralNotice: centralNoticeResponse.data },
+  };
+})
+
+function Delete({ selfUser, centralNotice }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [centralNotice, setCentralNotice] = useState(null);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const centralNoticeResponse = await getCentralNotice();
-      setCentralNotice(centralNoticeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -81,4 +88,4 @@ function Delete({ selfUser }) {
   );
 }
 
-export default withAuth(Delete);
+export default Delete;

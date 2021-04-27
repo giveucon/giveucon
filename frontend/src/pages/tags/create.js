@@ -8,7 +8,29 @@ import TextField from '@material-ui/core/TextField';
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+
+const postTag = async (tag) => {
+  const data = {
+    name: tag.name,
+  }
+  return await requestToBackend(null, 'api/tags/', 'post', 'json', data, null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: { selfUser },
+  };
+})
 
 function Create({ selfUser }) {
 
@@ -19,13 +41,6 @@ function Create({ selfUser }) {
   const [tagError, setTagError] = useState({
     name: false,
   });
-
-  const postTag = async (tag) => {
-    const data = {
-      name: tag.name,
-    }
-    return await requestToBackend('api/tags/', 'post', 'json', data, null);
-  };
 
   return (
     <Layout title={`태그 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -78,4 +93,4 @@ function Create({ selfUser }) {
   );
 }
 
-export default withAuth(Create);
+export default Create;

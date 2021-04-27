@@ -15,7 +15,7 @@ import Section from '../components/Section'
 import SwipeableTileList from '../components/SwipeableTileList';
 import Tile from '../components/Tile';
 import requestToBackend from '../utils/requestToBackend'
-import withAuth from '../utils/withAuth'
+import withAuthServerSideProps from '../utils/withAuthServerSideProps'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -53,18 +53,19 @@ const geoRecommendedCouponList = [
   />
 ]
 
-function Home({ selfUser }) {
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  const centralNoticeListResponse = await requestToBackend(context, 'api/central-notices/', 'get', 'json');
+  return {
+    props: { 
+      selfUser,
+      centralNoticeList: centralNoticeListResponse.data.results
+    },
+  };
+})
+
+function Home({ selfUser, centralNoticeList }) {
 
   const router = useRouter();
-  const [centralNoticeList, setCentralNoticeList] = useState(null);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, null);
-      setCentralNoticeList(centralNoticeListResponse.data.results);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -123,4 +124,4 @@ function Home({ selfUser }) {
   );
 }
 
-export default withAuth(Home);
+export default Home;

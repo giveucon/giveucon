@@ -18,7 +18,7 @@ import Layout from '../../components/Layout'
 import Section from '../../components/Section'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -30,30 +30,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Update({ selfUser }) {
+const getCentralNotice = async (context) => {
+  return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
+};
+
+const putCentralNotice = async (centralNotice) => {
+  const processedCentralNotice = {
+    article: {
+      title: centralNotice.title,
+      content: centralNotice.content,
+      images: centralNotice.images,
+    },
+  };
+  return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+};
+
+export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+  if (!selfUser.staff) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/unauthorized/',
+      },
+      props: {}
+    }
+  }
+  const prevCentralNoticeResponse = await getCentralNotice(context);
+  return {
+    props: { selfUser, prevCentralNotice: prevCentralNoticeResponse.data },
+  };
+})
+
+function Update({ selfUser, prevCentralNotice }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [centralNotice, setCentralNotice] = useState(null);
+  const [centralNotice, setCentralNotice] = useState({
+    id: prevCentralNotice.id,
+    title: prevCentralNotice.title,
+    content: prevCentralNotice.content,
+    images: prevCentralNotice.images,
+  });
   const [centralNoticeError, setCentralNoticeError] = useState({
     title: false,
     content: false,
   });
-  
-  const getCentralNotice = async () => {
-    return await requestToBackend(`api/central-notices/${router.query.id}/`, 'get', 'json', null, null);
-  };
-
-  const putCentralNotice = async (centralNotice) => {
-    const processedCentralNotice = {
-      article: {
-        title: centralNotice.title,
-        content: centralNotice.content,
-        images: centralNotice.images,
-      },
-    };
-    return await requestToBackend(`api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
-  };
 
   const uppy = useUppy(() => {
     return new Uppy()
@@ -64,14 +85,6 @@ function Update({ selfUser }) {
       setCentralNotice(prevCentralNotice => ({ ...prevCentralNotice, images: uppy.getFiles().map((file) => file.data) }));
     })
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const centralNoticeResponse = await getCentralNotice();
-      setCentralNotice(centralNoticeResponse.data);
-    }
-    selfUser && fetch();
-  }, [selfUser]);
 
   return (
     <Layout title={`공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -180,4 +193,4 @@ function Update({ selfUser }) {
   );
 }
 
-export default withAuth(Update);
+export default Update;

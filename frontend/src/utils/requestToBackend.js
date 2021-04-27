@@ -42,15 +42,18 @@ const multipartRequest = async (session, url, method, data, params) => {
   });
 }
 
-export default async function requestToBackend(url, method, contentType, data=null, params=null) {
+export default async function requestToBackend(context, url, method, contentType, data=null, params=null) {
 
-  const verifySessionResponse = await verifySession();
-  const session = verifySessionResponse.valid ? verifySessionResponse.session : await refreshSession();
+  const verifySessionResponse = await verifySession(context);
+  const session = verifySessionResponse.valid ? verifySessionResponse.session : await refreshSession(context);
 
   let response = null;
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);
-  else throw new Error();
+  else {
+    console.log(contentType);
+    throw new Error()
+  };
   if (response.status === 401) {
     toast.error('승인되지 않은 세션입니다.');
   } else if (response.status === 403) {
