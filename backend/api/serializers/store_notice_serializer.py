@@ -1,11 +1,11 @@
 from django.db import transaction
 from rest_framework.serializers import ModelSerializer
 
-from .article_serializer import ArticleSerializer
+from .article_read_serializer import ArticleReadSerializer
 from ..models import Article, StoreNotice
 
 class StoreNoticeSerializer(ModelSerializer):
-    article = ArticleSerializer()
+    article = ArticleReadSerializer()
     class Meta:
         model = StoreNotice
         fields = '__all__'
