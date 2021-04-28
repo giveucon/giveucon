@@ -65,30 +65,23 @@ function List({ selfUser, initialCentralNoticeListResponse }) {
         title='최신 공지사항'
         padding={false}
       >
-        {centralNoticeList && (
-          (centralNoticeList.length > 0) ? (
-            <SwipeableTileList autoplay={true}>
-              {centralNoticeList.slice(0, 2).map((item, index) => {
-                return <Tile
-                  key={index}
-                  title={item.article.title}
-                  image={
-                    item.images && (item.images.length > 0)
-                    ? item.images[0].image
-                    : '/no_image.png'
-                  }
-                  onClick={() => router.push(`/central-notices/${item.id}`)}
-                />
-              })}
-            </SwipeableTileList>
-          ) : (
-            <AlertBox content='공지사항이 없습니다.' variant='information' />
-          )
-        )}
-        {!centralNoticeList && (
+        {(centralNoticeList.length > 0) ? (
           <SwipeableTileList autoplay={true}>
-            <Tile skeleton/>
+            {centralNoticeList.slice(0, 2).map((item, index) => {
+              return <Tile
+                key={index}
+                title={item.article.title}
+                image={
+                  item.images && (item.images.length > 0)
+                  ? item.images[0].image
+                  : '/no_image.png'
+                }
+                onClick={() => router.push(`/central-notices/${item.id}`)}
+              />
+            })}
           </SwipeableTileList>
+        ) : (
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
 
@@ -96,39 +89,28 @@ function List({ selfUser, initialCentralNoticeListResponse }) {
         title='전체 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
       >
-        {centralNoticeList && (
-          (centralNoticeList.length > 0) ? (
-            <InfiniteScroll
-              dataLength={centralNoticeList.length}
-              next={getMoreCentralNoticeList}
-              hasMore={hasMoreCentralNoticeList}
-              loader={<InfiniteScrollLoader loading={true} />}
-              endMessage={<InfiniteScrollLoader loading={false} />}
-            >
-             <Grid container>
-                {centralNoticeList.map((item, index) => (
-                  <Grid item xs={12} key={index}>
-                    <ListItemCard
-                      title={item.article.title}
-                      subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                      onClick={() => router.push(`/central-notices/${item.id}/`)}
-                    />
-                  </Grid>
-                ))}
+        {(centralNoticeList.length > 0) ? (
+          <InfiniteScroll
+            dataLength={centralNoticeList.length}
+            next={getMoreCentralNoticeList}
+            hasMore={hasMoreCentralNoticeList}
+            loader={<InfiniteScrollLoader loading={true} />}
+            endMessage={<InfiniteScrollLoader loading={false} />}
+          >
+            <Grid container>
+              {centralNoticeList.map((item, index) => (
+                <Grid item xs={12} key={index}>
+                  <ListItemCard
+                    title={item.article.title}
+                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                    onClick={() => router.push(`/central-notices/${item.id}/`)}
+                  />
                 </Grid>
-              </InfiniteScroll>
-            ) : (
-            <AlertBox content='공지사항이 없습니다.' variant='information' />
-          )
-        )}
-        {!centralNoticeList && (
-          <Grid container>
-            {Array.from(Array(3).keys()).map((item, index) => (
-              <Grid item xs={12} key={index}>
-                <ListItemCard skeleton/>
+              ))}
               </Grid>
-            ))}
-          </Grid>
+            </InfiniteScroll>
+          ) : (
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
 

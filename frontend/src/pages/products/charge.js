@@ -42,20 +42,15 @@ function Charge({ selfUser, product, store }) {
     <Layout title={`결재 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={product ? '결재 내용' : '로딩중'}
+        title={'결재 내용'}
       >
-        {product && (
-          <Box>
-            <Typography variant='h5'>{product.name}</Typography>
-            <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
-            <Typography variant='body1'>{product.description}</Typography>
-          </Box>
-        )}
-        {!product && (
-          <ArticleBox skeleton/>
-        )}
+        <Box>
+          <Typography variant='h5'>{product.name}</Typography>
+          <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+          <Typography variant='body1'>{product.description}</Typography>
+        </Box>
       </Section>
-      {product && store && (selfUser.id !== store.owner) && (store.id === product.store) && (
+      {(selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='primary'
