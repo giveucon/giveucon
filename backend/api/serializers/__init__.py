@@ -8,6 +8,7 @@ from .image_serializer import ImageSerializer
 from .coupon_serializer import CouponSerializer
 from .central_notice_read_serializer import CentralNoticeReadSerializer
 from .central_notice_write_serializer import CentralNoticeWriteSerializer
-from .store_notice_serializer import StoreNoticeSerializer
+from .store_notice_read_serializer import StoreNoticeReadSerializer
+from .store_notice_write_serializer import StoreNoticeWriteSerializer
 from .tag_serializer import TagSerializer
 from .review_serializer import ReviewSerializer

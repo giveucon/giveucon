@@ -15,6 +15,4 @@ class ArticleListView(SerializerMixin, generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)
-        #images = self.request.data.getlist('images')
-        #serializer.save(user=user, images=images)
         serializer.save(user=user)

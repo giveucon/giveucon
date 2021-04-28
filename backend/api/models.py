@@ -35,7 +35,7 @@ class AccountUser(models.Model):
     )
 
 class Image(models.Model):
-    image = models.ImageField(null=False)
+    image = models.ImageField(null=False, blank=False)
 
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)

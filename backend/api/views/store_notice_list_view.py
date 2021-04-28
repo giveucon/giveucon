@@ -4,12 +4,15 @@ from rest_framework.response import Response
 
 from ..models import StoreNotice
 from ..paginations import StoreNoticePagination
-from ..serializers import StoreNoticeSerializer
+from ..serializers import StoreNoticeReadSerializer
+from ..serializers import StoreNoticeWriteSerializer
 from ..services import UserService
+from ..mixins import SerializerMixin
 
-class StoreNoticeListView(generics.ListCreateAPIView):
+class StoreNoticeListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = StoreNotice.objects.all()
-    serializer_class = StoreNoticeSerializer
+    serializer_class_read = StoreNoticeReadSerializer
+    serializer_class_write = StoreNoticeWriteSerializer
     pagination_class = StoreNoticePagination
 
     def perform_create(self, serializer):

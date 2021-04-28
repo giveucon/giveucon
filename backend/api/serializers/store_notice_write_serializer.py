@@ -2,15 +2,15 @@ from django.db import transaction
 from rest_framework.serializers import ModelSerializer
 
 from .article_write_serializer import ArticleWriteSerializer
-from .central_notice_read_serializer import CentralNoticeReadSerializer
-from ..models import Article, CentralNotice
+from .store_notice_read_serializer import StoreNoticeReadSerializer
+from ..models import StoreNotice
 
-class CentralNoticeWriteSerializer(ModelSerializer):
+class StoreNoticeWriteSerializer(ModelSerializer):
     article = ArticleWriteSerializer()
     class Meta:
-        model = CentralNotice
+        model = StoreNotice
         fields = '__all__'
-        
+
     def create(self, validated_data):
         article_data = validated_data.pop('article')
         user = validated_data.pop('user')
@@ -18,8 +18,8 @@ class CentralNoticeWriteSerializer(ModelSerializer):
         article.is_valid(raise_exception=True)
         with transaction.atomic():
             article = article.save(user=user)
-            central_notice = CentralNotice.objects.create(article=article, **validated_data)
-        return central_notice
+            store_notice = StoreNotice.objects.create(article=article, **validated_data)
+        return store_notice
 
     def update(self, instance, validated_data):
         article_data = validated_data.pop('article')
@@ -29,4 +29,4 @@ class CentralNoticeWriteSerializer(ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        return CentralNoticeReadSerializer(instance).data
+        return StoreNoticeReadSerializer(instance).data
