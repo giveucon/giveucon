@@ -57,36 +57,34 @@ function List({ selfUser, initialStoreNoticeList }) {
         backButton
         title='가게 공지사항 목록'
       >
-        {storeList && (
-          (storeList.length > 0) ? (
-            <InfiniteScroll
-              dataLength={storeNoticeList.length}
-              next={getMoreStoreNoticeList}
-              hasMore={hasMoreStoreNoticeList}
-              loader={<InfiniteScrollLoader loading={true} />}
-              endMessage={<InfiniteScrollLoader loading={false} />}
-            >
-              <Grid container>
-                {storeList && storeList.map((item, index) => (
-                  <Grid item xs={6} key={index}>
-                    <Tile
-                      title={item.name}
-                      image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                      onClick={() => router.push(`/store-notices/${item.id}/`)}
-                      menuItems={
-                        <MenuItem>Menu Item</MenuItem>
-                      }
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </InfiniteScroll>
-          ) : (
-            <AlertBox content='가게 공지사항이 없습니다.' variant='information' />
-          )
+        {storeList && (storeList.length > 0) ? (
+          <InfiniteScroll
+            dataLength={storeNoticeList.length}
+            next={getMoreStoreNoticeList}
+            hasMore={hasMoreStoreNoticeList}
+            loader={<InfiniteScrollLoader loading={true} />}
+            endMessage={<InfiniteScrollLoader loading={false} />}
+          >
+            <Grid container>
+              {storeList && storeList.map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <Tile
+                    title={item.name}
+                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    onClick={() => router.push(`/store-notices/${item.id}/`)}
+                    menuItems={
+                      <MenuItem>Menu Item</MenuItem>
+                    }
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </InfiniteScroll>
+        ) : (
+          <AlertBox content='가게 공지사항이 없습니다.' variant='information' />
         )}
       </Section>
-      { store && (store.user === selfUser.id) && (
+      {(store.user === selfUser.id) && (
         <Box marginY={1}>
           <Button
             color='primary'

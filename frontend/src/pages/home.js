@@ -84,30 +84,23 @@ function Home({ selfUser, centralNoticeList }) {
         ]}
         padding={false}
       >
-        {centralNoticeList && (
-          centralNoticeList.length > 0 ? (
-            <SwipeableTileList autoplay={true}>
-              {centralNoticeList.slice(0, 2).map((item, index) => (
-                <Tile
-                  key={index}
-                  title={item.article.title}
-                  image={
-                    item.images && (item.images.length > 0)
-                    ? item.images[0].image
-                    : '/no_image.png'
-                  }
-                  onClick={() => router.push(`/central-notices/${item.id}/` )}
-                />
-              ))}
-            </SwipeableTileList>
-          ) : (
-            <AlertBox content='공지사항이 없습니다.' variant='information' />
-          )
-        )}
-        {!centralNoticeList && (
+        {centralNoticeList.length > 0 ? (
           <SwipeableTileList autoplay={true}>
-            <Tile skeleton/>
+            {centralNoticeList.slice(0, 2).map((item, index) => (
+              <Tile
+                key={index}
+                title={item.article.title}
+                image={
+                  item.images && (item.images.length > 0)
+                  ? item.images[0].image
+                  : '/no_image.png'
+                }
+                onClick={() => router.push(`/central-notices/${item.id}/` )}
+              />
+            ))}
           </SwipeableTileList>
+        ) : (
+          <AlertBox content='공지사항이 없습니다.' variant='information' />
         )}
       </Section>
       

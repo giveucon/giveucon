@@ -23,29 +23,23 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
 function Id({ selfUser, centralNotice }) {
   const router = useRouter();
   return (
-    <Layout title={`${centralNotice ? centralNotice.article.title : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={centralNotice ? centralNotice.article.title : '로딩중'}
+        title={centralNotice.article.title}
       >
-        {centralNotice && (
-          <ArticleBox
-            title={centralNotice.article.title}
-            subtitle={new Date(centralNotice.article.created_at).toLocaleDateString()}
-            image={
-              centralNotice.article.images.length > 0
-              ? centralNotice.article.images[0].image
-              : '/no_image.png'
-            }
-            content={centralNotice.article.content}
-          >
-        </ArticleBox>
-        )}
-        {!centralNotice && (
-          <ArticleBox skeleton/>
-        )}
+        <ArticleBox
+          title={centralNotice.article.title}
+          subtitle={new Date(centralNotice.article.created_at).toLocaleDateString()}
+          image={
+            centralNotice.article.images.length > 0
+            ? centralNotice.article.images[0].image
+            : '/no_image.png'
+          }
+          content={centralNotice.article.content}
+        />
       </Section>
-      {selfUser && selfUser.staff && (
+      {selfUser.staff && (
         <Box marginY={1}>
           <Button
             color='default'

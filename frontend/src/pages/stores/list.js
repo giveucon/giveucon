@@ -62,45 +62,34 @@ function List({ selfUser, initialStoreListResponse, user }) {
           backButton
           title='가게 목록'
         >
-          {storeList && (
-            (storeList.length > 0) ? (
-              <InfiniteScroll
-                dataLength={storeList.length}
-                next={getMoreStoreList}
-                hasMore={hasMoreStoreList}
-                loader={<InfiniteScrollLoader loading={true} />}
-                endMessage={<InfiniteScrollLoader loading={false} />}
-              >
-                <Grid container spacing={1}>
-                  {storeList && storeList.map((item, index) => (
-                    <Grid item xs={6} key={index}>
-                      <Tile
-                        title={item.name}
-                        image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                        onClick={() => router.push(`/stores/${item.id}/`)}
-                        menuItems={
-                          <MenuItem>Menu Item</MenuItem>
-                        }
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              </InfiniteScroll>
-            ) : (
-              <AlertBox content='가게가 없습니다.' variant='information' />
-            )
-          )}
-          {!storeList && (
-            <Grid container spacing={1}>
-              {Array.from(Array(4).keys()).map((item, index) => (
-                <Grid item xs={6} key={index}>
-                  <Tile skeleton/>
-                </Grid>
-              ))}
-            </Grid>
+          {(storeList.length > 0) ? (
+            <InfiniteScroll
+              dataLength={storeList.length}
+              next={getMoreStoreList}
+              hasMore={hasMoreStoreList}
+              loader={<InfiniteScrollLoader loading={true} />}
+              endMessage={<InfiniteScrollLoader loading={false} />}
+            >
+              <Grid container spacing={1}>
+                {storeList && storeList.map((item, index) => (
+                  <Grid item xs={6} key={index}>
+                    <Tile
+                      title={item.name}
+                      image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                      onClick={() => router.push(`/stores/${item.id}/`)}
+                      menuItems={
+                        <MenuItem>Menu Item</MenuItem>
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </InfiniteScroll>
+          ) : (
+            <AlertBox content='가게가 없습니다.' variant='information' />
           )}
         </Section>
-        {user && (user.id === selfUser.id) && (
+        {(user.id === selfUser.id) && (
           <Box marginY={1}>
             <Button
               color='primary'

@@ -69,46 +69,35 @@ function List({ selfUser, initialProductListResponse, user, store }) {
         backButton
         title='상품 목록'
       >
-        {productList && (
-          (productList.length > 0) ? (
-            <InfiniteScroll
-              dataLength={productList.length}
-              next={getMoreProductList}
-              hasMore={hasMoreProductList}
-              loader={<InfiniteScrollLoader loading={true} />}
-              endMessage={<InfiniteScrollLoader loading={false} />}
-            >
-              <Grid container spacing={1}>
-                {productList && productList.map((item, index) => (
-                  <Grid item xs={6} key={index}>
-                    <Tile
-                      title={item.name}
-                      subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                      image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                      actions={[
-                        <IconButton><FavoriteIcon /></IconButton>
-                      ]}
-                      onClick={() => router.push(`/products/${item.id}/`)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </InfiniteScroll>
-          ) : (
-            <AlertBox content='상품이 없습니다.' variant='information' />
-          )
-        )}
-        {!productList && (
-          <Grid container spacing={1}>
-            {Array.from(Array(4).keys()).map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile skeleton/>
-              </Grid>
-            ))}
-          </Grid>
+        {(productList.length > 0) ? (
+          <InfiniteScroll
+            dataLength={productList.length}
+            next={getMoreProductList}
+            hasMore={hasMoreProductList}
+            loader={<InfiniteScrollLoader loading={true} />}
+            endMessage={<InfiniteScrollLoader loading={false} />}
+          >
+            <Grid container spacing={1}>
+              {productList && productList.map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <Tile
+                    title={item.name}
+                    subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    actions={[
+                      <IconButton><FavoriteIcon /></IconButton>
+                    ]}
+                    onClick={() => router.push(`/products/${item.id}/`)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </InfiniteScroll>
+        ) : (
+          <AlertBox content='상품이 없습니다.' variant='information' />
         )}
       </Section>
-      { store && (selfUser.id === store.user) && (
+      {store && (selfUser.id === store.user) && (
         <Box marginY={1}>
           <Button
             color='primary'

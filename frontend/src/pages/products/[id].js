@@ -30,42 +30,33 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
 function Id({ selfUser, product, store }) {
   const router = useRouter();
   return (
-    <Layout title={`${product ? product.name : '로딩중'} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${product.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={product ? product.name : '로딩중'}
+        title={product.name}
         padding={false}
       >
-        {product && (
-          <>
-            <SwipeableTileList autoplay={true}>
-              {product.images && (product.images.length > 0) ?
-                  (product.images.map((item, index) => {
-                    return <Tile
-                      key={index}
-                      image={item.image}
-                      onClick={() => router.push(`/images/${item.id}/` )}
-                    />
-                  })
-                ) : (
-                  <Tile image='/no_image.png'/>
-                )
-              }
-            </SwipeableTileList>
-            <Box padding={1}>
-              <Typography variant='h5'>{product.name}</Typography>
-              <Typography variant='h6'>{`${(product.price || 0).toLocaleString('ko-KR')}원`}</Typography>
-              <Typography variant='body1'>{product.description}</Typography>
-            </Box>
-          </>
-        )}
-        {!product && (
-          <SwipeableTileList autoplay={true}>
-            <Tile skeleton/>
-          </SwipeableTileList>
-        )}
+        <SwipeableTileList autoplay={true}>
+          {product.images && (product.images.length > 0) ?
+              (product.images.map((item, index) => {
+                return <Tile
+                  key={index}
+                  image={item.image}
+                  onClick={() => router.push(`/images/${item.id}/` )}
+                />
+              })
+            ) : (
+              <Tile image='/no_image.png'/>
+            )
+          }
+        </SwipeableTileList>
+        <Box padding={1}>
+          <Typography variant='h5'>{product.name}</Typography>
+          <Typography variant='h6'>{`${(product.price || 0).toLocaleString('ko-KR')}원`}</Typography>
+          <Typography variant='body1'>{product.description}</Typography>
+        </Box>
       </Section>
-      {selfUser && store && product && (selfUser.id !== store.owner) && (store.id === product.store) && (
+      {(selfUser.id !== store.owner) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='primary'

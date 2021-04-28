@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router'
 
 import requestToBackend from '../../utils/requestToBackend'
-import withAuth from '../../utils/withAuth'
+import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
 const getImage = async (context) => {
   return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
@@ -35,4 +35,4 @@ function Id({ selfUser, image }) {
   );
 }
 
-export default withAuth(Id);
+export default Id;
