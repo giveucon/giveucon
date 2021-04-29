@@ -10,11 +10,15 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import lightTheme from '../styles/lightTheme';
 import darkTheme from '../styles/darkTheme';
+import getCookies from '../utils/getCookies';
 
 function RootApp({ Component, pageProps }) {
   const router = useRouter();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = prefersDarkMode ? darkTheme : lightTheme;
+  const cookies = getCookies(null)
+  const [theme, setTheme] = useState(
+    cookies.giveucon && JSON.parse(cookies.giveucon).theme === 'dark' ? darkTheme : lightTheme
+  );
 
   const [pageLoading, setPageLoading] = useState(false);
 

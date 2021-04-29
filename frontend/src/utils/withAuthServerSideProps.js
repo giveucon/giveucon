@@ -1,7 +1,8 @@
 import getCookies from './getCookies';
 import requestToBackend from './requestToBackend';
+import setCookie from './setCookie';
 
-export default function withAuthServerSideProps(getServerSidePropsFunction, authType, keyword) {
+export default function withAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
 
     const cookies = getCookies(context)
@@ -16,9 +17,9 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
         props: {}
       }
     }
-    
-    const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
+    const session = JSON.parse(cookies.giveucon);
 
+    const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
     // If account founded but no user models linked
     if (selfUserResponse.status === 404) {
       return {
@@ -30,6 +31,14 @@ export default function withAuthServerSideProps(getServerSidePropsFunction, auth
       }
     }
     const selfUser = selfUserResponse.data;
+
+    setCookie(context, 'giveucon', JSON.stringify({
+      ...session,
+      theme: selfUser.dark_mode ? 'dark' : 'light'
+    }), {
+      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+    })
 
     // Return props after execute server side functions
     if (getServerSidePropsFunction) {

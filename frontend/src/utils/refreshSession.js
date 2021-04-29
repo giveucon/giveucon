@@ -25,7 +25,7 @@ export default async function refreshSession(context) {
   if (cookies.giveucon) {
     const session = JSON.parse(cookies.giveucon);
     const loginRefreshResponse = await requestRefreshTokens(session);
-    const giveuconToken = {
+    const refreshedSession = {
       'access_token': loginRefreshResponse.data.access,
       'refresh_token': loginRefreshResponse.data.refresh,
       'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
@@ -33,13 +33,13 @@ export default async function refreshSession(context) {
       'access_token_expiry': loginRefreshResponse.data.access_expiry,
       'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
     };
-    setCookie(context, 'giveucon', JSON.stringify(giveuconToken), {
+    setCookie(context, 'giveucon', JSON.stringify(refreshedSession), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     })
     console.log('refresh.js : Token refreshed');
-    console.log(giveuconToken);
-    return giveuconToken;
+    console.log(refreshedSession);
+    return refreshedSession;
   }
   return null;
 }
