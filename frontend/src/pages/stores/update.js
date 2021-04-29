@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
+import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -13,15 +14,10 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import Url from '@uppy/url'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
-import '@uppy/url/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import convertImageToBase64 from '../../utils/convertImageToBase64'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -83,22 +79,22 @@ function Update({ selfUser, prevStore, tagList }) {
     name: false,
     description: false,
   });
-  const [uppy, setUppy] = useState(null);
+
 
   useEffect(() => {
-    console.log("HI MY NAME IS USEEFFECTTTTTTTTTTTTTTTTTTTTTT");
-    setUppy(new Uppy()
-      .use(Url, {
-        target: Dashboard,
-        companionUrl: 'http://companion.uppy.io',
-      })
-      .on('files-added', (files) => {
-        setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
-      })
-      .on('file-removed', (file, reason) => {
-        setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
-      }));
+    let processedImages = store.images;
+    const convertImageListToBase64 = async () => {
+      for (const image in processedImages) {
+        await convertImageToBase64(processedImages[image].image, (dataURL) => {
+          processedImages[image].dataURL = dataURL;
+        });
+      }
+      console.log(processedImages);
+      setStore(prevStore => ({ ...prevStore, images: processedImages }));
+    }
+    convertImageListToBase64();
   });
+  
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -176,12 +172,50 @@ function Update({ selfUser, prevStore, tagList }) {
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
       >
         <Box paddingY={1}>
-          <Dashboard
-            uppy={uppy}
-            height={'20rem'}
-            hideCancelButton
-            hideUploadButton
-          />
+          
+          
+          <ImageUploading
+            multiple
+            value={store.images}
+            onChange={(images) => {
+              console.log(store.images);
+              setStore(prevStore => ({ ...prevStore, images }));
+            }}
+          >
+            {({
+              imageList,
+              onImageUpload,
+              onImageRemoveAll,
+              onImageUpdate,
+              onImageRemove,
+              isDragging,
+              dragProps
+            }) => (
+              // write your building UI
+              <div className="upload__image-wrapper">
+                <button
+                  style={isDragging ? { color: "red" } : undefined}
+                  onClick={onImageUpload}
+                  {...dragProps}
+                >
+                  Click or Drop here
+                </button>
+                &nbsp;
+                <button onClick={onImageRemoveAll}>Remove all images</button>
+                {imageList.map((image, index) => (
+                  <div key={index} className="image-item">
+                    <img src={image["dataURL"]} alt="" width="100" />
+                    <div className="image-item__btn-wrapper">
+                      <button onClick={() => onImageUpdate(index)}>Update</button>
+                      <button onClick={() => onImageRemove(index)}>Remove</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </ImageUploading>
+
+          
         </Box>
       </Section>
       <Box marginY={1}>
