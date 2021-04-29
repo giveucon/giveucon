@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
+import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import convertImageToBase64 from '../../utils/convertImageToBase64'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -38,12 +37,12 @@ const getStore = async (context, StoreNotice) => {
   return await requestToBackend(context, `api/stores/${StoreNotice.store}/`, 'get', 'json');
 };
 
-const putStoreNotice = async (storeNotice) => {
+const putStoreNotice = async (storeNotice, imageList) => {
   const processedStoreNotice = {
     article: {
       title: storeNotice.title,
       content: storeNotice.content,
-      images: storeNotice.images,
+      images: imageList,
     },
     store: storeNotice.store,
   };
@@ -75,23 +74,26 @@ function Update({ selfUser, prevStoreNotice }) {
     id: prevStoreNotice.id,
     title: prevStoreNotice.title,
     content: prevStoreNotice.content,
-    images: prevStoreNotice.images,
     store: prevStoreNotice.store,
   });
   const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
     content: false,
   });
-  
-  const uppy = useUppy(() => {
-    return new Uppy()
-    .on('files-added', (files) => {
-      setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
-    })
-    .on('file-removed', (file, reason) => {
-      setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, images: uppy.getFiles().map((file) => file.data) }));
-    })
-  })
+  const [imageList, setImageList] = useState(prevStore.images);
+
+  useEffect(() => {
+    let processedImageList = prevStore.images;
+    const injectDataUrl = async () => {
+      for (const image in processedImageList) {
+        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
+          processedImageList[image].dataURL = dataURL;
+        });
+      }
+      setImageList(processedImageList);
+    }
+    injectDataUrl();
+  }, []);
 
   return (
     <Layout title={`가게 공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -140,15 +142,66 @@ function Update({ selfUser, prevStoreNotice }) {
       <Section
         title='이미지'
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
+        padding={false}
       >
-        <Box paddingY={1}>
-          <Dashboard
-            uppy={uppy}
-            height={'20rem'}
-            hideCancelButton
-            hideUploadButton
-          />
-        </Box>
+        <ImageUploading
+          multiple
+          value={imageList}
+          onChange={(imageList) => {
+            setImageList(imageList);
+          }}
+        >
+          {({
+            imageList,
+            onImageUpload,
+            onImageRemoveAll,
+            onImageUpdate,
+            onImageRemove,
+            isDragging,
+            dragProps
+          }) => (
+            <>
+              {imageList.length > 0 && (
+                <SwipeableTileList half>
+                  {imageList.map((item, index) => (
+                    <Tile
+                      key={index}
+                      image={item.dataURL}
+                      imageType='base64'
+                      actions={
+                        <IconButton><DeleteIcon onClick={() => onImageRemove(index)}/></IconButton>
+                      }
+                    />
+                  ))}
+                </SwipeableTileList>
+              )}
+              <Box padding={1}>
+                <Box marginY={1}>
+                  <Button
+                    color='default'
+                    fullWidth
+                    variant='contained'
+                    onClick={onImageUpload}
+                  >
+                    이미지 추가
+                  </Button>
+                </Box>
+                {imageList.length > 0 && (
+                  <Box marginY={1}>
+                    <Button
+                      className={classes.RedButton}
+                      fullWidth
+                      variant='contained'
+                      onClick={onImageRemoveAll}
+                    >
+                      모든 이미지 삭제
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+            </>
+          )}
+        </ImageUploading>
       </Section>
       <Box marginY={1}>
         <Button
@@ -156,21 +209,13 @@ function Update({ selfUser, prevStoreNotice }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStoreNotice(storeNotice);
+            const response = await putStoreNotice(storeNotice, imageList);
             if (response.status === 200) {
               router.push(`/store-notices/${response.data.id}/`);
               toast.success('가게 공지사항이 업데이트 되었습니다.');
             } else if (response.status === 400) {
-              if (response.data.title) {
-                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: true}));
-              } else {
-                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: false}));
-              }
-              if (response.data.content) {
-                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: true}));
-              } else {
-                setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: false}));
-              }
+              setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: !!response.data.title}));
+              setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: !!response.data.content}));
               toast.error('입력란을 확인하세요.');
             }
           }}
