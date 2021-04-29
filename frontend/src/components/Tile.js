@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Tile({ actions=null, image=null, title=null, menuItems=null, onClick=null, skeleton=false, subtitle=null }) {
+export default function Tile({ actions=null, image=null, imageType='http', title=null, menuItems=null, onClick=null, skeleton=false, subtitle=null }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -62,7 +62,7 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   return (
     <Box className={classes.root}>
       {
@@ -79,11 +79,21 @@ export default function Tile({ actions=null, image=null, title=null, menuItems=n
           {/* Image and action menus area */}
           <Box className={classes.imageArea}>
             <CardActionArea onClick={onClick}>
-              <CardMedia
-                className={classes.media}
-                image={image}
-                title={title}
-              />
+              {imageType === 'base64' && (
+                <CardMedia
+                  className={classes.media}
+                  component='img'
+                  src={image}
+                  alt={title}
+                />
+              )}
+              {imageType === 'http' && (
+                <CardMedia
+                  className={classes.media}
+                  image={image}
+                  title={title}
+                />
+              )}
             </CardActionArea>
             <Box
               className={classes.actions}
