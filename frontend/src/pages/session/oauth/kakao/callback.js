@@ -1,5 +1,5 @@
 import axios from 'axios';
-import nookies from 'nookies'
+import setCookie from '../../../../utils/setCookie';
 
 const getTokens = async (code) => {
   try {
@@ -60,7 +60,7 @@ export async function getServerSideProps(context) {
   const tokenResponse = await getTokens(context.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
-  const giveuconToken = {
+  const session = {
     'access_token': loginRefreshResponse.data.access,
     'refresh_token': loginRefreshResponse.data.refresh,
     'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
@@ -68,10 +68,11 @@ export async function getServerSideProps(context) {
     'access_token_expiry': loginRefreshResponse.data.access_expiry,
     'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
   };
-  nookies.set(context,'giveucon', JSON.stringify(giveuconToken), {
+  setCookie(context, 'giveucon', JSON.stringify(session), {
     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
     path: process.env.NEXT_PUBLIC_COOKIE_PATH,
   })
+
   return {
     redirect: {
       permanent: false,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import Section from '../components/Section'
+import getCookies from '../utils/getCookies';
 
 const useStyles = makeStyles({
   background: {
@@ -28,15 +29,25 @@ const useStyles = makeStyles({
   },
 });
 
-function Login({ session }) {
+export async function getServerSideProps(context) {
+  const cookies = getCookies(context)
+  if (cookies.giveucon) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/home/',
+      },
+      props: {}
+    }
+  }
+  return {
+    props: {}
+  };
+}
+
+function Login() {
   const router = useRouter();
   const classes = useStyles();
-
-  useEffect(() => {
-    if (session) {
-      router.push('/home/');
-    }
-  },[])
 
   return (
     <>

@@ -64,9 +64,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
 })
 
 function Home({ selfUser, centralNoticeList }) {
-
   const router = useRouter();
-
   return (
     <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

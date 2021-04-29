@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: '0.5rem',
     right: '0.5rem',
-    backgroundColor: 'rgba(255, 255, 255, 1)',
     borderRadius: '1.5rem',
     boxShadow: theme.shadows[3],
   },
@@ -95,14 +94,14 @@ export default function Tile({ actions=null, image=null, imageType='http', title
                 />
               )}
             </CardActionArea>
-            <Box
+            <Card
               className={classes.actions}
               display={(actions || menuItems) ? 'flex' : 'none'}
               justifyContent='flex-end'
             >
               {actions}
               {menuItems && (<IconButton onClick={handleClick}><MoreVertIcon /></IconButton>)}
-            </Box>
+            </Card>
           </Box>
   
           {/* Title and content area */}

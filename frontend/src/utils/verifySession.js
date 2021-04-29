@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import getCookies from './getCookies'
 
 const requestVerifyTokens = async (session) => {
