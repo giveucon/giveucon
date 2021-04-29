@@ -48,7 +48,6 @@ export async function getServerSideProps(context) {
 function Login() {
   const router = useRouter();
   const classes = useStyles();
-
   return (
     <>
       <Head>
