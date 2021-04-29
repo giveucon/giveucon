@@ -143,39 +143,40 @@ function Create({ selfUser, tagList }) {
       <Section
         title='이미지'
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
+        padding={false}
       >
-        <Box paddingY={1}>
-          <ImageUploading
-            multiple
-            value={imageList}
-            onChange={(imageList) => {
-              setImageList(imageList);
-            }}
-          >
-            {({
-              imageList,
-              onImageUpload,
-              onImageRemoveAll,
-              onImageUpdate,
-              onImageRemove,
-              isDragging,
-              dragProps
-            }) => (
-              <>
-                {imageList.length > 0 && (
-                  <SwipeableTileList half>
-                    {imageList.map((item, index) => (
-                      <Tile
-                        key={index}
-                        image={item.dataURL}
-                        imageType='base64'
-                        actions={
-                          <IconButton><DeleteIcon onClick={() => onImageRemove(index)}/></IconButton>
-                        }
-                      />
-                    ))}
-                  </SwipeableTileList>
-                )}
+        <ImageUploading
+          multiple
+          value={imageList}
+          onChange={(imageList) => {
+            setImageList(imageList);
+          }}
+        >
+          {({
+            imageList,
+            onImageUpload,
+            onImageRemoveAll,
+            onImageUpdate,
+            onImageRemove,
+            isDragging,
+            dragProps
+          }) => (
+            <>
+              {imageList.length > 0 && (
+                <SwipeableTileList half>
+                  {imageList.map((item, index) => (
+                    <Tile
+                      key={index}
+                      image={item.dataURL}
+                      imageType='base64'
+                      actions={
+                        <IconButton><DeleteIcon onClick={() => onImageRemove(index)}/></IconButton>
+                      }
+                    />
+                  ))}
+                </SwipeableTileList>
+              )}
+              <Box padding={1}>
                 <Box marginY={1}>
                   <Button
                     color='default'
@@ -198,10 +199,10 @@ function Create({ selfUser, tagList }) {
                     </Button>
                   </Box>
                 )}
-              </>
-            )}
-          </ImageUploading>
-        </Box>
+              </Box>
+            </>
+          )}
+        </ImageUploading>
       </Section>
       <Box marginY={1}>
         <Button
