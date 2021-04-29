@@ -54,8 +54,8 @@ function List({ selfUser, initialProductListResponse, user, store }) {
 
   const getMoreProductList = async () => {
     const productListResponse = await await requestToBackend('api/products/', 'get', 'json', null, {
-      user: user.id || null,
-      store: store.id || null,
+      user: user ? user.id : null,
+      store: store ? store.id : null,
       page: productListPagination + 1,
     });
     setProductList(prevProductList => (prevProductList || []).concat(productListResponse.data.results));

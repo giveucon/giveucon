@@ -18,6 +18,10 @@ const getStoreNoticeList = async (context) => {
   });
 };
 
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
   const initialStoreNoticeListResponse = await getStoreNoticeList(context);
   const storeResponse = await getStore(session, initialStoreNoticeListResponse.data);
@@ -31,11 +35,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, initialStoreNoticeListResponse },
+    props: { selfUser, initialStoreNoticeListResponse, store: storeResponse.data },
   };
 })
 
-function List({ selfUser, initialStoreNoticeList }) {
+function List({ selfUser, initialStoreNoticeList, store }) {
 
   const router = useRouter();
   const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
@@ -43,7 +47,8 @@ function List({ selfUser, initialStoreNoticeList }) {
   const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(initialStoreNoticeListResponse.data.next);
 
   const getMoreStoreNoticeList = async () => {
-    const storeNoticeListResponse = await await requestToBackend('api/store-notices/', 'get', 'json', null, {
+    const storeNoticeListResponse = await requestToBackend('api/store-notices/', 'get', 'json', null, {
+      store: store.id,
       page: storeNoticeListPagination + 1,
     });
     setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,8 +15,10 @@ import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 import Uppy from '@uppy/core'
 import { Dashboard, useUppy } from '@uppy/react'
+import Url from '@uppy/url'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
+import '@uppy/url/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -81,16 +83,22 @@ function Update({ selfUser, prevStore, tagList }) {
     name: false,
     description: false,
   });
-  
-  const uppy = useUppy(() => {
-    return new Uppy()
-    .on('files-added', (files) => {
-      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
-    })
-    .on('file-removed', (file, reason) => {
-      setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
-    })
-  })
+  const [uppy, setUppy] = useState(null);
+
+  useEffect(() => {
+    console.log("HI MY NAME IS USEEFFECTTTTTTTTTTTTTTTTTTTTTT");
+    setUppy(new Uppy()
+      .use(Url, {
+        target: Dashboard,
+        companionUrl: 'http://companion.uppy.io',
+      })
+      .on('files-added', (files) => {
+        setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+      })
+      .on('file-removed', (file, reason) => {
+        setStore(prevStore => ({ ...prevStore, images: uppy.getFiles().map((file) => file.data) }));
+      }));
+  });
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>

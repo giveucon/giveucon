@@ -15,6 +15,7 @@ import Uppy from '@uppy/core'
 import { Dashboard, useUppy } from '@uppy/react'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
+import ImageUploading from "react-images-uploading";
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -30,7 +31,11 @@ const getTagList = async (context) => {
 };
 
 const postStore = async (store) => {
-  return await requestToBackend(null, 'api/stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+  const processedStore = {
+    ...store,
+    images: store.images.map(image => image.file),
+  }
+  return await requestToBackend(null, 'api/stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
@@ -139,12 +144,50 @@ function Create({ selfUser, tagList }) {
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
       >
         <Box paddingY={1}>
-          <Dashboard
-            uppy={uppy}
-            height={'20rem'}
-            hideCancelButton
-            hideUploadButton
-          />
+
+
+          <ImageUploading
+            multiple
+            value={store.images}
+            onChange={(images) => {
+              console.log(store.images);
+              setStore(prevStore => ({ ...prevStore, images }));
+            }}
+          >
+            {({
+              imageList,
+              onImageUpload,
+              onImageRemoveAll,
+              onImageUpdate,
+              onImageRemove,
+              isDragging,
+              dragProps
+            }) => (
+              // write your building UI
+              <div className="upload__image-wrapper">
+                <button
+                  style={isDragging ? { color: "red" } : undefined}
+                  onClick={onImageUpload}
+                  {...dragProps}
+                >
+                  Click or Drop here
+                </button>
+                &nbsp;
+                <button onClick={onImageRemoveAll}>Remove all images</button>
+                {imageList.map((image, index) => (
+                  <div key={index} className="image-item">
+                    <img src={image["dataURL"]} alt="" width="100" />
+                    <div className="image-item__btn-wrapper">
+                      <button onClick={() => onImageUpdate(index)}>Update</button>
+                      <button onClick={() => onImageRemove(index)}>Remove</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </ImageUploading>
+
+
         </Box>
       </Section>
       <Box marginY={1}>

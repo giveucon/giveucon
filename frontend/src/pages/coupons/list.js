@@ -60,9 +60,9 @@ function List({ selfUser, initialCouponListResponse, user, store, product }) {
 
   const getMoreCouponList = async () => {
     const couponListResponse = await await requestToBackend('api/coupons/', 'get', 'json', null, {
-      user: user.id || null,
-      store: store.id || null,
-      product: product.id || null,
+      user: user ? user.id : null,
+      store: store ? store.id : null,
+      product: product ? product.id : null,
       page: couponListPagination + 1,
     });
     setCouponList(prevCouponList => (prevCouponList || []).concat(couponListResponse.data.results));
