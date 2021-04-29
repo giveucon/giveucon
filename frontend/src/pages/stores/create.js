@@ -216,16 +216,8 @@ function Create({ selfUser, tagList }) {
               toast.success('가게가 생성되었습니다.');
             } 
             else if (response.status === 400) {
-              if (response.data.name) {
-                setStoreError(prevStoreError => ({...prevStoreError, name: true}));
-              } else {
-                setStoreError(prevStoreError => ({...prevStoreError, name: false}));
-              }
-              if (response.data.description) {
-                setStoreError(prevStoreError => ({...prevStoreError, description: true}));
-              } else {
-                setStoreError(prevStoreError => ({...prevStoreError, description: false}));
-              }
+              setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
+              setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
               toast.error('입력란을 확인하세요.');
             }
           }}

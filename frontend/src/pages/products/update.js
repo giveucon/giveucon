@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
+import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import convertImageToBase64 from '../../utils/convertImageToBase64'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -39,13 +38,13 @@ const getStore = async (context, product) => {
   return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-const putProduct = async (product) => {
+const putProduct = async (product, imageList) => {
   const processedProduct = {
     name: product.name,
     description: product.description,
     price: product.price,
     duration: product.duration + ' 00',
-    images: product.images,
+    images: imageList,
     store: product.store,
   };
   return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
@@ -87,16 +86,20 @@ function Update({ selfUser, prevProduct }) {
     price: false,
     duration: false,
   });
-  
-  const uppy = useUppy(() => {
-    return new Uppy()
-    .on('files-added', (files) => {
-      setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
-    })
-    .on('file-removed', (file, reason) => {
-      setProduct(prevProduct => ({ ...prevProduct, images: uppy.getFiles().map((file) => file.data) }));
-    })
-  })
+  const [imageList, setImageList] = useState(prevStore.images);
+
+  useEffect(() => {
+    let processedImageList = prevStore.images;
+    const injectDataUrl = async () => {
+      for (const image in processedImageList) {
+        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
+          processedImageList[image].dataURL = dataURL;
+        });
+      }
+      setImageList(processedImageList);
+    }
+    injectDataUrl();
+  }, []);
 
   return (
     <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -185,15 +188,66 @@ function Update({ selfUser, prevProduct }) {
       <Section
         title='이미지'
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
+        padding={false}
       >
-        <Box paddingY={1}>
-          <Dashboard
-            uppy={uppy}
-            height={'20rem'}
-            hideCancelButton
-            hideUploadButton
-          />
-        </Box>
+        <ImageUploading
+          multiple
+          value={imageList}
+          onChange={(imageList) => {
+            setImageList(imageList);
+          }}
+        >
+          {({
+            imageList,
+            onImageUpload,
+            onImageRemoveAll,
+            onImageUpdate,
+            onImageRemove,
+            isDragging,
+            dragProps
+          }) => (
+            <>
+              {imageList.length > 0 && (
+                <SwipeableTileList half>
+                  {imageList.map((item, index) => (
+                    <Tile
+                      key={index}
+                      image={item.dataURL}
+                      imageType='base64'
+                      actions={
+                        <IconButton><DeleteIcon onClick={() => onImageRemove(index)}/></IconButton>
+                      }
+                    />
+                  ))}
+                </SwipeableTileList>
+              )}
+              <Box padding={1}>
+                <Box marginY={1}>
+                  <Button
+                    color='default'
+                    fullWidth
+                    variant='contained'
+                    onClick={onImageUpload}
+                  >
+                    이미지 추가
+                  </Button>
+                </Box>
+                {imageList.length > 0 && (
+                  <Box marginY={1}>
+                    <Button
+                      className={classes.RedButton}
+                      fullWidth
+                      variant='contained'
+                      onClick={onImageRemoveAll}
+                    >
+                      모든 이미지 삭제
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+            </>
+          )}
+        </ImageUploading>
       </Section>
       <Box marginY={1}>
         <Button
@@ -201,31 +255,15 @@ function Update({ selfUser, prevProduct }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putProduct(product);
+            const response = await putProduct(product, imageList);
             if (response.status === 200) {
               router.push(`/products/${response.data.id}/`);
               toast.success('상품이 업데이트 되었습니다.');
             } else if (response.status === 400) {
-              if (response.data.name) {
-                setProductError(prevProductError => ({...prevProductError, name: true}));
-              } else {
-                setProductError(prevProductError => ({...prevProductError, name: false}));
-              }
-              if (response.data.description) {
-                setProductError(prevProductError => ({...prevProductError, description: true}));
-              } else {
-                setProductError(prevProductError => ({...prevProductError, description: false}));
-              }
-              if (response.data.price) {
-                setProductError(prevProductError => ({...prevProductError, price: true}));
-              } else {
-                setProductError(prevProductError => ({...prevProductError, price: false}));
-              }
-              if (response.data.duration) {
-                setProductError(prevProductError => ({...prevProductError, duration: true}));
-              } else {
-                setProductError(prevProductError => ({...prevProductError, duration: false}));
-              }
+              setProductError(prevProductError => ({...prevProductError, name: !!response.data.name}));
+              setProductError(prevProductError => ({...prevProductError, description: !!response.data.description}));
+              setProductError(prevProductError => ({...prevProductError, price: !!response.data.price}));
+              setProductError(prevProductError => ({...prevProductError, duration: !!response.data.duration}));
               toast.error('입력란을 확인하세요.');
             }
           }}
