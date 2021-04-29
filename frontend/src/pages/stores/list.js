@@ -46,7 +46,7 @@ function List({ selfUser, initialStoreListResponse, user }) {
 
   const getMoreStoreList = async () => {
     const params = {
-      user: user.id || null,
+      user: user ? user.id : null,
       page: storeListPagination + 1,
     };
     const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
@@ -89,7 +89,7 @@ function List({ selfUser, initialStoreListResponse, user }) {
             <AlertBox content='가게가 없습니다.' variant='information' />
           )}
         </Section>
-        {(user.id === selfUser.id) && (
+        {user && (user.id === selfUser.id) && (
           <Box marginY={1}>
             <Button
               color='primary'

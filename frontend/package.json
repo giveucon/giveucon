@@ -20,6 +20,7 @@
     "@material-ui/system": "^4.11.3",
     "@uppy/core": "^1.17.0",
     "@uppy/react": "^1.11.6",
+    "@uppy/url": "^1.5.20",
     "axios": "^0.21.1",
     "faker": "^5.5.3",
     "jsqr": "^1.3.1",
@@ -30,9 +31,11 @@
     "react-circular-progressbar": "^2.0.4",
     "react-dom": "17.0.1",
     "react-hot-toast": "^1.0.2",
+    "react-images-uploading": "^3.1.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-swipeable-views": "^0.13.9",
     "react-swipeable-views-utils": "^0.13.9",
+    "react-upload-gallery": "^0.2.0",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

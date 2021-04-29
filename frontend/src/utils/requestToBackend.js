@@ -42,11 +42,14 @@ const multipartRequest = async (session, url, method, data, params) => {
   });
 }
 
-export default async function requestToBackend(context, url, method, contentType, data=null, params=null) {
+export default async function requestToBackend(context, url, method, contentType, data=null, params=null, defaultOrigin=true) {
 
   const verifySessionResponse = await verifySession(context);
   const session = verifySessionResponse.valid ? verifySessionResponse.session : await refreshSession(context);
 
+  if (!defaultOrigin) {
+    url = new URL(url).pathname;
+  }
   let response = null;
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);
