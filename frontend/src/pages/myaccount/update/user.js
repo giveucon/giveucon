@@ -45,7 +45,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function User({ selfUser: prevSelfUser }) {
+function User({ setDarkMode, selfUser: prevSelfUser }) {
 
   const router = useRouter();
   const classes = useStyles();
@@ -165,6 +165,7 @@ function User({ selfUser: prevSelfUser }) {
           onClick={async () => {
             const response = await putSelfUser(selfUser);
             if (response.status === 200) {
+              setDarkMode(selfUser.dark_mode ? 'dark' : 'light');
               router.push('/myaccount/update/');
               toast.success('계정이 업데이트 되었습니다.');
             } 

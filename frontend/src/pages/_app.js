@@ -19,9 +19,14 @@ function RootApp({ Component, pageProps }) {
   const [theme, setTheme] = useState(
     cookies.giveucon && JSON.parse(cookies.giveucon).theme === 'dark' ? darkTheme : lightTheme
   );
-
   const [pageLoading, setPageLoading] = useState(false);
 
+  const setDarkMode = (option) => {
+    option === 'light' && setTheme(lightTheme);
+    option === 'dark' && setTheme(darkTheme);
+    (option === 'auto' && prefersDarkMode) ? setTheme(darkTheme) : setTheme(lightTheme);
+  }
+  
   useEffect(() => {
     const handleStart = () => { setPageLoading(true); };
     const handleComplete = () => { setPageLoading(false); };
@@ -60,7 +65,7 @@ function RootApp({ Component, pageProps }) {
         <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
           <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
         </Backdrop>
-        <Component {...pageProps} />
+        <Component {...pageProps} setDarkMode={setDarkMode} />
       </ThemeProvider>
     </>
   );
