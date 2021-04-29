@@ -11,12 +11,15 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import SwipeableTileList from '../../components/SwipeableTileList';
+import Tile from '../../components/Tile';
 import convertImageToBase64 from '../../utils/convertImageToBase64'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
@@ -43,8 +46,12 @@ const getTagList = async (context) => {
   return await requestToBackend(context, 'api/tags/', 'get', 'json');
 };
 
-const putStore = async (store) => {
-  return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(store), null);
+const putStore = async (store, imageList) => {
+  const processedStore = {
+    ...store,
+    images: imageList.map(image => image.file),
+  }
+  return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
@@ -72,29 +79,27 @@ function Update({ selfUser, prevStore, tagList }) {
     id: prevStore.id,
     name: prevStore.name,
     description: prevStore.description,
-    images: prevStore.images,
     tags: prevStore.tags,
   });
   const [storeError, setStoreError] = useState({
     name: false,
     description: false,
   });
-
+  const [imageList, setImageList] = useState(prevStore.images);
 
   useEffect(() => {
-    let processedImages = store.images;
-    const convertImageListToBase64 = async () => {
-      for (const image in processedImages) {
-        await convertImageToBase64(processedImages[image].image, (dataURL) => {
-          processedImages[image].dataURL = dataURL;
+    let processedImageList = prevStore.images;
+    const injectDataUrl = async () => {
+      for (const image in processedImageList) {
+        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
+          processedImageList[image].dataURL = dataURL;
         });
       }
-      console.log(processedImages);
-      setStore(prevStore => ({ ...prevStore, images: processedImages }));
+      console.log(processedImageList);
+      setImageList(processedImageList);
     }
-    convertImageListToBase64();
-  });
-  
+    injectDataUrl();
+  }, []);
 
   return (
     <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -147,7 +152,6 @@ function Update({ selfUser, prevStore, tagList }) {
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {
               setStore(prevStore => ({ ...prevStore, tags: value.map(value => value.id) }));
-              console.log(value.map(value => value.id));
             }}
             renderOption={(option, { selected }) => (
               <React.Fragment>
@@ -172,14 +176,11 @@ function Update({ selfUser, prevStore, tagList }) {
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
       >
         <Box paddingY={1}>
-          
-          
           <ImageUploading
             multiple
-            value={store.images}
-            onChange={(images) => {
-              console.log(store.images);
-              setStore(prevStore => ({ ...prevStore, images }));
+            value={imageList}
+            onChange={(imageList) => {
+              setImageList(imageList);
             }}
           >
             {({
@@ -191,31 +192,46 @@ function Update({ selfUser, prevStore, tagList }) {
               isDragging,
               dragProps
             }) => (
-              // write your building UI
-              <div className="upload__image-wrapper">
-                <button
-                  style={isDragging ? { color: "red" } : undefined}
-                  onClick={onImageUpload}
-                  {...dragProps}
-                >
-                  Click or Drop here
-                </button>
-                &nbsp;
-                <button onClick={onImageRemoveAll}>Remove all images</button>
-                {imageList.map((image, index) => (
-                  <div key={index} className="image-item">
-                    <img src={image["dataURL"]} alt="" width="100" />
-                    <div className="image-item__btn-wrapper">
-                      <button onClick={() => onImageUpdate(index)}>Update</button>
-                      <button onClick={() => onImageRemove(index)}>Remove</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <>
+                {imageList.length > 0 && (
+                  <SwipeableTileList half>
+                    {imageList.map((item, index) => (
+                      <Tile
+                        key={index}
+                        image={item.dataURL}
+                        imageType='base64'
+                        actions={
+                          <IconButton><DeleteIcon onClick={() => onImageRemove(index)}/></IconButton>
+                        }
+                      />
+                    ))}
+                  </SwipeableTileList>
+                )}
+                <Box marginY={1}>
+                  <Button
+                    color='default'
+                    fullWidth
+                    variant='contained'
+                    onClick={onImageUpload}
+                  >
+                    이미지 추가
+                  </Button>
+                </Box>
+                {imageList.length > 0 && (
+                  <Box marginY={1}>
+                    <Button
+                      className={classes.RedButton}
+                      fullWidth
+                      variant='contained'
+                      onClick={onImageRemoveAll}
+                    >
+                      모든 이미지 삭제
+                    </Button>
+                  </Box>
+                )}
+              </>
             )}
           </ImageUploading>
-
-          
         </Box>
       </Section>
       <Box marginY={1}>
@@ -224,7 +240,7 @@ function Update({ selfUser, prevStore, tagList }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStore(store);
+            const response = await putStore(store, imageList);
             if (response.status === 200) {
               router.push(`/stores/${response.data.id}/`);
               toast.success('가게가 업데이트 되었습니다.');
