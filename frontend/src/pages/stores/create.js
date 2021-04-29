@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
+import ImageUploading from 'react-images-uploading';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -11,11 +12,6 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import Uppy from '@uppy/core'
-import { Dashboard, useUppy } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
-import ImageUploading from "react-images-uploading";
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
@@ -59,16 +55,6 @@ function Create({ selfUser, tagList }) {
     description: false,
   });
 
-  const uppy = useUppy(() => {
-    return new Uppy()
-    .on('file-added', (file) => {
-      setStore(prevStore => ({...prevStore, images: uppy.getFiles().map((file) => file.data)}));
-    })
-    .on('file-removed', (file, reason) => {
-      setStore(prevStore => ({...prevStore, images: uppy.getFiles().map((file) => file.data)}));
-    })
-  })
-  
   return (
     <Layout title={`가게 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
