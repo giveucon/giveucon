@@ -40,4 +40,5 @@ urlpatterns = [
     path('tags/<int:pk>', TagDetailView.as_view()),
 
     path('reviews/', ReviewListView.as_view()),
+    path('reviews/<int:pk>', ReviewDetailView.as_view()),
 ]

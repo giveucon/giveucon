@@ -3,9 +3,9 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from ..models import CentralNotice
+from ..paginations import CentralNoticePagination
 from ..serializers import CentralNoticeReadSerializer
 from ..serializers import CentralNoticeWriteSerializer
-from ..paginations import CentralNoticePagination
 from ..services import UserService
 from ..mixins import SerializerMixin
 

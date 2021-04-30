@@ -8,8 +8,6 @@ class SerializerMixin(object):
     serializer_class_patch = None
 
     def get_serializer_class(self):
-        print('get_serializer_class()')
-
         serializer_class_mapper = {
             'GET': self.serializer_class_get or self.serializer_class_read,
             'POST': self.serializer_class_post or self.serializer_class_write,

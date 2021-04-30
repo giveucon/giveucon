@@ -32,11 +32,11 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             instance.title = validated_data.pop('title', instance.title)
             instance.content = validated_data.pop('content', instance.title)
+            instance.save()
             instance.images.all().delete()
             images_data = validated_data.pop('images', [])
             images = self.save_images(images_data)
             instance.images.set(images)
-            instance.save()
         return instance
 
     def to_representation(self, instance):
