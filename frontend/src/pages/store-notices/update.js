@@ -42,7 +42,7 @@ const putStoreNotice = async (storeNotice, imageList) => {
     article: {
       title: storeNotice.title,
       content: storeNotice.content,
-      images: imageList,
+      images: imageList.map(image => image.file),
     },
     store: storeNotice.store,
   };
@@ -72,18 +72,18 @@ function Update({ selfUser, prevStoreNotice }) {
   const classes = useStyles();
   const [storeNotice, setStoreNotice] = useState({
     id: prevStoreNotice.id,
-    title: prevStoreNotice.title,
-    content: prevStoreNotice.content,
-    store: prevStoreNotice.store,
+    title: prevStoreNotice.article.title,
+    content: prevStoreNotice.article.content,
+    store: prevStoreNotice.article.store,
   });
   const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
     content: false,
   });
-  const [imageList, setImageList] = useState(prevStore.images);
+  const [imageList, setImageList] = useState(prevStoreNotice.article.images);
 
   useEffect(() => {
-    let processedImageList = prevStore.images;
+    let processedImageList = prevStoreNotice.article.images;
     const injectDataUrl = async () => {
       for (const image in processedImageList) {
         await convertImageToBase64(processedImageList[image].image, (dataURL) => {

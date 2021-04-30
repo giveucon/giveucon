@@ -24,7 +24,7 @@ const getStore = async (context) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
   const initialStoreNoticeListResponse = await getStoreNoticeList(context);
-  const storeResponse = await getStore(session, initialStoreNoticeListResponse.data);
+  const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
       redirect: {
@@ -39,7 +39,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function List({ selfUser, initialStoreNoticeList, store }) {
+function List({ selfUser, initialStoreNoticeListResponse, store }) {
 
   const router = useRouter();
   const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
@@ -62,7 +62,7 @@ function List({ selfUser, initialStoreNoticeList, store }) {
         backButton
         title='가게 공지사항 목록'
       >
-        {storeList && (storeList.length > 0) ? (
+        {storeNoticeList && (storeNoticeList.length > 0) ? (
           <InfiniteScroll
             dataLength={storeNoticeList.length}
             next={getMoreStoreNoticeList}
@@ -71,7 +71,7 @@ function List({ selfUser, initialStoreNoticeList, store }) {
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
-              {storeList && storeList.map((item, index) => (
+              {storeNoticeList && storeNoticeList.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}

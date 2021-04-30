@@ -13,6 +13,8 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import SwipeableTileList from '../../components/SwipeableTileList'
+import Tile from '../../components/Tile'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -36,7 +38,7 @@ const postStoreNotice = async (storeNotice, imageList) => {
     article: {
       title: storeNotice.title,
       content: storeNotice.content,
-      images: imageList,
+      images: imageList.map(image => image.file),
     },
     store: storeNotice.store,
   };

@@ -44,7 +44,7 @@ const putProduct = async (product, imageList) => {
     description: product.description,
     price: product.price,
     duration: product.duration + ' 00',
-    images: imageList,
+    images: imageList.map(image => image.file),
     store: product.store,
   };
   return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
@@ -77,7 +77,6 @@ function Update({ selfUser, prevProduct }) {
     description: prevProduct.description,
     price: prevProduct.price,
     duration: prevProduct.duration,
-    images: prevProduct.images,
     store: prevProduct.store,
   });
   const [productError, setProductError] = useState({
@@ -86,10 +85,10 @@ function Update({ selfUser, prevProduct }) {
     price: false,
     duration: false,
   });
-  const [imageList, setImageList] = useState(prevStore.images);
+  const [imageList, setImageList] = useState(prevProduct.images);
 
   useEffect(() => {
-    let processedImageList = prevStore.images;
+    let processedImageList = prevProduct.images;
     const injectDataUrl = async () => {
       for (const image in processedImageList) {
         await convertImageToBase64(processedImageList[image].image, (dataURL) => {

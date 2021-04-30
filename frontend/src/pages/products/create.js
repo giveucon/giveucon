@@ -38,7 +38,7 @@ const postProduct = async (product, imageList) => {
     description: product.description,
     price: product.price,
     duration: product.duration + ' 00',
-    images: imageList,
+    images: imageList.map(image => image.file),
     store: product.store,
   };
   return await requestToBackend(null, '/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);

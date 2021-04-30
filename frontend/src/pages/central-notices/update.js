@@ -14,6 +14,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
+import SwipeableTileList from '../../components/SwipeableTileList'
+import Tile from '../../components/Tile'
 import convertImageToBase64 from '../../utils/convertImageToBase64'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
@@ -38,7 +40,7 @@ const putCentralNotice = async (centralNotice, imageList) => {
     article: {
       title: centralNotice.title,
       content: centralNotice.content,
-      images: imageList,
+      images: imageList.map(image => image.file),
     },
   };
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
@@ -66,18 +68,17 @@ function Update({ selfUser, prevCentralNotice }) {
   const classes = useStyles();
   const [centralNotice, setCentralNotice] = useState({
     id: prevCentralNotice.id,
-    title: prevCentralNotice.title,
-    content: prevCentralNotice.content,
-    images: prevCentralNotice.images,
+    title: prevCentralNotice.article.title,
+    content: prevCentralNotice.article.content,
   });
   const [centralNoticeError, setCentralNoticeError] = useState({
     title: false,
     content: false,
   });
-  const [imageList, setImageList] = useState(prevStore.images);
+  const [imageList, setImageList] = useState(prevCentralNotice.article.images);
 
   useEffect(() => {
-    let processedImageList = prevStore.images;
+    let processedImageList = prevCentralNotice.article.images;
     const injectDataUrl = async () => {
       for (const image in processedImageList) {
         await convertImageToBase64(processedImageList[image].image, (dataURL) => {
