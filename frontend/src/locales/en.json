@@ -1,0 +1,9 @@
+{
+  "home": {
+    "title": "Home",
+    "nearby": "Nearby"
+  },
+  "myaccount": {
+    "logout": "Logout"
+  }
+}

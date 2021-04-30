@@ -18,6 +18,7 @@ class MyDocument extends Document {
         const initialProps = await Document.getInitialProps(ctx)
         return {
           ...initialProps,
+          lang: ctx.query.lng,
           styles: (
             <React.Fragment>
               {initialProps.styles}
@@ -34,7 +35,7 @@ class MyDocument extends Document {
   render() {
     const kakaoKey = process.env.KAKAO_CLIENT_ID;
     return (
-      <Html lang='en' dir='ltr'>
+      <Html lang={this.props.lang} dir='ltr'>
         <Head>
           <meta charSet='utf-8' />
           {/* PWA primary color */}
