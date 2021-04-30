@@ -10,7 +10,7 @@ import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/use-i18n'
 import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from '/utils/withAuthServerSideProps'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -22,58 +22,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
-};
-
-const deleteStore = async (store) => {
-  return await requestToBackend(null, `api/stores/${store.id}/`, 'delete', 'json');
+const deleteSelfUser = async (context, selfUser) => {
+  return await requestToBackend(context, `api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
   const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
-  const storeResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
-  }
   return {
-    props: { lng: context.query.lng, lngDict, selfUser, store: storeResponse.data },
-  };
+    props: { lng: context.query.lng, lngDict,selfUser },
+  }
 })
 
-function Delete({ lng, lngDict, selfUser, store }) {
+function Delete({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 
   return (
-    <Layout title={`${i18n.t('pages.stores.delete.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.myaccount.delete.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.stores.delete.pageTitle')}
+        title={i18n.t('pages.myaccount.delete.pageTitle')}
       >
-        <AlertBox content={i18n.t('pages.stores.delete.warning')} variant='warning' />
+        <AlertBox content={i18n.t('pages.myaccount.delete.warning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteStore(store);
+              const response = await deleteSelfUser(selfUser);
               if (response.status === 204) {
-                router.push(`/${lng}/stores/`);
-                toast.success(i18n.t('pages.stores.delete.success'));
+                router.push('/session/logout');
+                toast.success(i18n.t('pages.myaccount.delete.success'));
               }
             }}
           >
-            {i18n.t('pages.stores.delete.deleteStore')}
+            {i18n.t('pages.myaccount.delete.deleteAccount')}
           </Button>
         </Box>
         <Box marginY={1}>

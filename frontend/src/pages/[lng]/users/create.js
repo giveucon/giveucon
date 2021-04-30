@@ -1,68 +1,51 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../../components/Layout'
-import Section from '../../../components/Section'
-import requestToBackend from '../../../utils/requestToBackend'
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
 
-const useStyles = makeStyles((theme) => ({
-  RedButton: {
-    background: theme.palette.error.main,
-    color: 'white',
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
-
-const putSelfUser = async (selfUser) => {
-  const data = {
-    email: selfUser.email,
-    user_name: selfUser.user_name,
-    first_name: selfUser.first_name,
-    last_name: selfUser.last_name,
-    locale: selfUser.locale,
-    dark_mode: selfUser.dark_mode,
-  };
-  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
+const getSelfAccount = async (context) => {
+  return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const prevSelfUser = selfUser;
+const postSelfUser = async (selfUser) => {
+  return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
+};
+
+export async function getServerSideProps(context) {
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
+  const selfAccountResponse = await getSelfAccount(context);
   return {
-    props: { prevSelfUser: prevSelfUser },
+    props: { lng: context.query.lng, lngDict, selfAccount: selfAccountResponse.data }
   };
-})
+}
 
-function User({ setDarkMode, selfUser: prevSelfUser }) {
+function Create({ lng, lngDict, selfAccount }) {
 
+  const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
-    id: prevSelfUser.id,
-    email: prevSelfUser.email,
-    user_name: prevSelfUser.user_name,
-    first_name: prevSelfUser.first_name,
-    last_name: prevSelfUser.last_name,
-    locale: prevSelfUser.locale,
-    dark_mode: prevSelfUser.dark_mode,
+    email: selfAccount.email,
+    user_name: selfAccount.username,
+    first_name: null,
+    last_name: null,
+    dark_mode: false,
   });
   const [selfUserError, setSelfUserError] = useState({
     email: false,
@@ -72,14 +55,14 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
   });
 
   return (
-    <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.users.create.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='사용자 설정'
+        title={i18n.t('pages.users.create.pageTitle')}
       >
       </Section>
       <Section
-        title='사용자 정보'
+        title={i18n.t('common.basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -88,7 +71,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label='이메일'
+            label={i18n.t('common.email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -100,11 +83,11 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <TextField
-            name='username'
+            name='user_name'
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label='유저네임'
+            label={i18n.t('common.username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -120,7 +103,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label='성'
+            label={i18n.t('common.lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -136,7 +119,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label='이름'
+            label={i18n.t('common.firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -148,7 +131,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>로케일</FormLabel>
+            <FormLabel>{i18n.t('common.locale')}</FormLabel>
             <RadioGroup
               name='locale'
               value={selfUser.locale}
@@ -158,10 +141,10 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label='한국어' />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('languages.original.ko')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label='English' />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('languages.original.en')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -180,7 +163,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
                 }}
               />
             }
-            label='다크 모드'
+            label={i18n.t('common.darkMode')}
             />
           </FormGroup>
         </Box>
@@ -191,41 +174,25 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putSelfUser(selfUser);
-            if (response.status === 200) {
-              setDarkMode(selfUser.dark_mode ? 'dark' : 'light');
-              router.push('/${}myaccount/update/');
-              toast.success('계정이 업데이트 되었습니다.');
-            } 
+            const response = await postSelfUser(selfUser);
+            if (response.status === 201) {
+              router.push(`/${lng}/myaccount/`);
+              toast.success(i18n.t('pages.users.create.success'));
+            }
             else if (response.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('common.checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('common.submit')}
         </Button>
       </Box>
-      <Section
-        title='위험 구역'
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.RedButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/myaccount/delete/')}
-          >
-            계정 탈퇴
-          </Button>
-        </Box>
-      </Section>
     </Layout>
   );
 }
 
-export default User;
+export default Create;

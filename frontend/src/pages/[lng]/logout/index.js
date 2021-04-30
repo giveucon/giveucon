@@ -4,11 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import useI18n from '../../hooks/use-i18n'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,27 +21,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const { default: lngDict = {} } = await import(
-    `../../locales/${context.query.lng}.json`
-  )
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   return {
     props: { lng: context.query.lng, lngDict, selfUser },
   };
 })
 
-function Logout({ lng, lngDict, selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   
   return (
-    <Layout title={`로그아웃 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.logout.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='로그아웃'
+        title={i18n.t('pages.logout.index.pageTitle')}
       >
-        <AlertBox content='로그아웃 하시겠습니까?' variant='question' />
+        <AlertBox content={i18n.t('pages.logout.index.question')} variant='question' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -49,7 +47,7 @@ function Logout({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/session/logout')}
           >
-            로그아웃
+            {i18n.t('pages.logout.index.logout')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -59,7 +57,7 @@ function Logout({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('common.goBack')}
           </Button>
         </Box>
       </Section>
@@ -67,4 +65,4 @@ function Logout({ lng, lngDict, selfUser }) {
   );
 }
 
-export default Logout;
+export default Index;

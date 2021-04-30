@@ -1,18 +1,138 @@
 {
-  "home": {
-    "title": "Home",
-    "nearby": "Nearby"
+  "common": {
+    "addImages": "Add images",
+    "appName": "giveUcon",
+    "basicInfo": "Basic info",
+    "darkMode": "Dark mode",
+    "dangerZone": "Danger zone",
+    "email": "Email",
+    "empty": "Empty",
+    "firstName": "First name",
+    "goBack": "Go back",
+    "images": "Images",
+    "lastName": "Last name",
+    "locale": "Locale",
+    "checkInputFields": "Please check input fields.",
+    "removeAllImages": "Delete all images",
+    "submit": "Submit",
+    "username": "User name"
   },
-  "stores": {
-    "index": {
-      "stores": "Stores",
-      "myStore": "My store",
-      "allStores": "All stores",
-      "addNewStore": "Add new store",
-      "noStore": "No store"
+  "languages": {
+    "original": {
+      "en": "English",
+      "ko": "한국어"
+    },
+    "translated": {
+      "en": "English",
+      "ko": "Korean"
     }
   },
-  "myaccount": {
-    "logout": "Logout"
+  "pages": {
+    "home": {
+      "index": {
+        "pageTitle": "Home",
+        "nearby": "Nearby"
+      }
+    },
+    "login": {
+      "index": {
+        "pageTitle": "Login",
+        "welcome": "Welcome!",
+        "loginAsKakaoAccount": "Log in as Kakao account"
+      }
+    },
+    "logout": {
+      "index": {
+        "pageTitle": "Logout",
+        "question": "Are you sure to logout?",
+        "logout": "Log out"
+      }
+    },
+    "myaccount": {
+      "delete": {
+        "pageTitle": "Delete account",
+        "warning": "Warning: This action CANNOT be undone.",
+        "deleteAccount": "Delete account",
+        "success": "Your account is successfully deleted."
+      },
+      "index": {
+        "pageTitle": "My Account",
+        "myInfo": "My Info",
+        "myStores": "My Stores",
+        "myProducts": "My Products",
+        "myCoupons": "My Coupons",
+        "managements": "Managements",
+        "notices": "Notices",
+        "settings": "Settings",
+        "logout": "Logout",
+        "developerTools": "Developer Tools",
+        "createDatabase": "Create database",
+        "components": "Components"
+      },
+      "update": {
+        "index": {
+          "pageTitle": "Settings",
+          "userSettings": "User settings"
+        },
+        "user": {
+          "pageTitle": "User settings",
+          "deleteAccount": "Delete account",
+          "success": "Your account is successfully updated."
+        }
+      }
+    },
+    "stores": {
+      "create": {
+        "pageTitle": "Create Store",
+        "storeTitle": "Store title",
+        "storeDescription": "Store description",
+        "tags": "Tags",
+        "success": "Store is successfully created."
+      },
+      "delete": {
+        "pageTitle": "Delete store",
+        "warning": "Warning: This action CANNOT be undone.",
+        "deleteStore": "Delete store",
+        "success": "Store is successfully deleted."
+      },
+      "id": {
+        "notices": "Notices",
+        "products": "Products",
+        "reviews": "Reviews",
+        "location": "Location",
+        "findPath": "Find path",
+        "createProduct": "Create new product",
+        "createNotice": "Create new notice",
+        "updateStore": "Edit store"
+      },
+      "index": {
+        "pageTitle": "Stores",
+        "myStore": "My store",
+        "allStores": "All stores",
+        "createStore": "Create new store"
+      },
+      "list": {
+        "pageTitle": "Store list",
+        "createProduct": "Create new store"
+      },
+      "update": {
+        "pageTitle": "Update Store",
+        "storeTitle": "Store title",
+        "storeDescription": "Store description",
+        "tags": "Tags",
+        "success": "Store is successfully updated.",
+        "deleteStore": "Delete store"
+      }
+    },
+    "users": {
+      "create": {
+        "pageTitle": "Create user",
+        "success": "Your account is successfully created."
+      },
+      "id": {
+        "ownedStores": "Owned stores",
+        "moveToMyAccount": "Go to my account"
+      }
+    }
   }
 }

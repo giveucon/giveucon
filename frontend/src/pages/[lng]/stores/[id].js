@@ -14,17 +14,17 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
-import AlertBox from '../../../components/AlertBox';
-import KakaoMapBox from '../../../components/KakaoMapBox';
-import Layout from '../../../components/Layout'
-import NoticeListItem from '../../../components/NoticeListItem'
-import ReviewListItem from '../../../components/ReviewListItem'
-import Tile from '../../../components/Tile';
-import Section from '../../../components/Section'
-import SwipeableTileList from '../../../components/SwipeableTileList';
-import useI18n from '../../../hooks/use-i18n'
-import requestToBackend from '../../../utils/requestToBackend'
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox';
+import KakaoMapBox from 'components/KakaoMapBox';
+import Layout from 'components/Layout'
+import NoticeListItem from 'components/NoticeListItem'
+import ReviewListItem from 'components/ReviewListItem'
+import Tile from 'components/Tile';
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
@@ -52,9 +52,7 @@ const getStoreReviewList = async (context, store) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const { default: lngDict = {} } = await import(
-    `../../../locales/${context.query.lng}.json`
-  )
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   const storeResponse = await getStore(context);
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
@@ -84,7 +82,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={store ? store.name : '로딩중'}
+        title={store.name}
         padding={false}
       >
         <SwipeableTileList autoplay={true}>
@@ -93,7 +91,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               return <Tile
                 key={index}
                 image={item.image}
-                onClick={() => router.push(`/images/${item.id}/`)}
+                onClick={() => router.push(`/${lng}/images/${item.id}/`)}
               />})
             ) : (
               <Tile image='/no_image.png' />
@@ -119,12 +117,12 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
         </Box>
       </Section>
       <Section
-        title='가게 공지사항'
+        title={i18n.t('pages.stores.id.notices')}
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
         titleSuffix={
           <IconButton
             onClick={() => router.push({
-              pathname: '/store-notices/list/',
+              pathname: `/${lng}/store-notices/list/`,
               query: { store: store.id },
             })}
           >
@@ -139,22 +137,22 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 <NoticeListItem
                   title={item.article.title}
                   subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                  onClick={() => router.push(`/store-notices/${item.id}/`)}
+                  onClick={() => router.push(`/${lng}/store-notices/${item.id}/`)}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='상품'
+        title={i18n.t('pages.stores.id.products')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={
           <IconButton
             onClick={() => router.push({
-              pathname: '/products/list/',
+              pathname: `/${lng}/products/list/`,
               query: { store: store.id },
             })}
           >
@@ -174,22 +172,22 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>
                   ]}
-                  onClick={() => router.push(`/products/${item.id}/`)}
+                  onClick={() => router.push(`/${lng}/products/${item.id}/`)}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content='상품이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='가게 리뷰'
+        title={i18n.t('pages.stores.id.reviews')}
         titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
         titleSuffix={
           <IconButton
             onClick={() => router.push({
-              pathname: '/store-reviews/list/',
+              pathname: `/${lng}/store-reviews/list/`,
               query: { store: store.id },
             })}
           >
@@ -205,17 +203,17 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                   title={item.review.article.title}
                   subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
                   score={item.review.score}
-                  onClick={() => router.push(`/store-reviews/${item.id}/`)}
+                  onClick={() => router.push(`/${lng}/store-reviews/${item.id}/`)}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content='가게 리뷰가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='가게 위치'
+        title={i18n.t('pages.stores.id.location')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
         <Card>
@@ -229,7 +227,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           variant='contained'
           onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
         >
-          경로 검색
+          {i18n.t('pages.stores.id.findPath')}
         </Button>
       </Box>
       {selfUser && store && (selfUser.id === store.user) && (
@@ -240,11 +238,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/products/create/',
+                pathname: `/${lng}/products/create/`,
                 query: { id: store.id },
               })}
             >
-              새 상품 추가
+              {i18n.t('pages.stores.id.createProduct')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -253,11 +251,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/store-notices/create/',
+                pathname: `/${lng}/store-notices/create/`,
                 query: { store: store.id },
               })}
             >
-              가게 공지사항 추가
+              {i18n.t('pages.stores.id.createNotice')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -266,11 +264,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/stores/update/',
+                pathname: `/${lng}/stores/update/`,
                 query: { store: store.id },
               })}
             >
-              가게 정보 수정
+              {i18n.t('pages.stores.id.updateStore')}
             </Button>
           </Box>
         </>
