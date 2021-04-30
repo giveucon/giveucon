@@ -112,7 +112,7 @@ class Friend(models.Model):
         unique_together = ('from_user', 'to_user')
 
 class Review(models.Model):
-    score = models.PositiveIntegerField(null=False)
+    score = models.PositiveIntegerField(null=False) # 1~5
     article = models.ForeignKey(
         Article,
         null=False,

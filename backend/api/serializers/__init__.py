@@ -14,4 +14,5 @@ from .tag_serializer import TagSerializer
 from .review_read_serializer import ReviewReadSerializer
 from .review_write_serializer import ReviewWriteSerializer
 from .store_review_read_serializer import StoreReviewReadSerializer
-from .store_review_write_serializer import StoreReviewWriteSerializer
+from .store_review_create_serializer import StoreReviewCreateSerializer
+from .store_review_update_serializer import StoreReviewUpdateSerializer
