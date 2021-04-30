@@ -1,4 +1,5 @@
 import React from 'react';
+import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,7 +50,7 @@ function Index({ selfUser }) {
         <UserProfileBox
           name={selfUser.user_name}
           subtitle={selfUser.email}
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
+          image={gravatar.url(selfUser.email, {default: 'identicon'})}
         />
         <Box marginY={1}>
           <Button
