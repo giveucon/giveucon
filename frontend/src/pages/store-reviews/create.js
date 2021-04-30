@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import ImageUploading from 'react-images-uploading';
@@ -10,12 +10,12 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
+import Rating from '@material-ui/lab/Rating';
 
 import Layout from '../../components/Layout'
 import Section from '../../components/Section'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
+import SwipeableTileList from '../../components/SwipeableTileList'
+import Tile from '../../components/Tile'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -30,29 +30,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreNotice = async (context) => {
-  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
+const getStore = async (context) => {
+  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
-const getStore = async (context, StoreNotice) => {
-  return await requestToBackend(context, `api/stores/${StoreNotice.store}/`, 'get', 'json');
-};
-
-const putStoreNotice = async (storeNotice, imageList) => {
-  const processedStoreNotice = {
-    article: {
-      title: storeNotice.title,
-      content: storeNotice.content,
-      images: imageList.map(image => image.file),
+const postStoreReview = async (storeReview, imageList) => {
+  const processedStoreReview = {
+    review: {
+      article: {
+        title: storeReview.title,
+        content: storeReview.content,
+        images: imageList.map(image => image.file),
+      },
+      score: storeReview.score,
     },
-    store: storeNotice.store,
+    store: storeReview.store,
   };
-  return await requestToBackend(null, 'api/store-notices/', 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+  return await requestToBackend(null, 'api/store-reviews/', 'post', 'multipart', convertJsonToFormData(processedStoreReview), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const prevStoreNoticeResponse = await getStoreNotice(context);
-  const storeResponse = await getStore(context, prevStoreNoticeResponse.data);
+  const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
       redirect: {
@@ -63,64 +61,58 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
-  };
+    props: { selfUser, store: storeResponse.data },
+  }
 })
 
-function Update({ selfUser, prevStoreNotice }) {
+function Create({ selfUser, store }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [storeNotice, setStoreNotice] = useState({
-    id: prevStoreNotice.id,
-    title: prevStoreNotice.article.title,
-    content: prevStoreNotice.article.content,
-    store: prevStoreNotice.article.store,
+  const [storeReview, setStoreReview] = useState({
+    score: 3,
+    title: null,
+    content: null,
+    store: store.id
   });
-  const [storeNoticeError, setStoreNoticeError] = useState({
+  const [storeReviewError, setStoreReviewError] = useState({
     title: false,
     content: false,
   });
-  const [imageList, setImageList] = useState(prevStoreNotice.article.images);
-
-  useEffect(() => {
-    let processedImageList = prevStoreNotice.article.images;
-    const injectDataUrl = async () => {
-      for (const image in processedImageList) {
-        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
-          processedImageList[image].dataURL = dataURL;
-        });
-        await convertImageToFile(processedImageList[image].image, processedImageList[image].image, (file) => {
-          processedImageList[image].file = file;
-        });
-      }
-      setImageList(processedImageList);
-    }
-    injectDataUrl();
-  }, []);
+  const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`가게 공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 리뷰 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게 공지사항 수정'
+        title='가게 리뷰 추가'
       />
       <Section
-        title='가게 공지사항 정보'
+        title='기본 정보'
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
+        <Box display='flex' justifyContent='center' paddingY={1}>
+          <Rating
+            value={storeReview.score}
+            onChange={(event, newValue) => {
+              setStoreReview(prevStoreReview => ({ ...prevStoreReview, score: newValue }));
+            }}
+            defaultValue={storeReview.score}
+            size="large"
+          />
+        </Box>
         <Box paddingY={1}>
           <TextField
             name='title'
-            value={storeNotice.title}
-            error={storeNoticeError.title}
+            value={storeReview.title}
+            error={storeReviewError.title}
             fullWidth
             label='제목'
             InputLabelProps={{
               shrink: true,
             }}
             onChange={(event) => {
-              setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, title: event.target.value }));
+              setStoreReview(prevStoreReview => ({ ...prevStoreReview, title: event.target.value }));
             }}
             required
           />
@@ -128,8 +120,8 @@ function Update({ selfUser, prevStoreNotice }) {
         <Box paddingY={1}>
           <TextField
             name='content'
-            value={storeNotice.content}
-            error={storeNoticeError.content}
+            value={storeReview.content}
+            error={storeReviewError.content}
             fullWidth
             label='내용'
             multiline
@@ -137,7 +129,7 @@ function Update({ selfUser, prevStoreNotice }) {
               shrink: true,
             }}
             onChange={(event) => {
-              setStoreNotice(prevStoreNotice => ({ ...prevStoreNotice, content: event.target.value }));
+              setStoreReview(prevStoreReview => ({ ...prevStoreReview, content: event.target.value }));
             }}
             required
           />
@@ -213,13 +205,15 @@ function Update({ selfUser, prevStoreNotice }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStoreNotice(storeNotice, imageList);
-            if (response.status === 200) {
-              router.push(`/store-notices/${response.data.id}/`);
-              toast.success('가게 공지사항이 업데이트 되었습니다.');
-            } else if (response.status === 400) {
-              setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: !!response.data.title}));
-              setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: !!response.data.content}));
+            const response = await postStoreReview(storeReview, imageList);
+            console.log(response.data);
+            if (response.status === 201) {
+              router.push(`/store-reviews/${response.data.id}/`);
+              toast.success('가게 리뷰가 생성되었습니다.');
+            } 
+            else if (response.status === 400) {
+              setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
+              setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));
               toast.error('입력란을 확인하세요.');
             }
           }}
@@ -227,26 +221,8 @@ function Update({ selfUser, prevStoreNotice }) {
           제출
         </Button>
       </Box>
-      <Section
-        title='위험 구역'
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.RedButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/store-notices/delete/',
-              query: { id: storeNotice.id },
-            })}
-          >
-            가게 공지사항 삭제
-          </Button>
-        </Box>
-      </Section>
     </Layout>
   );
 }
 
-export default Update;
+export default Create;

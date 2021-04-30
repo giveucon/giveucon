@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
+
+import SwipeableTileList from './SwipeableTileList'
+import Tile from './Tile'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,40 +18,41 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function ReviewBox({ actions=null, content=null, image=null, title=null, onClick=null, score=null, subtitle=null }) {
+export default function ReviewBox({ actions=null, content=null, imageList=null, title=null, onClick=null, score=null, subtitle=null }) {
   const classes = useStyles();
 
   return (
-    <Box paddingX={1}>
-      <Typography variant='h5'>
-        {title}
-      </Typography>
-      <Box alignItems='center' display='flex' justifyContent='flex-start'>
-        <Box marginRight={1}>
-          <Typography variant='subtitle1'>
-            {subtitle}
-          </Typography>
-        </Box>
-        <Divider orientation='vertical' flexItem />
-        <Box marginLeft={1}>
-          <Rating
-            value={score}
-            readOnly 
-          />
-        </Box>
-      </Box>
-      <Box display={image ? 'block' : 'none'} paddingY={1}>
-        <Card>
-          <CardActionArea onClick={onClick}>
-            <CardMedia
-              className={classes.media}
-              image={image}
-              title={title}
+    <Box paddingY={1}>
+      <Box paddingX={1}>
+        <Typography variant='h5'>
+          {title}
+        </Typography>
+        <Box alignItems='center' display='flex' justifyContent='flex-start'>
+          <Box marginRight={1}>
+            <Typography variant='subtitle1'>
+              {subtitle}
+            </Typography>
+          </Box>
+          <Divider orientation='vertical' flexItem />
+          <Box marginLeft={1}>
+            <Rating
+              value={score}
+              readOnly 
             />
-          </CardActionArea>
-        </Card>
+          </Box>
+        </Box>
       </Box>
-      <Box paddingY={1}>
+      <Box display={imageList && (imageList.length > 0) ? 'block' : 'none'} paddingY={1}>
+        <SwipeableTileList>
+          {imageList.map((item, index) => (
+            <Tile
+              key={index}
+              image={item}
+            />
+          ))}
+        </SwipeableTileList>
+      </Box>
+      <Box padding={1}>
         <Typography variant='body1'>
           {content}
         </Typography>
