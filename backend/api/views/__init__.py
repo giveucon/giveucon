@@ -23,3 +23,5 @@ from .tag_list_view import TagListView
 from .tag_detail_view import TagDetailView
 from .review_list_view import ReviewListView
 from .review_detail_view import ReviewDetailView
+from .store_review_list_view import StoreReviewListView
+from .store_review_detail_view import StoreReviewDetailView
