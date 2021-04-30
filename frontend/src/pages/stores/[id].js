@@ -11,6 +11,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ChatIcon from '@material-ui/icons/Chat';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 import AlertBox from '../../components/AlertBox';
@@ -41,16 +42,25 @@ const getProductList = async (context, store) => {
   return await requestToBackend(context, 'api/products/', 'get', 'json', null, params);
 };
 
+const getStoreReviewList = async (context, store) => {
+  const params = {
+    store: store.id
+  };
+  return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
+};
+
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
   const storeResponse = await getStore(context);
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
+  const storeReviewListResponse = await getStoreReviewList(context, storeResponse.data);
   return {
     props: {
       selfUser,
       store: storeResponse.data,
       storeNoticeList: storeNoticeListResponse.data,
       productList: productListResponse.data,
+      storeReviewList: storeReviewListResponse.data,
     },
   };
 })
@@ -58,7 +68,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ selfUser, store, storeNoticeList, productList }) {
+function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) {
   const router = useRouter();
   return (
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
@@ -101,7 +111,16 @@ function Id({ selfUser, store, storeNoticeList, productList }) {
       <Section
         title='가게 공지사항'
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
-        titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
+        titleSuffix={
+          <IconButton
+            onClick={() => router.push({
+              pathname: '/store-notices/list/',
+              query: { store: store.id },
+            })}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+        }
       >
         {storeNoticeList.length > 0 ? (
           <Grid container spacing={1}>
@@ -122,7 +141,16 @@ function Id({ selfUser, store, storeNoticeList, productList }) {
       <Section
         title='상품'
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
-        titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
+        titleSuffix={
+          <IconButton
+            onClick={() => router.push({
+              pathname: '/products/list/',
+              query: { store: store.id },
+            })}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+        }
       >
         {productList.length > 0 ? (
           <Grid container spacing={1}>
@@ -143,6 +171,36 @@ function Id({ selfUser, store, storeNoticeList, productList }) {
           </Grid>
         ) : (
           <AlertBox content='상품이 없습니다.' variant='information' />
+        )}
+      </Section>
+      <Section
+        title='가게 리뷰'
+        titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
+        titleSuffix={
+          <IconButton
+            onClick={() => router.push({
+              pathname: '/store-reviews/list/',
+              query: { store: store.id },
+            })}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+        }
+      >
+        {storeReviewList.length > 0 ? (
+          <Grid container spacing={1}>
+            {storeReviewList.slice(0, 4).map((item, index) => (
+              <Grid item xs={12} key={index}>
+                <ListItemCard
+                  title={item.article.title}
+                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                  onClick={() => router.push(`/store-reviews/${item.id}/`)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <AlertBox content='가게 리뷰가 없습니다.' variant='information' />
         )}
       </Section>
       <Section

@@ -17,6 +17,7 @@ import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList'
 import Tile from '../../components/Tile'
 import convertImageToBase64 from '../../utils/convertImageToBase64'
+import convertImageToFile from '../../utils/convertImageToFile'
 import convertJsonToFormData from '../../utils/convertJsonToFormData'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -83,6 +84,9 @@ function Update({ selfUser, prevCentralNotice }) {
       for (const image in processedImageList) {
         await convertImageToBase64(processedImageList[image].image, (dataURL) => {
           processedImageList[image].dataURL = dataURL;
+        });
+        await convertImageToFile(processedImageList[image].image, processedImageList[image].image, (file) => {
+          processedImageList[image].file = file;
         });
       }
       setImageList(processedImageList);

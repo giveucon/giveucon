@@ -14,8 +14,8 @@ import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
-const getStoreNoticeList = async (context) => {
-  return await requestToBackend(context, 'api/store-notices/', 'get', 'json', null, {
+const getStoreReviewList = async (context) => {
+  return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, {
     store: context.query.store,
   });
 };
@@ -25,7 +25,7 @@ const getStore = async (context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const initialStoreNoticeListResponse = await getStoreNoticeList(context);
+  const initialStoreReviewListResponse = await getStoreReviewList(context);
   const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
@@ -37,48 +37,48 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, initialStoreNoticeListResponse, store: storeResponse.data },
+    props: { selfUser, initialStoreReviewListResponse, store: storeResponse.data },
   };
 })
 
-function List({ selfUser, initialStoreNoticeListResponse, store }) {
+function List({ selfUser, initialStoreReviewListResponse, store }) {
 
   const router = useRouter();
-  const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
-  const [storeNoticeListPagination, setStoreNoticeListPagination] = useState(1);
-  const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(initialStoreNoticeListResponse.data.next);
+  const [storeReviewList, setStoreReviewList] = useState(initialStoreReviewListResponse.data.results);
+  const [storeReviewListPagination, setStoreReviewListPagination] = useState(1);
+  const [hasMoreStoreReviewList, setHasMoreStoreReviewList] = useState(initialStoreReviewListResponse.data.next);
 
-  const getMoreStoreNoticeList = async () => {
-    const storeNoticeListResponse = await requestToBackend('api/store-notices/', 'get', 'json', null, {
+  const getMoreStoreReviewList = async () => {
+    const storeReviewListResponse = await requestToBackend('api/store-reviews/', 'get', 'json', null, {
       store: store.id,
-      page: storeNoticeListPagination + 1,
+      page: storeReviewListPagination + 1,
     });
-    setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));
-    setStoreNoticeListPagination(prevStoreNoticeListPagination => prevStoreNoticeListPagination + 1);
-    if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(prevHasMoreStoreNoticeList => false);
+    setStoreReviewList(prevStoreReviewList => (prevStoreReviewList || []).concat(storeReviewListResponse.data.results));
+    setStoreReviewListPagination(prevStoreReviewListPagination => prevStoreReviewListPagination + 1);
+    if (storeReviewListResponse.data.next === null) setHasMoreStoreReviewList(prevHasMoreStoreReviewList => false);
   }
 
   return (
-    <Layout title={`가게 공지사항 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 리뷰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게 공지사항 목록'
+        title='가게 리뷰 목록'
       >
-        {storeNoticeList && (storeNoticeList.length > 0) ? (
+        {storeReviewList && (storeReviewList.length > 0) ? (
           <InfiniteScroll
-            dataLength={storeNoticeList.length}
-            next={getMoreStoreNoticeList}
-            hasMore={hasMoreStoreNoticeList}
+            dataLength={storeReviewList.length}
+            next={getMoreStoreReviewList}
+            hasMore={hasMoreStoreReviewList}
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
-              {storeNoticeList.map((item, index) => (
+              {storeReviewList.map((item, index) => (
                 <Grid item xs={12} key={index}>
                   <ListItemCard
                     title={item.article.title}
                     subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                    onClick={() => router.push(`/store-notices/${item.id}/`)}
+                    onClick={() => router.push(`/store-reviews/${item.id}/`)}
                   />
                 </Grid>
               ))}
@@ -86,7 +86,7 @@ function List({ selfUser, initialStoreNoticeListResponse, store }) {
 
           </InfiniteScroll>
         ) : (
-          <AlertBox content='가게 공지사항이 없습니다.' variant='information' />
+          <AlertBox content='가게 리뷰가 없습니다.' variant='information' />
         )}
       </Section>
       {(store.user === selfUser.id) && (
@@ -96,11 +96,11 @@ function List({ selfUser, initialStoreNoticeListResponse, store }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/store-notices/create/',
+              pathname: '/store-reviews/create/',
               query: { store: store.id },
             })}
           >
-            새 가게 공지사항 추가
+            새 가게 리뷰 추가
           </Button>
         </Box>
       )}
