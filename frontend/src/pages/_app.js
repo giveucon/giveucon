@@ -24,9 +24,9 @@ function RootApp({ Component, pageProps }) {
   const setDarkMode = (option) => {
     option === 'light' && setTheme(lightTheme);
     option === 'dark' && setTheme(darkTheme);
-    (option === 'auto' && prefersDarkMode) ? setTheme(darkTheme) : setTheme(lightTheme);
+    option === 'auto' && (prefersDarkMode ? setTheme(darkTheme) : setTheme(lightTheme));
   }
-  
+
   useEffect(() => {
     const handleStart = () => { setPageLoading(true); };
     const handleComplete = () => { setPageLoading(false); };
