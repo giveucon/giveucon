@@ -1,18 +1,138 @@
 {
-  "home": {
-    "home": "홈",
-    "nearby": "주변"
+  "common": {
+    "addImages": "이미지 추가",
+    "appName": "giveUcon",
+    "basicInfo": "기본 정보",
+    "darkMode": "다크 모드",
+    "dangerZone": "위험 구역",
+    "email": "이메일",
+    "empty": "비어 있음",
+    "firstName": "성을 제외한 이름",
+    "goBack": "뒤로 가기",
+    "images": "이미지",
+    "lastName": "성",
+    "locale": "로케일",
+    "checkInputFields": "입력란을 확인해 주세요.",
+    "removeAllImages": "모든 이미지 삭제",
+    "submit": "제출",
+    "username": "유저네임"
   },
-  "stores": {
-    "index": {
-      "stores": "가게",
-      "myStore": "내 가게",
-      "allStores": "모든 가게",
-      "addNewStore": "새 가게 추가",
-      "noStore": "가게 없음"
+  "languages": {
+    "original": {
+      "en": "English",
+      "ko": "한국어"
+    },
+    "translated": {
+      "en": "영어",
+      "ko": "한국어"
     }
   },
-  "myaccount": {
-    "logout": "로그아웃"
+  "pages": {
+    "home": {
+      "index": {
+        "pageTitle": "홈",
+        "nearby": "근처"
+      }
+    },
+    "login": {
+      "index": {
+        "pageTitle": "로그인",
+        "welcome": "환영합니다!",
+        "loginAsKakaoAccount": "카카오 계정으로 로그인"
+      }
+    },
+    "logout": {
+      "index": {
+        "pageTitle": "로그아웃",
+        "question": "정말로 로그아웃 하시겠습니까?",
+        "logout": "로그아웃"
+      }
+    },
+    "myaccount": {
+      "delete": {
+        "pageTitle": "계정 탈퇴",
+        "warning": "경고: 이 작업은 되돌릴 수 없습니다.",
+        "deleteAccount": "계정 탈퇴",
+        "success": "계정 탈퇴가 완료되었습니다."
+      },
+      "index": {
+        "pageTitle": "내 계정",
+        "myInfo": "내 정보",
+        "myStores": "내 가게",
+        "myProducts": "내 상품",
+        "myCoupons": "내 쿠폰",
+        "managements": "관리",
+        "notices": "공지사항",
+        "settings": "설정",
+        "logout": "로그아웃",
+        "developerTools": "개발자 도구",
+        "createDatabase": "데이터베이스 생성",
+        "components": "컴포넌트"
+      },
+      "update": {
+        "index": {
+          "pageTitle": "설정",
+          "userSettings": "계정 설정"
+        },
+        "user": {
+          "pageTitle": "계정 설정",
+          "deleteAccount": "계정 삭제",
+          "success": "계정 정보가 업데이트 되었습니다."
+        }
+      }
+    },
+    "stores": {
+      "create": {
+        "pageTitle": "가게 생성",
+        "storeTitle": "가게 이름",
+        "storeDescription": "가게 설명",
+        "tags": "태그",
+        "success": "가게가 생성되었습니다."
+      },
+      "delete": {
+        "pageTitle": "가게 삭제",
+        "warning": "경고: 이 작업은 되돌릴 수 없습니다.",
+        "deleteStore": "가게 삭제",
+        "success": "가게가 삭제되었습니다."
+      },
+      "id": {
+        "notices": "공지사항",
+        "products": "상품",
+        "reviews": "리뷰",
+        "location": "위치",
+        "findPath": "경로 검색",
+        "createProduct": "상품 추가",
+        "createNotice": "공지사항 작성",
+        "updateStore": "가게 수정"
+      },
+      "index": {
+        "pageTitle": "가게",
+        "myStore": "내 가게",
+        "allStores": "모든 가게",
+        "createStore": "새 가게 생성"
+      },
+      "list": {
+        "pageTitle": "가게 리스트",
+        "createProduct": "가게 생성"
+      },
+      "update": {
+        "pageTitle": "가게 수정",
+        "storeTitle": "가게 이름",
+        "storeDescription": "가게 설명",
+        "tags": "태그",
+        "success": "가게 정보가 업데이트 되었습니다.",
+        "deleteStore": "가게 삭제"
+      }
+    },
+    "users": {
+      "create": {
+        "pageTitle": "사용자 생성",
+        "success": "사용자 계정이 생성되었습니다."
+      },
+      "id": {
+        "ownedStores": "소유한 가게",
+        "moveToMyAccount": "내 계정으로 이동"
+      }
+    }
   }
 }

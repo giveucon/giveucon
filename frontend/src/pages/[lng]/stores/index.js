@@ -8,14 +8,14 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import AlertBox from '../../../components/AlertBox'
-import Layout from '../../../components/Layout'
-import Section from '../../../components/Section'
-import SwipeableTileList from '../../../components/SwipeableTileList';
-import Tile from '../../../components/Tile';
-import useI18n from '../../../hooks/use-i18n'
-import requestToBackend from '../../../utils/requestToBackend'
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getStoreList = async (context) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json');
@@ -29,9 +29,7 @@ const getSelfStoreList = async (context, selfUser) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const { default: lngDict = {} } = await import(
-    `../../../locales/${context.query.lng}.json`
-  )
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   const storeListResponse = await getStoreList(context);
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
   return {
@@ -51,19 +49,19 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('stores.index.stores')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.stores.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('stores.index.stores')}
+        title={i18n.t('pages.stores.index.pageTitle')}
       >
       </Section>
       <Section
-        title={i18n.t('stores.index.myStore')}
+        title={i18n.t('pages.stores.index.myStore')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
           <IconButton 
             onClick={() => router.push({
-              pathname: '/stores/list/',
+              pathname: `/${lng}/stores/list/`,
               query: { user: selfUser.id },
             })}>
             <ArrowForwardIcon />
@@ -77,20 +75,20 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
                 <Tile
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/stores/${item.id}/` )}
+                  onClick={() => router.push(`/${lng}/stores/${item.id}/` )}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('stores.index.noStore')} variant='information' />
+          <AlertBox content={i18n.t('pages.stores.index.noStore')} variant='information' />
         )}
       </Section>
       <Section
-        title={i18n.t('stores.index.allStores')}
+        title={i18n.t('pages.stores.index.allStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
-          <IconButton onClick={() => router.push('/stores/list/')}>
+          <IconButton onClick={() => router.push(`/${lng}/stores/list/`)}>
             <ArrowForwardIcon />
           </IconButton>}
         padding={false}
@@ -105,12 +103,12 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}
-                onClick={() => router.push(`/stores/${item.id}/`)}
+                onClick={() => router.push(`/${lng}/stores/${item.id}/`)}
               />
             })}
           </SwipeableTileList>
         ) : (
-          <AlertBox content={i18n.t('stores.index.noStore')} variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Box marginY={1}>
@@ -118,9 +116,9 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           color='primary'
           fullWidth
           variant='contained'
-          onClick={() => router.push(`/stores/create`)}
+          onClick={() => router.push(`/${lng}/stores/create`)}
         >
-          {i18n.t('stores.index.addNewStore')}
+          {i18n.t('pages.stores.index.createStore')}
         </Button>
       </Box>
     </Layout>

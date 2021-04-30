@@ -6,9 +6,9 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import Section from '../../components/Section'
-import useI18n from '../../hooks/use-i18n'
-import getCookies from '../../utils/getCookies';
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import getCookies from 'utils/getCookies';
 
 const useStyles = makeStyles({
   background: {
@@ -31,9 +31,7 @@ const useStyles = makeStyles({
 });
 
 export async function getServerSideProps(context) {
-  const { default: lngDict = {} } = await import(
-    `../../locales/${context.query.lng}.json`
-  )
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   const cookies = getCookies(context)
   if (cookies.giveucon) {
     return {
@@ -49,7 +47,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-function Login({ lng, lngDict }) {
+function Index({ lng, lngDict }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -58,7 +56,7 @@ function Login({ lng, lngDict }) {
   return (
     <>
       <Head>
-        <title>{`로그인 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <title>{`${i18n.t('pages.login.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Box
@@ -69,11 +67,11 @@ function Login({ lng, lngDict }) {
       >
         <Box style={{ minHeight: '8rem', minWidth: '16rem' }}>
           <Section
-            title='환영합니다!'
+            title={i18n.t('pages.login.index.welcome')}
           >
             <Box marginY={5}>
               <Typography align='center' color='textPrimary' variant='h3'>
-                giveUcon
+              {i18n.t('common.appName')}
               </Typography>
             </Box>
             <Box marginY={1}>
@@ -83,7 +81,7 @@ function Login({ lng, lngDict }) {
                 variant='contained'
                 onClick={() => router.push('/session/login')}
               >
-                카카오 계정으로 로그인
+                {i18n.t('pages.home.index.loginAsKakaoAccount')}
               </Button>
             </Box>
           </Section>
@@ -93,4 +91,4 @@ function Login({ lng, lngDict }) {
   );
 }
 
-export default Login;
+export default Index;

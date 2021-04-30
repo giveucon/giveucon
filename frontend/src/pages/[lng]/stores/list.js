@@ -6,14 +6,14 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import AlertBox from '../../../components/AlertBox';
-import InfiniteScrollLoader from '../../../components/InfiniteScrollLoader';
-import Layout from '../../../components/Layout';
-import Section from '../../../components/Section';
-import Tile from '../../../components/Tile';
-import useI18n from '../../../hooks/use-i18n'
-import requestToBackend from '../../../utils/requestToBackend';
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps';
+import AlertBox from 'components/AlertBox';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getStoreList = async (context) => {
   const params = {
@@ -27,9 +27,7 @@ const getUser = async (context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const { default: lngDict = {} } = await import(
-    `../../../locales/${context.query.lng}.json`
-  )
+  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   const initialStoreListResponse = await getStoreList(context);
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
@@ -64,10 +62,10 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
   }
 
   return (
-    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.stores.list.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title='가게 목록'
+          title={i18n.t('pages.stores.list.pageTitle')}
         >
           {(storeList.length > 0) ? (
             <InfiniteScroll
@@ -83,7 +81,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
                     <Tile
                       title={item.name}
                       image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                      onClick={() => router.push(`/stores/${item.id}/`)}
+                      onClick={() => router.push(`/${lng}/stores/${item.id}/`)}
                       menuItems={
                         <MenuItem>Menu Item</MenuItem>
                       }
@@ -93,7 +91,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
               </Grid>
             </InfiniteScroll>
           ) : (
-            <AlertBox content='가게가 없습니다.' variant='information' />
+            <AlertBox content={i18n.t('common.empty')} variant='information' />
           )}
         </Section>
         {user && (user.id === selfUser.id) && (
@@ -102,9 +100,9 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
               color='primary'
               fullWidth
               variant='contained'
-              onClick={() => router.push(`/stores/create/`)}
+              onClick={() => router.push(`/${lng}/stores/create/`)}
             >
-              새 가게 추가
+              {i18n.t('pages.stores.list.createStore')}
             </Button>
           </Box>
         )}

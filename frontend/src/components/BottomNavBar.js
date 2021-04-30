@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function BottomNavBar() {
   const router = useRouter();
   const classes = useStyles();
