@@ -37,12 +37,12 @@ urlpatterns = [
     path('coupons/<int:pk>/', CouponDetailView.as_view()),
 
     path('tags/', TagListView.as_view()),
-    path('tags/<int:pk>', TagDetailView.as_view()),
+    path('tags/<int:pk>/', TagDetailView.as_view()),
 
     path('reviews/', ReviewListView.as_view()),
-    path('reviews/<int:pk>', ReviewDetailView.as_view()),
+    path('reviews/<int:pk>/', ReviewDetailView.as_view()),
 
     path('store-reviews/', StoreReviewListView.as_view()),
-    path('store-reviews/<int:pk>', StoreReviewDetailView.as_view()),
+    path('store-reviews/<int:pk>/', StoreReviewDetailView.as_view()),
 
 ]
