@@ -76,9 +76,9 @@ function Home({ selfUser, centralNoticeList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('home.title')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('home.home')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title={i18n.t('home.title')}
+        title={i18n.t('home.home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton onClick={() => router.push('/central-notices/list/')}>

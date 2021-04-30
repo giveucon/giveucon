@@ -15,6 +15,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=255, blank=False, null=False)
     last_name = models.CharField(max_length=255, blank=False, null=False)
     #location
+    locale = models.CharField(max_length=2, blank=False, null=False, default='ko')
     dark_mode = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     def __str__(self):

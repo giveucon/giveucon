@@ -5,8 +5,13 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
@@ -121,7 +126,28 @@ function Create({ selfAccount }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
+          <FormControl>
+            <FormLabel>로케일</FormLabel>
+            <RadioGroup
+              name='locale'
+              value={selfUser.locale}
+              onChange={(event) => {
+                setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
+              }}
+            >
+              <Grid container>
+                <Grid item xs={6}>
+                  <FormControlLabel value='ko' control={<Radio />} label='한국어' />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel value='en' control={<Radio />} label='English' />
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </Box>
+        <Box paddingY={1}>
           <FormGroup row>
             <FormControlLabel
             control={

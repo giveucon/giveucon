@@ -1,7 +1,16 @@
 {
   "home": {
-    "title": "홈",
+    "home": "홈",
     "nearby": "주변"
+  },
+  "stores": {
+    "index": {
+      "stores": "가게",
+      "myStore": "내 가게",
+      "allStores": "모든 가게",
+      "addNewStore": "새 가게 추가",
+      "noStore": "가게 없음"
+    }
   },
   "myaccount": {
     "logout": "로그아웃"
