@@ -8,6 +8,8 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import I18n from '../lib/i18n'
 import lightTheme from '../styles/lightTheme';
 import darkTheme from '../styles/darkTheme';
 import getCookies from '../utils/getCookies';
@@ -50,22 +52,24 @@ function RootApp({ Component, pageProps }) {
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Toaster 
-          toastOptions={{
-            className: null,
-            style: {
-              borderRadius: '1.5rem'
-            },
-          }}
-        />
-        <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
-          <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
-        </Backdrop>
-        <Component {...pageProps} setDarkMode={setDarkMode} />
-      </ThemeProvider>
+      <I18n lngDict={pageProps.lngDict} locale={pageProps.lng}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Toaster 
+            toastOptions={{
+              className: null,
+              style: {
+                borderRadius: '1.5rem'
+              },
+            }}
+          />
+          <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
+            <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
+          </Backdrop>
+          <Component {...pageProps} setDarkMode={setDarkMode} />
+        </ThemeProvider>
+      </I18n>
     </>
   );
 }

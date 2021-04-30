@@ -1,0 +1,9 @@
+{
+  "home": {
+    "title": "홈",
+    "nearby": "주변"
+  },
+  "myaccount": {
+    "logout": "로그아웃"
+  }
+}
