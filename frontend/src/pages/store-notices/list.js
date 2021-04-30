@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AlertBox from '../../components/AlertBox'
 import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
 import Layout from '../../components/Layout'
-import ListItemCard from '../../components/ListItemCard';
+import NoticeListItem from '../../components/NoticeListItem';
 import Section from '../../components/Section'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
@@ -75,7 +75,7 @@ function List({ selfUser, initialStoreNoticeListResponse, store }) {
             <Grid container>
               {storeNoticeList.map((item, index) => (
                 <Grid item xs={12} key={index}>
-                  <ListItemCard
+                  <NoticeListItem
                     title={item.article.title}
                     subtitle={new Date(item.article.created_at).toLocaleDateString()}
                     onClick={() => router.push(`/store-notices/${item.id}/`)}

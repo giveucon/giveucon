@@ -9,9 +9,8 @@ import Layout from '../../components/Layout';
 import Section from '../../components/Section';
 import AccordionSection from '../../components/AccordionSection';
 import AlertBox from '../../components/AlertBox';
-import ArticleBox from '../../components/ArticleBox';
 import KakaoMapBox from '../../components/KakaoMapBox';
-import ListItemCard from '../../components/ListItemCard';
+import NoticeBox from '../../components/NoticeBox';
 import ReviewBox from '../../components/ReviewBox';
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
@@ -142,23 +141,6 @@ export default function Components() {
       </Section>
 
       <Section
-        title='ArticleBox'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-      >
-        <ArticleBox skeleton />
-        <ArticleBox
-          title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title'
-          subtitle='ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle'
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-          content='ArticleBox Content ArticleBox Content ArticleBox Content '
-          onClick={() => alert( 'Tapped' )}
-        >
-          <Button>Edit</Button>
-        </ArticleBox>
-      </Section>
-
-      <Section
         title='KakaoMapBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
@@ -168,28 +150,20 @@ export default function Components() {
       </Section>
 
       <Section
-        title='ListItemCard'
+        title='ArticleBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <ListItemCard skeleton />
-        <ListItemCard
-          title='ListItemCard primary'
-          subtitle='ListItemCard secondary'
+        <NoticeBox skeleton />
+        <NoticeBox
+          title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title'
+          subtitle='ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle'
+          imageList={['https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg']}
+          content='ArticleBox Content ArticleBox Content ArticleBox Content '
           onClick={() => alert( 'Tapped' )}
-        />
-        <ListItemCard
-          title='ListItemCard primary'
-          subtitle='ListItemCard secondary'
-          prefix={<IconButton><MenuIcon /></IconButton>}
-          onClick={() => alert( 'Tapped' )}
-        />
-        <ListItemCard
-          title='ListItemCard primary'
-          subtitle='ListItemCard secondary'
-          suffix={<Button>Edit</Button>}
-          onClick={() => alert( 'Tapped' )}
-        />
+        >
+          <Button>Edit</Button>
+        </NoticeBox>
       </Section>
 
       <Section
@@ -198,9 +172,9 @@ export default function Components() {
         titleSuffix={<Button>Edit</Button>}
       >
         <ReviewBox
-          image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
           title='Review Box'
           subtitle='Review Author'
+          imageList={['https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg']}
           content='Excellent'
           score={4}
           actions={<Button>Edit</Button>}

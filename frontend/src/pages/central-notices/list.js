@@ -11,7 +11,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import AlertBox from '../../components/AlertBox'
 import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
 import Layout from '../../components/Layout'
-import ListItemCard from '../../components/ListItemCard';
+import NoticeListItem from '../../components/NoticeListItem';
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
 import Tile from '../../components/Tile';
@@ -100,7 +100,7 @@ function List({ selfUser, initialCentralNoticeListResponse }) {
             <Grid container>
               {centralNoticeList.map((item, index) => (
                 <Grid item xs={12} key={index}>
-                  <ListItemCard
+                  <NoticeListItem
                     title={item.article.title}
                     subtitle={new Date(item.article.created_at).toLocaleDateString()}
                     onClick={() => router.push(`/central-notices/${item.id}/`)}

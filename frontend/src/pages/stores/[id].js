@@ -17,7 +17,8 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import AlertBox from '../../components/AlertBox';
 import KakaoMapBox from '../../components/KakaoMapBox';
 import Layout from '../../components/Layout'
-import ListItemCard from '../../components/ListItemCard'
+import NoticeListItem from '../../components/NoticeListItem'
+import ReviewListItem from '../../components/ReviewListItem'
 import Tile from '../../components/Tile';
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
@@ -126,7 +127,7 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
           <Grid container spacing={1}>
             {storeNoticeList.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
-                <ListItemCard
+                <NoticeListItem
                   title={item.article.title}
                   subtitle={new Date(item.article.created_at).toLocaleDateString()}
                   onClick={() => router.push(`/store-notices/${item.id}/`)}
@@ -191,9 +192,10 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
           <Grid container spacing={1}>
             {storeReviewList.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
-                <ListItemCard
-                  title={item.article.title}
-                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                <ReviewListItem
+                  title={item.review.article.title}
+                  subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
+                  score={item.review.score}
                   onClick={() => router.push(`/store-reviews/${item.id}/`)}
                 />
               </Grid>

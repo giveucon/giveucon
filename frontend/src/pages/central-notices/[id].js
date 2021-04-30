@@ -4,8 +4,8 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/Layout'
+import NoticeBox from '../../components/NoticeBox'
 import Section from '../../components/Section'
-import ArticleBox from '../../components/ArticleBox'
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
@@ -28,13 +28,13 @@ function Id({ selfUser, centralNotice }) {
         backButton
         title={centralNotice.article.title}
       >
-        <ArticleBox
+        <NoticeBox
           title={centralNotice.article.title}
           subtitle={new Date(centralNotice.article.created_at).toLocaleDateString()}
-          image={
+          imageList={
             centralNotice.article.images.length > 0
-            ? centralNotice.article.images[0].image
-            : '/no_image.png'
+            ? centralNotice.article.images.map(image => image.image)
+            : ['/no_image.png']
           }
           content={centralNotice.article.content}
         />

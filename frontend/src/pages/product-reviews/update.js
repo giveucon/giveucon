@@ -33,32 +33,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreReview = async (context) => {
-  return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
+const getProductReview = async (context) => {
+  return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
 };
 
-const getStore = async (context, StoreReview) => {
-  return await requestToBackend(context, `api/stores/${StoreReview.store.id}/`, 'get', 'json');
+const getProduct = async (context, ProductReview) => {
+  return await requestToBackend(context, `api/products/${ProductReview.product.id}/`, 'get', 'json');
 };
 
-const putStoreReview = async (storeReview, imageList) => {
-  const processedStoreReview = {
+const putProductReview = async (productReview, imageList) => {
+  const processedProductReview = {
     review: {
       article: {
-        title: storeReview.title,
-        content: storeReview.content,
+        title: productReview.title,
+        content: productReview.content,
         images: imageList.map(image => image.file),
       },
-      score: storeReview.score,
+      score: productReview.score,
     },
   };
-  return await requestToBackend(null, `api/store-reviews/${storeReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreReview), null);
+  return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const prevStoreReviewResponse = await getStoreReview(context);
-  const storeResponse = await getStore(context, prevStoreReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  const prevProductReviewResponse = await getProductReview(context);
+  const productResponse = await getProduct(context, prevProductReviewResponse.data);
+  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
     return {
       redirect: {
         permanent: false,
@@ -68,29 +68,29 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevStoreReview: prevStoreReviewResponse.data },
+    props: { selfUser, prevProductReview: prevProductReviewResponse.data },
   };
 })
 
-function Update({ selfUser, prevStoreReview }) {
+function Update({ selfUser, prevProductReview }) {
 
   const router = useRouter();
   const classes = useStyles();
-  const [storeReview, setStoreReview] = useState({
-    id: prevStoreReview.id,
-    score: prevStoreReview.review.score,
-    title: prevStoreReview.review.article.title,
-    content: prevStoreReview.review.article.content,
-    store: prevStoreReview.store,
+  const [productReview, setProductReview] = useState({
+    id: prevProductReview.id,
+    score: prevProductReview.review.score,
+    title: prevProductReview.review.article.title,
+    content: prevProductReview.review.article.content,
+    product: prevProductReview.product,
   });
-  const [storeReviewError, setStoreReviewError] = useState({
+  const [productReviewError, setProductReviewError] = useState({
     title: false,
     content: false,
   });
-  const [imageList, setImageList] = useState(prevStoreReview.review.article.images);
+  const [imageList, setImageList] = useState(prevProductReview.review.article.images);
 
   useEffect(() => {
-    let processedImageList = prevStoreReview.review.article.images;
+    let processedImageList = prevProductReview.review.article.images;
     const injectDataUrl = async () => {
       for (const image in processedImageList) {
         await convertImageToBase64(processedImageList[image].image, (dataURL) => {
@@ -106,10 +106,10 @@ function Update({ selfUser, prevStoreReview }) {
   }, []);
 
   return (
-    <Layout title={`가게 리뷰 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 리뷰 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게 리뷰 수정'
+        title='상품 리뷰 수정'
       />
       <Section
         title='기본 정보'
@@ -117,26 +117,26 @@ function Update({ selfUser, prevStoreReview }) {
       >
         <Box display='flex' justifyContent='center' paddingY={1}>
           <Rating
-            value={storeReview.score}
+            value={productReview.score}
             onChange={(event, newValue) => {
-              setStoreReview(prevStoreReview => ({ ...prevStoreReview, score: newValue }));
+              setProductReview(prevProductReview => ({ ...prevProductReview, score: newValue }));
             }}
-            defaultValue={storeReview.score}
+            defaultValue={productReview.score}
             size="large"
           />
         </Box>
         <Box paddingY={1}>
           <TextField
             name='title'
-            value={storeReview.title}
-            error={storeReviewError.title}
+            value={productReview.title}
+            error={productReviewError.title}
             fullWidth
             label='제목'
             InputLabelProps={{
               shrink: true,
             }}
             onChange={(event) => {
-              setStoreReview(prevStoreReview => ({ ...prevStoreReview, title: event.target.value }));
+              setProductReview(prevProductReview => ({ ...prevProductReview, title: event.target.value }));
             }}
             required
           />
@@ -144,8 +144,8 @@ function Update({ selfUser, prevStoreReview }) {
         <Box paddingY={1}>
           <TextField
             name='content'
-            value={storeReview.content}
-            error={storeReviewError.content}
+            value={productReview.content}
+            error={productReviewError.content}
             fullWidth
             label='내용'
             multiline
@@ -153,7 +153,7 @@ function Update({ selfUser, prevStoreReview }) {
               shrink: true,
             }}
             onChange={(event) => {
-              setStoreReview(prevStoreReview => ({ ...prevStoreReview, content: event.target.value }));
+              setProductReview(prevProductReview => ({ ...prevProductReview, content: event.target.value }));
             }}
             required
           />
@@ -229,13 +229,13 @@ function Update({ selfUser, prevStoreReview }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await putStoreReview(storeReview, imageList);
+            const response = await putProductReview(productReview, imageList);
             if (response.status === 200) {
-              router.push(`/store-reviews/${response.data.id}/`);
-              toast.success('가게 리뷰가 업데이트 되었습니다.');
+              router.push(`/product-reviews/${response.data.id}/`);
+              toast.success('상품 리뷰가 업데이트 되었습니다.');
             } else if (response.status === 400) {
-              setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
-              setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));
+              setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));
+              setProductReviewError(prevProductReviewError => ({...prevProductReviewError, content: !!response.data.content}));
               toast.error('입력란을 확인하세요.');
             }
           }}
@@ -253,11 +253,11 @@ function Update({ selfUser, prevStoreReview }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/store-reviews/delete/',
-              query: { id: storeReview.id },
+              pathname: '/product-reviews/delete/',
+              query: { id: productReview.id },
             })}
           >
-            가게 리뷰 삭제
+            상품 리뷰 삭제
           </Button>
         </Box>
       </Section>
