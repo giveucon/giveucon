@@ -89,21 +89,19 @@ function List({ selfUser, initialProductReviewListResponse, product }) {
           <AlertBox content='상품 리뷰가 없습니다.' variant='information' />
         )}
       </Section>
-      {(product.user === selfUser.id) && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/product-reviews/create/',
-              query: { product: product.id },
-            })}
-          >
-            새 상품 리뷰 추가
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/product-reviews/create/',
+            query: { product: product.id },
+          })}
+        >
+          새 상품 리뷰 추가
+        </Button>
+      </Box>
     </Layout>
   );
 }

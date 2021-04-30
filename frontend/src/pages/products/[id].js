@@ -2,16 +2,18 @@ import React from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
-import Tile from '../../components/Tile';
+import AlertBox from '../../components/AlertBox'
 import Layout from '../../components/Layout'
-import ReviewBox from '../../components/ReviewBox'
+import ReviewListItem from '../../components/ReviewListItem'
 import Section from '../../components/Section'
 import SwipeableTileList from '../../components/SwipeableTileList';
+import Tile from '../../components/Tile';
 import requestToBackend from '../../utils/requestToBackend'
 import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
 
@@ -24,7 +26,9 @@ const getStore = async (context, product) => {
 };
 
 const getProductReviewList = async (context) => {
-  return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
+  return await requestToBackend(context, `api/product-reviews/`, 'get', 'json', null, {
+    product: context.query.id
+  });
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
@@ -52,17 +56,16 @@ function Id({ selfUser, product, store, productReviewList }) {
       >
         <SwipeableTileList autoplay={true}>
           {product.images && (product.images.length > 0) ?
-              (product.images.map((item, index) => {
-                return <Tile
-                  key={index}
-                  image={item.image}
-                  onClick={() => router.push(`/images/${item.id}/` )}
-                />
-              })
-            ) : (
-              <Tile image='/no_image.png'/>
-            )
-          }
+            (product.images.map((item, index) => {
+              return <Tile
+                key={index}
+                image={item.image}
+                onClick={() => router.push(`/images/${item.id}/` )}
+              />
+            })
+          ) : (
+            [<Tile image='/no_image.png'/>]
+          )}
         </SwipeableTileList>
         <Box padding={1}>
           <Typography variant='h5'>{product.name}</Typography>
@@ -88,10 +91,10 @@ function Id({ selfUser, product, store, productReviewList }) {
           <Grid container spacing={1}>
             {productReviewList.slice(0, 4).map((item, index) => (
               <Grid item xs={12} key={index}>
-                <ReviewBox
-                  list
+                <ReviewListItem
                   title={item.review.article.title}
                   subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
+                  score={item.review.score}
                   onClick={() => router.push(`/product-reviews/${item.id}/`)}
                 />
               </Grid>
