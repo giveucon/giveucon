@@ -25,3 +25,5 @@ from .review_list_view import ReviewListView
 from .review_detail_view import ReviewDetailView
 from .store_review_list_view import StoreReviewListView
 from .store_review_detail_view import StoreReviewDetailView
+from .product_review_list_view import ProductReviewListView
+from .product_review_detail_view import ProductReviewDetailView
