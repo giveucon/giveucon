@@ -5,9 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import WarningIcon from '@material-ui/icons/Warning';
@@ -33,6 +38,7 @@ const putSelfUser = async (selfUser) => {
     user_name: selfUser.user_name,
     first_name: selfUser.first_name,
     last_name: selfUser.last_name,
+    locale: selfUser.locale,
     dark_mode: selfUser.dark_mode,
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
@@ -55,6 +61,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
     user_name: prevSelfUser.user_name,
     first_name: prevSelfUser.first_name,
     last_name: prevSelfUser.last_name,
+    locale: prevSelfUser.locale,
     dark_mode: prevSelfUser.dark_mode,
   });
   const [selfUserError, setSelfUserError] = useState({
@@ -139,7 +146,28 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
+          <FormControl>
+            <FormLabel>로케일</FormLabel>
+            <RadioGroup
+              name='locale'
+              value={selfUser.locale}
+              onChange={(event) => {
+                setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
+              }}
+            >
+              <Grid container>
+                <Grid item xs={6}>
+                  <FormControlLabel value='ko' control={<Radio />} label='한국어' />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel value='en' control={<Radio />} label='English' />
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </Box>
+        <Box paddingY={1}>
           <FormGroup row>
             <FormControlLabel
             control={
