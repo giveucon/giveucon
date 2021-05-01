@@ -1,8 +1,11 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import Store
-from ..serializers import StoreSerializer
+from ..serializers import StoreReadSerializer
+from ..serializers import StoreWriteSerializer
 
-class StoreDetailView(generics.RetrieveUpdateDestroyAPIView):
+class StoreDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Store.objects.all()
-    serializer_class = StoreSerializer
+    serializer_class_read = StoreReadSerializer
+    serializer_class_write = StoreWriteSerializer

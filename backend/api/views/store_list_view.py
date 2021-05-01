@@ -1,13 +1,16 @@
 from rest_framework import generics
 
-from ..models import User, Store
+from ..mixins import SerializerMixin
+from ..models import Store
 from ..paginations import StorePagination
-from ..serializers import StoreSerializer
+from ..serializers import StoreReadSerializer
+from ..serializers import StoreWriteSerializer
 from ..services import UserService
 
-class StoreListView(generics.ListCreateAPIView):
+class StoreListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = Store.objects.all()
-    serializer_class = StoreSerializer
+    serializer_class_read = StoreReadSerializer
+    serializer_class_write = StoreWriteSerializer
     pagination_class = StorePagination
 
     def get_queryset(self):
@@ -19,5 +22,4 @@ class StoreListView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)
-        images = self.request.data.getlist('images')
-        serializer.save(user=user, images=images)
+        serializer.save(user=user)

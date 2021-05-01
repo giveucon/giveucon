@@ -1,11 +1,11 @@
 from rest_framework.serializers import ModelSerializer
 
-from .store_serializer import StoreSerializer
+from .store_read_serializer import StoreReadSerializer
 from .review_read_serializer import ReviewReadSerializer
 from ..models import StoreReview
 
 class StoreReviewReadSerializer(ModelSerializer):
-    store = StoreSerializer()
+    store = StoreReadSerializer()
     review = ReviewReadSerializer()
     class Meta:
         model = StoreReview

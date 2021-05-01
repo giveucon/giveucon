@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer
 
 from .image_serializer import ImageSerializer
 from ..models import Product, Image
+from ..services import ImageService
 
 class ProductSerializer(ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
@@ -11,13 +12,9 @@ class ProductSerializer(ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        images_data = validated_data.pop('images')
-
         with transaction.atomic():
+            images = ImageService.save_images(validated_data.pop('images'), [])
             product = Product(**validated_data)
-            images = Image.objects.bulk_create([Image() for _ in images_data])
-            for i in range(len(images)):
-                images[i].image.save(images_data[i].name, images_data[i])
             product.save()
             product.images.set(images)
             return product
