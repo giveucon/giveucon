@@ -8,7 +8,9 @@ from .product_read_serializer import ProductReadSerializer
 from .product_create_serializer import ProductCreateSerializer
 from .product_update_serializer import ProductUpdateSerializer
 from .image_serializer import ImageSerializer
-from .coupon_serializer import CouponSerializer
+from .coupon_read_serializer import CouponReadSerializer
+from .coupon_create_serializer import CouponCreateSerializer
+from .coupon_update_serializer import CouponUpdateSerializer
 from .central_notice_read_serializer import CentralNoticeReadSerializer
 from .central_notice_write_serializer import CentralNoticeWriteSerializer
 from .store_notice_read_serializer import StoreNoticeReadSerializer

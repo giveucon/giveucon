@@ -4,16 +4,19 @@ from hashlib import sha256
 import json
 from rest_framework import exceptions
 from rest_framework import generics
-from rest_framework import status
 from rest_framework.response import Response
 
+from ..mixins import SerializerMixin
 from ..models import Coupon
-from ..serializers import CouponSerializer
+from ..serializers import CouponReadSerializer
+from ..serializers import CouponUpdateSerializer
 
-class CouponScanView(generics.UpdateAPIView):
+class CouponScanView(SerializerMixin, generics.UpdateAPIView):
     queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+    serializer_class_read = CouponReadSerializer
+    serializer_class_update = CouponUpdateSerializer
 
+# magic, coupon, signature
     def update(self, request, *args, **kwargs):
         if ('magic' not in request.data
             or request.data['magic'] != 'giveucon'
