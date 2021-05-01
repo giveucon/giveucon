@@ -22,10 +22,10 @@ function Index({ lng, lngDict, selfUser }) {
   const router = useRouter();
 
   return (
-    <Layout title={`거래 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('trades')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='거래'
+        title={i18n.t('trades')}
       >
       </Section>
       <Section

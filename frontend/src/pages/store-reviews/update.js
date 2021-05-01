@@ -107,13 +107,13 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
   }, []);
 
   return (
-    <Layout title={`가게 리뷰 수정 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('editReview')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='가게 리뷰 수정'
+        title={i18n.t('editReview')}
       />
       <Section
-        title='기본 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box display='flex' justifyContent='center' paddingY={1}>
@@ -132,7 +132,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
             value={storeReview.title}
             error={storeReviewError.title}
             fullWidth
-            label='제목'
+            label={i18n.t('title')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -148,7 +148,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
             value={storeReview.content}
             error={storeReviewError.content}
             fullWidth
-            label='내용'
+            label={i18n.t('content')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -161,7 +161,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -204,7 +204,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -215,7 +215,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -233,19 +233,19 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
             const response = await putStoreReview(storeReview, imageList);
             if (response.status === 200) {
               router.push(`/store-reviews/${response.data.id}/`);
-              toast.success('가게 리뷰가 업데이트 되었습니다.');
+              toast.success(i18n.t('_reviewSuccessfullyEdited'));
             } else if (response.status === 400) {
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -258,7 +258,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
               query: { id: storeReview.id },
             })}
           >
-            가게 리뷰 삭제
+            {i18n.t('deleteReview')}
           </Button>
         </Box>
       </Section>

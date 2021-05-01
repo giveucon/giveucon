@@ -59,10 +59,10 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
   }
 
   return (
-    <Layout title={`가게 공지사항 목록 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('noticeList')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='가게 공지사항 목록'
+        title={i18n.t('noticeList')}
       >
         {storeNoticeList && (storeNoticeList.length > 0) ? (
           <InfiniteScroll
@@ -86,7 +86,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
 
           </InfiniteScroll>
         ) : (
-          <AlertBox content='가게 공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       {(store.user === selfUser.id) && (
@@ -100,7 +100,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
               query: { store: store.id },
             })}
           >
-            새 가게 공지사항 추가
+            {i18n.t('addNotice')}
           </Button>
         </Box>
       )}

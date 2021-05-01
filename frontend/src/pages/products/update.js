@@ -106,13 +106,13 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
   }, []);
 
   return (
-    <Layout title={`상품 수정 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('editProduct')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='상품 수정'
+        title={i18n.t('editProduct')}
       />
       <Section
-        title='기본 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -121,7 +121,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             value={product.name}
             error={productError.name}
             fullWidth
-            label='이름'
+            label={i18n.t('name')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -137,7 +137,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             value={product.description}
             error={productError.description}
             fullWidth
-            label='설명'
+            label={i18n.t('description')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -154,7 +154,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             value={product.price}
             error={productError.price}
             fullWidth
-            label='가격'
+            label={i18n.t('price')}
             type='number'
             InputLabelProps={{
               shrink: true,
@@ -163,7 +163,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
               setProduct(prevProduct => ({ ...prevProduct, price: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (<InputAdornment position='end'>원</InputAdornment>),
+              endAdornment: (<InputAdornment position='end'>{i18n.t('_localeCurrencyKoreanWon')}</InputAdornment>),
             }}
             required
           />
@@ -175,7 +175,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             error={productError.duration}
             fullWidth
             type='number'
-            label='유효기간'
+            label={i18n.t('expiryDate')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -183,14 +183,14 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
               setProduct(prevProduct => ({ ...prevProduct, duration: event.target.value }));
             }}
             InputProps={{
-              endAdornment: (<InputAdornment position='end'>일</InputAdornment>),
+              endAdornment: (<InputAdornment position='end'>{i18n.t('days')}</InputAdornment>),
             }}
             required
           />
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -233,7 +233,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -244,7 +244,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -262,21 +262,21 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             const response = await putProduct(product, imageList);
             if (response.status === 200) {
               router.push(`/products/${response.data.id}/`);
-              toast.success('상품이 업데이트 되었습니다.');
+              toast.success(i18n.t('_productSuccessfullyEdited'));
             } else if (response.status === 400) {
               setProductError(prevProductError => ({...prevProductError, name: !!response.data.name}));
               setProductError(prevProductError => ({...prevProductError, description: !!response.data.description}));
               setProductError(prevProductError => ({...prevProductError, price: !!response.data.price}));
               setProductError(prevProductError => ({...prevProductError, duration: !!response.data.duration}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
       <Box marginY={1}>
@@ -289,7 +289,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             query: { id: product.id },
           })}
         >
-          상품 삭제
+          {i18n.t('deleteProduct')}
         </Button>
       </Box>
       </Section>

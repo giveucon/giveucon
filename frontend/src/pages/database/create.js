@@ -10,6 +10,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
 import convertJsonToFormData from 'utils/convertJsonToFormData'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
@@ -28,8 +29,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function Initialize({ selfUser }) {
+function create({ selfUser }) {
   
+  const i18n = useI18n();
   const router = useRouter();
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);
@@ -58,9 +60,9 @@ function Initialize({ selfUser }) {
   }
 
   return (
-    <Layout title={`데이터베이스 초기화 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('createDatabase')} - ${i18n.t('_appName')}`}>
       <Section
-        title='데이터베이스 초기화'
+        title={i18n.t('createDatabase')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box display='flex' justifyContent='center'>
@@ -88,7 +90,7 @@ function Initialize({ selfUser }) {
               router.push('/');
             }}
           >
-            데이터베이스 생성
+            {i18n.t('createDatabase')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -99,7 +101,7 @@ function Initialize({ selfUser }) {
             variant='contained'
             onClick={() => router.back()}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>
@@ -107,4 +109,4 @@ function Initialize({ selfUser }) {
   );
 }
 
-export default Initialize;
+export default create;

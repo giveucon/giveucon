@@ -65,7 +65,7 @@ const i18n = useI18n();
               query: { id: storeNotice.id },
             })}
           >
-            가게 공지사항 수정
+            {i18n.t('editNotice')}
           </Button>
         </Box>
       )}

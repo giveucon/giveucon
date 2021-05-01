@@ -60,10 +60,10 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
   }
 
   return (
-    <Layout title={`가게 리뷰 목록 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('reviewList')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='가게 리뷰 목록'
+        title={i18n.t('reviewList')}
       >
         {storeReviewList && (storeReviewList.length > 0) ? (
           <InfiniteScroll
@@ -87,7 +87,7 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
 
           </InfiniteScroll>
         ) : (
-          <AlertBox content='가게 리뷰가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       {(store.user === selfUser.id) && (
@@ -101,7 +101,7 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
               query: { store: store.id },
             })}
           >
-            새 가게 리뷰 추가
+            {i18n.t('addReview')}
           </Button>
         </Box>
       )}

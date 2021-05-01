@@ -68,10 +68,10 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
   }
 
   return (
-    <Layout title={`상품 목록 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('productList')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='상품 목록'
+        title={i18n.t('productList')}
       >
         {(productList.length > 0) ? (
           <InfiniteScroll
@@ -86,7 +86,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
-                    subtitle={item.price.toLocaleString('ko-KR') + '원'}
+                    subtitle={`${item.price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}
                     image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
                     actions={[
                       <IconButton><FavoriteIcon /></IconButton>
@@ -98,7 +98,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
             </Grid>
           </InfiniteScroll>
         ) : (
-          <AlertBox content='상품이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       {store && (selfUser.id === store.user) && (
@@ -112,7 +112,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
               query: { id: store.id },
             })}
           >
-            새 상품 추가
+            {i18n.t('addProduct')}
           </Button>
         </Box>
       )}
