@@ -5,10 +5,11 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const postTag = async (tag) => {
   const data = {
@@ -17,7 +18,7 @@ const postTag = async (tag) => {
   return await requestToBackend(null, 'api/tags/', 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff) {
     return {
       redirect: {
@@ -28,12 +29,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function Create({ selfUser }) {
+function Create({ lng, lngDict, selfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [tag, setTag] = useState({
     name: null,

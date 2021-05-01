@@ -6,11 +6,12 @@ import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import Layout from '../../components/Layout'
-import BusinessCard from '../../components/BusinessCard';
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import BusinessCard from 'components/BusinessCard';
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCoupon = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
@@ -20,7 +21,7 @@ const getProduct = async (context, coupon) => {
   return await requestToBackend(context, `api/products/${coupon.product}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
     return {
@@ -33,12 +34,15 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   }
   const productResponse = await getProduct(context, couponResponse.data);
   return {
-    props: { selfUser, coupon: couponResponse.data, product: productResponse.data },
+    props: { lng, lngDict, selfUser, coupon: couponResponse.data, product: productResponse.data },
   };
 })
 
-function Id({ selfUser, coupon, product }) {
+function Id({ lng, lngDict, selfUser, coupon, product }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+
   return (
     <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

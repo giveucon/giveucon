@@ -8,13 +8,14 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList';
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getStoreList = async (context) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json');
@@ -27,25 +28,34 @@ const getSelfStoreList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeListResponse = await getStoreList(context);
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
   return {
-    props: { selfUser, storeList: storeListResponse.data, selfStoreList: selfStoreListResponse.data },
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      storeList: storeListResponse.data,
+      selfStoreList: selfStoreListResponse.data
+    },
   };
 })
 
-function Index({ selfUser, storeList, selfStoreList }) {
+function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+
   return (
-    <Layout title={`가게 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('stores')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게'
+        title={i18n.t('stores')}
       >
       </Section>
       <Section
-        title='내 가게'
+        title={i18n.t('myStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
           <IconButton 
@@ -64,17 +74,17 @@ function Index({ selfUser, storeList, selfStoreList }) {
                 <Tile
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/stores/${item.id}/` )}
+                  onClick={() => router.push(`/${lng}/stores/${item.id}/` )}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content='가게가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Section
-        title='모든 가게'
+        title={i18n.t('allStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
           <IconButton onClick={() => router.push('/stores/list/')}>
@@ -97,7 +107,7 @@ function Index({ selfUser, storeList, selfStoreList }) {
             })}
           </SwipeableTileList>
         ) : (
-          <AlertBox content='가게가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Box marginY={1}>
@@ -105,9 +115,9 @@ function Index({ selfUser, storeList, selfStoreList }) {
           color='primary'
           fullWidth
           variant='contained'
-          onClick={() => router.push(`/stores/create`)}
+          onClick={() => router.push('/stores/create/')}
         >
-          새 가게 추가
+          {i18n.t('addStore')}
         </Button>
       </Box>
     </Layout>

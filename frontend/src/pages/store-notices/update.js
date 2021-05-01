@@ -12,13 +12,14 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -50,7 +51,7 @@ const putStoreNotice = async (storeNotice, imageList) => {
   return await requestToBackend(null, 'api/store-notices/', 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevStoreNoticeResponse = await getStoreNotice(context);
   const storeResponse = await getStore(context, prevStoreNoticeResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
@@ -63,12 +64,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
+    props: { lng, lngDict, selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
   };
 })
 
-function Update({ selfUser, prevStoreNotice }) {
+function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [storeNotice, setStoreNotice] = useState({

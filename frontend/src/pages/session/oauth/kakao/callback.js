@@ -1,5 +1,6 @@
 import axios from 'axios';
-import setCookie from '../../../../utils/setCookie';
+import requestToBackend from 'utils/requestToBackend';
+import setCookie from 'utils/setCookie';
 
 const getTokens = async (code) => {
   try {
@@ -56,10 +57,31 @@ const socialLoginRefresh = async (refresh_token) => {
   }
 };
 
+const getSelfUser = async (session) => {
+  try {
+    const response = await axios({
+      url: 'api/rest-auth/token/refresh/',
+      method: 'post',
+      baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json'
+      },
+    })
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error(error);
+    return { status: error.response.status, data: error.response.data }
+  }
+};
+
+
 export async function getServerSideProps(context) {
   const tokenResponse = await getTokens(context.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
+
   const session = {
     'access_token': loginRefreshResponse.data.access,
     'refresh_token': loginRefreshResponse.data.refresh,
@@ -68,15 +90,26 @@ export async function getServerSideProps(context) {
     'access_token_expiry': loginRefreshResponse.data.access_expiry,
     'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
   };
-  setCookie(context, 'giveucon', JSON.stringify(session), {
+  setCookie(context, 'giveucon_session', JSON.stringify(session), {
     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
     path: process.env.NEXT_PUBLIC_COOKIE_PATH,
   })
 
+  const selfUserResponse = await getSelfUser(session);
+  if (selfUserResponse.status === 200) {
+    setCookie(context, 'giveucon_settings', JSON.stringify({
+      locale: selfUserResponse.data.locale,
+      dark_mode: selfUserResponse.data.dark_mode
+    }), {
+      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+    })
+  }
+
   return {
     redirect: {
       permanent: false,
-      destination: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+      destination: `${process.env.NEXT_PUBLIC_BASE_URL}home/`,
     },
     props: {}
   };

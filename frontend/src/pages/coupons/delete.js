@@ -5,11 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -29,7 +30,7 @@ const deleteCoupon = async (coupon) => {
   return await requestToBackend(null, `api/coupons/${coupon.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
     return {
@@ -41,12 +42,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, coupon: couponResponse.data },
+    props: { lng, lngDict, selfUser, coupon: couponResponse.data },
   };
 })
 
-function Delete({ selfUser, coupon }) {
+function Delete({ lng, lngDict, selfUser, coupon }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 

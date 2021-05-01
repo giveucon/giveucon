@@ -5,10 +5,11 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCoupon = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json');
@@ -24,7 +25,7 @@ const getProduct = async (context, coupon) => {
   return await requestToBackend(context, `api/products/${coupon.product}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
     return {
@@ -39,6 +40,8 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   const productResponse = await getProduct(context, couponResponse.data);
   return {
     props: {
+      lng,
+      lngDict,
       selfUser,
       coupon: couponResponse.data,
       couponQR: couponQRResponse.data,
@@ -47,8 +50,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function Use({ selfUser, coupon, couponQR, product }) {
+function Use({ lng, lngDict, selfUser, coupon, couponQR, product }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+
   return (
     <Layout title={`쿠폰 사용 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

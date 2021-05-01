@@ -5,11 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -21,28 +22,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteSelfUser = async (context, selfUser) => {
-  return await requestToBackend(context, `api/users/${selfUser.id}/`, 'delete', 'json');
+const deleteSelfUser = async (selfUser) => {
+  return await requestToBackend(null, `api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   }
 })
 
-function Delete({ selfUser }) {
+function Delete({ lng, lngDict, selfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 
   return (
-    <Layout title={`계정 탈퇴 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteMyAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='계정 탈퇴'
+        title={i18n.t('deleteMyAccount')}
       >
-        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -52,11 +54,11 @@ function Delete({ selfUser }) {
               const response = await deleteSelfUser(selfUser);
               if (response.status === 204) {
                 router.push('/session/logout');
-                toast.success('계정 탈퇴가 완료되었습니다.');
+                toast.success(i18n.t('_myAccountSuccessfullyDeleted'));
               }
             }}
           >
-            계정 탈퇴
+            {i18n.t('deleteMyAccount')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -66,7 +68,7 @@ function Delete({ selfUser }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

@@ -4,10 +4,11 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 
-import Layout from '../../components/Layout';
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout';
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const putCouponScan = async (qrData) => {
   const data = {
@@ -20,14 +21,15 @@ const getCoupon = async (qrData) => {
   return await requestToBackend(null, `api/products/${qrData.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function Scan({ selfUser }) {
+function Scan({ lng, lngDict, selfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
 
   useEffect(() => {

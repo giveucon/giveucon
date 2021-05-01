@@ -6,13 +6,14 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import AlertBox from '../../components/AlertBox';
-import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
-import Layout from '../../components/Layout';
-import Section from '../../components/Section';
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend';
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps';
+import AlertBox from 'components/AlertBox';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getStoreList = async (context) => {
   const params = {
@@ -25,11 +26,13 @@ const getUser = async (context) => {
   return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialStoreListResponse = await getStoreList(context);
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
-    props: { 
+    props: {
+      lng,
+      lngDict,
       selfUser,
       initialStoreListResponse,
       user: context.query.user ? userResponse.data : null
@@ -37,8 +40,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function List({ selfUser, initialStoreListResponse, user }) {
+function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [storeList, setStoreList] = useState(initialStoreListResponse.data.results);
   const [storeListPagination, setStoreListPagination] = useState(1);
@@ -57,10 +61,10 @@ function List({ selfUser, initialStoreListResponse, user }) {
   }
 
   return (
-    <Layout title={`가게 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('storeList')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title='가게 목록'
+          title={i18n.t('storeList')}
         >
           {(storeList.length > 0) ? (
             <InfiniteScroll
@@ -86,7 +90,7 @@ function List({ selfUser, initialStoreListResponse, user }) {
               </Grid>
             </InfiniteScroll>
           ) : (
-            <AlertBox content='가게가 없습니다.' variant='information' />
+            <AlertBox content={i18n.t('_isEmpty')} variant='information' />
           )}
         </Section>
         {user && (user.id === selfUser.id) && (
@@ -95,9 +99,9 @@ function List({ selfUser, initialStoreListResponse, user }) {
               color='primary'
               fullWidth
               variant='contained'
-              onClick={() => router.push(`/stores/create/`)}
+              onClick={() => router.push('/stores/create/')}
             >
-              새 가게 추가
+              {i18n.t('addStore')}
             </Button>
           </Box>
         )}

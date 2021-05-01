@@ -9,13 +9,14 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-import AlertBox from '../components/AlertBox'
-import Layout from '../components/Layout'
-import Section from '../components/Section'
-import SwipeableTileList from '../components/SwipeableTileList';
-import Tile from '../components/Tile';
-import requestToBackend from '../utils/requestToBackend'
-import withAuthServerSideProps from '../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -53,22 +54,24 @@ const geoRecommendedCouponList = [
   />
 ]
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const centralNoticeListResponse = await requestToBackend(context, 'api/central-notices/', 'get', 'json');
   return {
     props: { 
-      selfUser,
-      centralNoticeList: centralNoticeListResponse.data.results
+      lng, lngDict, selfUser, centralNoticeList: centralNoticeListResponse.data.results
     },
   };
 })
 
-function Home({ selfUser, centralNoticeList }) {
+function Index({ lng, lngDict, selfUser, centralNoticeList }) {
+
+  const i18n = useI18n()
   const router = useRouter();
+
   return (
-    <Layout title={`홈 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('home')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title='홈'
+        title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton onClick={() => router.push('/central-notices/list/')}>
@@ -98,12 +101,12 @@ function Home({ selfUser, centralNoticeList }) {
             ))}
           </SwipeableTileList>
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       
       <Section
-        title='주변에서 사용할 수 있음'
+        title={i18n.t('nearby')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
@@ -115,4 +118,4 @@ function Home({ selfUser, centralNoticeList }) {
   );
 }
 
-export default Home;
+export default Index;

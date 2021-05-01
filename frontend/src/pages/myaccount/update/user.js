@@ -5,17 +5,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../../components/Layout'
-import Section from '../../../components/Section'
-import requestToBackend from '../../../utils/requestToBackend'
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -33,20 +39,22 @@ const putSelfUser = async (selfUser) => {
     user_name: selfUser.user_name,
     first_name: selfUser.first_name,
     last_name: selfUser.last_name,
+    locale: selfUser.locale,
     dark_mode: selfUser.dark_mode,
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevSelfUser = selfUser;
   return {
-    props: { prevSelfUser: prevSelfUser },
+    props: { lng, lngDict, prevSelfUser: prevSelfUser },
   };
 })
 
-function User({ setDarkMode, selfUser: prevSelfUser }) {
+function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
@@ -55,6 +63,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
     user_name: prevSelfUser.user_name,
     first_name: prevSelfUser.first_name,
     last_name: prevSelfUser.last_name,
+    locale: prevSelfUser.locale,
     dark_mode: prevSelfUser.dark_mode,
   });
   const [selfUserError, setSelfUserError] = useState({
@@ -65,14 +74,14 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
   });
 
   return (
-    <Layout title={`사용자 설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('userSettings')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='사용자 설정'
+        title={i18n.t('userSettings')}
       >
       </Section>
       <Section
-        title='사용자 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -81,7 +90,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label='이메일'
+            label={i18n.t('email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -97,7 +106,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label='유저네임'
+            label={i18n.t('username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -113,7 +122,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label='성'
+            label={i18n.t('lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -129,7 +138,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label='이름'
+            label={i18n.t('firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -139,7 +148,28 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             required
           />
         </Box>
-        <Box>
+        <Box paddingY={1}>
+          <FormControl>
+            <FormLabel>{i18n.t('locale')}</FormLabel>
+            <RadioGroup
+              name='locale'
+              value={selfUser.locale}
+              onChange={(event) => {
+                setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
+              }}
+            >
+              <Grid container>
+                <Grid item xs={6}>
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_languageNameKorean')} />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_languageNameEnglish')} />
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </Box>
+        <Box paddingY={1}>
           <FormGroup row>
             <FormControlLabel
             control={
@@ -152,7 +182,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
                 }}
               />
             }
-            label='다크 모드'
+            label={i18n.t('darkMode')}
             />
           </FormGroup>
         </Box>
@@ -167,22 +197,22 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             if (response.status === 200) {
               setDarkMode(selfUser.dark_mode ? 'dark' : 'light');
               router.push('/myaccount/update/');
-              toast.success('계정이 업데이트 되었습니다.');
+              toast.success(i18n.t('_myAccountSuccessfullyEdited'));
             } 
             else if (response.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -192,7 +222,7 @@ function User({ setDarkMode, selfUser: prevSelfUser }) {
             variant='contained'
             onClick={() => router.push('/myaccount/delete/')}
           >
-            계정 탈퇴
+            {i18n.t('deleteMyAccount')}
           </Button>
         </Box>
       </Section>

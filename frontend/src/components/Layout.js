@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import BottomNavBar from './BottomNavBar'
+import BottomNavBar from 'components/BottomNavBar'
 
 const useStyles = makeStyles((theme) => ({
   root: {

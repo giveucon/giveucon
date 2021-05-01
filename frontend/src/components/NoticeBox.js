@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
+
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function ArticleBox({ children=null, content=null, image=null, onClick=null, skeleton=false, title=null, subtitle=null }) {
+export default function NoticeBox({ children=null, content=null, imageList=null, onClick=null, skeleton=false, title=null, subtitle=null }) {
   const classes = useStyles();
 
   return (
@@ -34,16 +34,15 @@ export default function ArticleBox({ children=null, content=null, image=null, on
           </>
         ) : (
           <>
-            <Box display={image ? 'block' : 'none'} paddingY={1}>
-              <Card>
-                <CardActionArea onClick={onClick}>
-                  <CardMedia
-                    className={classes.media}
-                    image={image}
-                    title={title}
+            <Box display={imageList && (imageList.length > 0) ? 'block' : 'none'} paddingY={1}>
+              <SwipeableTileList autoplay={true}>
+                {imageList && (imageList.length > 0) && imageList.map((item, index) => (
+                  <Tile
+                    key={index}
+                    image={item}
                   />
-                </CardActionArea>
-              </Card>
+                ))}
+              </SwipeableTileList>
             </Box>
             <Box paddingY={1}>
               <Typography variant='h6'>{title}</Typography>

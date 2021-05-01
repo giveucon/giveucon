@@ -13,15 +13,16 @@ import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 import Rating from '@material-ui/lab/Rating';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList'
-import Tile from '../../components/Tile'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
+import useI18n from 'hooks/useI18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -55,7 +56,7 @@ const putStoreReview = async (storeReview, imageList) => {
   return await requestToBackend(null, `api/store-reviews/${storeReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevStoreReviewResponse = await getStoreReview(context);
   const storeResponse = await getStore(context, prevStoreReviewResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
@@ -68,12 +69,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevStoreReview: prevStoreReviewResponse.data },
+    props: { lng, lngDict, selfUser, prevStoreReview: prevStoreReviewResponse.data },
   };
 })
 
-function Update({ selfUser, prevStoreReview }) {
+function Update({ lng, lngDict, selfUser, prevStoreReview }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [storeReview, setStoreReview] = useState({
@@ -232,7 +234,7 @@ function Update({ selfUser, prevStoreReview }) {
             const response = await putStoreReview(storeReview, imageList);
             if (response.status === 200) {
               router.push(`/store-reviews/${response.data.id}/`);
-              toast.success('가게 공지사항이 업데이트 되었습니다.');
+              toast.success('가게 리뷰가 업데이트 되었습니다.');
             } else if (response.status === 400) {
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));
@@ -257,7 +259,7 @@ function Update({ selfUser, prevStoreReview }) {
               query: { id: storeReview.id },
             })}
           >
-            가게 공지사항 삭제
+            가게 리뷰 삭제
           </Button>
         </Box>
       </Section>

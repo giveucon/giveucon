@@ -4,10 +4,10 @@ import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import Tile from '../../components/Tile';
-import withAuthServerSideProps from '../withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import Tile from 'components/Tile';
+import withAuthServerSideProps from 'withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
   return {

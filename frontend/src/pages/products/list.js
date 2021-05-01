@@ -7,13 +7,14 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import AlertBox from '../../components/AlertBox'
-import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import Tile from 'components/Tile';
+import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProductList = async (context) => {
   const params = {
@@ -31,12 +32,14 @@ const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialProductListResponse = await getProductList(context);
   const userResponse = context.query.user && await getUser(context);
   const storeResponse = context.query.store && await getStore(context);
   return {
     props: {
+      lng,
+      lngDict,
       selfUser,
       initialProductListResponse,
       user: context.query.user ? userResponse.data : null,
@@ -45,8 +48,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function List({ selfUser, initialProductListResponse, user, store }) {
+function List({ lng, lngDict, selfUser, initialProductListResponse, user, store }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [productList, setProductList] = useState(initialProductListResponse.data.results);
   const [productListPagination, setProductListPagination] = useState(0);

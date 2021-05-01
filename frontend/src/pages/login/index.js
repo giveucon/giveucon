@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,8 +6,11 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import Section from '../components/Section'
-import getCookies from '../utils/getCookies';
+import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
+import EN from 'locales/en.json'
+import KO from 'locales/ko.json'
+import getCookies from 'utils/getCookies';
 
 const useStyles = makeStyles({
   background: {
@@ -31,27 +34,30 @@ const useStyles = makeStyles({
 
 export async function getServerSideProps(context) {
   const cookies = getCookies(context)
-  if (cookies.giveucon) {
+  if (cookies.giveucon_session) {
     return {
-      redirect: {
-        permanent: false,
-        destination: '/home/',
-      },
-      props: {}
+      redirect: { permanent: false, destination: '/home/', }
     }
   }
-  return {
+  else return {
     props: {}
   };
 }
 
-function Login() {
+function Index() {
+
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
+  
+  useEffect(() => {
+    i18n.locale('ko', KO)
+  }, [])
+
   return (
     <>
       <Head>
-        <title>{`로그인 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <title>{`${i18n.t('pages.login.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Box
@@ -62,11 +68,11 @@ function Login() {
       >
         <Box style={{ minHeight: '8rem', minWidth: '16rem' }}>
           <Section
-            title='환영합니다!'
+            title={i18n.t('_welcome')}
           >
             <Box marginY={5}>
               <Typography align='center' color='textPrimary' variant='h3'>
-                giveUcon
+              {i18n.t('_appName')}
               </Typography>
             </Box>
             <Box marginY={1}>
@@ -76,7 +82,7 @@ function Login() {
                 variant='contained'
                 onClick={() => router.push('/session/login')}
               >
-                카카오 계정으로 로그인
+                {i18n.t('loginAsKakaoAccount')}
               </Button>
             </Box>
           </Section>
@@ -86,4 +92,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Index;
