@@ -199,7 +199,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
           onClick={async () => {
             const response = await putSelfUser(selfUser);
             if (response.status === 200) {
-              setDarkMode(selfUser.dark_mode ? 'dark' : 'light');
+              setDarkMode(selfUser.dark_mode);
               router.push('/myaccount/update/');
               toast.success(i18n.t('_myAccountSuccessfullyEdited'));
             } 

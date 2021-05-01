@@ -17,17 +17,25 @@ import getCookies from 'utils/getCookies';
 function RootApp({ Component, pageProps }) {
   const router = useRouter();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const cookies = getCookies(null)
   const [theme, setTheme] = useState(
-    cookies.giveucon_settings && (JSON.parse(cookies.giveucon_settings).dark_mode) ? darkTheme : lightTheme
+    pageProps.selfUser && pageProps.selfUser.dark_mode ? darkTheme : lightTheme
+  );
+  const [darkMode, setDarkMode] = useState(
+    pageProps.selfUser && pageProps.selfUser.dark_mode ? true : false
   );
   const [pageLoading, setPageLoading] = useState(false);
 
-  const setDarkMode = (darkMode) => {
-    darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
-  }
-
   useEffect(() => {
+    // Set default locale
+    const getLngDict = async (lng) => {
+      const { default: lngDict = {} } = await import(`locales/${lng}.json`);
+      return lngDict;
+    }
+    if(!pageProps.lng) {
+      pageProps.lng = 'ko';
+      pageProps.lngDict = getLngDict(pageProps.lng);
+    }
+
     const handleStart = () => { setPageLoading(true); };
     const handleComplete = () => { setPageLoading(false); };
 
@@ -40,6 +48,10 @@ function RootApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
+  useEffect(() => {
+    darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
+  }, [darkMode]);
 
   return (
     <>
@@ -59,7 +71,10 @@ function RootApp({ Component, pageProps }) {
             toastOptions={{
               className: null,
               style: {
-                borderRadius: '1.5rem'
+                background: darkMode ? 'black' : 'white',
+                borderRadius: '1.5rem',
+                color: darkMode ? 'white' : 'black',
+                margin: '1.2rem 0 0 0'
               },
             }}
           />

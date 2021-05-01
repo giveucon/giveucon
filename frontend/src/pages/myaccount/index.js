@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CodeIcon from '@material-ui/icons/Code';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import Layout from 'components/Layout'
@@ -109,6 +110,50 @@ function Index({ lng, lngDict, selfUser }) {
         </Box>
       </Section>
       <Section
+        title={i18n.t('favorites')}
+        titlePrefix={<IconButton><FavoriteIcon /></IconButton>}
+      >
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/friends/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('friends')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/favorite-stores/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('favoriteStores')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/favorite-products/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('favoriteProducts')}
+          </Button>
+        </Box>
+      </Section>
+      <Section
         title={i18n.t('managements')}
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
@@ -167,6 +212,7 @@ function Index({ lng, lngDict, selfUser }) {
             {i18n.t('components')}
           </Button>
         </Box>
+
         <Box marginY={1}>
           <Button
             color='default'
@@ -189,6 +235,7 @@ function Index({ lng, lngDict, selfUser }) {
             React-Hot-Toast 테스트
           </Button>
         </Box>
+
       </Section>
     </Layout>
   );
