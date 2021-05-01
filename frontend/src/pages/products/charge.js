@@ -5,11 +5,12 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import ArticleBox from '../../components/ArticleBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import ArticleBox from 'components/ArticleBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
@@ -28,16 +29,19 @@ const postCoupon = async (selfUser, product) => {
   return await requestToBackend(null, `api/coupons/`, 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   const storeResponse = await getStore(context, productResponse.data);
   return {
-    props: { selfUser, product: productResponse.data, store: storeResponse.data },
+    props: { lng, lngDict, selfUser, product: productResponse.data, store: storeResponse.data },
   };
 })
 
-function Charge({ selfUser, product, store }) {
+function Charge({ lng, lngDict, selfUser, product, store }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <Layout title={`결재 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

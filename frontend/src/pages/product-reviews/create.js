@@ -12,13 +12,14 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import Rating from '@material-ui/lab/Rating';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList'
-import Tile from '../../components/Tile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
+import useI18n from 'hooks/use-i18n'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -49,7 +50,7 @@ const postProductReview = async (productReview, imageList) => {
   return await requestToBackend(null, 'api/product-reviews/', 'post', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
     return {
@@ -61,12 +62,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, product: productResponse.data },
+    props: { lng, lngDict, selfUser, product: productResponse.data },
   }
 })
 
-function Create({ selfUser, product }) {
+function Create({ lng, lngDict, selfUser, product }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [productReview, setProductReview] = useState({

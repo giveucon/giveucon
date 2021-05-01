@@ -81,7 +81,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
       >
       </Section>
       <Section
-        title={i18n.t('common.basicInfo')}
+        title={i18n.t('common.words.basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -90,7 +90,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label={i18n.t('common.email')}
+            label={i18n.t('common.words.email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -106,7 +106,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label={i18n.t('common.username')}
+            label={i18n.t('common.words.username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -122,7 +122,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label={i18n.t('common.lastName')}
+            label={i18n.t('common.words.lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -138,7 +138,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label={i18n.t('common.firstName')}
+            label={i18n.t('common.words.firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -150,7 +150,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>{i18n.t('common.locale')}</FormLabel>
+            <FormLabel>{i18n.t('common.words.locale')}</FormLabel>
             <RadioGroup
               name='locale'
               value={selfUser.locale}
@@ -160,10 +160,10 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('languages.original.ko')} />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('common.locales.ko')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('languages.original.en')} />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('common.locales.en')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -182,7 +182,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
                 }}
               />
             }
-            label={i18n.t('common.darkMode')}
+            label={i18n.t('common.words.darkMode')}
             />
           </FormGroup>
         </Box>
@@ -204,15 +204,15 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error(i18n.t('common.checkInputFields'));
+              toast.error(i18n.t('common.dialogs.checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.submit')}
+          {i18n.t('common.buttons.submit')}
         </Button>
       </Box>
       <Section
-        title={i18n.t('common.dangerZone')}
+        title={i18n.t('common.words.dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>

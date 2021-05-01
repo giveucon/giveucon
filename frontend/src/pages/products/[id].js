@@ -8,14 +8,15 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import ReviewListItem from '../../components/ReviewListItem'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList';
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import ReviewListItem from 'components/ReviewListItem'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
@@ -31,12 +32,14 @@ const getProductReviewList = async (context) => {
   });
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   const storeResponse = await getStore(context, productResponse.data);
   const productReviewListResponse = await getProductReviewList(context);
   return {
     props: {
+      lng,
+      lngDict,
       selfUser,
       product: productResponse.data,
       store: storeResponse.data,
@@ -45,8 +48,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function Id({ selfUser, product, store, productReviewList }) {
+function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+
   return (
     <Layout title={`${product.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

@@ -33,13 +33,13 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     const session = JSON.parse(getCookies(context).giveucon);
     setCookie(context, 'giveucon', JSON.stringify({
       ...session,
+      locale: selfUser.locale,
       theme: selfUser.dark_mode ? 'dark' : 'light'
     }), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     })
 
-    
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
 
     // Return props after execute server side functions

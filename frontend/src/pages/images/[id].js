@@ -2,23 +2,27 @@ import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getImage = async (context) => {
   return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const imageResponse = await getImage(context);
   console.log(imageResponse.data);
   return {
-    props: { selfUser, image: imageResponse.data },
+    props: { lng, lngDict, selfUser, image: imageResponse.data },
   };
 })
 
-function Id({ selfUser, image }) {
+function Id({ lng, lngDict, selfUser, image }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <>
       <Head>

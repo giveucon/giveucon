@@ -12,15 +12,16 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList'
-import Tile from '../../components/Tile'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
+import useI18n from 'hooks/use-i18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -47,7 +48,7 @@ const putCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff) {
     return {
       redirect: {
@@ -59,12 +60,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   }
   const prevCentralNoticeResponse = await getCentralNotice(context);
   return {
-    props: { selfUser, prevCentralNotice: prevCentralNoticeResponse.data },
+    props: { lng, lngDict, selfUser, prevCentralNotice: prevCentralNoticeResponse.data },
   };
 })
 
-function Update({ selfUser, prevCentralNotice }) {
+function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [centralNotice, setCentralNotice] = useState({

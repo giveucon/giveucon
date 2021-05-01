@@ -8,23 +8,23 @@ import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
-import AlertBox from '../../components/AlertBox'
-import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
-import Layout from '../../components/Layout'
-import NoticeListItem from '../../components/NoticeListItem';
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList';
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout'
+import NoticeListItem from 'components/NoticeListItem';
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCentralNoticeList = async (context) => {
   return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  const initialCentralNoticeListResponse = await getCentralNoticeList(context);
-  if (!selfUser.staff && (selfUser.id !== centralResponse.data.user)) {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+  if (!selfUser.staff) {
     return {
       redirect: {
         permanent: false,
@@ -33,16 +33,18 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
       props: {}
     }
   }
+  const initialCentralNoticeListResponse = await getCentralNoticeList(context);
   return {
-    props: { selfUser, initialCentralNoticeListResponse },
+    props: { lng, lngDict, selfUser, initialCentralNoticeListResponse },
   };
 })
 
-function List({ selfUser, initialCentralNoticeListResponse }) {
+function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(initialCentralNoticeListResponse.data.results);
-  const [centralNoticeListPagination, setCentralNoticeListPagination] = useState(0);
+  const [centralNoticeListPagination, setCentralNoticeListPagination] = useState(1);
   const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
   const getMoreCentralNoticeList = async () => {

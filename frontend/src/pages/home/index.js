@@ -101,7 +101,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
             ))}
           </SwipeableTileList>
         ) : (
-          <AlertBox content={i18n.t('common.empty')} variant='information' />
+          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
         )}
       </Section>
       

@@ -4,15 +4,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 
-import AlertBox from '../../components/AlertBox'
-import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
-import Layout from '../../components/Layout'
-import ListItemCard from '../../components/ListItemCard';
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout'
+import ListItemCard from 'components/ListItemCard';
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProductReviewList = async (context) => {
   return await requestToBackend(context, 'api/product-reviews/', 'get', 'json', null, {
@@ -24,7 +24,7 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialProductReviewListResponse = await getProductReviewList(context);
   const productResponse = await getProduct(context);
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
@@ -37,12 +37,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, initialProductReviewListResponse, product: productResponse.data },
+    props: { lng, lngDict, selfUser, initialProductReviewListResponse, product: productResponse.data },
   };
 })
 
-function List({ selfUser, initialProductReviewListResponse, product }) {
+function List({ lng, lngDict, selfUser, initialProductReviewListResponse, product }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [productReviewList, setProductReviewList] = useState(initialProductReviewListResponse.data.results);
   const [productReviewListPagination, setProductReviewListPagination] = useState(1);

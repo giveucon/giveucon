@@ -11,13 +11,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList'
-import Tile from '../../components/Tile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
+import useI18n from 'hooks/use-i18n'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -40,7 +41,7 @@ const postCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff) {
     return {
       redirect: {
@@ -51,12 +52,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   }
 })
 
-function Create({ selfUser }) {
+function Create({ lng, lngDict, selfUser }) {
   
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [centralNotice, setCentralNotice] = useState({

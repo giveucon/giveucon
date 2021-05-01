@@ -2,7 +2,7 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components'
 import { ServerStyleSheets } from '@material-ui/styles';
-import lightTheme from '../styles/lightTheme';
+import lightTheme from 'styles/lightTheme';
 
 class MyDocument extends Document {
   static async getInitialProps (ctx) {

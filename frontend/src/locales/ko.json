@@ -1,30 +1,32 @@
 {
   "common": {
-    "addImages": "이미지 추가",
-    "appName": "giveUcon",
-    "basicInfo": "기본 정보",
-    "darkMode": "다크 모드",
-    "dangerZone": "위험 구역",
-    "email": "이메일",
-    "empty": "비어 있음",
-    "firstName": "성을 제외한 이름",
-    "goBack": "뒤로 가기",
-    "images": "이미지",
-    "lastName": "성",
-    "locale": "로케일",
-    "checkInputFields": "입력란을 확인해 주세요.",
-    "removeAllImages": "모든 이미지 삭제",
-    "submit": "제출",
-    "username": "유저네임"
-  },
-  "languages": {
-    "original": {
+    "app": {
+      "name": "giveUcon"
+    },
+    "buttons": {
+      "addImages": "이미지 추가",
+      "goBack": "뒤로 가기",
+      "removeAllImages": "모든 이미지 삭제",
+      "submit": "제출"
+    },
+    "dialogs": {
+      "empty": "비어 있음",
+      "checkInputFields": "입력란을 확인해 주세요."
+    },
+    "locales": {
       "en": "English",
       "ko": "한국어"
     },
-    "translated": {
-      "en": "영어",
-      "ko": "한국어"
+    "words": {
+      "basicInfo": "기본 정보",
+      "darkMode": "어두운 모드",
+      "dangerZone": "위험 구역",
+      "email": "이메일",
+      "firstName": "성을 제외한 이름",
+      "images": "이미지",
+      "lastName": "성",
+      "locale": "로케일",
+      "username": "유저네임"
     }
   },
   "pages": {

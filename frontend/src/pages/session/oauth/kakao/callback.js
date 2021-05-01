@@ -1,5 +1,5 @@
 import axios from 'axios';
-import setCookie from '../../../../utils/setCookie';
+import setCookie from 'utils/setCookie';
 
 const getTokens = async (code) => {
   try {

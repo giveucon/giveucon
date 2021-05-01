@@ -5,13 +5,10 @@ import Typography from '@material-ui/core/Typography';
 
 export default function InfiniteScrollLoader({ loading=true }) {
   return (
-    <Box display='flex' justifyContent='center' padding={2}>
-      {loading && (
+    loading && (
+      <Box display='flex' justifyContent='center' padding={2}>
         <CircularProgress />
-      )}
-      {!loading && (
-        <Typography variant='subtitle2'>항목이 더 이상 없습니다.</Typography>
-      )}
-    </Box>
+      </Box>
+    )
   );
 }

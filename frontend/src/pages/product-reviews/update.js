@@ -13,15 +13,16 @@ import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 import Rating from '@material-ui/lab/Rating';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList'
-import Tile from '../../components/Tile'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
+import useI18n from 'hooks/use-i18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -55,7 +56,7 @@ const putProductReview = async (productReview, imageList) => {
   return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevProductReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, prevProductReviewResponse.data);
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
@@ -68,12 +69,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevProductReview: prevProductReviewResponse.data },
+    props: { lng, lngDict, selfUser, prevProductReview: prevProductReviewResponse.data },
   };
 })
 
-function Update({ selfUser, prevProductReview }) {
+function Update({ lng, lngDict, selfUser, prevProductReview }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [productReview, setProductReview] = useState({

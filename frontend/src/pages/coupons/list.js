@@ -6,13 +6,14 @@ import Grid from '@material-ui/core/Grid';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 
-import AlertBox from '../../components/AlertBox'
-import InfiniteScrollLoader from '../../components/InfiniteScrollLoader';
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponList = async (context) => {
   const params = {
@@ -35,13 +36,15 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialCouponListResponse = await getCouponList(context);
   const userResponse = context.query.user && await getUser(context);
   const storeResponse = context.query.store && await getStore(context);
   const productResponse = context.query.product && await getProduct(context);
   return {
     props: {
+      lng,
+      lngDict,
       selfUser,
       initialCouponListResponse,
       user: context.query.user ? userResponse.data : null,
@@ -51,8 +54,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   };
 })
 
-function List({ selfUser, initialCouponListResponse, user, store, product }) {
+function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, product }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
   const [couponListPagination, setCouponListPagination] = useState(0);

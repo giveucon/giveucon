@@ -142,7 +142,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.empty')} variant='information' />
+          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
         )}
       </Section>
       <Section
@@ -177,7 +177,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.empty')} variant='information' />
+          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
         )}
       </Section>
       <Section
@@ -208,7 +208,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.empty')} variant='information' />
+          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
         )}
       </Section>
       <Section

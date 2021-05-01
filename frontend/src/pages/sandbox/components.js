@@ -5,17 +5,17 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import Layout from '../../components/Layout';
-import Section from '../../components/Section';
-import AccordionSection from '../../components/AccordionSection';
-import AlertBox from '../../components/AlertBox';
-import KakaoMapBox from '../../components/KakaoMapBox';
-import NoticeBox from '../../components/NoticeBox';
-import ReviewBox from '../../components/ReviewBox';
-import SwipeableTileList from '../../components/SwipeableTileList';
-import Tile from '../../components/Tile';
-import UserProfileBox from '../../components/UserProfileBox';
-import UserProfileSection from '../../components/UserProfileSection';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import AccordionSection from 'components/AccordionSection';
+import AlertBox from 'components/AlertBox';
+import KakaoMapBox from 'components/KakaoMapBox';
+import NoticeBox from 'components/NoticeBox';
+import ReviewBox from 'components/ReviewBox';
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import UserProfileBox from 'components/UserProfileBox';
+import UserProfileSection from 'components/UserProfileSection';
 
 export default function Components() {
 

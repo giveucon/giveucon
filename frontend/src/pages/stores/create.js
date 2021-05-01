@@ -79,7 +79,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
         title={i18n.t('pages.stores.create.pageTitle')}
       />
       <Section
-        title={i18n.t('common.basicInfo')}
+        title={i18n.t('common.words.basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -143,7 +143,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
         </Box>
       </Section>
       <Section
-        title={i18n.t('common.images')}
+        title={i18n.t('common.words.images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -186,7 +186,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    {i18n.t('common.addImages')}
+                    {i18n.t('common.words.addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -197,7 +197,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      {i18n.t('common.removeAllImages')}
+                      {i18n.t('common.words.removeAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -220,11 +220,11 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             else if (response.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
               setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
-              toast.error(i18n.t('common.checkInputFields'));
+              toast.error(i18n.t('common.dialogs.checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.submit')}
+          {i18n.t('common.buttons.submit')}
         </Button>
       </Box>
     </Layout>

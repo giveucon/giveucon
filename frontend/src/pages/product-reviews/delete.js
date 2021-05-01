@@ -5,11 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -33,7 +34,7 @@ const deleteProductReview = async (productReview) => {
   return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, productReviewResponse.data);
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
@@ -46,12 +47,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, productReview: productReviewResponse.data },
+    props: { lng, lngDict, selfUser, productReview: productReviewResponse.data },
   };
 })
 
-function Delete({ selfUser, productReview }) {
+function Delete({ lng, lngDict, selfUser, productReview }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 

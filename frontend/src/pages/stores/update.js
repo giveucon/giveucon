@@ -119,7 +119,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
         title={i18n.t('pages.stores.update.pageTitle')}
       />
       <Section
-        title={i18n.t('common.basicInfo')}
+        title={i18n.t('common.words.basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -183,7 +183,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
         </Box>
       </Section>
       <Section
-        title={i18n.t('common.images')}
+        title={i18n.t('common.words.images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -226,7 +226,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    {i18n.t('common.addImages')}
+                    {i18n.t('common.buttons.addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -237,7 +237,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      {i18n.t('common.removeAllImages')}
+                      {i18n.t('common.buttons.removeAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -259,15 +259,15 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             } else if (response.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
               setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
-              toast.error(i18n.t('common.checkInputFields'));
+              toast.error(i18n.t('common.dialogs.checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.submit')}
+          {i18n.t('common.buttons.submit')}
         </Button>
       </Box>
       <Section
-        title={i18n.t('common.dangerZone')}
+        title={i18n.t('common.words.dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
