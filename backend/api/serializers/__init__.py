@@ -24,3 +24,4 @@ from .store_review_update_serializer import StoreReviewUpdateSerializer
 from .product_review_read_serializer import ProductReviewReadSerializer
 from .product_review_create_serializer import ProductReviewCreateSerializer
 from .product_review_update_serializer import ProductReviewUpdateSerializer
+from .favorite_store_serializer import FavoriteStoreSerializer
