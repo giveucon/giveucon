@@ -61,7 +61,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
   }
 
   return (
-    <Layout title={`${i18n.t('storeList')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('storeList')} - ${i18n.t('_appName')}`}>
         <Section
           backButton
           title={i18n.t('storeList')}

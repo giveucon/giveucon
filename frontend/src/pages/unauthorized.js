@@ -6,11 +6,15 @@ import Button from '@material-ui/core/Button';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
 
 function Unauthorized({}) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
-    <Layout title={`권한 없음 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`권한 없음 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='권한 없음'

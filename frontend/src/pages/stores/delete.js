@@ -32,14 +32,13 @@ const deleteStore = async (store) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, store: storeResponse.data },
@@ -53,7 +52,7 @@ function Delete({ lng, lngDict, selfUser, store }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`${i18n.t('deleteStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteStore')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('deleteStore')}

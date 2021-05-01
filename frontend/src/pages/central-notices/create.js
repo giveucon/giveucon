@@ -42,14 +42,13 @@ const postCentralNotice = async (centralNotice, imageList) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff) {
+  if (!selfUser.staff){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser },
@@ -72,13 +71,13 @@ function Create({ lng, lngDict, selfUser }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`공지사항 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='공지사항 추가'
+        title={i18n.t('addNotice')}
       />
       <Section
-        title='기본 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -87,7 +86,7 @@ function Create({ lng, lngDict, selfUser }) {
             value={centralNotice.title}
             error={centralNoticeError.title}
             fullWidth
-            label='제목'
+            label={i18n.t('title')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -103,7 +102,7 @@ function Create({ lng, lngDict, selfUser }) {
             value={centralNotice.content}
             error={centralNoticeError.content}
             fullWidth
-            label='내용'
+            label={i18n.t('content')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -116,7 +115,7 @@ function Create({ lng, lngDict, selfUser }) {
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -159,7 +158,7 @@ function Create({ lng, lngDict, selfUser }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -170,7 +169,7 @@ function Create({ lng, lngDict, selfUser }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -189,16 +188,16 @@ function Create({ lng, lngDict, selfUser }) {
             console.log(response.data);
             if (response.status === 201) {
               router.push(`/central-notices/${response.data.id}/`);
-              toast.success('공지사항이 생성되었습니다.');
+              toast.success(i18n.t('_noticeSuccessfullyAdded'));
             } 
             else if (response.status === 400) {
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: !!response.data.title}));
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: !!response.data.content}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
     </Layout>

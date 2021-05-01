@@ -43,7 +43,7 @@ function Charge({ lng, lngDict, selfUser, product, store }) {
   const router = useRouter();
   
   return (
-    <Layout title={`결재 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`결재 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={'결재 내용'}

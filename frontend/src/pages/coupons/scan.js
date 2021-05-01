@@ -99,8 +99,8 @@ function Scan({ lng, lngDict, selfUser }) {
   }, []);
 
   return (
-    <Layout title={`쿠폰 스캔 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
-      <Section backButton title='쿠폰 스캔'>
+    <Layout title={`${i18n.t('scanCoupon')} - ${i18n.t('_appName')}`}>
+      <Section backButton title={i18n.t('scanCoupon')}>
         <Card>
           <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
             <canvas id='canvas' width='480' height='360' hidden></canvas>

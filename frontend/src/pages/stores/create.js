@@ -73,7 +73,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`${i18n.t('addStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('addStore')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('addStore')}

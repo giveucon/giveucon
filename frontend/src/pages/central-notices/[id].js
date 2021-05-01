@@ -27,7 +27,7 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${centralNotice.article.title} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={centralNotice.article.title}
@@ -54,7 +54,7 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
               query: { id: centralNotice.id },
             })}
           >
-            공지사항 수정
+            {i18n.t('editNotice')}
           </Button>
         </Box>
       )}

@@ -27,14 +27,13 @@ const getProduct = async (context, coupon) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const couponQRResponse = await getCouponQR(context);
   const productResponse = await getProduct(context, couponResponse.data);
@@ -56,7 +55,7 @@ function Use({ lng, lngDict, selfUser, coupon, couponQR, product }) {
   const router = useRouter();
 
   return (
-    <Layout title={`쿠폰 사용 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('useCoupon')}- ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={product.name}
@@ -78,7 +77,7 @@ function Use({ lng, lngDict, selfUser, coupon, couponQR, product }) {
           variant='contained'
           onClick={() => router.back()}
         >
-          뒤로가기
+          {i18n.t('goBack')}
         </Button>
       </Box>
     </Layout>

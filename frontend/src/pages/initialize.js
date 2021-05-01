@@ -15,14 +15,13 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
-  if (!selfUser.staff) {
+  if (!selfUser.staff){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { selfUser },
@@ -59,7 +58,7 @@ function Initialize({ selfUser }) {
   }
 
   return (
-    <Layout title={`데이터베이스 초기화 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`데이터베이스 초기화 - ${i18n.t('_appName')}`}>
       <Section
         title='데이터베이스 초기화'
         titlePrefix={<IconButton><WarningIcon /></IconButton>}

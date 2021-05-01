@@ -23,14 +23,13 @@ const getProduct = async (context, coupon) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const productResponse = await getProduct(context, couponResponse.data);
   return {
@@ -44,10 +43,10 @@ function Id({ lng, lngDict, selfUser, coupon, product }) {
   const router = useRouter();
 
   return (
-    <Layout title={`쿠폰 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('coupons')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title={`쿠폰`}
+        title={i18n.t('coupons')}
       >
       </Section>
       <Section
@@ -74,7 +73,7 @@ function Id({ lng, lngDict, selfUser, coupon, product }) {
               query: { id: coupon.id },
             })}
           >
-            쿠폰 사용
+            {i18n.t('useCoupon')}
           </Button>
         </Box>
       )}

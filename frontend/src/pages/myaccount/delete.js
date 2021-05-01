@@ -39,7 +39,7 @@ function Delete({ lng, lngDict, selfUser }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`${i18n.t('deleteMyAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteMyAccount')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('deleteMyAccount')}

@@ -22,7 +22,7 @@ function Index({ lng, lngDict, selfUser }) {
   const router = useRouter();
 
   return (
-    <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`거래 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='거래'

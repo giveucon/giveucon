@@ -49,14 +49,13 @@ const putCentralNotice = async (centralNotice, imageList) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff) {
+  if (!selfUser.staff){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const prevCentralNoticeResponse = await getCentralNotice(context);
   return {
@@ -97,13 +96,13 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
   }, []);
 
   return (
-    <Layout title={`공지사항 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('editNotice')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='공지사항 수정'
+        title={i18n.t('editNotice')}
       />
       <Section
-        title='공지사항 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -112,7 +111,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
             value={centralNotice.title}
             error={centralNoticeError.title}
             fullWidth
-            label='제목'
+            label={i18n.t('title')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -128,7 +127,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
             value={centralNotice.content}
             error={centralNoticeError.content}
             fullWidth
-            label='내용'
+            label={i18n.t('content')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -141,7 +140,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -184,7 +183,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -195,7 +194,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -213,19 +212,19 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
             const response = await putCentralNotice(centralNotice, imageList);
             if (response.status === 200) {
               router.push(`/central-notices/${response.data.id}/`);
-              toast.success('공지사항이 업데이트 되었습니다.');
+              toast.success(i18n.t('_noticeSuccessfullyEdited'));
             } else if (response.status === 400) {
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: !!response.data.title}));
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: !!response.data.content}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -238,7 +237,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
               query: { id: centralNotice.id },
             })}
           >
-            공지사항 삭제
+            {i18n.t('deleteNotice')}
           </Button>
         </Box>
       </Section>

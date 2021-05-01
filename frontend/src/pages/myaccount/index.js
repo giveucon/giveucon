@@ -39,7 +39,7 @@ function Index({ lng, lngDict, selfUser }) {
   const classes = useStyles();
   
   return (
-    <Layout title={`${i18n.t('myAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('myAccount')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('myAccount')}

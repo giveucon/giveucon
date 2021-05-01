@@ -38,7 +38,7 @@ const i18n = useI18n();
   const router = useRouter();
   
   return (
-    <Layout title={`${storeNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={storeNotice.article.title}

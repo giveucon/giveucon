@@ -68,7 +68,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
   }
 
   return (
-    <Layout title={`상품 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 목록 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='상품 목록'

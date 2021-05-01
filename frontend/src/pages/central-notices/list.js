@@ -28,10 +28,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const initialCentralNoticeListResponse = await getCentralNoticeList(context);
   return {
@@ -48,7 +47,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
   const getMoreCentralNoticeList = async () => {
-    const centralNoticeListResponse = await await requestToBackend('api/central-notices/', 'get', 'json', null, {
+    const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, {
       page: centralNoticeListPagination + 1,
     });
     setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
@@ -57,14 +56,14 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   }
 
   return (
-    <Layout title={`공지사항 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('notices')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='공지사항'
+        title={i18n.t('notices')}
       />
       <Section
         titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
-        title='최신 공지사항'
+        title={i18n.t('newNotices')}
         padding={false}
       >
         {(centralNoticeList.length > 0) ? (
@@ -83,12 +82,12 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
             })}
           </SwipeableTileList>
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
 
       <Section
-        title='전체 공지사항'
+        title={i18n.t('allNotices')}
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
       >
         {(centralNoticeList.length > 0) ? (
@@ -112,7 +111,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
               </Grid>
             </InfiniteScroll>
           ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
 
@@ -124,7 +123,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
             variant='contained'
             onClick={() => router.push(`/central-notices/create/`)}
           >
-            공지사항 추가
+            {i18n.t('addNotice')}
           </Button>
         </Box>
       )}

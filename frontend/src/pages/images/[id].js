@@ -26,7 +26,7 @@ function Id({ lng, lngDict, selfUser, image }) {
   return (
     <>
       <Head>
-        <title>{`이미지 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <title>{`${i18n.t('images')} - ${i18n.t('_appName')}`}</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <img

@@ -20,7 +20,7 @@ function Index({ lng, lngDict, selfUser }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${i18n.t('settings')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('settings')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('settings')}

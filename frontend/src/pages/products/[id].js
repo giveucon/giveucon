@@ -54,7 +54,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${product.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${product.name} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={product.name}

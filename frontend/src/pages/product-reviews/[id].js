@@ -39,7 +39,7 @@ function Id({ lng, lngDict, selfUser, productReview, product }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${productReview.review.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${productReview.review.article.title} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={productReview.review.article.title}
@@ -68,7 +68,7 @@ function Id({ lng, lngDict, selfUser, productReview, product }) {
               query: { id: productReview.id },
             })}
           >
-            상품 리뷰 수정
+            {i18n.t('editReview')}
           </Button>
         </Box>
       )}
