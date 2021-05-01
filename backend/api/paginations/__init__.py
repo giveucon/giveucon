@@ -4,3 +4,8 @@ from .product_pagination import ProductPagination
 from .coupon_pagination import CouponPagination
 from .central_notice_pagination import CentralNoticePagination
 from .store_notice_pagination import StoreNoticePagination
+from .store_review_pagination import StoreReviewPagination
+from .product_review_pagination import ProductReviewPagination
+from .friend_pagination import FriendPagination
+from .favorite_store_pagination import FavoriteStorePagination
+from .favorite_product_pagination import FavoriteProductPagination

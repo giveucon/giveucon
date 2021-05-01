@@ -14,6 +14,8 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
 import useI18n from 'hooks/useI18n'
 import convertJsonToFormData from 'utils/convertJsonToFormData'
 import requestToBackend from 'utils/requestToBackend'
@@ -82,7 +84,7 @@ function Create({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('addProduct')} - ${i18n.t('_appName')}`}
     >

@@ -107,7 +107,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('editProduct')} - ${i18n.t('_appName')}`}
     >

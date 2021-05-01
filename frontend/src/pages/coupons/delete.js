@@ -53,7 +53,7 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('deleteCoupon')} - ${i18n.t('_appName')}`}
     >

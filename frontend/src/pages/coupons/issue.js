@@ -5,7 +5,6 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import ArticleBox from 'components/ArticleBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
@@ -13,7 +12,7 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
+  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
 const getStore = async (context, product) => {
@@ -44,7 +43,7 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
   
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
@@ -66,7 +65,7 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
             variant='contained'
             onClick={async () => {
               const response = await postCoupon(selfUser, product);
-              if (response.status === 200) {
+              if (response.status === 201) {
                 router.push(`/coupons/${response.data.id}/`);
                 toast.success(i18n.t('_couponSuccessfullyIssued'));
               }

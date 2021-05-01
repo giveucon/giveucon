@@ -79,13 +79,13 @@ function Create({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
-      title={`${i18n.t('createNotice')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('createNotice')}
+        title={i18n.t('addNotice')}
       />
       <Section
         title={i18n.t('basicInfo')}

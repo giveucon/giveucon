@@ -72,7 +72,7 @@ function Create({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}
     >

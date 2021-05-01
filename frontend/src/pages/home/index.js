@@ -70,7 +70,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
     >

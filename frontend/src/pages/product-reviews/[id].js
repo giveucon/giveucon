@@ -40,7 +40,7 @@ function Id({ lng, lngDict, selfUser, productReview, product }) {
   
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${productReview.review.article.title} - ${i18n.t('_appName')}`}
     >

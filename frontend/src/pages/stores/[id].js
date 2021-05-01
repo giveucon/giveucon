@@ -62,9 +62,9 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       lngDict,
       selfUser,
       store: storeResponse.data,
-      storeNoticeList: storeNoticeListResponse.data,
-      productList: productListResponse.data,
-      storeReviewList: storeReviewListResponse.data,
+      storeNoticeList: storeNoticeListResponse.data.results,
+      productList: productListResponse.data.results,
+      storeReviewList: storeReviewListResponse.data.results,
     },
   };
 })
@@ -76,10 +76,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
 
   const i18n = useI18n();
   const router = useRouter();
+  console.log(storeNoticeList);
   
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${store.name} - ${i18n.t('_appName')}`}
     >

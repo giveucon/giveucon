@@ -40,7 +40,7 @@ function Index({ lng, lngDict, selfUser }) {
   
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('myAccount')} - ${i18n.t('_appName')}`}
     >
@@ -95,6 +95,16 @@ function Index({ lng, lngDict, selfUser }) {
             })}
           >
             {i18n.t('myCoupons')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/coupons/scan/')}
+          >
+            {i18n.t('scanCoupon')}
           </Button>
         </Box>
       </Section>

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -15,11 +13,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const getStoreList = async (context) => {
+const getFavoriteProductList = async (context) => {
   const params = {
     user: context.query.user || null,
   };
-  return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
+  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, params);
 };
 
 const getUser = async (context) => {
@@ -27,63 +25,63 @@ const getUser = async (context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  const initialStoreListResponse = await getStoreList(context);
+  const initialFavoriteProductListResponse = await getFavoriteProductList(context);
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
     props: {
       lng,
       lngDict,
       selfUser,
-      initialStoreListResponse,
+      initialFavoriteProductListResponse,
       user: context.query.user ? userResponse.data : null
      },
   };
 })
 
-function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
+function List({ lng, lngDict, selfUser, initialFavoriteProductListResponse, user }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const [storeList, setStoreList] = useState(initialStoreListResponse.data.results);
-  const [storeListPagination, setStoreListPagination] = useState(1);
-  const [hasMoreStoreList, setHasMoreStoreList] = useState(initialStoreListResponse.data.next);
+  const [favoriteProductList, setFavoriteProductList] = useState(initialFavoriteProductListResponse.data.results);
+  const [favoriteProductListPagination, setFavoriteProductListPagination] = useState(1);
+  const [hasMoreFavoriteProductList, setHasMoreFavoriteProductList] = useState(initialFavoriteProductListResponse.data.next);
 
-  const getMoreStoreList = async () => {
+  const getMoreFavoriteProductList = async () => {
     const params = {
       user: user ? user.id : null,
-      page: storeListPagination + 1,
+      page: favoriteProductListPagination + 1,
     };
-    const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
-    setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
-    setStoreListPagination(prevStoreListPagination => prevStoreListPagination + 1);
-    if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
+    const favoriteProductListResponse = await requestToBackend(null, 'api/favorite-products/', 'get', 'json', null, params);
+    setFavoriteProductList(prevFavoriteProductList => prevFavoriteProductList.concat(favoriteProductListResponse.data.results));
+    setFavoriteProductListPagination(prevFavoriteProductListPagination => prevFavoriteProductListPagination + 1);
+    if (productListResponse.data.next === null) setHasMoreFavoriteProductList(prevHasMoreFavoriteProductList => false);
   }
 
   return (
     <Layout
       locale={lng}
       menuItemValueList={selfUser.menuItems}
-      title={`${i18n.t('storeList')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('favoriteProductList')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('storeList')}
+        title={i18n.t('favoriteProductList')}
       >
-        {(storeList.length > 0) ? (
+        {(favoriteProductList.length > 0) ? (
           <InfiniteScroll
-            dataLength={storeList.length}
-            next={getMoreStoreList}
-            hasMore={hasMoreStoreList}
+            dataLength={favoriteProductList.length}
+            next={getMoreFavoriteProductList}
+            hasMore={hasMoreFavoriteProductList}
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container spacing={1}>
-              {storeList && storeList.map((item, index) => (
+              {productList && productList.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
                     image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                    onClick={() => router.push(`/stores/${item.id}/`)}
+                    onClick={() => router.push(`/products/${item.id}/`)}
                     menuItems={
                       <MenuItem>Menu Item</MenuItem>
                     }
@@ -96,18 +94,6 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-      {user && (user.id === selfUser.id) && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/stores/create/')}
-          >
-            {i18n.t('addStore')}
-          </Button>
-        </Box>
-      )}
     </Layout>
   );
 }

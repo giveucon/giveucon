@@ -16,38 +16,50 @@ import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
 import UserProfileBox from 'components/UserProfileBox';
 import UserProfileSection from 'components/UserProfileSection';
+import useI18n from 'hooks/useI18n'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-export default function Components() {
+const swipeableTileList = [
+  <Tile
+    title='Swipeable Tile 1'
+    image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
+    onClick={() => alert( 'Tapped' )}
+    actions={
+      <Button>Edit</Button>
+    }
+  />,
+  <Tile
+    title='Swipeable Tile 2'
+    image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
+    onClick={() => alert( 'Tapped' )}
+    actions={
+      <Button>Edit</Button>
+    }
+  />,
+  <Tile
+    title='Swipeable Tile 3'
+    image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'
+    onClick={() => alert( 'Tapped' )}
+    actions={
+      <Button>Edit</Button>
+    }
+  />
+]
 
-  const swipeableTileList = [
-    <Tile
-      title='Swipeable Tile 1'
-      image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />,
-    <Tile
-      title='Swipeable Tile 2'
-      image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />,
-    <Tile
-      title='Swipeable Tile 3'
-      image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'
-      onClick={() => alert( 'Tapped' )}
-      actions={
-        <Button>Edit</Button>
-      }
-    />
-  ]
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+  return {
+    props: { lng, lngDict, selfUser },
+  };
+})
 
+export default function Components({ lng, lngDict, selfUser }) {
+  const i18n = useI18n();
   return (
-    <Layout title={`컴포넌트 - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={lng}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('components')} - ${i18n.t('_appName')}`}
+    >
 
       <Section
         backButton

@@ -1,11 +1,13 @@
 from rest_framework import generics
 
 from ..models import FavoriteStore
+from ..paginations import FavoriteStorePagination
 from ..serializers import FavoriteStoreSerializer
 from ..services import UserService
 
 class FavoriteStoreListView(generics.ListCreateAPIView):
     queryset = FavoriteStore.objects.all()
+    pagination_class = FavoriteStorePagination
     serializer_class = FavoriteStoreSerializer
 
     def perform_create(self, serializer):

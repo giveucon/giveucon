@@ -76,7 +76,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
     >

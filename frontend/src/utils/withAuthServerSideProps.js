@@ -6,7 +6,6 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
 
     const cookies = getCookies(context);
-
     // If session is not found
     if (!cookies.giveucon_session) {
       return {
@@ -17,6 +16,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
         props: {}
       }
     }
+
     const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
     // If account founded but no user models linked
     if (selfUserResponse.status === 404) {
@@ -28,10 +28,11 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
         props: {}
       }
     }
+
     let selfUser = selfUserResponse.data;
     selfUser.menuItems = [
       'home', 'myWallet', 'stores', 'trades', 'myAccount'
-    ], 
+    ];
 
     setCookie(context, 'giveucon_settings', JSON.stringify({
       locale: selfUser.locale,

@@ -33,7 +33,6 @@ class MyDocument extends Document {
   }
 
   render() {
-    const kakaoKey = process.env.KAKAO_CLIENT_ID;
     return (
       <Html lang={this.props.lang} dir='ltr'>
         <Head>

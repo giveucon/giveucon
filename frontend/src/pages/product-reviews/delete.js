@@ -58,7 +58,7 @@ function Delete({ lng, lngDict, selfUser, productReview }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('deleteReview')} - ${i18n.t('_appName')}`}
     >

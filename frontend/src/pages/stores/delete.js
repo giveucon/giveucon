@@ -53,7 +53,7 @@ function Delete({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('deleteStore')} - ${i18n.t('_appName')}`}
     >

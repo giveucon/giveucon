@@ -108,7 +108,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('editReview')} - ${i18n.t('_appName')}`}
     >

@@ -14,6 +14,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
 import useI18n from 'hooks/useI18n'
 import convertImageToBase64 from 'utils/convertImageToBase64'
 import convertImageToFile from 'utils/convertImageToFile'
@@ -48,7 +50,7 @@ const putStoreNotice = async (storeNotice, imageList) => {
     },
     store: storeNotice.store,
   };
-  return await requestToBackend(null, 'api/store-notices/', 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+  return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
@@ -76,7 +78,7 @@ function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
     id: prevStoreNotice.id,
     title: prevStoreNotice.article.title,
     content: prevStoreNotice.article.content,
-    store: prevStoreNotice.article.store,
+    store: prevStoreNotice.store,
   });
   const [storeNoticeError, setStoreNoticeError] = useState({
     title: false,
@@ -102,7 +104,7 @@ function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('editNotice')} - ${i18n.t('_appName')}`}
     >

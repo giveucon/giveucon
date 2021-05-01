@@ -20,9 +20,7 @@ import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
-import getCookies from 'utils/getCookies'
 import requestToBackend from 'utils/requestToBackend'
-import setCookie from 'utils/setCookie'
 
 const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
@@ -64,7 +62,7 @@ function Create({ selfAccount, setDarkMode }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('createAccount')} - ${i18n.t('_appName')}`}
     >

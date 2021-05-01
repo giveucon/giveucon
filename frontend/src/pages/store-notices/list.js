@@ -60,7 +60,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('noticeList')} - ${i18n.t('_appName')}`}
     >

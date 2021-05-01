@@ -15,7 +15,7 @@ import convertJsonToFormData from 'utils/convertJsonToFormData'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff){
     return {
       redirect: {
@@ -25,11 +25,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     };
   }
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function create({ selfUser }) {
+function create({ lng, lngDict, selfUser }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -61,7 +61,7 @@ function create({ selfUser }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('createDatabase')} - ${i18n.t('_appName')}`}
     >

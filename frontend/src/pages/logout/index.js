@@ -34,7 +34,7 @@ function Index({ lng, lngDict, selfUser }) {
   
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('logout')} - ${i18n.t('_appName')}`}
     >

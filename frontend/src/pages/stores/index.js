@@ -49,7 +49,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('stores')} - ${i18n.t('_appName')}`}
     >
@@ -78,7 +78,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
                 <Tile
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
-                  onClick={() => router.push(`/${lng}/stores/${item.id}/` )}
+                  onClick={() => router.push(`/stores/${item.id}/` )}
                 />
               </Grid>
             ))}

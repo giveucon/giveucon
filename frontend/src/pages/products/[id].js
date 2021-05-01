@@ -23,7 +23,7 @@ const getProduct = async (context) => {
 };
 
 const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store.id}/`, 'get', 'json');
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 };
 
 const getProductReviewList = async (context) => {
@@ -55,7 +55,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${product.name} - ${i18n.t('_appName')}`}
     >
@@ -121,8 +121,8 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/products/charge/',
-              query: { id: product.id },
+              pathname: '/coupons/issue/',
+              query: { product: product.id },
             })}
           >
             {i18n.t('issueCoupon')}
@@ -139,7 +139,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
           {i18n.t('goToStore')}
         </Button>
       </Box>
-      {selfUser && store && product && (selfUser.id === store.user) && (store.id === product.store) && (
+      {(selfUser.id === store.user) && (store.id === product.store) && (
         <Box marginY={1}>
           <Button
             color='default'

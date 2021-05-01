@@ -7,7 +7,7 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import Layout from 'components/Layout'
-import BusinessCard from 'components/BusinessCard';
+import Tile from 'components/Tile';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -15,10 +15,6 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCoupon = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
-};
-
-const getProduct = async (context, coupon) => {
-  return await requestToBackend(context, `api/products/${coupon.product}`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
@@ -31,20 +27,19 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       }
     };
   }
-  const productResponse = await getProduct(context, couponResponse.data);
   return {
-    props: { lng, lngDict, selfUser, coupon: couponResponse.data, product: productResponse.data },
+    props: { lng, lngDict, selfUser, coupon: couponResponse.data },
   };
 })
 
-function Id({ lng, lngDict, selfUser, coupon, product }) {
+function Id({ lng, lngDict, selfUser, coupon }) {
 
   const i18n = useI18n();
   const router = useRouter();
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('coupons')} - ${i18n.t('_appName')}`}
     >
@@ -54,12 +49,12 @@ function Id({ lng, lngDict, selfUser, coupon, product }) {
       >
       </Section>
       <Section
-        title={product.name}
+        title={coupon.product.name}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
       >
-        <BusinessCard
-          title={product.description}
-          image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+        <Tile
+          title={coupon.product.description}
+          image={coupon.product.images[0].image}
           onClick={() => alert( 'Tapped' )}
           menuItems={
             <MenuItem>Menu Item</MenuItem>

@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from ..models import ProductReview
+from ..paginations import ProductReviewPagination
 from ..serializers import ProductReviewReadSerializer
 from ..serializers import ProductReviewCreateSerializer
 from ..services import UserService
@@ -10,6 +11,7 @@ from ..mixins import SerializerMixin
 
 class ProductReviewListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = ProductReview.objects.all()
+    pagination_class = ProductReviewPagination
     serializer_class_read = ProductReviewReadSerializer
     serializer_class_create = ProductReviewCreateSerializer
 

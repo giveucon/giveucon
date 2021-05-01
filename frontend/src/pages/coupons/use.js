@@ -21,10 +21,6 @@ const getCouponQR = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json', null, params);
 };
 
-const getProduct = async (context, coupon) => {
-  return await requestToBackend(context, `api/products/${coupon.product}`, 'get', 'json');
-};
-
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
@@ -36,7 +32,6 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
     };
   }
   const couponQRResponse = await getCouponQR(context);
-  const productResponse = await getProduct(context, couponResponse.data);
   return {
     props: {
       lng,
@@ -44,35 +39,32 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       selfUser,
       coupon: couponResponse.data,
       couponQR: couponQRResponse.data,
-      product: productResponse.data
     },
   };
 })
 
-function Use({ lng, lngDict, selfUser, coupon, couponQR, product }) {
+function Use({ lng, lngDict, selfUser, coupon, couponQR }) {
 
   const i18n = useI18n();
   const router = useRouter();
 
   return (
     <Layout
-      locale={selfUser.locale}
+      locale={lng}
       menuItemValueList={selfUser.menuItems}
       title={`${i18n.t('useCoupon')}- ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={product.name}
+        title={coupon.product.name}
       >
-        <Card>
-          <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
-            <QRCode
-              value={JSON.stringify(couponQR)}
-              size={400}
-              includeMargin={true}
-            />
-          </Box>
-        </Card>
+        <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
+          <QRCode
+            value={JSON.stringify(couponQR)}
+            size={400}
+            includeMargin={true}
+          />
+        </Box>
       </Section>
       <Box marginY={1}>
         <Button
