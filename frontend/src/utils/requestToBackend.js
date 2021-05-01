@@ -1,8 +1,8 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-import refreshSession from './refreshSession';
-import verifySession from './verifySession';
+import refreshSession from 'utils/refreshSession';
+import verifySession from 'utils/verifySession';
 
 const jsonRequest = async (session, url, method, data, params) => {
   return await axios({

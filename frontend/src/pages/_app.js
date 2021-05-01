@@ -19,13 +19,12 @@ function RootApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const cookies = getCookies(null)
   const [theme, setTheme] = useState(
-    cookies.giveucon && (JSON.parse(cookies.giveucon).theme === 'dark') ? darkTheme : lightTheme
+    cookies.giveucon_settings && (JSON.parse(cookies.giveucon_settings).dark_mode) ? darkTheme : lightTheme
   );
   const [pageLoading, setPageLoading] = useState(false);
 
-  const setDarkMode = (option) => {
-    option === 'light' && setTheme(lightTheme);
-    option === 'dark' && setTheme(darkTheme);
+  const setDarkMode = (darkMode) => {
+    darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
   }
 
   useEffect(() => {

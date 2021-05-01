@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteSelfUser = async (context, selfUser) => {
-  return await requestToBackend(context, `api/users/${selfUser.id}/`, 'delete', 'json');
+const deleteSelfUser = async (selfUser) => {
+  return await requestToBackend(null, `api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng: lngDict,selfUser },
+    props: { lng, lngDict, selfUser },
   }
 })
 

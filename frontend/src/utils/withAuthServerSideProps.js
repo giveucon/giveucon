@@ -1,6 +1,6 @@
-import getCookies from './getCookies';
-import requestToBackend from './requestToBackend';
-import setCookie from './setCookie';
+import getCookies from 'utils/getCookies';
+import requestToBackend from 'utils/requestToBackend';
+import setCookie from 'utils/setCookie';
 
 export default function withAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
@@ -8,7 +8,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     const cookies = getCookies(context);
 
     // If session is not found
-    if (!cookies.giveucon) {
+    if (!cookies.giveucon_session) {
       return {
         redirect: {
           permanent: false,
@@ -30,11 +30,9 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     }
     const selfUser = selfUserResponse.data;
 
-    const session = JSON.parse(getCookies(context).giveucon);
-    setCookie(context, 'giveucon', JSON.stringify({
-      ...session,
+    setCookie(context, 'giveucon_settings', JSON.stringify({
       locale: selfUser.locale,
-      theme: selfUser.dark_mode ? 'dark' : 'light'
+      dark_mode: selfUser.dark_mode
     }), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
