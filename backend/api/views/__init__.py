@@ -27,3 +27,7 @@ from .store_review_list_view import StoreReviewListView
 from .store_review_detail_view import StoreReviewDetailView
 from .product_review_list_view import ProductReviewListView
 from .product_review_detail_view import ProductReviewDetailView
+from .favorite_store_list_view import FavoriteStoreListView
+from .favorite_store_detail_view import FavoriteStoreDetailView
+from .favorite_product_list_view import FavoriteProductListView
+from .favorite_product_detail_view import FavoriteProductDetailView

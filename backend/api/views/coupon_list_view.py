@@ -2,14 +2,17 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.response import Response
 
-from ..models import User, AccountUser, Coupon
+from ..mixins import SerializerMixin
+from ..models import Coupon
 from ..paginations import CouponPagination
-from ..serializers import CouponSerializer
+from ..serializers import CouponReadSerializer
+from ..serializers import CouponCreateSerializer
 from ..services import UserService
 
-class CouponListView(generics.ListCreateAPIView):
+class CouponListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+    serializer_class_read = CouponReadSerializer
+    serializer_class_create = CouponCreateSerializer
     pagination_class = CouponPagination
 
     def perform_create(self, serializer):

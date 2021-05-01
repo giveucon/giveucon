@@ -7,12 +7,15 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 
+from ..mixins import SerializerMixin
 from ..models import Coupon
-from ..serializers import CouponSerializer
+from ..serializers import CouponReadSerializer
+from ..serializers import CouponUpdateSerializer
 
-class CouponDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CouponDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+    serializer_class_read = CouponReadSerializer
+    serializer_class_update = CouponUpdateSerializer
 
     def retrieve(self, request, *args, **kwargs):
         coupon = get_object_or_404(Coupon, pk=kwargs.get('pk'))

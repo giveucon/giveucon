@@ -14,11 +14,10 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ('user',)
 
     def create(self, validated_data):
-        user = validated_data.pop('user')
         images_data = validated_data.pop('images', [])
         with transaction.atomic():
-            images = self.save_images(images_data)
-            article = Article.objects.create(user=user, **validated_data)
+            images = ImageService.save_images(images_data)
+            article = Article.objects.create(**validated_data)
             article.images.set(images)
         return article
 
