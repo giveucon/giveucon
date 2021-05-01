@@ -13,7 +13,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import UserProfileBox from 'components/UserProfileBox'
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({

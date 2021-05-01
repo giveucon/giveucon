@@ -14,7 +14,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import convertImageToBase64 from 'utils/convertImageToBase64'
 import convertImageToFile from 'utils/convertImageToFile'
 import convertJsonToFormData from 'utils/convertJsonToFormData'

@@ -30,7 +30,7 @@ function convertJsonToFormDataRecursive(jsonObject, formData, parentKey) {
         formData.append(propName, value);
       } else if (value instanceof Date) {
         formData.append(propName, value.toISOString());
-      } else if (((value === null) || value !== null) && value !== undefined) {
+      } else if (value !== null && value !== undefined) {
         formData.append(propName, value);
       }
 

@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import Section from 'components/Section'
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies';
 

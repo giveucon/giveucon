@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Layout from 'components/Layout'
 import BusinessCard from 'components/BusinessCard';
 import Section from 'components/Section'
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
