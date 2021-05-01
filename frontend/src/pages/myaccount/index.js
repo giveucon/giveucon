@@ -10,10 +10,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CodeIcon from '@material-ui/icons/Code';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import UserProfileBox from '../../components/UserProfileBox'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import UserProfileBox from 'components/UserProfileBox'
+import useI18n from 'hooks/use-i18n'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -25,26 +26,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function Index({ selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   
   return (
-    <Layout title={`내 계정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.myaccount.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='내 계정'
+        title={i18n.t('pages.myaccount.index.pageTitle')}
       >
       </Section>
       <Section
-        title='내 정보'
+        title={i18n.t('pages.myaccount.index.myInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <UserProfileBox
@@ -62,7 +64,7 @@ function Index({ selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            내 가게
+            {i18n.t('pages.myaccount.index.myStores')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -75,7 +77,7 @@ function Index({ selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            내 상품
+            {i18n.t('pages.myaccount.index.myProducts')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -84,16 +86,16 @@ function Index({ selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/coupons/list/',
+              pathname: '/couoons/list/',
               query: { user: selfUser.id },
             })}
           >
-            내 쿠폰
+            {i18n.t('pages.myaccount.index.myCoupons')}
           </Button>
         </Box>
       </Section>
       <Section
-        title='관리'
+        title={i18n.t('pages.myaccount.index.managements')}
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -101,9 +103,9 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/central-notices/list/`)}
+            onClick={() => router.push('/central-notices/list/')}
           >
-            공지사항
+            {i18n.t('pages.myaccount.index.notices')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -111,9 +113,9 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/myaccount/update/`)}
+            onClick={() => router.push('/myaccount/update/')}
           >
-            설정
+            {i18n.t('pages.myaccount.index.settings')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -121,14 +123,14 @@ function Index({ selfUser }) {
             className={classes.RedButton}
             fullWidth
             variant='contained'
-            onClick={() => {router.push(`/logout/`)}}
+            onClick={() => {router.push('/logout/')}}
           >
-            로그아웃
+            {i18n.t('pages.myaccount.index.logout')}
           </Button>
         </Box>
       </Section>
       <Section
-        title='개발자 도구'
+        title={i18n.t('pages.myaccount.index.developerTools')}
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -136,9 +138,9 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/initialize/`)}
+            onClick={() => router.push('/initialize/')}
           >
-            데이터베이스 생성
+            {i18n.t('pages.myaccount.index.createDatabase')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -146,9 +148,9 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => {router.push(`/sandbox/components/`)}}
+            onClick={() => {router.push('/sandbox/components/')}}
           >
-            컴포넌트
+            {i18n.t('pages.myaccount.index.components')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -156,7 +158,7 @@ function Index({ selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/sandbox/scanner/`)}
+            onClick={() => router.push('/sandbox/scanner/')}
           >
             QR코드 스캐너
           </Button>

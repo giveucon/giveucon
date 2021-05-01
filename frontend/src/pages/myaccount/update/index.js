@@ -2,43 +2,37 @@ import React from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 
-import SettingsIcon from '@material-ui/icons/Settings';
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-import Layout from '../../../components/Layout'
-import Section from '../../../components/Section'
-import withAuthServerSideProps from '../../../utils/withAuthServerSideProps'
-
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function Index({ selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   
   return (
-    <Layout title={`설정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.myaccount.update.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='설정'
-      >
-      </Section>
-      <Section
-        title='설정'
-        titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        title={i18n.t('pages.myaccount.update.index.pageTitle')}
       >
         <Box marginY={1}>
           <Button
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/myaccount/update/user/`)}
+            onClick={() => router.push('/myaccount/update/user/')}
           >
-            사용자 설정
+            {i18n.t('pages.myaccount.update.index.userSettings')}
           </Button>
         </Box>
       </Section>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 import Section from 'components/Section'
 import useI18n from 'hooks/use-i18n'
+import EN from 'locales/en.json'
+import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies';
 
 const useStyles = makeStyles({
@@ -31,7 +33,6 @@ const useStyles = makeStyles({
 });
 
 export async function getServerSideProps(context) {
-  const { default: lngDict = {} } = await import(`locales/${context.query.lng}.json`);
   const cookies = getCookies(context)
   if (cookies.giveucon) {
     return {
@@ -43,16 +44,21 @@ export async function getServerSideProps(context) {
     }
   }
   return {
-    props: { lng: context.query.lng, lngDict }
+    props: {}
   };
 }
 
-function Index({ lng, lngDict }) {
+function Index() {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   
+  useEffect(() => {
+    i18n.locale('en', EN)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       <Head>
@@ -81,7 +87,7 @@ function Index({ lng, lngDict }) {
                 variant='contained'
                 onClick={() => router.push('/session/login')}
               >
-                {i18n.t('pages.home.index.loginAsKakaoAccount')}
+                {i18n.t('pages.login.index.loginAsKakaoAccount')}
               </Button>
             </Box>
           </Section>

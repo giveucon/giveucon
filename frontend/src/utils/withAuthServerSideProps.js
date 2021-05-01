@@ -39,20 +39,23 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     })
 
+    
+    const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
+
     // Return props after execute server side functions
     if (getServerSidePropsFunction) {
       return {
         props: {
+          lng: selfUser.locale,
+          lngDict,
           selfUser,
-          ...((await getServerSidePropsFunction(context, selfUser)).props || {}),
+          ...((await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser)).props || {}),
         },
       }
     }
 
     return {
-      props: {
-        selfUser,
-      },
+      props: { lng: selfUser.locale, lngDict, selfUser },
     }
 
   }

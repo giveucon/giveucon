@@ -16,15 +16,16 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList';
-import Tile from '../../components/Tile';
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -55,7 +56,7 @@ const putStore = async (store, imageList) => {
   return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevStoreResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)) {
     return {
@@ -68,12 +69,19 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   }
   const tagListResponse = await getTagList(context);
   return {
-    props: { selfUser, prevStore: prevStoreResponse.data, tagList: tagListResponse.data },
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      prevStore: prevStoreResponse.data,
+      tagList: tagListResponse.data
+    },
   };
 })
 
-function Update({ selfUser, prevStore, tagList }) {
+function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [store, setStore] = useState({
@@ -105,13 +113,13 @@ function Update({ selfUser, prevStore, tagList }) {
   }, []);
 
   return (
-    <Layout title={`가게 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.stores.update.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='가게 수정'
+        title={i18n.t('pages.stores.update.pageTitle')}
       />
       <Section
-        title='기본 정보'
+        title={i18n.t('common.basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -120,7 +128,7 @@ function Update({ selfUser, prevStore, tagList }) {
             value={store.name}
             error={storeError.name}
             fullWidth
-            label='가게 이름'
+            label={i18n.t('pages.stores.update.storeTitle')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -136,7 +144,7 @@ function Update({ selfUser, prevStore, tagList }) {
             value={store.description}
             error={storeError.description}
             fullWidth
-            label='가게 설명'
+            label={i18n.t('pages.stores.update.storeDescription')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -169,13 +177,13 @@ function Update({ selfUser, prevStore, tagList }) {
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label='태그' placeholder='태그' />
+              <TextField {...params} label={i18n.t('pages.stores.update.tags')} placeholder={i18n.t('pages.stores.update.tags')} />
             )}
           />
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('common.images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -218,7 +226,7 @@ function Update({ selfUser, prevStore, tagList }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('common.addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -229,7 +237,7 @@ function Update({ selfUser, prevStore, tagList }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('common.removeAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -247,19 +255,19 @@ function Update({ selfUser, prevStore, tagList }) {
             const response = await putStore(store, imageList);
             if (response.status === 200) {
               router.push(`/stores/${response.data.id}/`);
-              toast.success('가게가 업데이트 되었습니다.');
+              toast.success(i18n.t('pages.store.update.success'));
             } else if (response.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
               setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('common.checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('common.submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('common.dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -272,7 +280,7 @@ function Update({ selfUser, prevStore, tagList }) {
               query: { id: store.id },
             })}
           >
-            가게 삭제
+            {i18n.t('pages.stores.update.deleteStore')}
           </Button>
         </Box>
       </Section>

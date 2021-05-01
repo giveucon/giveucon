@@ -14,16 +14,17 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
-import AlertBox from '../../components/AlertBox';
-import KakaoMapBox from '../../components/KakaoMapBox';
-import Layout from '../../components/Layout'
-import NoticeListItem from '../../components/NoticeListItem'
-import ReviewListItem from '../../components/ReviewListItem'
-import Tile from '../../components/Tile';
-import Section from '../../components/Section'
-import SwipeableTileList from '../../components/SwipeableTileList';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox';
+import KakaoMapBox from 'components/KakaoMapBox';
+import Layout from 'components/Layout'
+import NoticeListItem from 'components/NoticeListItem'
+import ReviewListItem from 'components/ReviewListItem'
+import Tile from 'components/Tile';
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
@@ -50,13 +51,15 @@ const getStoreReviewList = async (context, store) => {
   return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
   const storeReviewListResponse = await getStoreReviewList(context, storeResponse.data);
   return {
     props: {
+      lng,
+      lngDict,
       selfUser,
       store: storeResponse.data,
       storeNoticeList: storeNoticeListResponse.data,
@@ -69,13 +72,16 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) {
+function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, storeReviewList }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <Layout title={`${store.name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={store ? store.name : '로딩중'}
+        title={store.name}
         padding={false}
       >
         <SwipeableTileList autoplay={true}>
@@ -110,7 +116,7 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
         </Box>
       </Section>
       <Section
-        title='가게 공지사항'
+        title={i18n.t('pages.stores.id.notices')}
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -136,11 +142,11 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
             ))}
           </Grid>
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='상품'
+        title={i18n.t('pages.stores.id.products')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -171,11 +177,11 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
             ))}
           </Grid>
         ) : (
-          <AlertBox content='상품이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='가게 리뷰'
+        title={i18n.t('pages.stores.id.reviews')}
         titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -196,17 +202,17 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
                   title={item.review.article.title}
                   subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
                   score={item.review.score}
-                  onClick={() => router.push(`/store-reviews/${item.id}/`)}
+                  onClick={() => router.push(`/${lng}/store-reviews/${item.id}/`)}
                 />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <AlertBox content='가게 리뷰가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       <Section
-        title='가게 위치'
+        title={i18n.t('pages.stores.id.location')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
         <Card>
@@ -220,7 +226,7 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
           variant='contained'
           onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
         >
-          경로 검색
+          {i18n.t('pages.stores.id.findPath')}
         </Button>
       </Box>
       {selfUser && store && (selfUser.id === store.user) && (
@@ -231,11 +237,11 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: '/products/create/',
+                pathname: `/${lng}/products/create/`,
                 query: { id: store.id },
               })}
             >
-              새 상품 추가
+              {i18n.t('pages.stores.id.createProduct')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -248,7 +254,7 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
                 query: { store: store.id },
               })}
             >
-              가게 공지사항 추가
+              {i18n.t('pages.stores.id.createNotice')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -261,7 +267,7 @@ function Id({ selfUser, store, storeNoticeList, productList, storeReviewList }) 
                 query: { store: store.id },
               })}
             >
-              가게 정보 수정
+              {i18n.t('pages.stores.id.updateStore')}
             </Button>
           </Box>
         </>
