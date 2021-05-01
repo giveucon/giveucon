@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
@@ -15,9 +15,12 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import EN from 'locales/en.json'
+import KO from 'locales/ko.json'
+import requestToBackend from 'utils/requestToBackend'
 
 const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
@@ -36,6 +39,7 @@ export async function getServerSideProps(context) {
 
 function Create({ selfAccount }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
     email: selfAccount.email,
@@ -51,15 +55,20 @@ function Create({ selfAccount }) {
     last_name: false,
   });
 
+  useEffect(() => {
+    i18n.locale('en', EN)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <Layout title={`사용자 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.users.create.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title='사용자 생성'
+        title={i18n.t('pages.users.create.pageTitle')}
       >
       </Section>
       <Section
-        title='로그인 정보'
+        title={i18n.t('common.basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -68,7 +77,7 @@ function Create({ selfAccount }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label='이메일'
+            label={i18n.t('common.email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -84,7 +93,7 @@ function Create({ selfAccount }) {
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label='유저네임'
+            label={i18n.t('common.username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -100,7 +109,7 @@ function Create({ selfAccount }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label='성'
+            label={i18n.t('common.lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -116,7 +125,7 @@ function Create({ selfAccount }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label='이름'
+            label={i18n.t('common.firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -128,7 +137,7 @@ function Create({ selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>로케일</FormLabel>
+            <FormLabel>{i18n.t('common.locale')}</FormLabel>
             <RadioGroup
               name='locale'
               value={selfUser.locale}
@@ -138,10 +147,10 @@ function Create({ selfAccount }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label='한국어' />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('languages.original.ko')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label='English' />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('languages.original.en')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -160,7 +169,7 @@ function Create({ selfAccount }) {
                 }}
               />
             }
-            label='다크 모드'
+            label={i18n.t('common.darkMode')}
             />
           </FormGroup>
         </Box>
@@ -173,19 +182,19 @@ function Create({ selfAccount }) {
           onClick={async () => {
             const response = await postSelfUser(selfUser);
             if (response.status === 201) {
-              router.push(`/myaccount/`);
-              toast.success('계정이 생성되었습니다.');
+              router.push('/myaccount/');
+              toast.success(i18n.t('pages.users.create.success'));
             }
             else if (response.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('common.checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('common.submit')}
         </Button>
       </Box>
     </Layout>

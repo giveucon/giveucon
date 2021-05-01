@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router'
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,16 +9,14 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-import AlertBox from '../components/AlertBox'
-import Layout from '../components/Layout'
-import Section from '../components/Section'
-import SwipeableTileList from '../components/SwipeableTileList';
-import Tile from '../components/Tile';
-import useI18n from '../hooks/use-i18n'
-import EN from '../locales/en.json'
-import KO from '../locales/ko.json'
-import requestToBackend from '../utils/requestToBackend'
-import withAuthServerSideProps from '../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList';
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -56,30 +54,24 @@ const geoRecommendedCouponList = [
   />
 ]
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const centralNoticeListResponse = await requestToBackend(context, 'api/central-notices/', 'get', 'json');
   return {
     props: { 
-      selfUser,
-      centralNoticeList: centralNoticeListResponse.data.results
+      lng, lngDict, selfUser, centralNoticeList: centralNoticeListResponse.data.results
     },
   };
 })
 
-function Home({ selfUser, centralNoticeList }) {
+function Index({ lng, lngDict, selfUser, centralNoticeList }) {
 
   const i18n = useI18n()
   const router = useRouter();
 
-  useEffect(() => {
-    i18n.locale('en', EN)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
-    <Layout title={`${i18n.t('home.title')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('pages.home.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title={i18n.t('home.title')}
+        title={i18n.t('pages.home.index.pageTitle')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton onClick={() => router.push('/central-notices/list/')}>
@@ -109,12 +101,12 @@ function Home({ selfUser, centralNoticeList }) {
             ))}
           </SwipeableTileList>
         ) : (
-          <AlertBox content='공지사항이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('common.empty')} variant='information' />
         )}
       </Section>
       
       <Section
-        title={i18n.t('home.nearby')}
+        title={i18n.t('pages.home.index.nearby')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
@@ -126,4 +118,4 @@ function Home({ selfUser, centralNoticeList }) {
   );
 }
 
-export default Home;
+export default Index;
