@@ -39,14 +39,14 @@ function Index({ lng, lngDict, selfUser }) {
   const classes = useStyles();
   
   return (
-    <Layout title={`${i18n.t('pages.myaccount.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('myAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.myaccount.index.pageTitle')}
+        title={i18n.t('myAccount')}
       >
       </Section>
       <Section
-        title={i18n.t('pages.myaccount.index.myInfo')}
+        title={i18n.t('myInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <UserProfileBox
@@ -64,7 +64,7 @@ function Index({ lng, lngDict, selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            {i18n.t('pages.myaccount.index.myStores')}
+            {i18n.t('myStores')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -77,7 +77,7 @@ function Index({ lng, lngDict, selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            {i18n.t('pages.myaccount.index.myProducts')}
+            {i18n.t('myProducts')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -90,12 +90,12 @@ function Index({ lng, lngDict, selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            {i18n.t('pages.myaccount.index.myCoupons')}
+            {i18n.t('myCoupons')}
           </Button>
         </Box>
       </Section>
       <Section
-        title={i18n.t('pages.myaccount.index.managements')}
+        title={i18n.t('managements')}
         titlePrefix={<IconButton><SettingsIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -105,7 +105,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/central-notices/list/')}
           >
-            {i18n.t('pages.myaccount.index.notices')}
+            {i18n.t('notices')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -115,7 +115,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/myaccount/update/')}
           >
-            {i18n.t('pages.myaccount.index.settings')}
+            {i18n.t('settings')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -125,12 +125,12 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => {router.push('/logout/')}}
           >
-            {i18n.t('pages.myaccount.index.logout')}
+            {i18n.t('logout')}
           </Button>
         </Box>
       </Section>
       <Section
-        title={i18n.t('pages.myaccount.index.developerTools')}
+        title={i18n.t('developerTools')}
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -140,7 +140,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/initialize/')}
           >
-            {i18n.t('pages.myaccount.index.createDatabase')}
+            {i18n.t('createDatabase')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -150,7 +150,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => {router.push('/sandbox/components/')}}
           >
-            {i18n.t('pages.myaccount.index.components')}
+            {i18n.t('components')}
           </Button>
         </Box>
         <Box marginY={1}>

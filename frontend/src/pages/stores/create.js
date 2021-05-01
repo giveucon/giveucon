@@ -73,13 +73,13 @@ function Create({ lng, lngDict, selfUser, tagList }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`${i18n.t('pages.stores.create.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('addStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.stores.create.pageTitle')}
+        title={i18n.t('addStore')}
       />
       <Section
-        title={i18n.t('common.words.basicInfo')}
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -88,7 +88,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             value={store.name}
             error={storeError.name}
             fullWidth
-            label={i18n.t('pages.stores.create.storeTitle')}
+            label={i18n.t('name')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -104,7 +104,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             value={store.description}
             error={storeError.description}
             fullWidth
-            label={i18n.t('pages.stores.create.storeDescription')}
+            label={i18n.t('description')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -137,13 +137,13 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label={i18n.t('pages.stores.create.tags')} placeholder={i18n.t('pages.stores.create.tags')} />
+              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('pages.stores.create.tags')} />
             )}
           />
         </Box>
       </Section>
       <Section
-        title={i18n.t('common.words.images')}
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -186,7 +186,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    {i18n.t('common.words.addImages')}
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -197,7 +197,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      {i18n.t('common.words.removeAllImages')}
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -215,16 +215,16 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             const response = await postStore(store, imageList);
             if (response.status === 201) {
               router.push(`/stores/${response.data.id}/`);
-              toast.success(i18n.t('pages.stores.create.success'));
+              toast.success(i18n.t('_storeSuccessfullyAdded'));
             } 
             else if (response.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
               setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
-              toast.error(i18n.t('common.dialogs.checkInputFields'));
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.buttons.submit')}
+          {i18n.t('submit')}
         </Button>
       </Box>
     </Layout>

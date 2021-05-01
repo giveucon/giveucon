@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import Box from '@material-ui/core/Box';
 
-import Pagination from './Pagination';
+import Pagination from 'components/Pagination';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 

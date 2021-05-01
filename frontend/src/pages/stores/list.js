@@ -61,10 +61,10 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
   }
 
   return (
-    <Layout title={`${i18n.t('pages.stores.list.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('storeList')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
         <Section
           backButton
-          title={i18n.t('pages.stores.list.pageTitle')}
+          title={i18n.t('storeList')}
         >
           {(storeList.length > 0) ? (
             <InfiniteScroll
@@ -90,7 +90,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
               </Grid>
             </InfiniteScroll>
           ) : (
-            <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+            <AlertBox content={i18n.t('_isEmpty')} variant='information' />
           )}
         </Section>
         {user && (user.id === selfUser.id) && (
@@ -101,7 +101,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
               variant='contained'
               onClick={() => router.push('/stores/create/')}
             >
-              {i18n.t('pages.stores.list.createStore')}
+              {i18n.t('addStore')}
             </Button>
           </Box>
         )}

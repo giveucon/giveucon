@@ -69,9 +69,9 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('pages.home.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('home')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
-        title={i18n.t('pages.home.index.pageTitle')}
+        title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton onClick={() => router.push('/central-notices/list/')}>
@@ -101,12 +101,12 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
             ))}
           </SwipeableTileList>
         ) : (
-          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       
       <Section
-        title={i18n.t('pages.home.index.nearby')}
+        title={i18n.t('nearby')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >

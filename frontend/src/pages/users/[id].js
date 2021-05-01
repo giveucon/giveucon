@@ -41,7 +41,7 @@ function Id({ lng, lngDict, selfUser, user }) {
       >
       </UserProfileSection>
       <Section
-        title={i18n.t('pages.users.id.ownedStores')}
+        title={i18n.t('ownedStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
       >
       </Section>
@@ -53,7 +53,7 @@ function Id({ lng, lngDict, selfUser, user }) {
             variant='contained'
             onClick={() => router.push('/myaccount/')}
           >
-            {i18n.t('pages.users.id.moveToMyAccount')}
+            {i18n.t('goToMyAccount')}
           </Button>
         </Box>
       )}

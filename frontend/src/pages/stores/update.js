@@ -113,13 +113,13 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
   }, []);
 
   return (
-    <Layout title={`${i18n.t('pages.stores.update.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('editStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.stores.update.pageTitle')}
+        title={i18n.t('editStore')}
       />
       <Section
-        title={i18n.t('common.words.basicInfo')}
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -128,7 +128,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             value={store.name}
             error={storeError.name}
             fullWidth
-            label={i18n.t('pages.stores.update.storeTitle')}
+            label={i18n.t('name')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -144,7 +144,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             value={store.description}
             error={storeError.description}
             fullWidth
-            label={i18n.t('pages.stores.update.storeDescription')}
+            label={i18n.t('description')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -177,13 +177,13 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label={i18n.t('pages.stores.update.tags')} placeholder={i18n.t('pages.stores.update.tags')} />
+              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('pages.stores.update.tags')} />
             )}
           />
         </Box>
       </Section>
       <Section
-        title={i18n.t('common.words.images')}
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -226,7 +226,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    {i18n.t('common.buttons.addImages')}
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -237,7 +237,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      {i18n.t('common.buttons.removeAllImages')}
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -255,19 +255,19 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             const response = await putStore(store, imageList);
             if (response.status === 200) {
               router.push(`/stores/${response.data.id}/`);
-              toast.success(i18n.t('pages.store.update.success'));
+              toast.success(i18n.t('_storeSuccessfullyEdited'));
             } else if (response.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
               setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
-              toast.error(i18n.t('common.dialogs.checkInputFields'));
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.buttons.submit')}
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title={i18n.t('common.words.dangerZone')}
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -280,7 +280,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
               query: { id: store.id },
             })}
           >
-            {i18n.t('pages.stores.update.deleteStore')}
+            {i18n.t('deleteStore')}
           </Button>
         </Box>
       </Section>

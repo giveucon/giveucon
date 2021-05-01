@@ -33,12 +33,12 @@ function Index({ lng, lngDict, selfUser }) {
   const classes = useStyles();
   
   return (
-    <Layout title={`${i18n.t('pages.logout.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('logout')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.logout.index.pageTitle')}
+        title={i18n.t('logout')}
       >
-        <AlertBox content={i18n.t('pages.logout.index.question')} variant='question' />
+        <AlertBox content={i18n.t('_areYouSureToLogout')} variant='question' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -46,7 +46,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/session/logout')}
           >
-            {i18n.t('pages.logout.index.logout')}
+            {i18n.t('logout')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -56,7 +56,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            {i18n.t('common.buttons.goBack')}
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

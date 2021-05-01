@@ -48,14 +48,14 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('pages.stores.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('stores')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.stores.index.pageTitle')}
+        title={i18n.t('stores')}
       >
       </Section>
       <Section
-        title={i18n.t('pages.stores.index.myStore')}
+        title={i18n.t('myStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
           <IconButton 
@@ -80,11 +80,11 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('pages.stores.index.noStore')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Section
-        title={i18n.t('pages.stores.index.allStores')}
+        title={i18n.t('allStores')}
         titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
         titleSuffix={
           <IconButton onClick={() => router.push('/stores/list/')}>
@@ -107,7 +107,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
             })}
           </SwipeableTileList>
         ) : (
-          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Box marginY={1}>
@@ -117,7 +117,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           variant='contained'
           onClick={() => router.push('/stores/create/')}
         >
-          {i18n.t('pages.stores.index.createStore')}
+          {i18n.t('addStore')}
         </Button>
       </Box>
     </Layout>

@@ -53,12 +53,12 @@ function Delete({ lng, lngDict, selfUser, store }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`${i18n.t('pages.stores.delete.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.stores.delete.pageTitle')}
+        title={i18n.t('deleteStore')}
       >
-        <AlertBox content={i18n.t('pages.stores.delete.warning')} variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -68,11 +68,11 @@ function Delete({ lng, lngDict, selfUser, store }) {
               const response = await deleteStore(store);
               if (response.status === 204) {
                 router.push('/stores/');
-                toast.success(i18n.t('pages.stores.delete.success'));
+                toast.success(i18n.t('_storeSuccessfullyDeleted'));
               }
             }}
           >
-            {i18n.t('pages.stores.delete.deleteStore')}
+            {i18n.t('deleteStore')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -82,7 +82,7 @@ function Delete({ lng, lngDict, selfUser, store }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            {i18n.t('common.buttons.goBack')}
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

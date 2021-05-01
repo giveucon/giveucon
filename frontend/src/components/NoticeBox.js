@@ -5,8 +5,8 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import SwipeableTileList from './SwipeableTileList'
-import Tile from './Tile'
+import SwipeableTileList from 'components/SwipeableTileList'
+import Tile from 'components/Tile'
 
 const useStyles = makeStyles((theme) => ({
     root: {

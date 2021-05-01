@@ -74,14 +74,14 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
   });
 
   return (
-    <Layout title={`${i18n.t('pages.myaccount.update.user.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('userSettings')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.myaccount.update.user.pageTitle')}
+        title={i18n.t('userSettings')}
       >
       </Section>
       <Section
-        title={i18n.t('common.words.basicInfo')}
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -90,7 +90,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label={i18n.t('common.words.email')}
+            label={i18n.t('email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -106,7 +106,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label={i18n.t('common.words.username')}
+            label={i18n.t('username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -122,7 +122,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label={i18n.t('common.words.lastName')}
+            label={i18n.t('lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -138,7 +138,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label={i18n.t('common.words.firstName')}
+            label={i18n.t('firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -150,7 +150,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>{i18n.t('common.words.locale')}</FormLabel>
+            <FormLabel>{i18n.t('locale')}</FormLabel>
             <RadioGroup
               name='locale'
               value={selfUser.locale}
@@ -160,10 +160,10 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('common.locales.ko')} />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_languageNameKorean')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('common.locales.en')} />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_languageNameEnglish')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -182,7 +182,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
                 }}
               />
             }
-            label={i18n.t('common.words.darkMode')}
+            label={i18n.t('darkMode')}
             />
           </FormGroup>
         </Box>
@@ -197,22 +197,22 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             if (response.status === 200) {
               setDarkMode(selfUser.dark_mode ? 'dark' : 'light');
               router.push('/myaccount/update/');
-              toast.success(i18n.t('pages.myaccount.update.user.success'));
+              toast.success(i18n.t('_myAccountSuccessfullyEdited'));
             } 
             else if (response.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error(i18n.t('common.dialogs.checkInputFields'));
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.buttons.submit')}
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title={i18n.t('common.words.dangerZone')}
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -222,7 +222,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             variant='contained'
             onClick={() => router.push('/myaccount/delete/')}
           >
-            {i18n.t('pages.myaccount.update.user.deleteAccount')}
+            {i18n.t('deleteMyAccount')}
           </Button>
         </Box>
       </Section>

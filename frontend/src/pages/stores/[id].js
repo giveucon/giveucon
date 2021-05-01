@@ -116,7 +116,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
         </Box>
       </Section>
       <Section
-        title={i18n.t('pages.stores.id.notices')}
+        title={i18n.t('notices')}
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -142,7 +142,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Section
@@ -177,11 +177,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Section
-        title={i18n.t('pages.stores.id.reviews')}
+        title={i18n.t('reviews')}
         titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -208,11 +208,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
             ))}
           </Grid>
         ) : (
-          <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Section
-        title={i18n.t('pages.stores.id.location')}
+        title={i18n.t('location')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
         <Card>
@@ -226,7 +226,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           variant='contained'
           onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
         >
-          {i18n.t('pages.stores.id.findPath')}
+          {i18n.t('findPath')}
         </Button>
       </Box>
       {selfUser && store && (selfUser.id === store.user) && (
@@ -241,7 +241,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 query: { id: store.id },
               })}
             >
-              {i18n.t('pages.stores.id.createProduct')}
+              {i18n.t('addProduct')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -254,7 +254,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 query: { store: store.id },
               })}
             >
-              {i18n.t('pages.stores.id.createNotice')}
+              {i18n.t('addNotice')}
             </Button>
           </Box>
           <Box marginY={1}>
@@ -267,7 +267,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 query: { store: store.id },
               })}
             >
-              {i18n.t('pages.stores.id.updateStore')}
+              {i18n.t('editStore')}
             </Button>
           </Box>
         </>

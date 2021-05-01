@@ -20,10 +20,10 @@ function Index({ lng, lngDict, selfUser }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${i18n.t('pages.myaccount.update.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('settings')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.myaccount.update.index.pageTitle')}
+        title={i18n.t('settings')}
       >
         <Box marginY={1}>
           <Button
@@ -32,7 +32,7 @@ function Index({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => router.push('/myaccount/update/user/')}
           >
-            {i18n.t('pages.myaccount.update.index.userSettings')}
+            {i18n.t('userSettings')}
           </Button>
         </Box>
       </Section>

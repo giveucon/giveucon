@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
+import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies';
 
@@ -67,11 +68,11 @@ function Index() {
       >
         <Box style={{ minHeight: '8rem', minWidth: '16rem' }}>
           <Section
-            title={i18n.t('pages.login.index.welcome')}
+            title={i18n.t('_welcome')}
           >
             <Box marginY={5}>
               <Typography align='center' color='textPrimary' variant='h3'>
-              {i18n.t('common.app.name')}
+              {i18n.t('_appName')}
               </Typography>
             </Box>
             <Box marginY={1}>
@@ -81,7 +82,7 @@ function Index() {
                 variant='contained'
                 onClick={() => router.push('/session/login')}
               >
-                {i18n.t('pages.login.index.loginAsKakaoAccount')}
+                {i18n.t('loginAsKakaoAccount')}
               </Button>
             </Box>
           </Section>

@@ -63,14 +63,14 @@ function Create({ selfAccount, setDarkMode }) {
   }, [])
 
   return (
-    <Layout title={`${i18n.t('pages.users.create.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('createAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section
         backButton
-        title={i18n.t('pages.users.create.pageTitle')}
+        title={i18n.t('createAccount')}
       >
       </Section>
       <Section
-        title={i18n.t('common.words.basicInfo')}
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
       >
         <Box paddingY={1}>
@@ -79,7 +79,7 @@ function Create({ selfAccount, setDarkMode }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label={i18n.t('common.words.email')}
+            label={i18n.t('.email')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -95,7 +95,7 @@ function Create({ selfAccount, setDarkMode }) {
             value={selfUser.user_name}
             error={selfUserError.user_name}
             fullWidth
-            label={i18n.t('common.words.username')}
+            label={i18n.t('username')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -111,7 +111,7 @@ function Create({ selfAccount, setDarkMode }) {
             value={selfUser.last_name}
             error={selfUserError.last_name}
             fullWidth
-            label={i18n.t('common.words.lastName')}
+            label={i18n.t('lastName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -127,7 +127,7 @@ function Create({ selfAccount, setDarkMode }) {
             value={selfUser.first_name}
             error={selfUserError.first_name}
             fullWidth
-            label={i18n.t('common.words.firstName')}
+            label={i18n.t('firstName')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -139,7 +139,7 @@ function Create({ selfAccount, setDarkMode }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>{i18n.t('common.words.locale')}</FormLabel>
+            <FormLabel>{i18n.t('locale')}</FormLabel>
             <RadioGroup
               name='locale'
               value={selfUser.locale}
@@ -151,10 +151,10 @@ function Create({ selfAccount, setDarkMode }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('common.locales.en')} />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_languageNameKorean')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('common.locales.ko')} />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_languageNameEnglish')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -174,7 +174,7 @@ function Create({ selfAccount, setDarkMode }) {
                 }}
               />
             }
-            label={i18n.t('common.words.darkMode')}
+            label={i18n.t('darkMode')}
             />
           </FormGroup>
         </Box>
@@ -188,18 +188,18 @@ function Create({ selfAccount, setDarkMode }) {
             const response = await postSelfUser(selfUser);
             if (response.status === 201) {
               router.push('/myaccount/');
-              toast.success(i18n.t('pages.users.create.success'));
+              toast.success(i18n.t('_myAccountSuccessfullyCreated'));
             }
             else if (response.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
-              toast.error(i18n.t('common.dialogs.checkInputFields'));
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          {i18n.t('common.buttons.submit')}
+          {i18n.t('submit')}
         </Button>
       </Box>
     </Layout>
