@@ -17,6 +17,7 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import withLayout from 'utils/withLayout'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -118,4 +119,4 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
   );
 }
 
-export default Index;
+export default withLayout(Index);
