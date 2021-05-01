@@ -80,7 +80,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
         </Box>
       </Section>
       <Section
-        title='상품 리뷰'
+        title={i18n.t('reviews')}
         titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -107,7 +107,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
             ))}
           </Grid>
         ) : (
-          <AlertBox content='상품 리뷰가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       {(selfUser.id !== store.owner) && (store.id === product.store) && (
@@ -121,7 +121,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
               query: { id: product.id },
             })}
           >
-            쿠폰 구매
+            {i18n.t('issueCoupon')}
           </Button>
         </Box>
       )}
@@ -132,7 +132,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
           variant='contained'
           onClick={() => router.push(`/stores/${store.id}/`,)}
         >
-          상점으로 이동
+          {i18n.t('goToStore')}
         </Button>
       </Box>
       {selfUser && store && product && (selfUser.id === store.user) && (store.id === product.store) && (
@@ -146,7 +146,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
               query: { id: product.id },
             })}
           >
-            상품 정보 수정
+            {i18n.t('editProduct')}
           </Button>
         </Box>
       )}

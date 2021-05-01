@@ -68,7 +68,7 @@ function Id({ lng, lngDict, selfUser, storeReview, store }) {
               query: { id: storeReview.id },
             })}
           >
-            가게 리뷰 수정
+            {i18n.t('editReview')}
           </Button>
         </Box>
       )}

@@ -37,16 +37,16 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
   };
 })
 
-function Charge({ lng, lngDict, selfUser, product, store }) {
+function Issue({ lng, lngDict, selfUser, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
   
   return (
-    <Layout title={`결재 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title={'결재 내용'}
+        title={i18n.t('issueCoupon')}
       >
         <Box>
           <Typography variant='h5'>{product.name}</Typography>
@@ -64,11 +64,11 @@ function Charge({ lng, lngDict, selfUser, product, store }) {
               const response = await postCoupon(selfUser, product);
               if (response.status === 200) {
                 router.push(`/coupons/${response.data.id}/`);
-                toast.success('상품 결재가 완료되었습니다.');
+                toast.success(i18n.t('_couponSuccessfullyIssued'));
               }
             }}
           >
-            쿠폰 구매
+            {i18n.t('issueCoupon')}
           </Button>
         </Box>
       )}
@@ -79,11 +79,11 @@ function Charge({ lng, lngDict, selfUser, product, store }) {
           variant='contained'
           onClick={() => router.back()}
         >
-          뒤로가기
+          {i18n.t('goBack')}
         </Button>
       </Box>
     </Layout>
   );
 }
 
-export default Charge;
+export default Issue;

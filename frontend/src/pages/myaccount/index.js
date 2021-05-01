@@ -138,7 +138,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/initialize/')}
+            onClick={() => router.push('/database/create/')}
           >
             {i18n.t('createDatabase')}
           </Button>

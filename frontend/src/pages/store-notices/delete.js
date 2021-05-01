@@ -57,12 +57,12 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`가게 공지사항 삭제 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('deleteNotice')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='가게 공지사항 삭제'
+        title={i18n.t('deleteNotice')}
       >
-        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -72,11 +72,11 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
               const response = await deleteStoreNotice(storeNotice);
               if (response.status === 204) {
                 router.push(`/stores/${storeNotice.store}/`);
-                toast.success('가게 공지사항이 삭제되었습니다.');
+                toast.success(i18n.t('_noticeSuccessfullyDeleted'));
               }
             }}
           >
-            가게 공지사항 삭제
+            {i18n.t('deleteNotice')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -86,7 +86,7 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

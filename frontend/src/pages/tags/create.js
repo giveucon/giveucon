@@ -44,10 +44,10 @@ function Create({ lng, lngDict, selfUser }) {
   });
 
   return (
-    <Layout title={`태그 생성 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('addTag')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='태그 생성'
+        title={i18n.t('addTag')}
       >
         <Box paddingY={1}>
           <TextField
@@ -55,7 +55,7 @@ function Create({ lng, lngDict, selfUser }) {
             value={tag.name}
             error={tagError.name}
             fullWidth
-            label='태그 이름'
+            label={i18n.t('name')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -75,7 +75,7 @@ function Create({ lng, lngDict, selfUser }) {
             const response = await postTag(tag);
             if (response.status === 201) {
               // router.push(`/tags/${response.id}/`);
-              toast.success('태그가 생성되었습니다.');
+              toast.success(i18n.t('_tagSuccessfullyAdded'));
             } 
             else if (response.status === 400) {
               if (response.data.name) {
@@ -83,11 +83,11 @@ function Create({ lng, lngDict, selfUser }) {
               } else {
                 setTagError(prevTagError => ({...prevTagError, name: false}));
               }
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
     </Layout>

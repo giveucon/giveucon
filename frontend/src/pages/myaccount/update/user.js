@@ -160,10 +160,10 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_languageNameKorean')} />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_localeNameKorean')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_languageNameEnglish')} />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_localeNameEnglish')} />
                 </Grid>
               </Grid>
             </RadioGroup>
