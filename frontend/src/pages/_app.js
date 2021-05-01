@@ -44,7 +44,7 @@ function RootApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>{`${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <title>{`Loading...`}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name='viewport'

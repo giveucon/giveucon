@@ -35,14 +35,14 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
   const router = useRouter();
   
   return (
-    <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('myWallet')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='내 지갑'
+        title={i18n.t('myWallet')}
       >
       </Section>
       <Section
-        title='내 쿠폰'
+        title={i18n.t('myCoupons')}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
         titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
       >
@@ -63,7 +63,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
             ))}
           </Grid>
         ) : (
-          <AlertBox content='쿠폰이 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
     </Layout>

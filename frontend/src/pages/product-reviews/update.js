@@ -59,14 +59,13 @@ const putProductReview = async (productReview, imageList) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevProductReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, prevProductReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, prevProductReview: prevProductReviewResponse.data },
@@ -108,13 +107,13 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
   }, []);
 
   return (
-    <Layout title={`상품 리뷰 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('editReview')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='상품 리뷰 수정'
+        title={i18n.t('editReview')}
       />
       <Section
-        title='기본 정보'
+        title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box display='flex' justifyContent='center' paddingY={1}>
@@ -133,7 +132,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
             value={productReview.title}
             error={productReviewError.title}
             fullWidth
-            label='제목'
+            label={i18n.t('title')}
             InputLabelProps={{
               shrink: true,
             }}
@@ -149,7 +148,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
             value={productReview.content}
             error={productReviewError.content}
             fullWidth
-            label='내용'
+            label={i18n.t('content')}
             multiline
             InputLabelProps={{
               shrink: true,
@@ -162,7 +161,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
         </Box>
       </Section>
       <Section
-        title='이미지'
+        title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
         padding={false}
       >
@@ -205,7 +204,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    이미지 추가
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (
@@ -216,7 +215,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
                       variant='contained'
                       onClick={onImageRemoveAll}
                     >
-                      모든 이미지 삭제
+                      {i18n.t('deleteAllImages')}
                     </Button>
                   </Box>
                 )}
@@ -234,19 +233,19 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
             const response = await putProductReview(productReview, imageList);
             if (response.status === 200) {
               router.push(`/product-reviews/${response.data.id}/`);
-              toast.success('상품 리뷰가 업데이트 되었습니다.');
+              toast.success(i18n.t('_reviewSuccessfullyEdited'));
             } else if (response.status === 400) {
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, content: !!response.data.content}));
-              toast.error('입력란을 확인하세요.');
+              toast.error(i18n.t('_checkInputFields'));
             }
           }}
         >
-          제출
+          {i18n.t('submit')}
         </Button>
       </Box>
       <Section
-        title='위험 구역'
+        title={i18n.t('dangerZone')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
         <Box marginY={1}>
@@ -259,7 +258,7 @@ function Update({ lng, lngDict, selfUser, prevProductReview }) {
               query: { id: productReview.id },
             })}
           >
-            상품 리뷰 삭제
+            {i18n.t('deleteReview')}
           </Button>
         </Box>
       </Section>

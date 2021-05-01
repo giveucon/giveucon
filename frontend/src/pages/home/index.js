@@ -69,7 +69,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('home')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('home')} - ${i18n.t('_appName')}`}>
       <Section
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}

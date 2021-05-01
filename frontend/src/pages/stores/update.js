@@ -58,14 +58,13 @@ const putStore = async (store, imageList) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevStoreResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const tagListResponse = await getTagList(context);
   return {
@@ -113,7 +112,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
   }, []);
 
   return (
-    <Layout title={`${i18n.t('editStore')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('editStore')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('editStore')}

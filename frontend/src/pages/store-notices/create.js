@@ -48,14 +48,13 @@ const postStoreNotice = async (storeNotice, imageList) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, store: storeResponse.data },
@@ -79,7 +78,7 @@ function Create({ lng, lngDict, selfUser, store }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`가게 공지사항 추가 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 공지사항 추가 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='가게 공지사항 추가'

@@ -32,14 +32,13 @@ const deleteCoupon = async (coupon) => {
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, coupon: couponResponse.data },
@@ -53,12 +52,12 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`쿠폰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteCoupon')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='쿠폰 삭제'
+        title={i18n.t('deleteCoupon')}
       >
-        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -68,7 +67,7 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
               const response = await deleteCoupon(coupon);
               if (response.status === 204) {
                 router.push(`/coupons/`);
-                toast.success('쿠폰이 삭제되었습니다.');
+                toast.success(i18n.t('_couponSuccessfullyDeleted'));
               }
             }}
           >
@@ -82,7 +81,7 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

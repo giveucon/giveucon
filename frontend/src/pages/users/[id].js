@@ -29,7 +29,7 @@ function Id({ lng, lngDict, selfUser, user }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${user.user_name} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${user.user_name} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={user.user_name}

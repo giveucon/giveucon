@@ -37,14 +37,13 @@ const deleteProduct = async (product) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   const storeResponse = await getStore(context, productResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, product: productResponse.data },
@@ -58,7 +57,7 @@ function Delete({ lng, lngDict, selfUser, product }) {
   const classes = useStyles();
   
   return (
-    <Layout title={`상품 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 삭제 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='상품 삭제'

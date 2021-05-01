@@ -19,14 +19,13 @@ const postTag = async (tag) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff) {
+  if (!selfUser.staff){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser },
@@ -45,7 +44,7 @@ function Create({ lng, lngDict, selfUser }) {
   });
 
   return (
-    <Layout title={`태그 생성 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`태그 생성 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='태그 생성'

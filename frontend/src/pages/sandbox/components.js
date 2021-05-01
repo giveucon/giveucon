@@ -47,7 +47,7 @@ export default function Components() {
   ]
 
   return (
-    <Layout title={`컴포넌트 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`컴포넌트 - ${i18n.t('_appName')}`}>
 
       <Section
         backButton

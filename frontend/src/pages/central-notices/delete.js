@@ -31,14 +31,13 @@ const deleteCentralNotice = async (centralNotice) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff) {
+  if (!selfUser.staff){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   const centralNoticeResponse = await getCentralNotice(context);
   return {
@@ -53,12 +52,12 @@ function Delete({ lng, lngDict, selfUser, centralNotice }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`공지사항 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteNotice')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='공지사항 삭제'
+        title={i18n.t('deleteNotice')}
       >
-        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -68,11 +67,11 @@ function Delete({ lng, lngDict, selfUser, centralNotice }) {
               const response = await deleteCentralNotice(centralNotice);
               if (response.status === 204) {
                 router.push(`/central-notices/`);
-                toast.success('공지사항이 삭제되었습니다.');
+                toast.success(i18n.t('_noticeSuccessfullyDeleted'));
               }
             }}
           >
-            공지사항 삭제
+            {i18n.t('deleteNotice')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -82,7 +81,7 @@ function Delete({ lng, lngDict, selfUser, centralNotice }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

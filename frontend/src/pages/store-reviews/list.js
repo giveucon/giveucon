@@ -28,14 +28,13 @@ const getStore = async (context) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialStoreReviewListResponse = await getStoreReviewList(context);
   const storeResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, initialStoreReviewListResponse, store: storeResponse.data },
@@ -61,7 +60,7 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
   }
 
   return (
-    <Layout title={`가게 리뷰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`가게 리뷰 목록 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='가게 리뷰 목록'

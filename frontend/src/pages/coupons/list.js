@@ -75,10 +75,10 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   }
 
   return (
-    <Layout title={`쿠폰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='쿠폰 목록'
+        title={i18n.t('couponList')}
       >
         {couponList && (
           (couponList.length > 0) ? (
@@ -109,7 +109,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
               </Grid>
             </InfiniteScroll>
           ) : (
-            <AlertBox content='쿠폰이 없습니다.' variant='information' />
+            <AlertBox content={i18n.t('_isEmpty')} variant='information' />
           )
         )}
       </Section>

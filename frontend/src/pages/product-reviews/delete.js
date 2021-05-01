@@ -37,14 +37,13 @@ const deleteProductReview = async (productReview) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, productReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, productReview: productReviewResponse.data },
@@ -58,12 +57,12 @@ function Delete({ lng, lngDict, selfUser, productReview }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`상품 리뷰 삭제 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('deleteReview')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='상품 리뷰 삭제'
+        title={i18n.t('deleteReview')}
       >
-        <AlertBox content='경고: 이 작업 후에는 되돌릴 수 없습니다.' variant='warning' />
+        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
         <Box marginY={1}>
           <Button
             className={classes.RedButton}
@@ -73,11 +72,11 @@ function Delete({ lng, lngDict, selfUser, productReview }) {
               const response = await deleteProductReview(productReview);
               if (response.status === 204) {
                 router.push(`/products/${productReview.product.id}/`);
-                toast.success('상품 리뷰가 삭제되었습니다.');
+                toast.success(i18n.t('_reviewSuccessfullyDeleted'));
               }
             }}
           >
-            가게 리뷰 삭제
+            {i18n.t('deleteReview')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -87,7 +86,7 @@ function Delete({ lng, lngDict, selfUser, productReview }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
       </Section>

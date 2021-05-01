@@ -27,14 +27,13 @@ const getProduct = async (context) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const initialProductReviewListResponse = await getProductReviewList(context);
   const productResponse = await getProduct(context);
-  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, initialProductReviewListResponse, product: productResponse.data },
@@ -60,10 +59,10 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
   }
 
   return (
-    <Layout title={`상품 리뷰 목록 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('reviewList')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='상품 리뷰 목록'
+        title={i18n.t('reviewList')}
       >
         {productReviewList && (productReviewList.length > 0) ? (
           <InfiniteScroll
@@ -87,7 +86,7 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
 
           </InfiniteScroll>
         ) : (
-          <AlertBox content='상품 리뷰가 없습니다.' variant='information' />
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       <Box marginY={1}>
@@ -100,7 +99,7 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
             query: { product: product.id },
           })}
         >
-          새 상품 리뷰 추가
+          {i18n.t('addReview')}
         </Button>
       </Box>
     </Layout>

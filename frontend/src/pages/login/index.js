@@ -57,7 +57,7 @@ function Index() {
   return (
     <>
       <Head>
-        <title>{`${i18n.t('pages.login.index.pageTitle')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}</title>
+        <title>{`${i18n.t('login')} - ${i18n.t('_appName')}`}</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Box

@@ -6,13 +6,15 @@ import Button from '@material-ui/core/Button';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import useI18n from 'hooks/useI18n'
 
 function Error404() {
 
+  const i18n = useI18n();
   const router = useRouter();
 
   return (
-    <Layout title={`404 오류 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`404 오류 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='404 오류'

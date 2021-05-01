@@ -55,14 +55,13 @@ const putProduct = async (product, imageList) => {
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevProductResponse = await getProduct(context);
   const storeResponse = await getStore(context, prevProductResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
         permanent: false,
-        destination: '/unauthorized/',
-      },
-      props: {}
-    }
+        destination: "/unauthorized/"
+      }
+    };
   }
   return {
     props: { lng, lngDict, selfUser, prevProduct: prevProductResponse.data },
@@ -107,7 +106,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
   }, []);
 
   return (
-    <Layout title={`상품 수정 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`상품 수정 - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title='상품 수정'

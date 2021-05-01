@@ -63,7 +63,7 @@ function Create({ selfAccount, setDarkMode }) {
   }, [])
 
   return (
-    <Layout title={`${i18n.t('createAccount')} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
+    <Layout title={`${i18n.t('createAccount')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
         title={i18n.t('createAccount')}
