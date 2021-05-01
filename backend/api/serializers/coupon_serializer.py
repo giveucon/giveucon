@@ -4,10 +4,10 @@ from django.db import transaction
 from hashlib import sha256
 from rest_framework.serializers import ModelSerializer
 from ..models import Coupon
-from .product_serializer import ProductSerializer
+from .product_read_serializer import ProductReadSerializer
 
 class CouponSerializer(ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product = ProductReadSerializer(read_only=True)
     class Meta:
         model = Coupon
         fields = '__all__'

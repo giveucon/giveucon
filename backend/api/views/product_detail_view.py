@@ -1,8 +1,11 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import Product
-from ..serializers import ProductSerializer
+from ..serializers import ProductReadSerializer
+from ..serializers import ProductUpdateSerializer
 
-class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class_read = ProductReadSerializer
+    serializer_class_update = ProductUpdateSerializer

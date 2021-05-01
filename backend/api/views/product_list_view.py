@@ -1,14 +1,13 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import Product
 from ..paginations import ProductPagination
-from ..serializers import ProductSerializer
+from ..serializers import ProductReadSerializer
+from ..serializers import ProductCreateSerializer
 
-class ProductListView(generics.ListCreateAPIView):
+class ProductListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class_read = ProductReadSerializer
+    serializer_class_create = ProductCreateSerializer
     pagination_class = ProductPagination
-
-    def perform_create(self, serializer):
-        images = self.request.data.getlist('images')
-        serializer.save(images=images)
