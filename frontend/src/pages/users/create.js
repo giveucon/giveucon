@@ -17,7 +17,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies'

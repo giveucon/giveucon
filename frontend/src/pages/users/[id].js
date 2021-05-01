@@ -8,7 +8,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import UserProfileSection from 'components/UserProfileSection';
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 

@@ -13,7 +13,7 @@ import Layout from 'components/Layout'
 import Section from 'components/Section'
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/use-i18n'
+import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
