@@ -97,8 +97,8 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                 {couponList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile
-                      title={`쿠폰 이름`}
-                      image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+                      title={item.product.name}
+                      image={item.product.images[0].image}
                       actions={[
                         <IconButton><DirectionsIcon /></IconButton>,
                         <IconButton><CropFreeIcon /></IconButton>

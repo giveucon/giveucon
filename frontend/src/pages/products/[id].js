@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import ReviewListItem from 'components/ReviewListItem'
@@ -74,7 +75,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
               />
             })
           ) : (
-            [<Tile image='/no_image.png'/>]
+            [<Tile image={constants.NO_IMAGE_PATH}/>]
           )}
         </SwipeableTileList>
         <Box padding={1}>
@@ -99,7 +100,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
       >
         {productReviewList.length > 0 ? (
           <Grid container spacing={1}>
-            {productReviewList.slice(0, 4).map((item, index) => (
+            {productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={12} key={index}>
                 <ReviewListItem
                   title={item.review.article.title}

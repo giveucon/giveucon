@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -14,17 +14,18 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import KakaoMapBox from 'components/KakaoMapBox';
-import Layout from 'components/Layout'
-import NoticeListItem from 'components/NoticeListItem'
-import ReviewListItem from 'components/ReviewListItem'
+import Layout from 'components/Layout';
+import NoticeListItem from 'components/NoticeListItem';
+import ReviewListItem from 'components/ReviewListItem';
 import Tile from 'components/Tile';
-import Section from 'components/Section'
+import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
@@ -98,7 +99,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 onClick={() => router.push(`/images/${item.id}/`)}
               />})
             ) : (
-              <Tile image='/no_image.png' />
+              <Tile image={constants.NO_IMAGE_PATH} />
             )
           }
         </SwipeableTileList>
@@ -136,7 +137,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
       >
         {storeNoticeList.length > 0 ? (
           <Grid container spacing={1}>
-            {storeNoticeList.slice(0, 4).map((item, index) => (
+            {storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={12} key={index}>
                 <NoticeListItem
                   title={item.article.title}
@@ -171,8 +172,8 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 <Tile
                   margin={false}
                   title={item.name}
-                  subtitle={item.price.toLocaleString('ko-KR') + '원'}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                  subtitle={`${item.price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}
+                  image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>
                   ]}
@@ -201,7 +202,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
       >
         {storeReviewList.length > 0 ? (
           <Grid container spacing={1}>
-            {storeReviewList.slice(0, 4).map((item, index) => (
+            {storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={12} key={index}>
                 <ReviewListItem
                   title={item.review.article.title}

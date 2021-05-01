@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -8,14 +8,15 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import AlertBox from 'components/AlertBox'
-import Layout from 'components/Layout'
-import Section from 'components/Section'
+import * as constants from 'constants';
+import AlertBox from 'components/AlertBox';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getStoreList = async (context) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json');
@@ -73,11 +74,11 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
       >
         { selfStoreList.results.length > 0 ? (
           <Grid container spacing={1}>
-            {selfStoreList.results.slice(0, 4).map((item, index) => (
+            {selfStoreList.results.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}
-                  image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                  image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/stores/${item.id}/` )}
                 />
               </Grid>
@@ -98,11 +99,11 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
       >
         {(storeList.results.length > 0) ? (
           <SwipeableTileList half>
-            {storeList.results.slice(0, 10).map((item, index) => {
+            {storeList.results.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => {
               return <Tile
                 key={index}
                 title={item.name}
-                image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                 actions={[
                   <IconButton><FavoriteIcon /></IconButton>
                 ]}

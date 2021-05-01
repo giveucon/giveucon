@@ -1,14 +1,15 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import ReviewBox from 'components/ReviewBox'
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from 'constants';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import ReviewBox from 'components/ReviewBox';
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getProductReview = async (context) => {
   return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
@@ -56,7 +57,7 @@ function Id({ lng, lngDict, selfUser, productReview, product }) {
           imageList={
             productReview.review.article.images.length > 0
             ? productReview.review.article.images.map(image => image.image)
-            : ['/no_image.png']
+            : [constants.NO_IMAGE_PATH]
           }
           content={productReview.review.article.content}
         />

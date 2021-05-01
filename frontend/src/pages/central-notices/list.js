@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,16 +8,17 @@ import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ChatIcon from '@material-ui/icons/Chat';
 
-import AlertBox from 'components/AlertBox'
+import * as constants from 'constants';
+import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
-import Layout from 'components/Layout'
+import Layout from 'components/Layout';
 import NoticeListItem from 'components/NoticeListItem';
-import Section from 'components/Section'
+import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getCentralNoticeList = async (context) => {
   return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
@@ -64,14 +65,14 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
       >
         {(centralNoticeList.length > 0) ? (
           <SwipeableTileList autoplay={true}>
-            {centralNoticeList.slice(0, 2).map((item, index) => {
+            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => {
               return <Tile
                 key={index}
                 title={item.article.title}
                 image={
                   item.images && (item.images.length > 0)
                   ? item.images[0].image
-                  : '/no_image.png'
+                  : constants.NO_IMAGE_PATH
                 }
                 onClick={() => router.push(`/central-notices/${item.id}`)}
               />

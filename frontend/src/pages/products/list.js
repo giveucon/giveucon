@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -7,14 +7,15 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import AlertBox from 'components/AlertBox'
+import * as constants from 'constants';
+import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
-import Layout from 'components/Layout'
-import Section from 'components/Section'
+import Layout from 'components/Layout';
+import Section from 'components/Section';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getProductList = async (context) => {
   const params = {
@@ -91,7 +92,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
                   <Tile
                     title={item.name}
                     subtitle={`${item.price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}
-                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                     actions={[
                       <IconButton><FavoriteIcon /></IconButton>
                     ]}

@@ -53,7 +53,7 @@ const i18n = useI18n();
           imageList={
             storeNotice.article.images.length > 0
             ? storeNotice.article.images.map(image => image.image)
-            : ['/no_image.png']
+            : [constants.NO_IMAGE_PATH]
           }
           content={storeNotice.article.content}
         />

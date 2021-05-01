@@ -4,12 +4,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/useI18n'
+import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
@@ -80,7 +81,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
-                    image={item.images.length > 0 ? item.images[0].image : '/no_image.png'}
+                    image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                     onClick={() => router.push(`/stores/${item.id}/`)}
                     menuItems={
                       <MenuItem>Menu Item</MenuItem>

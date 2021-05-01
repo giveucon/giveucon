@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -9,61 +9,42 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-import AlertBox from 'components/AlertBox'
-import Layout from 'components/Layout'
-import Section from 'components/Section'
+import * as constants from 'constants';
+import AlertBox from 'components/AlertBox';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const geoRecommendedCouponList = [
-  <Tile
-    key={1}
-    title='첫 번째 쿠폰'
-    subtitle='10,000원'
-    image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
-    actions={[
-      <IconButton><DirectionsIcon /></IconButton>,
-      <IconButton><CropFreeIcon /></IconButton>
-    ]}
-  />,
-  <Tile
-    key={2}
-    title='두 번째 쿠폰'
-    subtitle='20,000원'
-    image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
-    actions={[
-      <IconButton><DirectionsIcon /></IconButton>,
-      <IconButton><CropFreeIcon /></IconButton>
-    ]}
-  />,
-  <Tile
-    key={3}
-    title='세 번째 쿠폰'
-    subtitle='30,000원'
-    image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
-    actions={[
-      <IconButton><DirectionsIcon /></IconButton>,
-      <IconButton><CropFreeIcon /></IconButton>
-    ]}
-  />
-]
+const getCentralNoticeList = async (context) => {
+  return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
+};
+
+const getNearbyCouponList = async (context, selfUser) => {
+  const params = {
+    user: selfUser.id,
+  };
+  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
+};
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  const centralNoticeListResponse = await requestToBackend(context, 'api/central-notices/', 'get', 'json');
+  const centralNoticeListResponse = await getCentralNoticeList(context);
+  const nearbyCouponListResponse = await getNearbyCouponList(context, selfUser);
   return {
     props: { 
-      lng, lngDict, selfUser, centralNoticeList: centralNoticeListResponse.data.results
+      lng,
+      lngDict,
+      selfUser,
+      centralNoticeList: centralNoticeListResponse.data.results,
+      nearbyCouponList: nearbyCouponListResponse.data.results
     },
   };
 })
 
-function Index({ lng, lngDict, selfUser, centralNoticeList }) {
+function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -91,14 +72,14 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
       >
         {centralNoticeList.length > 0 ? (
           <SwipeableTileList autoplay={true}>
-            {centralNoticeList.slice(0, 2).map((item, index) => (
+            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
                 key={index}
                 title={item.article.title}
                 image={
                   item.images && (item.images.length > 0)
                   ? item.images[0].image
-                  : '/no_image.png'
+                  : constants.NO_IMAGE_PATH
                 }
                 onClick={() => router.push(`/central-notices/${item.id}/` )}
               />
@@ -115,7 +96,29 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
         padding={false}
       >
         <SwipeableTileList half>
-          {geoRecommendedCouponList}
+          {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            <Tile
+              key={index}
+              title={item.product.name}
+              image={
+                item.product.images && (item.product.images.length > 0)
+                ? item.product.images[0].image
+                : constants.NO_IMAGE_PATH
+              }
+              onClick={() => router.push(`/coupons/${item.id}/`)}
+              actions={[
+                <IconButton><DirectionsIcon /></IconButton>,
+                <IconButton>
+                  <CropFreeIcon
+                    onClick={() => router.push({
+                      pathname: '/coupons/use/',
+                      query: { id: item.id },
+                    })}
+                  />
+                </IconButton>
+              ]}
+            />
+          ))}
         </SwipeableTileList>
       </Section>
     </Layout>

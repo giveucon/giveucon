@@ -55,11 +55,18 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
             {selfCouponList.map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
-                  title={`쿠폰 이름`}
-                  image='https://cdn.pixabay.com/photo/2017/12/05/05/34/gifts-2998593_960_720.jpg'
+                  title={item.product.name}
+                  image={item.product.images[0].image}
                   actions={[
                     <IconButton><DirectionsIcon /></IconButton>,
-                    <IconButton><CropFreeIcon /></IconButton>
+                    <IconButton
+                      onClick={() => router.push({
+                        pathname: '/coupons/use/',
+                        query: { id: item.id },
+                      })}
+                    >
+                      <CropFreeIcon />
+                    </IconButton>
                   ]}
                   onClick={() => router.push(`/coupons/${item.id}/`)}
                 />

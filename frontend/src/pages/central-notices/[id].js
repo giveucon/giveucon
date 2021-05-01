@@ -1,14 +1,15 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import Layout from 'components/Layout'
-import NoticeBox from 'components/NoticeBox'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from 'constants';
+import Layout from 'components/Layout';
+import NoticeBox from 'components/NoticeBox';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getCentralNotice = async (context) => {
   return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
@@ -42,7 +43,7 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
           imageList={
             centralNotice.article.images.length > 0
             ? centralNotice.article.images.map(image => image.image)
-            : ['/no_image.png']
+            : [constants.NO_IMAGE_PATH]
           }
           content={centralNotice.article.content}
         />
