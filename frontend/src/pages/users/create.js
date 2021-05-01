@@ -20,7 +20,9 @@ import Section from 'components/Section'
 import useI18n from 'hooks/use-i18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
+import getCookies from 'utils/getCookies'
 import requestToBackend from 'utils/requestToBackend'
+import setCookie from 'utils/setCookie'
 
 const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
@@ -37,7 +39,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-function Create({ selfAccount }) {
+function Create({ selfAccount, setDarkMode }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -46,6 +48,7 @@ function Create({ selfAccount }) {
     user_name: selfAccount.username,
     first_name: null,
     last_name: null,
+    locale: 'ko',
     dark_mode: false,
   });
   const [selfUserError, setSelfUserError] = useState({
@@ -56,8 +59,7 @@ function Create({ selfAccount }) {
   });
 
   useEffect(() => {
-    i18n.locale('en', EN)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    i18n.locale('ko', KO)
   }, [])
 
   return (
@@ -142,15 +144,17 @@ function Create({ selfAccount }) {
               name='locale'
               value={selfUser.locale}
               onChange={(event) => {
+                event.target.value === 'en' && i18n.locale('en', EN);
+                event.target.value === 'ko' && i18n.locale('ko', KO);
                 setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
               }}
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('common.locales.ko')} />
+                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('common.locales.en')} />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('common.locales.en')} />
+                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('common.locales.ko')} />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -165,6 +169,7 @@ function Create({ selfAccount }) {
                 color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
+                  setDarkMode(event.target.checked);
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />

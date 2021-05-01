@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 
 import Section from 'components/Section'
 import useI18n from 'hooks/use-i18n'
-import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies';
 
@@ -34,16 +33,12 @@ const useStyles = makeStyles({
 
 export async function getServerSideProps(context) {
   const cookies = getCookies(context)
-  if (cookies.giveucon) {
+  if (cookies.giveucon_session) {
     return {
-      redirect: {
-        permanent: false,
-        destination: '/home/',
-      },
-      props: {}
+      redirect: { permanent: false, destination: '/home/', }
     }
   }
-  return {
+  else return {
     props: {}
   };
 }
@@ -56,7 +51,6 @@ function Index() {
   
   useEffect(() => {
     i18n.locale('ko', KO)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import getCookies from './getCookies'
+import getCookies from 'utils/getCookies'
 
 const requestVerifyTokens = async (session) => {
   try {
@@ -20,8 +20,8 @@ const requestVerifyTokens = async (session) => {
 
 export default async function verifySession(context) {
   const cookies = getCookies(context);
-  if (cookies.giveucon) {
-    const session = JSON.parse(cookies.giveucon);
+  if (cookies.giveucon_session) {
+    const session = JSON.parse(cookies.giveucon_session);
     const verifyTokensResponse = await requestVerifyTokens(session);
     if (verifyTokensResponse.status === 200) return {
       valid: true,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import getCookies from './getCookies'
-import setCookie from './setCookie'
+import getCookies from 'utils/getCookies'
+import setCookie from 'utils/setCookie'
 
 const requestRefreshTokens = async (session) => {
   try {
@@ -22,8 +22,8 @@ const requestRefreshTokens = async (session) => {
 
 export default async function refreshSession(context) {
   const cookies = getCookies(context);
-  if (cookies.giveucon) {
-    const session = JSON.parse(cookies.giveucon);
+  if (cookies.giveucon_session) {
+    const session = JSON.parse(cookies.giveucon_session);
     const loginRefreshResponse = await requestRefreshTokens(session);
     const refreshedSession = {
       'access_token': loginRefreshResponse.data.access,
@@ -33,7 +33,7 @@ export default async function refreshSession(context) {
       'access_token_expiry': loginRefreshResponse.data.access_expiry,
       'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
     };
-    setCookie(context, 'giveucon', JSON.stringify(refreshedSession), {
+    setCookie(context, 'giveucon_session', JSON.stringify(refreshedSession), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
       path: process.env.NEXT_PUBLIC_COOKIE_PATH,
     })
