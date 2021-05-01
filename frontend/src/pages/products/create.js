@@ -12,11 +12,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -44,7 +45,7 @@ const postProduct = async (product, imageList) => {
   return await requestToBackend(null, '/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
@@ -56,12 +57,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, store: storeResponse.data },
+    props: { lng, lngDict, selfUser, store: storeResponse.data },
   };
 })
 
-function Create({ selfUser, store }) {
+function Create({ lng, lngDict, selfUser, store }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [product, setProduct] = useState({

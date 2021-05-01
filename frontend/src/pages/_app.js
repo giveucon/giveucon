@@ -9,10 +9,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import I18n from '../lib/i18n'
-import lightTheme from '../styles/lightTheme';
-import darkTheme from '../styles/darkTheme';
-import getCookies from '../utils/getCookies';
+import I18n from 'lib/i18n'
+import lightTheme from 'styles/lightTheme';
+import darkTheme from 'styles/darkTheme';
+import getCookies from 'utils/getCookies';
 
 function RootApp({ Component, pageProps }) {
   const router = useRouter();

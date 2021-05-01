@@ -4,19 +4,23 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   return {
-    props: { selfUser },
+    props: { lng, lngDict, selfUser },
   }
 })
 
-function Index({ selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
+  
+  const i18n = useI18n();
   const router = useRouter();
+
   return (
     <Layout title={`거래 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

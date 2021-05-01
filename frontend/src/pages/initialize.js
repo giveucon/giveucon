@@ -8,11 +8,11 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../components/Layout'
-import Section from '../components/Section'
-import convertJsonToFormData from '../utils/convertJsonToFormData'
-import requestToBackend from '../utils/requestToBackend'
-import withAuthServerSideProps from '../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
   if (!selfUser.staff) {

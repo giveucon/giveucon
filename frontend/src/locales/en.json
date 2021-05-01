@@ -1,30 +1,32 @@
 {
   "common": {
-    "addImages": "Add images",
-    "appName": "giveUcon",
-    "basicInfo": "Basic info",
-    "darkMode": "Dark mode",
-    "dangerZone": "Danger zone",
-    "email": "Email",
-    "empty": "Empty",
-    "firstName": "First name",
-    "goBack": "Go back",
-    "images": "Images",
-    "lastName": "Last name",
-    "locale": "Locale",
-    "checkInputFields": "Please check input fields.",
-    "removeAllImages": "Delete all images",
-    "submit": "Submit",
-    "username": "User name"
-  },
-  "languages": {
-    "original": {
+    "app": {
+      "name": "giveUcon"
+    },
+    "buttons": {
+      "addImages": "Add images",
+      "goBack": "Go back",
+      "removeAllImages": "Delete all images",
+      "submit": "Submit"
+    },
+    "dialogs": {
+      "empty": "Empty",
+      "checkInputFields": "Please check input fields."
+    },
+    "locales": {
       "en": "English",
       "ko": "한국어"
     },
-    "translated": {
-      "en": "English",
-      "ko": "Korean"
+    "words": {
+      "basicInfo": "Basic info",
+      "darkMode": "Dark mode",
+      "dangerZone": "Danger zone",
+      "email": "Email",
+      "firstName": "First name",
+      "images": "Images",
+      "lastName": "Last name",
+      "locale": "Locale",
+      "username": "User name"
     }
   },
   "pages": {

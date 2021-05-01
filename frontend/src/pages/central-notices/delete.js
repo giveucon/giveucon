@@ -5,11 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -29,7 +30,7 @@ const deleteCentralNotice = async (centralNotice) => {
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff) {
     return {
       redirect: {
@@ -41,12 +42,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
   }
   const centralNoticeResponse = await getCentralNotice(context);
   return {
-    props: { selfUser, centralNotice: centralNoticeResponse.data },
+    props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data },
   };
 })
 
-function Delete({ selfUser, centralNotice }) {
+function Delete({ lng, lngDict, selfUser, centralNotice }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 

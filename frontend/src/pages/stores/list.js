@@ -90,7 +90,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
               </Grid>
             </InfiniteScroll>
           ) : (
-            <AlertBox content={i18n.t('common.empty')} variant='information' />
+            <AlertBox content={i18n.t('common.dialogs.empty')} variant='information' />
           )}
         </Section>
         {user && (user.id === selfUser.id) && (

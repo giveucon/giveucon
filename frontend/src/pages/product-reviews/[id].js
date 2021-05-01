@@ -3,11 +3,12 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import ReviewBox from '../../components/ReviewBox'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import ReviewBox from 'components/ReviewBox'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getProductReview = async (context) => {
   return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
@@ -17,17 +18,26 @@ const getProduct = async (context, productReview) => {
   return await requestToBackend(context, `api/products/${productReview.product.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, productReviewResponse.data);
   console.log(productReviewResponse.data);
   return {
-    props: { selfUser, productReview: productReviewResponse.data, product: productResponse.data },
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      productReview: productReviewResponse.data,
+      product: productResponse.data
+    },
   };
 })
 
-function Id({ selfUser, productReview, product }) {
+function Id({ lng, lngDict, selfUser, productReview, product }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <Layout title={`${productReview.review.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

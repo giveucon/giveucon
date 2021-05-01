@@ -7,12 +7,13 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import Tile from '../../components/Tile';
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import Tile from 'components/Tile';
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponList = async (context, selfUser) => {
   const params = {
@@ -21,15 +22,18 @@ const getCouponList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const selfCouponListResponse = await getCouponList(context, selfUser);
   return {
-    props: { selfUser, selfCouponList: selfCouponListResponse.data.results },
+    props: { lng, lngDict, selfUser, selfCouponList: selfCouponListResponse.data.results },
   };
 })
 
-function Index({ selfUser, selfCouponList }) {
+function Index({ lng, lngDict, selfUser, selfCouponList }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <Layout title={`내 지갑 - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

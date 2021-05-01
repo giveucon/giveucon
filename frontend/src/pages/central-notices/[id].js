@@ -3,25 +3,29 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import Layout from '../../components/Layout'
-import NoticeBox from '../../components/NoticeBox'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import NoticeBox from 'components/NoticeBox'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCentralNotice = async (context) => {
   return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const centralNoticeResponse = await getCentralNotice(context);
   return {
-    props: { selfUser, centralNotice: centralNoticeResponse.data },
+    props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data },
   };
 })
 
-function Id({ selfUser, centralNotice }) {
+function Id({ lng, lngDict, selfUser, centralNotice }) {
+
+  const i18n = useI18n();
   const router = useRouter();
+  
   return (
     <Layout title={`${centralNotice.article.title} - ${process.env.NEXT_PUBLIC_APPLICATION_NAME}`}>
       <Section

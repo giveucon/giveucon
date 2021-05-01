@@ -68,7 +68,7 @@ function Delete({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={() => {router.back()}}
           >
-            {i18n.t('common.goBack')}
+            {i18n.t('common.buttons.goBack')}
           </Button>
         </Box>
       </Section>

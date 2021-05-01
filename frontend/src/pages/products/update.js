@@ -13,13 +13,14 @@ import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import convertImageToBase64 from '../../utils/convertImageToBase64'
-import convertImageToFile from '../../utils/convertImageToFile'
-import convertJsonToFormData from '../../utils/convertJsonToFormData'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import convertImageToBase64 from 'utils/convertImageToBase64'
+import convertImageToFile from 'utils/convertImageToFile'
+import convertJsonToFormData from 'utils/convertJsonToFormData'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -51,7 +52,7 @@ const putProduct = async (product, imageList) => {
   return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const prevProductResponse = await getProduct(context);
   const storeResponse = await getStore(context, prevProductResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
@@ -64,12 +65,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, prevProduct: prevProductResponse.data },
+    props: { lng, lngDict, selfUser, prevProduct: prevProductResponse.data },
   };
 })
 
-function Update({ selfUser, prevProduct }) {
+function Update({ lng, lngDict, selfUser, prevProduct }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [product, setProduct] = useState({

@@ -5,11 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../../components/AlertBox'
-import Layout from '../../components/Layout'
-import Section from '../../components/Section'
-import requestToBackend from '../../utils/requestToBackend'
-import withAuthServerSideProps from '../../utils/withAuthServerSideProps'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
+import useI18n from 'hooks/use-i18n'
+import requestToBackend from 'utils/requestToBackend'
+import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
   RedButton: {
@@ -33,7 +34,7 @@ const deleteStoreNotice = async (storeNotice) => {
   return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
   const storeResponse = await getStore(context, storeNoticeResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
@@ -46,12 +47,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     }
   }
   return {
-    props: { selfUser, storeNotice: storeNoticeResponse.data },
+    props: { lng, lngDict, selfUser, storeNotice: storeNoticeResponse.data },
   };
 })
 
-function Delete({ selfUser, storeNotice }) {
+function Delete({ lng, lngDict, selfUser, storeNotice }) {
 
+  const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 

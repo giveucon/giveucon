@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from '../components/AlertBox'
-import Layout from '../components/Layout'
-import Section from '../components/Section'
+import AlertBox from 'components/AlertBox'
+import Layout from 'components/Layout'
+import Section from 'components/Section'
 
 function Error({ statusCode }) {
   const router = useRouter();

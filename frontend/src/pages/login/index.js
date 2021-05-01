@@ -55,7 +55,7 @@ function Index() {
   const classes = useStyles();
   
   useEffect(() => {
-    i18n.locale('en', EN)
+    i18n.locale('ko', KO)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -77,7 +77,7 @@ function Index() {
           >
             <Box marginY={5}>
               <Typography align='center' color='textPrimary' variant='h3'>
-              {i18n.t('common.appName')}
+              {i18n.t('common.app.name')}
               </Typography>
             </Box>
             <Box marginY={1}>
