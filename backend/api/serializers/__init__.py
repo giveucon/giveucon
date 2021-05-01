@@ -25,3 +25,4 @@ from .product_review_read_serializer import ProductReviewReadSerializer
 from .product_review_create_serializer import ProductReviewCreateSerializer
 from .product_review_update_serializer import ProductReviewUpdateSerializer
 from .favorite_store_serializer import FavoriteStoreSerializer
+from .favorite_product_serializer import FavoriteProductSerializer
