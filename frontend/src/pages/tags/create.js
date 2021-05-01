@@ -44,7 +44,11 @@ function Create({ lng, lngDict, selfUser }) {
   });
 
   return (
-    <Layout title={`${i18n.t('addTag')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('addTag')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('addTag')}

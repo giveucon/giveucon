@@ -28,7 +28,10 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
         props: {}
       }
     }
-    const selfUser = selfUserResponse.data;
+    let selfUser = selfUserResponse.data;
+    selfUser.menuItems = [
+      'home', 'myWallet', 'stores', 'trades', 'myAccount'
+    ], 
 
     setCookie(context, 'giveucon_settings', JSON.stringify({
       locale: selfUser.locale,

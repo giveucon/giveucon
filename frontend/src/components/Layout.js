@@ -14,7 +14,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Layout({ bottomNav=true, children, title }) {
+export default function Layout({
+  menuItemValueList,
+  children,
+  locale,
+  title
+}) {
   const classes = useStyles();
   return (
     <>
@@ -24,12 +29,15 @@ export default function Layout({ bottomNav=true, children, title }) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Container maxWidth='xs'>
-        <Box className={classes.childrenBox} mb={bottomNav ? 10 : 0}>
+        <Box
+          className={classes.childrenBox}
+          marginBottom={menuItemValueList && (menuItemValueList.length > 0) ? 10 : 0}
+        >
           {children}
         </Box>
         {
-          bottomNav && (
-            <BottomNavBar />
+          menuItemValueList && (menuItemValueList.length > 0) && (
+            <BottomNavBar menuItemValueList={menuItemValueList} locale={locale} />
           )
         }
       </Container>

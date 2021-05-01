@@ -78,7 +78,11 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
   const router = useRouter();
   
   return (
-    <Layout title={`${store.name} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${store.name} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={store.name}
@@ -146,7 +150,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
         )}
       </Section>
       <Section
-        title={i18n.t('pages.stores.id.products')}
+        title={i18n.t('products')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
         titleSuffix={
           <IconButton
@@ -202,7 +206,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                   title={item.review.article.title}
                   subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
                   score={item.review.score}
-                  onClick={() => router.push(`/${lng}/store-reviews/${item.id}/`)}
+                  onClick={() => router.push(`/store-reviews/${item.id}/`)}
                 />
               </Grid>
             ))}
@@ -237,7 +241,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               fullWidth
               variant='contained'
               onClick={() => router.push({
-                pathname: `/${lng}/products/create/`,
+                pathname: '/products/create/',
                 query: { id: store.id },
               })}
             >

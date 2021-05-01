@@ -68,7 +68,11 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
   }
 
   return (
-    <Layout title={`${i18n.t('productList')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('productList')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('productList')}

@@ -27,7 +27,11 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${centralNotice.article.title} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${centralNotice.article.title} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={centralNotice.article.title}

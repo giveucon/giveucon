@@ -43,7 +43,11 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('issueCoupon')}

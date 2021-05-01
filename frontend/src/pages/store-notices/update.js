@@ -101,7 +101,11 @@ function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
   }, []);
 
   return (
-    <Layout title={`${i18n.t('editNotice')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('editNotice')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('editNotice')}

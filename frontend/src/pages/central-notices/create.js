@@ -71,7 +71,11 @@ function Create({ lng, lngDict, selfUser }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('addNotice')}

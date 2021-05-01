@@ -81,7 +81,11 @@ function Create({ lng, lngDict, selfUser, store }) {
   const [imageList, setImageList] = useState([]);
 
   return (
-    <Layout title={`${i18n.t('addProduct')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('addProduct')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('addProduct')}
@@ -208,7 +212,7 @@ function Create({ lng, lngDict, selfUser, store }) {
                     variant='contained'
                     onClick={onImageUpload}
                   >
-                    {i18n.t('createImages')}
+                    {i18n.t('addImages')}
                   </Button>
                 </Box>
                 {imageList.length > 0 && (

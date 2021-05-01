@@ -39,7 +39,11 @@ function Index({ lng, lngDict, selfUser }) {
   const classes = useStyles();
   
   return (
-    <Layout title={`${i18n.t('myAccount')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('myAccount')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('myAccount')}
@@ -86,7 +90,7 @@ function Index({ lng, lngDict, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/couoons/list/',
+              pathname: '/coupons/list/',
               query: { user: selfUser.id },
             })}
           >
@@ -103,7 +107,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/central-notices/list/')}
+            onClick={() => router.push('/central-notices/')}
           >
             {i18n.t('notices')}
           </Button>

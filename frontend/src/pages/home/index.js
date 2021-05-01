@@ -17,7 +17,6 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
-import withLayout from 'utils/withLayout'
 
 const geoRecommendedCouponList = [
   <Tile
@@ -66,11 +65,15 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
 
 function Index({ lng, lngDict, selfUser, centralNoticeList }) {
 
-  const i18n = useI18n()
+  const i18n = useI18n();
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('home')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
+    >
       <Section
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
@@ -119,4 +122,4 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
   );
 }
 
-export default withLayout(Index);
+export default Index;

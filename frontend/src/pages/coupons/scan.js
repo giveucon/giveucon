@@ -99,7 +99,11 @@ function Scan({ lng, lngDict, selfUser }) {
   }, []);
 
   return (
-    <Layout title={`${i18n.t('scanCoupon')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('scanCoupon')} - ${i18n.t('_appName')}`}
+    >
       <Section backButton title={i18n.t('scanCoupon')}>
         <Card>
           <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 

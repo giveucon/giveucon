@@ -60,7 +60,11 @@ function create({ selfUser }) {
   }
 
   return (
-    <Layout title={`${i18n.t('createDatabase')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('createDatabase')} - ${i18n.t('_appName')}`}
+    >
       <Section
         title={i18n.t('createDatabase')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}

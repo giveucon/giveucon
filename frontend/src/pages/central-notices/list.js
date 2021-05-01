@@ -24,14 +24,6 @@ const getCentralNoticeList = async (context) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
-      }
-    };
-  }
   const initialCentralNoticeListResponse = await getCentralNoticeList(context);
   return {
     props: { lng, lngDict, selfUser, initialCentralNoticeListResponse },
@@ -56,7 +48,11 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   }
 
   return (
-    <Layout title={`${i18n.t('notices')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('notices')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('notices')}

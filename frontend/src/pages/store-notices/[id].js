@@ -38,7 +38,11 @@ const i18n = useI18n();
   const router = useRouter();
   
   return (
-    <Layout title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={storeNotice.article.title}

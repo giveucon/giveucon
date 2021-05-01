@@ -52,7 +52,11 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
   const classes = useStyles();
 
   return (
-    <Layout title={`${i18n.t('deleteCoupon')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('deleteCoupon')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('deleteCoupon')}

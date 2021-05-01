@@ -35,7 +35,11 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
   const router = useRouter();
   
   return (
-    <Layout title={`${i18n.t('myWallet')} - ${i18n.t('_appName')}`}>
+    <Layout
+      locale={selfUser.locale}
+      menuItemValueList={selfUser.menuItems}
+      title={`${i18n.t('myWallet')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('myWallet')}
