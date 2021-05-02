@@ -11,37 +11,37 @@ export const LIST_SLICE_NUMBER = 3;
 export const LOGO_PATH = '/logo.png';
 export const MENU_ITEM_LIST = [
   {
-    value: 'home',
+    key: 'home',
     icon: <HomeOutlinedIcon />,
     label: 'home',
     link: '/home/'
   },
   {
-    value: 'myaccount',
+    key: 'myAccount',
     icon: <AccountCircleOutlinedIcon />,
     label: 'account',
     link: '/myaccount/'
   },
   {
-    value: 'mywallet',
+    key: 'myWallet',
     icon: <AccountBalanceWalletOutlinedIcon />,
     label: 'wallet',
     link: '/mywallet/'
   },
   {
-    value: 'scan',
+    key: 'scan',
     icon: <CameraAltOutlinedIcon />,
     label: 'scan',
     link: '/coupons/scan/'
   },
   {
-    value: 'stores',
+    key: 'stores',
     icon: <StorefrontIcon />,
     label: 'stores',
     link: '/stores/'
   },
   {
-    value: 'trades',
+    key: 'trades',
     icon: <LocalMallOutlinedIcon />,
     label: 'trades',
     link: '/trades/'
