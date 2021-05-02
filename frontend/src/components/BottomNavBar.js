@@ -6,12 +6,8 @@ import AppBar from '@material-ui/core/AppBar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import StorefrontIcon from '@material-ui/icons/Storefront';
-import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
-import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 
+import * as constants from 'constants';
 import useI18n from 'hooks/useI18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
@@ -28,34 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const allMenuItemList = [
-  {
-    value: 'home',
-    icon: <HomeOutlinedIcon />,
-    link: '/home/'
-  },
-  {
-    value: 'myWallet',
-    icon: <AccountBalanceWalletOutlinedIcon />,
-    link: '/mywallet/'
-  },
-  {
-    value: 'stores',
-    icon: <StorefrontIcon />,
-    link: '/stores/'
-  },
-  {
-    value: 'trades',
-    icon: <LocalMallOutlinedIcon />,
-    link: '/trades/'
-  },
-  {
-    value: 'myAccount',
-    icon: <AccountCircleOutlinedIcon />,
-    link: '/myaccount/'
-  },
-]
-
 export default function BottomNavBar({ menuItemValueList, locale }) {
 
   const i18n = useI18n();
@@ -70,7 +38,7 @@ export default function BottomNavBar({ menuItemValueList, locale }) {
   let key = 0;
   let menuItemList = [];
   for (const menuItemKey in menuItemValueList) {
-    const menuItem = allMenuItemList.find(item => item.value === menuItemValueList[menuItemKey]);
+    const menuItem = constants.MENU_ITEM_LIST.find(item => item.value === menuItemValueList[menuItemKey]);
     menuItem && menuItemList.push(
       {
         key: ++key,

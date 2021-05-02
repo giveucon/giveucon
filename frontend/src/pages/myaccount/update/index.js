@@ -39,6 +39,16 @@ function Index({ lng, lngDict, selfUser }) {
             {i18n.t('userSettings')}
           </Button>
         </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/myaccount/update/menu-items/')}
+          >
+            {i18n.t('menuItems')}
+          </Button>
+        </Box>
       </Section>
     </Layout>
   );

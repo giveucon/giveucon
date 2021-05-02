@@ -1,35 +1,28 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import arrayMove from 'array-move';
 import toast from 'react-hot-toast';
 import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
-
-const useStyles = makeStyles((theme) => ({
-  RedButton: {
-    background: theme.palette.error.main,
-    color: 'white',
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
+import * as constants from '../../../constants';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const putSelfUser = async (selfUser) => {
   const data = {
@@ -51,7 +44,6 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
 })
 
 function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
-
   const i18n = useI18n();
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
@@ -63,36 +55,41 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     locale: prevSelfUser.locale,
     dark_mode: prevSelfUser.dark_mode,
   });
-  const [menuItemList, setMenuItemList] = useState(['Item 1', 'Item 2', 'Item 3', 'Item 4']);
-  const [unusedMenuItemList, setUnusedMenuItemList] = useState(['Item 5', 'Item 6', 'Item 7', 'Item 8']);
+  const [unusedMenuItemList, setUnusedMenuItemList] = useState(['scan']);
+  const [menuItemList, setMenuItemList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
   
   function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
   }
 
-  const DragHandle = sortableHandle(() => 
-    <DragHandleIcon />
-  );
+  const DragHandle = sortableHandle(() => <DragHandleIcon />);
   const SortableMenuItemContainer = SortableContainer(({children}) => {
     return <List>{children}</List>;
   });
 
   const SortableUnusedMenuItem = SortableElement(({value}) => (
     <ListItem>
-      <DragHandle />
-      <IconButton
-        onClick={() =>{
-          if (menuItemList.length >= 5) {
-            toast.error(i18n.t('_maxMenuItemNumberReached'));
-          } else {
-            setUnusedMenuItemList(unusedMenuItemList => not(unusedMenuItemList, value));
-            setMenuItemList(menuItemList => menuItemList.concat(value));
-          }
-        }}
-      >
-        <AddIcon />
-      </IconButton>
-      {value}
+      <ListItemAvatar>
+        <Box display='flex' alighItems='center'>
+          <DragHandle />
+          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.value === value).icon}</Box>
+        </Box>
+      </ListItemAvatar>
+      <ListItemText primary={i18n.t(value)} />
+      <ListItemSecondaryAction>
+        <IconButton
+          onClick={() =>{
+            if (menuItemList.length >= 5) {
+              toast.error(i18n.t('_maxMenuItemNumberReached'));
+            } else {
+              setUnusedMenuItemList(unusedMenuItemList => not(unusedMenuItemList, value));
+              setMenuItemList(menuItemList => menuItemList.concat(value));
+            }
+          }}
+        >
+          <AddIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
     </ListItem>
   ));
   const onSortUnusedMenuItemEnd = ({oldIndex, newIndex}) => {
@@ -101,16 +98,23 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
 
   const SortableMenuItem = SortableElement(({value}) => (
     <ListItem>
-      <DragHandle />
-      <IconButton
-        onClick={() =>{
-          setMenuItemList(menuItemList => not(menuItemList, value));
-          setUnusedMenuItemList(UnusedMenuItemList => UnusedMenuItemList.concat(value));
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
-      {value}
+      <ListItemAvatar>
+        <Box display='flex' alighItems='center'>
+          <DragHandle />
+          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.value === value).icon}</Box>
+        </Box>
+      </ListItemAvatar>
+      <ListItemText primary={i18n.t(value)} />
+      <ListItemSecondaryAction>
+        <IconButton
+          onClick={() =>{
+            setMenuItemList(menuItemList => not(menuItemList, value));
+            setUnusedMenuItemList(UnusedMenuItemList => UnusedMenuItemList.concat(value));
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
     </ListItem>
   ));
   const onSortMenuItemEnd = ({oldIndex, newIndex}) => {
