@@ -1,17 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image'
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import HomeIcon from '@material-ui/icons/Home';
-import CropFreeIcon from '@material-ui/icons/CropFree';
-import DirectionsIcon from '@material-ui/icons/Directions';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import Typography from '@material-ui/core/Typography';
 
 import * as constants from '../../constants';
-import AlertBox from 'components/AlertBox';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
@@ -27,6 +21,7 @@ function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const [count, setCount] = useState(0);
 
   return (
     <Layout
@@ -38,37 +33,56 @@ function Index({ lng, lngDict, selfUser }) {
         backButton
         title={i18n.t('about')}
       >
-        <Box padding='2rem'>
-          <Box style={{ position: 'relative', width: '100%', paddingBottom: '20%' }} >
-            <Image
-              src={constants.LOGO_PATH}
-              layout='fill'
-              objectFit='contain'
-              alt={i18n.t('_appName')}
-            />
+        {count < 10 && (
+          <Box margin='2rem'>
+            <Box style={{ position: 'relative', width: '100%', paddingTop: '20%' }} >
+              <Image
+                src={constants.LOGO_PATH}
+                alt={i18n.t('_appName')}
+                layout='fill'
+                objectFit='contain'
+                onClick={() => {
+                  setCount(count => count + 1);
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('https://github.com/giveucon/giveucon')}
-          >
-            {i18n.t('goToHomepage')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.back()}
-          >
-            {i18n.t('goBack')}
-          </Button>
-        </Box>
+        )}
+        {count >= 10 && (
+          <>
+            <Box style={{ position: 'relative', width: '100%', paddingTop: '50%' }} >
+              <Image
+                src={'https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif'}
+                alt={i18n.t('_appName')}
+                layout='fill'
+                objectFit='contain'
+              />
+            </Box>
+            <Typography align='center'>얼른 개발을 끝내고 싶은 개발자의 심정</Typography>
+          </>
+        )}
+        <Typography align='center'>{`${i18n.t('version')}: ${constants.APP_VERSION}`}</Typography>
       </Section>
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('https://github.com/giveucon/giveucon')}
+        >
+          {i18n.t('goToHomepage')}
+        </Button>
+      </Box>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.back()}
+        >
+          {i18n.t('goBack')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

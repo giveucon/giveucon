@@ -8,24 +8,36 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     const cookies = getCookies(context);
     // If session is not found
     if (!cookies.giveucon_session) {
+      const defaultLng = 'ko'
+      const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
       return {
         redirect: {
           permanent: false,
           destination: '/login/',
         },
-        props: {}
+        props: {
+          lng: defaultLng,
+          lngDict: defaultLngDict,
+          darkMode: false,
+        }
       }
     }
 
     const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
     // If account founded but no user models linked
     if (selfUserResponse.status === 404) {
+      const defaultLng = 'ko'
+      const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
       return {
         redirect: {
           permanent: false,
           destination: '/users/create/',
         },
-        props: {}
+        props: {
+          lng: defaultLng,
+          lngDict: defaultLngDict,
+          darkMode: false,
+        }
       }
     }
 
@@ -33,14 +45,6 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     selfUser.menuItems = [
       'home', 'myWallet', 'stores', 'trades', 'myAccount'
     ];
-
-    setCookie(context, 'giveucon_settings', JSON.stringify({
-      locale: selfUser.locale,
-      dark_mode: selfUser.dark_mode
-    }), {
-      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-    })
 
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
 
@@ -50,6 +54,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
         props: {
           lng: selfUser.locale,
           lngDict,
+          darkMode: selfUser.dark_mode,
           selfUser,
           ...((await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser)).props || {}),
         },
@@ -57,7 +62,12 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     }
 
     return {
-      props: { lng: selfUser.locale, lngDict, selfUser },
+      props: {
+        lng: selfUser.locale,
+        lngDict,
+        darkMode: selfUser.dark_mode,
+        selfUser
+      },
     }
 
   }
