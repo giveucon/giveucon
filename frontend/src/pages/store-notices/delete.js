@@ -59,7 +59,7 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteNotice')} - ${i18n.t('_appName')}`}
     >
       <Section

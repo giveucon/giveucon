@@ -52,7 +52,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
     >
       <Section

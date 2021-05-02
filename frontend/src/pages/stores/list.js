@@ -63,7 +63,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('storeList')} - ${i18n.t('_appName')}`}
     >
       <Section

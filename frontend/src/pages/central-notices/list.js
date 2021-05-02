@@ -51,7 +51,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('notices')} - ${i18n.t('_appName')}`}
     >
       <Section

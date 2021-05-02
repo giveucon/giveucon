@@ -40,7 +40,7 @@ const i18n = useI18n();
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}
     >
       <Section

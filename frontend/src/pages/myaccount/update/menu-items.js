@@ -57,8 +57,8 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     dark_mode: prevSelfUser.dark_mode,
     menu_items: prevSelfUser.menu_items,
   });
-  const [unusedMenuItemKeyList, setUnusedMenuItemKeyList] = useState(['scan']);
-  const [menuItemKeyList, setMenuItemKeyList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
+  const [unusedMenuItemList, setUnusedMenuItemKeyList] = useState(['scan']);
+  const [menuItemList, setMenuItemKeyList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
   
   function not(lhs, rhs) {
     return lhs.filter((value) => rhs.indexOf(value) === -1);
@@ -69,23 +69,23 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     return <List>{children}</List>;
   });
 
-  const SortableUnusedMenuItem = SortableElement(({value: key}) => (
+  const SortableUnusedMenuItem = SortableElement(({value}) => (
     <ListItem>
       <ListItemAvatar>
         <Box display='flex' alighItems='center'>
           <DragHandle />
-          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.key === key).icon}</Box>
+          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.value === value).icon}</Box>
         </Box>
       </ListItemAvatar>
-      <ListItemText primary={i18n.t(constants.MENU_ITEM_LIST.find(item => item.key === key).label)} />
+      <ListItemText primary={i18n.t(constants.MENU_ITEM_LIST.find(item => item.value === value).label)} />
       <ListItemSecondaryAction>
         <IconButton
           onClick={() =>{
-            if (menuItemKeyList.length >= 5) {
+            if (menuItemList.length >= 5) {
               toast.error(i18n.t('_maxMenuItemNumberReached'));
             } else {
-              setUnusedMenuItemKeyList(unusedMenuItemKeyList => not(unusedMenuItemKeyList, key));
-              setMenuItemKeyList(menuItemKeyList => menuItemKeyList.concat(key));
+              setUnusedMenuItemKeyList(unusedMenuItemList => not(unusedMenuItemList, value));
+              setMenuItemKeyList(menuItemList => menuItemList.concat(value));
             }
           }}
         >
@@ -95,23 +95,23 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     </ListItem>
   ));
   const onSortUnusedMenuItemEnd = ({oldIndex, newIndex}) => {
-    setUnusedMenuItemKeyList(unusedMenuItemKeyList => arrayMove(unusedMenuItemKeyList, oldIndex, newIndex));
+    setUnusedMenuItemKeyList(unusedMenuItemList => arrayMove(unusedMenuItemList, oldIndex, newIndex));
   };
 
-  const SortableMenuItem = SortableElement(({value: key}) => (
+  const SortableMenuItem = SortableElement(({value}) => (
     <ListItem>
       <ListItemAvatar>
         <Box display='flex' alighItems='center'>
           <DragHandle />
-          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.key === key).icon}</Box>
+          <Box marginX={1}>{constants.MENU_ITEM_LIST.find(item => item.value === value).icon}</Box>
         </Box>
       </ListItemAvatar>
-      <ListItemText primary={i18n.t(constants.MENU_ITEM_LIST.find(item => item.key === key).label)} />
+      <ListItemText primary={i18n.t(constants.MENU_ITEM_LIST.find(item => item.value === value).label)} />
       <ListItemSecondaryAction>
         <IconButton
           onClick={() =>{
-            setMenuItemKeyList(menuItemKeyList => not(menuItemKeyList, key));
-            setUnusedMenuItemKeyList(UnusedMenuItemKeyList => UnusedMenuItemKeyList.concat(key));
+            setMenuItemKeyList(menuItemList => not(menuItemList, value));
+            setUnusedMenuItemKeyList(UnusedMenuItemKeyList => UnusedMenuItemKeyList.concat(value));
           }}
         >
           <DeleteIcon />
@@ -120,13 +120,13 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     </ListItem>
   ));
   const onSortMenuItemEnd = ({oldIndex, newIndex}) => {
-    setMenuItemKeyList(menuItemKeyList => arrayMove(menuItemKeyList, oldIndex, newIndex));
+    setMenuItemKeyList(menuItemList => arrayMove(menuItemList, oldIndex, newIndex));
   };
 
   return (
     <Layout
       locale={lng}
-      menuItemValueList={prevSelfUser.menuItems}
+      menuItemList={prevSelfUser.menuItems}
       title={`${i18n.t('menuItems')} - ${i18n.t('_appName')}`}
     >
       <Section
@@ -139,7 +139,7 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
         titlePrefix={<IconButton><CheckBoxOutlineBlankIcon /></IconButton>}
       >
         <SortableMenuItemContainer onSortEnd={onSortUnusedMenuItemEnd} useDragHandle>
-          {unusedMenuItemKeyList.map((value, index) => (
+          {unusedMenuItemList.map((value, index) => (
             <SortableUnusedMenuItem key={value} index={index} value={value} />
           ))}
         </SortableMenuItemContainer>
@@ -149,7 +149,7 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
         titlePrefix={<IconButton><CheckBoxIcon /></IconButton>}
       >
         <SortableMenuItemContainer onSortEnd={onSortMenuItemEnd} useDragHandle>
-          {menuItemKeyList.map((value, index) => (
+          {menuItemList.map((value, index) => (
             <SortableMenuItem key={value} index={index} value={value} />
           ))}
         </SortableMenuItemContainer>

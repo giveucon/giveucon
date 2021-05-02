@@ -78,7 +78,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={prevSelfUser.menuItems}
+      menuItemList={prevSelfUser.menuItems}
       title={`${i18n.t('userSettings')} - ${i18n.t('_appName')}`}
     >
       <Section

@@ -114,7 +114,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('editStore')} - ${i18n.t('_appName')}`}
     >
       <Section

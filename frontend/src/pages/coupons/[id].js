@@ -40,7 +40,7 @@ function Id({ lng, lngDict, selfUser, coupon }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('coupons')} - ${i18n.t('_appName')}`}
     >
       <Section

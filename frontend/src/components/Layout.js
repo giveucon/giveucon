@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Layout({
-  menuItemValueList,
+  menuItemList,
   children,
   locale,
   title
@@ -31,13 +31,13 @@ export default function Layout({
       <Container maxWidth='xs'>
         <Box
           className={classes.childrenBox}
-          marginBottom={menuItemValueList && (menuItemValueList.length > 0) ? 10 : 0}
+          marginBottom={menuItemList && (menuItemList.length > 0) ? 10 : 0}
         >
           {children}
         </Box>
         {
-          menuItemValueList && (menuItemValueList.length > 0) && (
-            <BottomNavBar menuItemValueList={menuItemValueList} locale={locale} />
+          menuItemList && (menuItemList.length > 0) && (
+            <BottomNavBar menuItemList={menuItemList} locale={locale} />
           )
         }
       </Container>

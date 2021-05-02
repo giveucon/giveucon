@@ -60,7 +60,7 @@ function Create({ lng, lngDict, setDarkMode, selfAccount }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('createAccount')} - ${i18n.t('_appName')}`}
     >
       <Section

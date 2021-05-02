@@ -98,7 +98,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('editNotice')} - ${i18n.t('_appName')}`}
     >
       <Section

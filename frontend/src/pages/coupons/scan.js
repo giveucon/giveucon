@@ -101,7 +101,7 @@ function Scan({ lng, lngDict, selfUser }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('scanCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section backButton title={i18n.t('scanCoupon')}>

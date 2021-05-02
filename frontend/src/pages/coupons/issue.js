@@ -44,7 +44,7 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section

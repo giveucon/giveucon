@@ -42,7 +42,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     }
 
     let selfUser = selfUserResponse.data;
-    selfUser.menuItems = [
+    selfUser.menu_items = [
       'home', 'myWallet', 'stores', 'trades', 'myAccount'
     ];
 

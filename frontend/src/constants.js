@@ -11,40 +11,40 @@ export const LIST_SLICE_NUMBER = 3;
 export const LOGO_PATH = '/logo.png';
 export const MENU_ITEM_LIST = [
   {
-    key: 'home',
+    value: 'home',
     icon: <HomeOutlinedIcon />,
     label: 'home',
-    link: '/home/'
+    link: '/home'
   },
   {
-    key: 'myAccount',
+    value: 'myAccount',
     icon: <AccountCircleOutlinedIcon />,
     label: 'account',
-    link: '/myaccount/'
+    link: '/myaccount'
   },
   {
-    key: 'myWallet',
+    value: 'myWallet',
     icon: <AccountBalanceWalletOutlinedIcon />,
     label: 'wallet',
-    link: '/mywallet/'
+    link: '/mywallet'
   },
   {
-    key: 'scan',
+    value: 'scan',
     icon: <CameraAltOutlinedIcon />,
     label: 'scan',
-    link: '/coupons/scan/'
+    link: '/coupons/scan'
   },
   {
-    key: 'stores',
+    value: 'stores',
     icon: <StorefrontIcon />,
     label: 'stores',
-    link: '/stores/'
+    link: '/stores'
   },
   {
-    key: 'trades',
+    value: 'trades',
     icon: <LocalMallOutlinedIcon />,
     label: 'trades',
-    link: '/trades/'
+    link: '/trades'
   }
 ];
 export const NO_IMAGE_PATH = '/no_image.png';

@@ -75,7 +75,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('addStore')} - ${i18n.t('_appName')}`}
     >
       <Section

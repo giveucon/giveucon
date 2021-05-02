@@ -30,7 +30,7 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${centralNotice.article.title} - ${i18n.t('_appName')}`}
     >
       <Section

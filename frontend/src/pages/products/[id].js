@@ -57,7 +57,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${product.name} - ${i18n.t('_appName')}`}
     >
       <Section

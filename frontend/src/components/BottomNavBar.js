@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BottomNavBar({ menuItemKeyList, locale }) {
+export default function BottomNavBar({ menuItemList, locale }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -36,16 +36,16 @@ export default function BottomNavBar({ menuItemKeyList, locale }) {
   }, [])
 
   let key = 0;
-  let menuItemList = [];
-  for (const menuItemKey in menuItemKeyList) {
-    const menuItem = constants.MENU_ITEM_LIST.find(item => item.key === menuItemKeyList[menuItemKey]);
-    menuItem && menuItemList.push(
+  let menuItemListAdapter = [];
+  for (const value in menuItemList) {
+    const menuItem = constants.MENU_ITEM_LIST.find(item => item.value === menuItemList[value]);
+    menuItem && menuItemListAdapter.push(
       {
         key: ++key,
         icon: menuItem.icon,
         label: i18n.t(menuItem.label),
         onClick: () => {router.push(`${menuItem.link}`)},
-        value: menuItem.value
+        value: menuItem.link
       }
     );
   };
@@ -55,10 +55,10 @@ export default function BottomNavBar({ menuItemKeyList, locale }) {
       <Container maxWidth='xs'>
         <BottomNavigation
           className={classes.bottomNavigation}
-          value={router.pathname || 'home'}
+          value={router.pathname}
           showLabels
         >
-          {menuItemList.map(item => {
+          {menuItemListAdapter.map(item => {
             return <BottomNavigationAction 
               key={item.key}
               icon={item.icon}

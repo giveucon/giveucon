@@ -37,7 +37,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('myWallet')} - ${i18n.t('_appName')}`}
     >
       <Section

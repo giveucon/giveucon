@@ -51,7 +51,7 @@ function Use({ lng, lngDict, selfUser, coupon, couponQR }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('useCoupon')}- ${i18n.t('_appName')}`}
     >
       <Section
