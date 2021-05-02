@@ -13,31 +13,37 @@ export const MENU_ITEM_LIST = [
   {
     value: 'home',
     icon: <HomeOutlinedIcon />,
+    label: 'home',
     link: '/home/'
   },
   {
-    value: 'myAccount',
+    value: 'myaccount',
     icon: <AccountCircleOutlinedIcon />,
+    label: 'account',
     link: '/myaccount/'
   },
   {
-    value: 'myWallet',
+    value: 'mywallet',
     icon: <AccountBalanceWalletOutlinedIcon />,
+    label: 'wallet',
     link: '/mywallet/'
   },
   {
     value: 'scan',
     icon: <CameraAltOutlinedIcon />,
+    label: 'scan',
     link: '/coupons/scan/'
   },
   {
     value: 'stores',
     icon: <StorefrontIcon />,
+    label: 'stores',
     link: '/stores/'
   },
   {
     value: 'trades',
     icon: <LocalMallOutlinedIcon />,
+    label: 'trades',
     link: '/trades/'
   }
 ];

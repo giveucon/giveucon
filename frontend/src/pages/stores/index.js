@@ -72,9 +72,9 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           </IconButton>
         }
       >
-        { selfStoreList.results.length > 0 ? (
+        {selfStoreList.results.length > 0 ? (
           <Grid container spacing={1}>
-            {selfStoreList.results.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+            {selfStoreList.results.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.name}

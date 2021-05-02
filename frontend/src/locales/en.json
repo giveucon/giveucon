@@ -29,6 +29,7 @@
   "_tagSuccessfullyDeleted": "Tag is successfully deleted.",
   "_tagSuccessfullyEdited": "Tag is successfully edited.",
   "about": "About",
+  "account": "Account",
   "addImages": "Add images",
   "addNotice": "Add notice",
   "addProduct": "Add product",
@@ -122,5 +123,6 @@
   "username": "Username",
   "userSettings": "User settings",
   "version": "Version",
+  "wallet": "Wallet",
   "welcome": "Welcome"
 }

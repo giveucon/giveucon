@@ -43,7 +43,7 @@ export default function BottomNavBar({ menuItemValueList, locale }) {
       {
         key: ++key,
         icon: menuItem.icon,
-        label: i18n.t(menuItem.value),
+        label: i18n.t(menuItem.label),
         onClick: () => {router.push(`${menuItem.link}`)},
         value: menuItem.value
       }

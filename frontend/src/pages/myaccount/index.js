@@ -58,6 +58,7 @@ function Index({ lng, lngDict, selfUser }) {
           name={selfUser.user_name}
           subtitle={selfUser.email}
           image={gravatar.url(selfUser.email, {default: 'identicon'})}
+          onClick={() => router.push(`/users/${selfUser.id}/`)}
         />
         <Box marginY={1}>
           <Button

@@ -29,6 +29,7 @@
   "_tagSuccessfullyDeleted": "태그가 성공적으로 삭제되었습니다.",
   "_tagSuccessfullyEdited": "태그가 성공적으로 수정되었습니다.",
   "about": "정보",
+  "account": "계정",
   "addImages": "이미지 추가",
   "addNotice": "공지사항 추가",
   "addProduct": "상품 추가",
@@ -122,5 +123,6 @@
   "username": "유저네임",
   "userSettings": "사용자 설정",
   "version": "버전",
+  "wallet": "지갑",
   "welcome": "환영합니다"
 }
