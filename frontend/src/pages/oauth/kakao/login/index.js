@@ -1,8 +1,8 @@
 export async function getServerSideProps(ctx) {
   const client_id = process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY;
-  const redirect_uri = `${process.env.NEXT_PUBLIC_BASE_URL}session/oauth/kakao/callback/`;
+  const redirect_uri = `${process.env.NEXT_PUBLIC_BASE_URL}oauth/kakao/login/callback/`;
   const response_type = 'code';
-  const state = 'some random string';
+  const state = process.env.NEXT_PUBLIC_KAKAO_APP_URL_PARAMETER_STATE;
   return {
     redirect: {
       permanent: false,

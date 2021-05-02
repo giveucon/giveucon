@@ -48,7 +48,7 @@ function Index({ lng, lngDict, selfUser }) {
             className={classes.RedButton}
             fullWidth
             variant='contained'
-            onClick={() => router.push('/session/logout')}
+            onClick={() => router.push('/oauth/kakao/logout/')}
           >
             {i18n.t('logout')}
           </Button>

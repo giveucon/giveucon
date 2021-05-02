@@ -1,5 +1,4 @@
 import axios from 'axios';
-import requestToBackend from 'utils/requestToBackend';
 import setCookie from 'utils/setCookie';
 
 const getTokens = async (code) => {
@@ -11,7 +10,7 @@ const getTokens = async (code) => {
       params: {
         grant_type: 'authorization_code',
         client_id: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
-        redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + 'session/oauth/kakao/callback/',
+        redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + 'oauth/kakao/login/callback/',
         code,
         client_secret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
       }
@@ -57,26 +56,6 @@ const socialLoginRefresh = async (refresh_token) => {
   }
 };
 
-const getSelfUser = async (session) => {
-  try {
-    const response = await axios({
-      url: 'api/rest-auth/token/refresh/',
-      method: 'post',
-      baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
-      headers: {
-        'Authorization': `Bearer ${session.access_token}`,
-        'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json'
-      },
-    })
-    return { status: response.status, data: response.data };
-  } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
-  }
-};
-
-
 export async function getServerSideProps(context) {
   const tokenResponse = await getTokens(context.query.code);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
@@ -94,17 +73,6 @@ export async function getServerSideProps(context) {
     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
     path: process.env.NEXT_PUBLIC_COOKIE_PATH,
   })
-
-  const selfUserResponse = await getSelfUser(session);
-  if (selfUserResponse.status === 200) {
-    setCookie(context, 'giveucon_settings', JSON.stringify({
-      locale: selfUserResponse.data.locale,
-      dark_mode: selfUserResponse.data.dark_mode
-    }), {
-      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-    })
-  }
 
   return {
     redirect: {

@@ -12,13 +12,12 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import I18n from 'lib/i18n'
 import lightTheme from 'styles/lightTheme';
 import darkTheme from 'styles/darkTheme';
-import getCookies from 'utils/getCookies';
 
 function RootApp({ Component, pageProps }) {
   const router = useRouter();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [theme, setTheme] = useState(
-    pageProps.selfUser && pageProps.selfUser.dark_mode ? darkTheme : lightTheme
+    pageProps.darkMode ? darkTheme : lightTheme
   );
   const [darkMode, setDarkMode] = useState(
     pageProps.selfUser && pageProps.selfUser.dark_mode ? true : false
@@ -26,16 +25,6 @@ function RootApp({ Component, pageProps }) {
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
-    // Set default locale
-    const getLngDict = async (lng) => {
-      const { default: lngDict = {} } = await import(`locales/${lng}.json`);
-      return lngDict;
-    }
-    if(!pageProps.lng) {
-      pageProps.lng = 'ko';
-      pageProps.lngDict = getLngDict(pageProps.lng);
-    }
-
     const handleStart = () => { setPageLoading(true); };
     const handleComplete = () => { setPageLoading(false); };
 

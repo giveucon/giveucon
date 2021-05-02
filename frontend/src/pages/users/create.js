@@ -21,6 +21,7 @@ import useI18n from 'hooks/useI18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 import requestToBackend from 'utils/requestToBackend'
+import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
 
 const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
@@ -30,14 +31,14 @@ const postSelfUser = async (selfUser) => {
   return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
 };
 
-export async function getServerSideProps(context) {
+export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
   const selfAccountResponse = await getSelfAccount(context);
   return {
-    props: { selfAccount: selfAccountResponse.data }
+    props: { lng, lngDict, selfAccount: selfAccountResponse.data }
   };
-}
+})
 
-function Create({ selfAccount, setDarkMode }) {
+function Create({ lng, lngDict, setDarkMode, selfAccount }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -55,10 +56,6 @@ function Create({ selfAccount, setDarkMode }) {
     first_name: false,
     last_name: false,
   });
-
-  useEffect(() => {
-    i18n.locale('ko', KO)
-  }, [])
 
   return (
     <Layout

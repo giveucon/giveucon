@@ -8,9 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
-import EN from 'locales/en.json'
-import KO from 'locales/ko.json'
 import getCookies from 'utils/getCookies';
+import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
 
 const useStyles = makeStyles({
   background: {
@@ -32,27 +31,23 @@ const useStyles = makeStyles({
   },
 });
 
-export async function getServerSideProps(context) {
+export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
   const cookies = getCookies(context)
   if (cookies.giveucon_session) {
     return {
       redirect: { permanent: false, destination: '/home/', }
     }
   }
-  else return {
-    props: {}
+  return {
+    props: { lng, lngDict }
   };
-}
+})
 
-function Index() {
+function Index( lng, lngDict ) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
-  useEffect(() => {
-    i18n.locale('ko', KO)
-  }, [])
 
   return (
     <>
@@ -80,7 +75,7 @@ function Index() {
                 className={classes.kakaoButton}
                 fullWidth
                 variant='contained'
-                onClick={() => router.push('/session/login')}
+                onClick={() => router.push('/oauth/kakao/login/')}
               >
                 {i18n.t('loginAsKakaoAccount')}
               </Button>
