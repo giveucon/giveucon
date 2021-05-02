@@ -7,7 +7,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
 
-import * as constants from 'constants';
+import * as constants from '../constants';
 import useI18n from 'hooks/useI18n'
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'

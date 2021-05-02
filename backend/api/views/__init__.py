@@ -31,3 +31,5 @@ from .favorite_store_list_view import FavoriteStoreListView
 from .favorite_store_detail_view import FavoriteStoreDetailView
 from .favorite_product_list_view import FavoriteProductListView
 from .favorite_product_detail_view import FavoriteProductDetailView
+from .user_menuitem_list_view import UserMenuItemListView
+from .user_menuitem_detail_view import UserMenuItemDetailView

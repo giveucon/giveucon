@@ -41,6 +41,7 @@ const putSelfUser = async (selfUser) => {
     last_name: selfUser.last_name,
     locale: selfUser.locale,
     dark_mode: selfUser.dark_mode,
+    menu_items: selfUser.menu_items,
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
@@ -65,6 +66,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     last_name: prevSelfUser.last_name,
     locale: prevSelfUser.locale,
     dark_mode: prevSelfUser.dark_mode,
+    menu_items: prevSelfUser.menu_items,
   });
   const [selfUserError, setSelfUserError] = useState({
     email: false,
@@ -76,7 +78,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemValueList={prevSelfUser.menuItems}
       title={`${i18n.t('userSettings')} - ${i18n.t('_appName')}`}
     >
       <Section

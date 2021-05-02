@@ -32,6 +32,7 @@ const putSelfUser = async (selfUser) => {
     last_name: selfUser.last_name,
     locale: selfUser.locale,
     dark_mode: selfUser.dark_mode,
+    menu_items: selfUser.menu_items,
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
@@ -54,6 +55,7 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
     last_name: prevSelfUser.last_name,
     locale: prevSelfUser.locale,
     dark_mode: prevSelfUser.dark_mode,
+    menu_items: prevSelfUser.menu_items,
   });
   const [unusedMenuItemList, setUnusedMenuItemList] = useState(['scan']);
   const [menuItemList, setMenuItemList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
@@ -124,7 +126,7 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
   return (
     <Layout
       locale={lng}
-      menuItemValueList={selfUser.menuItems}
+      menuItemValueList={prevSelfUser.menuItems}
       title={`${i18n.t('menuItems')} - ${i18n.t('_appName')}`}
     >
       <Section

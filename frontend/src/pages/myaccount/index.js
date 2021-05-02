@@ -179,6 +179,16 @@ function Index({ lng, lngDict, selfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/about/')}
+          >
+            {i18n.t('about')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
             className={classes.RedButton}
             fullWidth
             variant='contained'

@@ -7,6 +7,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 
 export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LIST_SLICE_NUMBER = 3;
+export const LOGO_PATH = '/logo.png';
 export const MENU_ITEM_LIST = [
   {
     value: 'home',

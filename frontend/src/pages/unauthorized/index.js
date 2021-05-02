@@ -8,7 +8,7 @@ import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 
-function Unauthorized({}) {
+function Index({}) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -45,4 +45,4 @@ function Unauthorized({}) {
   );
 }
 
-export default Unauthorized;
+export default Index;
