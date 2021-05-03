@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
+  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
 const getStore = async (context, product) => {

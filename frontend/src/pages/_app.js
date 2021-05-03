@@ -27,7 +27,6 @@ function RootApp({ Component, pageProps }) {
   useEffect(() => {
     const handleStart = () => { 
       setPageLoading(true);
-      setDarkMode(pageProps.selfUser && pageProps.selfUser.dark_mode ? true : false);
     };
     const handleComplete = () => {
       setPageLoading(false);
@@ -44,8 +43,8 @@ function RootApp({ Component, pageProps }) {
   }, []);
 
   useEffect(() => {
-    darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
-  }, [darkMode]);
+    pageProps.darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
+  });
 
   return (
     <>

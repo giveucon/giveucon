@@ -69,17 +69,21 @@ function Scan({ lng, lngDict, selfUser }) {
           drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
           drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
-          const qrData = JSON.parse(code.data)
-          if (verifyQRData(qrData) === true) {
-            console.log(video.srcObject.getTracks())
-            video.srcObject.getTracks().forEach(
-              track => {
-                track.stop();
-                video.srcObject.removeTrack(track);
-              }
-            )
-            video.srcObject = null;
-            router.push(`/coupons/${qrData.coupon}/`)
+          try {
+            const qrData = JSON.parse(code.data)
+            if (verifyQRData(qrData) === true) {
+              console.log(video.srcObject.getTracks())
+              video.srcObject.getTracks().forEach(
+                track => {
+                  track.stop();
+                  video.srcObject.removeTrack(track);
+                }
+              )
+              video.srcObject = null;
+              router.push(`/coupons/${qrData.coupon}/`)
+            }
+          } catch (exception) {
+            console.log(exception);
           }
         }
       }

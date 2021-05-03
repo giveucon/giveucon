@@ -1,6 +1,5 @@
 import getCookies from 'utils/getCookies';
 import requestToBackend from 'utils/requestToBackend';
-import setCookie from 'utils/setCookie';
 
 export default function withAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
@@ -41,10 +40,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     }
 
     let selfUser = selfUserResponse.data;
-    selfUser.menu_items = [
-      'home', 'myWallet', 'stores', 'trades', 'myAccount'
-    ];
-
+    selfUser.menu_items = [ 'home', 'myWallet', 'stores', 'trades', 'myAccount' ];
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
 
     // Return props after execute server side functions
@@ -58,9 +54,7 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
           ...((await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser)).props || {}),
         },
       }
-    }
-
-    return {
+    } else return {
       props: {
         lng: selfUser.locale,
         lngDict,

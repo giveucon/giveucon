@@ -143,7 +143,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
           variant='contained'
           onClick={() => router.push({
             pathname: '/product-reviews/create/',
-            query: { id: product.id },
+            query: { product: product.id },
           })}
         >
           {i18n.t('addReview')}
@@ -167,7 +167,7 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/products/update/',
-              query: { id: product.id },
+              query: { product: product.id },
             })}
           >
             {i18n.t('editProduct')}

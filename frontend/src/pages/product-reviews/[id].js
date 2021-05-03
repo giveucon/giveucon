@@ -19,9 +19,14 @@ const getProduct = async (context, productReview) => {
   return await requestToBackend(context, `api/products/${productReview.product.id}/`, 'get', 'json');
 };
 
+const getStore = async (context, product) => {
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
   const productResponse = await getProduct(context, productReviewResponse.data);
+  const storeResponse = await getStore(context, productResponse.data);
   console.log(productReviewResponse.data);
   return {
     props: {
@@ -29,12 +34,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       lngDict,
       selfUser,
       productReview: productReviewResponse.data,
-      product: productResponse.data
+      product: productResponse.data,
+      store: storeResponse.data
     },
   };
 })
 
-function Id({ lng, lngDict, selfUser, productReview, product }) {
+function Id({ lng, lngDict, selfUser, productReview, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -62,7 +68,7 @@ function Id({ lng, lngDict, selfUser, productReview, product }) {
           content={productReview.review.article.content}
         />
       </Section>
-      {selfUser.id === product.user && (
+      {selfUser.id === store.user && (
         <Box marginY={1}>
           <Button
             color='default'

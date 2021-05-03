@@ -60,13 +60,13 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       }
     };
   }
+  console.log(productResponse);
   return {
     props: { lng, lngDict, selfUser, product: productResponse.data },
   }
 })
 
 function Create({ lng, lngDict, selfUser, product }) {
-
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
@@ -211,7 +211,6 @@ function Create({ lng, lngDict, selfUser, product }) {
           variant='contained'
           onClick={async () => {
             const response = await postProductReview(productReview, imageList);
-            console.log(response.data);
             if (response.status === 201) {
               router.push(`/product-reviews/${response.data.id}/`);
               toast.success(i18n.t('_reviewSuccessfullyAdded'));
