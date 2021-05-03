@@ -13,7 +13,7 @@ import useI18n from 'hooks/useI18n'
 import getCookies from 'utils/getCookies';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   background: {
     height: '100vh',
     backgroundImage: 'url(https://cdn.pixabay.com/photo/2014/07/30/18/26/grocery-store-405522_960_720.jpg)',
@@ -21,17 +21,14 @@ const useStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
   },
-  title: {
-    color: 'Black',
-  },
   kakaoButton: {
-    background: '#ffeb3b',
-    color: 'Black',
+    background: theme.palette.kakao.main,
+    color: theme.palette.kakao.contrastText,
     '&:hover': {
-       background: '#b2a429',
+       background: theme.palette.kakao.dark,
     },
   },
-});
+}));
 
 export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
   const cookies = getCookies(context)

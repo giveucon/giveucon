@@ -7,19 +7,25 @@ const theme = createMuiTheme({
       light: '#68b36b',
       main: '#43a047',
       dark: '#2e7031',
-      // contrastText: '#ffffff',
+      contrastText: '#ffffff',
     },
     secondary: { // Lime[A400]
       light: '#d1ff33',
       main: '#c6ff00',
       dark: '#8ab200',
-      // contrastText: '#ffffff',
+      contrastText: '#ffffff',
     },
     error: { // Red
       light: '#f6685e',
       main: '#f44336',
       dark: '#aa2e25',
-      // contrastText: '#ffffff',
+      contrastText: '#ffffff',
+    },
+    kakao: { // Yellow
+      light: '#ffef62',
+      main: '#ffeb3b',
+      dark: '#b2a429',
+      contrastText: '#000000',
     },
     background: { // White
       default: '#ffffff',

@@ -28,9 +28,9 @@ const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 const useStyles = makeStyles((theme) => ({
-  RedButton: {
+  errorButton: {
     background: theme.palette.error.main,
-    color: 'white',
+    color: theme.palette.error.contrastText,
     '&:hover': {
        background: theme.palette.error.dark,
     },
@@ -196,7 +196,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                 {imageList.length > 0 && (
                   <Box marginY={1}>
                     <Button
-                      className={classes.RedButton}
+                      className={classes.errorButton}
                       fullWidth
                       variant='contained'
                       onClick={onImageRemoveAll}

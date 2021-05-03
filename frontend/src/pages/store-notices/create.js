@@ -21,9 +21,9 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
-  RedButton: {
+  errorButton: {
     background: theme.palette.error.main,
-    color: 'white',
+    color: theme.palette.error.contrastText,
     '&:hover': {
        background: theme.palette.error.dark,
     },
@@ -175,7 +175,7 @@ function Create({ lng, lngDict, selfUser, store }) {
                 {imageList.length > 0 && (
                   <Box marginY={1}>
                     <Button
-                      className={classes.RedButton}
+                      className={classes.errorButton}
                       fullWidth
                       variant='contained'
                       onClick={onImageRemoveAll}

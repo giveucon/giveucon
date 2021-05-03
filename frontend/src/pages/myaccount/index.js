@@ -18,9 +18,9 @@ import useI18n from 'hooks/useI18n'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
-  RedButton: {
+  errorButton: {
     background: theme.palette.error.main,
-    color: 'white',
+    color: theme.palette.error.contrastText,
     '&:hover': {
        background: theme.palette.error.dark,
     },
@@ -190,7 +190,7 @@ function Index({ lng, lngDict, selfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
-            className={classes.RedButton}
+            className={classes.errorButton}
             fullWidth
             variant='contained'
             onClick={() => {router.push('/oauth/kakao/logout/')}}
