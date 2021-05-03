@@ -49,15 +49,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Tile({ actions=null, image=null, imageType='http', title=null, menuItems=null, onClick=null, skeleton=false, subtitle=null }) {
+  
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };

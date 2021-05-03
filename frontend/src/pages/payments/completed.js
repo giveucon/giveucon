@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -10,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import PaymentIcon from '@material-ui/icons/Payment';
+import CheckIcon from '@material-ui/icons/Check';
 
 import * as constants from 'constants';
 import Layout from 'components/Layout'
@@ -41,23 +40,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
-
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+const getCoupon = async (context) => {
+  return await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  const productResponse = await getProduct(context);
-  const storeResponse = await getStore(context, productResponse.data);
+  const couponResponse = await getCoupon(context);
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data, store: storeResponse.data },
+    props: { lng, lngDict, selfUser, coupon: couponResponse.data },
   };
 })
 
-function Issue({ lng, lngDict, selfUser, product, store }) {
+function Completed({ lng, lngDict, selfUser, coupon }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -70,13 +64,8 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section
-        backButton
-        title={i18n.t('issueCoupon')}
-      >
-      </Section>
-      <Section
-        title={i18n.t('paymentInfo')}
-        titlePrefix={<IconButton><PaymentIcon /></IconButton>}
+        title={i18n.t('_couponSuccessfullyIssued')}
+        titlePrefix={<IconButton><CheckIcon /></IconButton>}
       >
         <Box display='flex' alignItems='center' justifyContent='flex-start'>
           <Box className={classes.imageArea}>
@@ -84,36 +73,32 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
-                  image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
-                  title={product.name}
+                  image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
+                  title={coupon.product.name}
                 />
               </CardActionArea>
             </Card>
           </Box>
           <Box margin='1rem'>
             <Box marginBottom='0.5rem'>
-              <Typography variant='h5'>{product.name}</Typography>
+              <Typography variant='h5'>{coupon.product.name}</Typography>
             </Box>
             <Divider />
             <Box marginTop='0.5rem'>
-              <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+              <Typography variant='h6'>{coupon.product.price.toLocaleString('ko-KR') + '원'}</Typography>
             </Box>
           </Box>
         </Box>
       </Section>
-      {(selfUser.id !== store.owner) && (store.id === product.store) && (
+      {(true) && (
         <Box marginY={1}>
           <Button
-            // color='primary'
-            className={classes.kakaoButton}
+            color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push({
-              pathname: '/payments/kakao/',
-              query: { product: product.id },
-            })}
+            onClick={() => router.push(`/coupons/${coupon.id}`)}
           >
-            {i18n.t('issueCoupon')}
+            {i18n.t('goToCoupon')}
           </Button>
         </Box>
       )}
@@ -122,13 +107,13 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
           color='default'
           fullWidth
           variant='contained'
-          onClick={() => router.back()}
+          onClick={() => router.push('/home/')}
         >
-          {i18n.t('goBack')}
+          {i18n.t('goHome')}
         </Button>
       </Box>
     </Layout>
   );
 }
 
-export default Issue;
+export default Completed;

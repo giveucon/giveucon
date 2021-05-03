@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
@@ -99,7 +100,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                   <Grid item xs={6} key={index}>
                     <Tile
                       title={item.name}
-                      image={item.images[0].image}
+                      image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                       actions={[
                         <IconButton><DirectionsIcon /></IconButton>,
                         <IconButton><CropFreeIcon /></IconButton>

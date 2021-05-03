@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -79,9 +80,14 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
           )}
         </SwipeableTileList>
         <Box padding={1}>
-          <Typography variant='h5'>{product.name}</Typography>
-          <Typography variant='h6'>{`${(product.price || 0).toLocaleString('ko-KR')}원`}</Typography>
-          <Typography variant='body1'>{product.description}</Typography>
+          <Box marginBottom={1}>
+            <Typography variant='h5'>{product.name}</Typography>
+            <Typography variant='h6'>{`${(product.price || 0).toLocaleString('ko-KR')}원`}</Typography>
+          </Box>
+          <Divider />
+          <Box marginTop={1}>
+            <Typography variant='body1'>{product.description}</Typography>
+          </Box>
         </Box>
       </Section>
       <Section

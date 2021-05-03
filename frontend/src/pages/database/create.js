@@ -29,7 +29,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
   };
 })
 
-function create({ lng, lngDict, selfUser }) {
+function Create({ lng, lngDict, selfUser }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -51,7 +51,7 @@ function create({ lng, lngDict, selfUser }) {
     return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
   };
 
-  async function InitializeDatabase() {
+  async function initializeDatabase() {
     setInitializing(true);
     for (const i of Array(dummyTimeout).keys()) {
       await postDummyTimeout();
@@ -89,7 +89,7 @@ function create({ lng, lngDict, selfUser }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              await InitializeDatabase();
+              await initializeDatabase();
               await new Promise(r => setTimeout(r, 1000));
               router.push('/');
             }}
@@ -113,4 +113,4 @@ function create({ lng, lngDict, selfUser }) {
   );
 }
 
-export default create;
+export default Create;

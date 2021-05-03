@@ -25,8 +25,13 @@ function RootApp({ Component, pageProps }) {
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
-    const handleStart = () => { setPageLoading(true); };
-    const handleComplete = () => { setPageLoading(false); };
+    const handleStart = () => { 
+      setPageLoading(true);
+      setDarkMode(pageProps.selfUser && pageProps.selfUser.dark_mode ? true : false);
+    };
+    const handleComplete = () => {
+      setPageLoading(false);
+    };
 
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
@@ -45,8 +50,8 @@ function RootApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>{`Loading...`}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{'Loading...'}</title>
+        <link rel='icon' href='/favicon.ico' />
         <meta
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'

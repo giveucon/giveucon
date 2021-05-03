@@ -4,8 +4,8 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import MenuItem from '@material-ui/core/MenuItem';
 
+import * as constants from 'constants';
 import Layout from 'components/Layout'
 import Tile from 'components/Tile';
 import Section from 'components/Section'
@@ -54,14 +54,20 @@ function Id({ lng, lngDict, selfUser, coupon }) {
       >
         <Tile
           title={coupon.product.description}
-          image={coupon.product.images[0].image}
-          onClick={() => alert( 'Tapped' )}
-          menuItems={
-            <MenuItem>Menu Item</MenuItem>
-          }
+          image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
         />
       </Section>
-      { selfUser.id === coupon.user && (
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push(`/products/${coupon.product.id}/`)}
+        >
+          {i18n.t('goToProduct')}
+        </Button>
+      </Box>
+      {selfUser.id === coupon.user && (
         <Box marginY={1}>
           <Button
             color='primary'

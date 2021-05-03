@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -104,21 +105,24 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           }
         </SwipeableTileList>
         <Box padding={1}>
-          {
-            store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
-              <Chip
-                key={index}
-                label={item.name}
-                color='primary'
-                size='small'
-                variant='outlined'
-                // onClick={() => router.push(`/tags/${item.id}/`)}
-              />
-            ))
-          }
-        </Box>
-        <Box padding={1}>
-          <Typography>{store.description}</Typography>
+          <Box marginBottom={1}>
+            {
+              store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
+                <Chip
+                  key={index}
+                  label={item.name}
+                  color='primary'
+                  size='small'
+                  variant='outlined'
+                  // onClick={() => router.push(`/tags/${item.id}/`)}
+                />
+              ))
+            }
+          </Box>
+          <Divider />
+          <Box marginTop={1}>
+            <Typography>{store.description}</Typography>
+          </Box>
         </Box>
       </Section>
       <Section

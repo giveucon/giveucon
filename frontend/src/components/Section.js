@@ -9,7 +9,16 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-export default function Section({ backButton=false, children=null, padding=true, title=null, titlePrefix=null, titleSuffix=null, skeleton=false }) {
+export default function Section({
+  backButton=false,
+  children=null,
+  disabledBackButton=false,
+  padding=true,
+  title=null,
+  titlePrefix=null,
+  titleSuffix=null,
+  skeleton=false
+}) {
   const router = useRouter();
   return (
     <Box marginY={2}>
@@ -43,8 +52,9 @@ export default function Section({ backButton=false, children=null, padding=true,
               justifyContent='flex-start'
               paddingX={1}
             >
-              <Box display={backButton ? 'block' : 'none'}>
+              <Box display={backButton || disabledBackButton ? 'block' : 'none'}>
                 <IconButton
+                  disabled={disabledBackButton}
                   onClick={() => {router.back()}}
                 >
                   <ArrowBackIcon />

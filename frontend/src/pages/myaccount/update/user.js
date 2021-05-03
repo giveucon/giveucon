@@ -20,6 +20,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
+import EN from 'locales/en.json'
+import KO from 'locales/ko.json'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
@@ -161,6 +163,8 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
               name='locale'
               value={selfUser.locale}
               onChange={(event) => {
+                event.target.value === 'en' && i18n.locale('en', EN);
+                event.target.value === 'ko' && i18n.locale('ko', KO);
                 setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
               }}
             >
@@ -184,6 +188,7 @@ function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
                 color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
+                  setDarkMode(event.target.checked);
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />
