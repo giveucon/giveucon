@@ -7,6 +7,7 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -56,7 +57,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
               <Grid item xs={6} key={index}>
                 <Tile
                   title={item.product.name}
-                  image={item.product.images[0].image}
+                  image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
                     <IconButton><DirectionsIcon /></IconButton>,
                     <IconButton
