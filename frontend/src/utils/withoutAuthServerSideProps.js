@@ -1,8 +1,4 @@
-import getCookies from 'utils/getCookies';
-import requestToBackend from 'utils/requestToBackend';
-import setCookie from 'utils/setCookie';
-
-export default function withAuthServerSideProps(getServerSidePropsFunction) {
+export default function withoutAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
 
     const defaultLng = 'ko'
@@ -26,7 +22,6 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
         darkMode: false,
       },
     }
-
 
   }
 }

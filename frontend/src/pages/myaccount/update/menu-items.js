@@ -126,7 +126,7 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
   return (
     <Layout
       locale={lng}
-      menuItemList={prevSelfUser.menuItems}
+      menuItemList={prevSelfUser.menu_items}
       title={`${i18n.t('menuItems')} - ${i18n.t('_appName')}`}
     >
       <Section

@@ -5,11 +5,12 @@ import setCookie from 'utils/setCookie';
 export default function withAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
 
+    const defaultLng = 'ko'
+    const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
+    
     const cookies = getCookies(context);
     // If session is not found
     if (!cookies.giveucon_session) {
-      const defaultLng = 'ko'
-      const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
       return {
         redirect: {
           permanent: false,
@@ -26,8 +27,6 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
     // If account founded but no user models linked
     if (selfUserResponse.status === 404) {
-      const defaultLng = 'ko'
-      const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
       return {
         redirect: {
           permanent: false,

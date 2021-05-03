@@ -135,6 +135,19 @@ function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
           color='default'
           fullWidth
           variant='contained'
+          onClick={() => router.push({
+            pathname: '/product-reviews/create/',
+            query: { id: product.id },
+          })}
+        >
+          {i18n.t('addReview')}
+        </Button>
+      </Box>
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
           onClick={() => router.push(`/stores/${store.id}/`,)}
         >
           {i18n.t('goToStore')}

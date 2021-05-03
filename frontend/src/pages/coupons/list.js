@@ -59,7 +59,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   const i18n = useI18n();
   const router = useRouter();
   const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
-  const [couponListPagination, setCouponListPagination] = useState(0);
+  const [couponListPagination, setCouponListPagination] = useState(1);
   const [hasMoreCouponList, setHasMoreCouponList] = useState(initialCouponListResponse.data.next);
 
   const getMoreCouponList = async () => {
@@ -73,6 +73,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
     setCouponListPagination(prevCouponListPagination => prevCouponListPagination + 1);
     if (couponListPagination.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
   }
+  console.log(couponList);
 
   return (
     <Layout
@@ -97,8 +98,8 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                 {couponList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile
-                      title={item.product.name}
-                      image={item.product.images[0].image}
+                      title={item.name}
+                      image={item.images[0].image}
                       actions={[
                         <IconButton><DirectionsIcon /></IconButton>,
                         <IconButton><CropFreeIcon /></IconButton>

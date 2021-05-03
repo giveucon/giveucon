@@ -220,6 +220,7 @@ function Create({ lng, lngDict, selfUser, product }) {
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, content: !!response.data.content}));
               toast.error(i18n.t('_checkInputFields'));
+              console.log(response.data);
             }
           }}
         >

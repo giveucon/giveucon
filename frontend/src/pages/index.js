@@ -8,7 +8,8 @@ export const getServerSideProps = withAuthServerSideProps(async (context, selfUs
     redirect: {
       permanent: false,
       destination: "/home/"
-    }
+    },
+    props: {}
   };
 })
 

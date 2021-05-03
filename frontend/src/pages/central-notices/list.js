@@ -70,8 +70,8 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
                 key={index}
                 title={item.article.title}
                 image={
-                  item.images && (item.images.length > 0)
-                  ? item.images[0].image
+                  item.article.images && (item.article.images.length > 0)
+                  ? item.article.images[0].image
                   : constants.NO_IMAGE_PATH
                 }
                 onClick={() => router.push(`/central-notices/${item.id}`)}

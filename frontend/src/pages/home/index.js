@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import HomeIcon from '@material-ui/icons/Home';
 import CropFreeIcon from '@material-ui/icons/CropFree';
@@ -55,6 +56,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
     >
+
       <Section
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
@@ -66,27 +68,28 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
             <Badge badgeContent={100} color='error' max={99}>
               <NotificationsIcon />
             </Badge>
+          </IconButton>,
+          <IconButton>
+            <AccountCircleIcon onClick={() => router.push('/myaccount/')} />
           </IconButton>
         ]}
         padding={false}
       >
-        {centralNoticeList.length > 0 ? (
+        {centralNoticeList.length > 0 && (
           <SwipeableTileList autoplay={true}>
             {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
                 key={index}
                 title={item.article.title}
                 image={
-                  item.images && (item.images.length > 0)
-                  ? item.images[0].image
+                  item.article.images && (item.article.images.length > 0)
+                  ? item.article.images[0].image
                   : constants.NO_IMAGE_PATH
                 }
                 onClick={() => router.push(`/central-notices/${item.id}/` )}
               />
             ))}
           </SwipeableTileList>
-        ) : (
-          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
       
@@ -95,32 +98,37 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
-        <SwipeableTileList half>
-          {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
-            <Tile
-              key={index}
-              title={item.product.name}
-              image={
-                item.product.images && (item.product.images.length > 0)
-                ? item.product.images[0].image
-                : constants.NO_IMAGE_PATH
-              }
-              onClick={() => router.push(`/coupons/${item.id}/`)}
-              actions={[
-                <IconButton><DirectionsIcon /></IconButton>,
-                <IconButton>
-                  <CropFreeIcon
-                    onClick={() => router.push({
-                      pathname: '/coupons/use/',
-                      query: { id: item.id },
-                    })}
-                  />
-                </IconButton>
-              ]}
-            />
-          ))}
-        </SwipeableTileList>
+        {nearbyCouponList.length > 0 ? (
+          <SwipeableTileList half>
+            {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+              <Tile
+                key={index}
+                title={item.product.name}
+                image={
+                  item.product.images && (item.product.images.length > 0)
+                  ? item.product.images[0].image
+                  : constants.NO_IMAGE_PATH
+                }
+                onClick={() => router.push(`/coupons/${item.id}/`)}
+                actions={[
+                  <IconButton><DirectionsIcon /></IconButton>,
+                  <IconButton>
+                    <CropFreeIcon
+                      onClick={() => router.push({
+                        pathname: '/coupons/use/',
+                        query: { id: item.id },
+                      })}
+                    />
+                  </IconButton>
+                ]}
+              />
+            ))}
+          </SwipeableTileList>
+        ) : (
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+        )}
       </Section>
+
     </Layout>
   );
 }

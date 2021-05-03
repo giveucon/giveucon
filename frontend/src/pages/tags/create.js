@@ -19,17 +19,20 @@ const postTag = async (tag) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff){
+  console.log(!selfUser.staff);
+  if(!selfUser.staff) {
     return {
       redirect: {
         permanent: false,
         destination: "/unauthorized/"
-      }
+      },
+      props: {}
+    };
+  } else {
+    return {
+      props: { lng, lngDict, selfUser },
     };
   }
-  return {
-    props: { lng, lngDict, selfUser },
-  };
 })
 
 function Create({ lng, lngDict, selfUser }) {
