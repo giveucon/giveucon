@@ -11,6 +11,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
+import convertImageToFile from 'utils/convertImageToFile'
 import convertJsonToFormData from 'utils/convertJsonToFormData'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
@@ -39,18 +40,18 @@ function Create({ lng, lngDict, selfUser }) {
   const dummyTimeoutNumber = 200;
   const dummyUserNumber = 4;
   const dummyStoreNumber = 2;
-  const allRequestCount = dummyTimeout;
+  const allRequestCount = dummyUserNumber + (dummyUserNumber * dummyStoreNumber);
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
   }
 
   const postDummyTimeout = async () => {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 100));
   };
   
   const postDummyUser = async (user) => {
-    return await requestToBackend('api/dummy-users/', 'post', 'json', user, null);
+    return await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
   };
   
   const postDummyStore = async (store, imageList) => {
@@ -58,7 +59,7 @@ function Create({ lng, lngDict, selfUser }) {
       ...store,
       images: imageList.map(image => image.file),
     }
-    return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
+    return await requestToBackend(null, 'api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
   };
 
   const createDummyUser = async () => {
@@ -66,7 +67,7 @@ function Create({ lng, lngDict, selfUser }) {
     const lastName = faker.name.lastName();
     const user = {
       email: `${firstName}.${lastName}@giveucon.com`,
-      user_name: selfAccount.username,
+      user_name: `${firstName} ${lastName}`,
       first_name: firstName,
       last_name: lastName,
       locale: 'ko',
@@ -75,28 +76,34 @@ function Create({ lng, lngDict, selfUser }) {
     const userResult = await postDummyUser(user);
     if (userResult.status === 201) {
       increaseRequestedCount();
-      return user;
+      return userResult.data;
     } else {
-      createDummyUser();
+      console.log(userResult);
+      throw new Error();
     }
   };
 
   const createDummyStore = async (user) => {
     const store = {
       name: faker.company.companyName(),
-      description: faker.company.catchPhraseDescriptor(),
+      description: faker.company.catchPhrase(),
       tags: [],
-      user = user.id,
+      user: user.id,
     };
     let imageList = [];
+    /*
     for (const i of Array(faker.datatype.number() % 4).keys()) {
-      await convertImageToFile(faker.name.findName(), faker.datatype.hexaDecimal(), (file) => {
+      await convertImageToFile(faker.image.business(), faker.datatype.hexaDecimal(), (file) => {
         imageList.push({file});
       });
     }
+    */
     const storeResult = await postDummyStore(store, imageList);
     if (storeResult.status === 201) {
       increaseRequestedCount();
+    } else {
+      console.log(storeResult);
+      throw new Error();
     }
   };
 
@@ -110,6 +117,8 @@ function Create({ lng, lngDict, selfUser }) {
         await postDummyTimeout();
       }
     }
+    await new Promise(r => setTimeout(r, 1000));
+    router.push('/home/');
   }
 
   return (

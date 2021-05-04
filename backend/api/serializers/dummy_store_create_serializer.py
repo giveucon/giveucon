@@ -4,6 +4,7 @@ from hashlib import sha256
 from rest_framework import serializers
 
 from ..models import Store
+from ..serializers import StoreReadSerializer
 from ..services import ImageService
 
 class DummyStoreCreateSerializer(serializers.ModelSerializer):
@@ -20,10 +21,12 @@ class DummyStoreCreateSerializer(serializers.ModelSerializer):
             images = ImageService.save_images(validated_data.pop('images', []))
             tags = validated_data.pop('tags', [])
             store = Store(**validated_data)
-            store.user = user
             store.private_key = private_key.to_string().hex()
             store.public_key = public_key.to_string().hex()
             store.save()
             store.images.set(images)
             store.tags.set(tags)
             return store
+
+    def to_representation(self, instance):
+        return StoreReadSerializer(instance).data
