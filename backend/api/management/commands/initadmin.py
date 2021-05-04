@@ -12,6 +12,6 @@ class Command(BaseCommand):
             admin.is_active = True
             admin.is_admin = True
             admin.save()
-            self.stdout.write('Admin account initialized.')
+            self.stdout.write('Administrator account is initialized successfully.')
         else:
-            self.stdout.write('Admin account can only be initialized if no Accounts exist.')
+            self.stdout.write('Administrator account can only be initialized if no accounts exist.')

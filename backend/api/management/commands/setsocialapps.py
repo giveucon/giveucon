@@ -16,4 +16,4 @@ class Command(BaseCommand):
             cur.execute(sql_query_socialapp)
             cur.execute(sql_query_socialapp_sites)
 
-        self.stdout.write('Successfully set social applications.')
+        self.stdout.write('social applications are set successfully.')

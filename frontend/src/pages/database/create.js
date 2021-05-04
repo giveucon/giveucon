@@ -6,6 +6,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout';
@@ -36,25 +37,31 @@ function Create({ lng, lngDict, selfUser }) {
   const router = useRouter();
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);
+  const [statePhrase, setStatePhrase] = useState(i18n.t('_waitingUserInput'));
+  const [sourcePhrase, setSourcePhrase] = useState(i18n.t(' '));
 
-  const dummyUserNumber = 20;
-  const dummyStoreNumber = 1;
-  const dummyProductNumber = 12;
-  const allRequestCount = dummyUserNumber + (dummyUserNumber * dummyStoreNumber) + (dummyUserNumber * dummyStoreNumber * dummyProductNumber);
+  const userIdList = [];
+  const storeIdList = [];
+  const productIdList = [];
+
+  const userNumber = 20;
+  const storeNumber = 100;
+  const productNumber = 300;
+  const allRequestCount = userNumber + storeNumber + productNumber;
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
   }
 
-  const postDummyTimeout = async () => {
-    await new Promise(r => setTimeout(r, 100));
+  const postTimeout = async () => {
+    await new Promise(r => setTimeout(r, 10));
   };
   
-  const postDummyUser = async (user) => {
+  const postUser = async (user) => {
     return await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
   };
   
-  const postDummyStore = async (store, imageList) => {
+  const postStore = async (store, imageList) => {
     const processedStore = {
       ...store,
       images: imageList.map(image => image.file),
@@ -62,7 +69,7 @@ function Create({ lng, lngDict, selfUser }) {
     return await requestToBackend(null, 'api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
   };
   
-  const postDummyProduct = async (product, imageList) => {
+  const postProduct = async (product, imageList) => {
     const processedProduct = {
       ...product,
       duration: product.duration + ' 00',
@@ -71,7 +78,7 @@ function Create({ lng, lngDict, selfUser }) {
     return await requestToBackend(null, 'api/dummy-products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
   };
 
-  const createDummyUser = async () => {
+  const createUser = async () => {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const user = {
@@ -82,22 +89,23 @@ function Create({ lng, lngDict, selfUser }) {
       locale: 'ko',
       dark_mode: false,
     };
-    const userResult = await postDummyUser(user);
+    setSourcePhrase(`(${user.user_name})`);
+    const userResult = await postUser(user);
     if (userResult.status === 201) {
+      userIdList.push(userResult.data.id);
       increaseRequestedCount();
-      return userResult.data;
+      await postTimeout();
     } else {
       console.log(userResult);
-      throw new Error();
     }
   };
 
-  const createDummyStore = async (user) => {
+  const createStore = async () => {
     const store = {
       name: faker.company.companyName(),
       description: faker.company.catchPhrase(),
       tags: [],
-      user: user.id,
+      user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
     let imageList = [];
     /*
@@ -109,49 +117,69 @@ function Create({ lng, lngDict, selfUser }) {
       );
     }
     */
-    const storeResponse = await postDummyStore(store, imageList);
+    setSourcePhrase(`(${store.name})`);
+    const storeResponse = await postStore(store, imageList);
     if (storeResponse.status === 201) {
+      storeIdList.push(storeResponse.data.id);
       increaseRequestedCount();
-      return storeResponse.data;
+      await postTimeout();
     } else {
       console.log(storeResponse);
-      throw new Error();
     }
   };
 
-  const createDummyProduct = async (store) => {
+  const createProduct = async () => {
     const product = {
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
       price: faker.commerce.price(),
       duration: faker.datatype.number() % 365,
-      store: store.id,
+      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
     let imageList = [];
-    const productResponse = await postDummyProduct(product, imageList);
+    setSourcePhrase(`(${product.name})`);
+    const productResponse = await postProduct(product, imageList);
     if (productResponse.status === 201) {
+      productIdList.push(productResponse.data.id);
       increaseRequestedCount();
-      return productResponse.data;
+      await postTimeout();
     } else {
       console.log(productResponse);
-      throw new Error();
     }
   };
 
   async function initializeDatabase() {
     setInitializing(true);
-    for (const i of Array(dummyUserNumber).keys()) {
-      const user = await createDummyUser();
-      await postDummyTimeout();
-      for (const j of Array(dummyStoreNumber).keys()) {
-        const store = await createDummyStore(user);
-        await postDummyTimeout();
-        for (const k of Array(dummyProductNumber).keys()) {
-          await createDummyProduct(store);
-          await postDummyTimeout();
+    
+    /*
+    for (const i of Array(userNumber).keys()) {
+      const user = await createUser();
+      await postTimeout();
+      for (const j of Array(storeNumber).keys()) {
+        const store = await createStore(user);
+        await postTimeout();
+        for (const k of Array(productNumber).keys()) {
+          await createProduct(store);
+          await postTimeout();
         }
       }
     }
+    */
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
+    for (const i of Array(userNumber).keys()) {
+      await createUser();
+    }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('store')}`);
+    for (const i of Array(storeNumber).keys()) {
+      await createStore();
+    }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('product')}`);
+    for (const i of Array(productNumber).keys()) {
+      await createProduct();
+    }
+
+    setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));
+    setSourcePhrase(' ');
   }
 
   return (
@@ -164,17 +192,23 @@ function Create({ lng, lngDict, selfUser }) {
         title={i18n.t('createDatabase')}
         titlePrefix={<IconButton><WarningIcon /></IconButton>}
       >
-        <Box display='flex' justifyContent='center'>
-          <Box margin='2rem' position='relative' display='inline-flex'>
-            <CircularProgressbar
-              value={Math.round(requestedCount / allRequestCount * 100)}
-              text={`${Math.round(requestedCount / allRequestCount * 100)}%`}
-              styles={buildStyles({
-                textColor: '#43a047',
-                pathColor: '#43a047',
-                pathTransitionDuration: 0
-              })}
-            />
+        <Box margin='1rem'>
+          <Box display='flex' justifyContent='center'>
+            <Box display='flex' position='relative'>
+              <CircularProgressbar
+                value={Math.round(requestedCount / allRequestCount * 100)}
+                text={`${Math.round(requestedCount / allRequestCount * 100)}%`}
+                styles={buildStyles({
+                  textColor: '#43a047',
+                  pathColor: '#43a047',
+                  pathTransitionDuration: 0
+                })}
+              />
+            </Box>
+          </Box>
+          <Box marginY='1rem'>
+            <Typography>{statePhrase}</Typography>
+            <Typography>{sourcePhrase}</Typography>
           </Box>
         </Box>
         <Box marginY={1}>
