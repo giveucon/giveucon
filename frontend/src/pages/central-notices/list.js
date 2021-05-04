@@ -36,15 +36,15 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   const i18n = useI18n();
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(initialCentralNoticeListResponse.data.results);
-  const [centralNoticeListPagination, setCentralNoticeListPagination] = useState(1);
+  const [centralNoticeListpage, setCentralNoticeListpage] = useState(0);
   const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
   const getMoreCentralNoticeList = async () => {
     const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, {
-      page: centralNoticeListPagination + 1,
+      page: centralNoticeListpage + 1,
     });
     setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
-    setCentralNoticeListPagination(prevCentralNoticeListPagination => prevCentralNoticeListPagination + 1);
+    setCentralNoticeListpage(prevCentralNoticeListpage => prevCentralNoticeListpage + 1);
     if (centralNoticeListResponse.data.next === null) setHasMoreCentralNoticeList(prevHasMoreCentralNoticeList => false);
   }
 

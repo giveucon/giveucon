@@ -56,4 +56,5 @@ urlpatterns = [
 
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),
+    path('dummy-products/', DummyProductCreateView.as_view()),
 ]

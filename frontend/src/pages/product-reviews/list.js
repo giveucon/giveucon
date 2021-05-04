@@ -45,16 +45,16 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
   const i18n = useI18n();
   const router = useRouter();
   const [productReviewList, setProductReviewList] = useState(initialProductReviewListResponse.data.results);
-  const [productReviewListPagination, setProductReviewListPagination] = useState(1);
+  const [productReviewListpage, setProductReviewListpage] = useState(0);
   const [hasMoreProductReviewList, setHasMoreProductReviewList] = useState(initialProductReviewListResponse.data.next);
 
   const getMoreProductReviewList = async () => {
     const productReviewListResponse = await requestToBackend('api/product-reviews/', 'get', 'json', null, {
       product: product.id,
-      page: productReviewListPagination + 1,
+      page: productReviewListpage + 1,
     });
     setProductReviewList(prevProductReviewList => (prevProductReviewList || []).concat(productReviewListResponse.data.results));
-    setProductReviewListPagination(prevProductReviewListPagination => prevProductReviewListPagination + 1);
+    setProductReviewListpage(prevProductReviewListpage => prevProductReviewListpage + 1);
     if (productReviewListResponse.data.next === null) setHasMoreProductReviewList(prevHasMoreProductReviewList => false);
   }
 

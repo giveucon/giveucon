@@ -45,16 +45,16 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
   const i18n = useI18n();
   const router = useRouter();
   const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
-  const [storeNoticeListPagination, setStoreNoticeListPagination] = useState(1);
+  const [storeNoticeListpage, setStoreNoticeListpage] = useState(0);
   const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(initialStoreNoticeListResponse.data.next);
 
   const getMoreStoreNoticeList = async () => {
     const storeNoticeListResponse = await requestToBackend('api/store-notices/', 'get', 'json', null, {
       store: store.id,
-      page: storeNoticeListPagination + 1,
+      page: storeNoticeListpage + 1,
     });
     setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));
-    setStoreNoticeListPagination(prevStoreNoticeListPagination => prevStoreNoticeListPagination + 1);
+    setStoreNoticeListpage(prevStoreNoticeListpage => prevStoreNoticeListpage + 1);
     if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(prevHasMoreStoreNoticeList => false);
   }
 

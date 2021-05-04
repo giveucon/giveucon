@@ -78,7 +78,7 @@ function Create({ lng, lngDict, setDarkMode, selfAccount }) {
             value={selfUser.email}
             error={selfUserError.email}
             fullWidth
-            label={i18n.t('.email')}
+            label={i18n.t('email')}
             InputLabelProps={{
               shrink: true,
             }}

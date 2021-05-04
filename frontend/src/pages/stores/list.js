@@ -46,17 +46,17 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
   const i18n = useI18n();
   const router = useRouter();
   const [storeList, setStoreList] = useState(initialStoreListResponse.data.results);
-  const [storeListPagination, setStoreListPagination] = useState(1);
+  const [storeListpage, setStoreListpage] = useState(0);
   const [hasMoreStoreList, setHasMoreStoreList] = useState(initialStoreListResponse.data.next);
 
   const getMoreStoreList = async () => {
     const params = {
       user: user ? user.id : null,
-      page: storeListPagination + 1,
+      page: storeListpage + 1,
     };
     const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
     setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
-    setStoreListPagination(prevStoreListPagination => prevStoreListPagination + 1);
+    setStoreListpage(prevStoreListpage => prevStoreListpage + 1);
     if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
   }
 

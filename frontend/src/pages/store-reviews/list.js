@@ -46,16 +46,16 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
   const i18n = useI18n();
   const router = useRouter();
   const [storeReviewList, setStoreReviewList] = useState(initialStoreReviewListResponse.data.results);
-  const [storeReviewListPagination, setStoreReviewListPagination] = useState(1);
+  const [storeReviewListpage, setStoreReviewListpage] = useState(0);
   const [hasMoreStoreReviewList, setHasMoreStoreReviewList] = useState(initialStoreReviewListResponse.data.next);
 
   const getMoreStoreReviewList = async () => {
     const storeReviewListResponse = await requestToBackend('api/store-reviews/', 'get', 'json', null, {
       store: store.id,
-      page: storeReviewListPagination + 1,
+      page: storeReviewListpage + 1,
     });
     setStoreReviewList(prevStoreReviewList => (prevStoreReviewList || []).concat(storeReviewListResponse.data.results));
-    setStoreReviewListPagination(prevStoreReviewListPagination => prevStoreReviewListPagination + 1);
+    setStoreReviewListpage(prevStoreReviewListpage => prevStoreReviewListpage + 1);
     if (storeReviewListResponse.data.next === null) setHasMoreStoreReviewList(prevHasMoreStoreReviewList => false);
   }
 

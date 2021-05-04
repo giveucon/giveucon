@@ -44,17 +44,17 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
   const i18n = useI18n();
   const router = useRouter();
   const [favoriteStoreList, setFavoriteStoreList] = useState(initialFavoriteStoreListResponse.data.results);
-  const [favoriteStoreListPagination, setFavoriteStoreListPagination] = useState(1);
+  const [favoriteStoreListpage, setFavoriteStoreListpage] = useState(1);
   const [hasMoreFavoriteStoreList, setHasMoreFavoriteStoreList] = useState(initialFavoriteStoreListResponse.data.next);
 
   const getMoreFavoriteStoreList = async () => {
     const params = {
       user: user ? user.id : null,
-      page: favoriteStoreListPagination + 1,
+      page: favoriteStoreListpage + 1,
     };
     const favoriteStoreListResponse = await requestToBackend(null, 'api/favorite-stores/', 'get', 'json', null, params);
     setFavoriteStoreList(prevFavoriteStoreList => prevFavoriteStoreList.concat(favoriteStoreListResponse.data.results));
-    setFavoriteStoreListPagination(prevFavoriteStoreListPagination => prevFavoriteStoreListPagination + 1);
+    setFavoriteStoreListpage(prevFavoriteStoreListpage => prevFavoriteStoreListpage + 1);
     if (storeListResponse.data.next === null) setHasMoreFavoriteStoreList(prevHasMoreFavoriteStoreList => false);
   }
 

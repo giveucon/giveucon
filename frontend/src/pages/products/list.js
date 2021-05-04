@@ -54,18 +54,18 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
   const i18n = useI18n();
   const router = useRouter();
   const [productList, setProductList] = useState(initialProductListResponse.data.results);
-  const [productListPagination, setProductListPagination] = useState(0);
+  const [productListpage, setProductListpage] = useState(0);
   const [hasMoreProductList, setHasMoreProductList] = useState(initialProductListResponse.data.next);
 
   const getMoreProductList = async () => {
-    const productListResponse = await await requestToBackend('api/products/', 'get', 'json', null, {
+    const productListResponse = await requestToBackend(null, 'api/products/', 'get', 'json', null, {
       user: user ? user.id : null,
       store: store ? store.id : null,
-      page: productListPagination + 1,
+      page: productListpage + 1,
     });
     setProductList(prevProductList => (prevProductList || []).concat(productListResponse.data.results));
-    setProductListPagination(prevProductListPagination => prevProductListPagination + 1);
-    if (productListPagination.data.next === null) setHasMoreProductList(prevHasMoreProductList => false);
+    setProductListpage(prevProductListpage => prevProductListpage + 1);
+    if (productListResponse.data.next === null) setHasMoreProductList(prevHasMoreProductList => false);
   }
 
   return (

@@ -60,7 +60,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   const i18n = useI18n();
   const router = useRouter();
   const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
-  const [couponListPagination, setCouponListPagination] = useState(1);
+  const [couponListpage, setCouponListpage] = useState(0);
   const [hasMoreCouponList, setHasMoreCouponList] = useState(initialCouponListResponse.data.next);
 
   const getMoreCouponList = async () => {
@@ -68,11 +68,11 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
       user: user ? user.id : null,
       store: store ? store.id : null,
       product: product ? product.id : null,
-      page: couponListPagination + 1,
+      page: couponListpage + 1,
     });
     setCouponList(prevCouponList => (prevCouponList || []).concat(couponListResponse.data.results));
-    setCouponListPagination(prevCouponListPagination => prevCouponListPagination + 1);
-    if (couponListPagination.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
+    setCouponListpage(prevCouponListpage => prevCouponListpage + 1);
+    if (couponListpage.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
   }
   console.log(couponList);
 

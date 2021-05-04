@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import faker from 'faker';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Box from '@material-ui/core/Box';
@@ -8,13 +8,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
-import convertImageToFile from 'utils/convertImageToFile'
-import convertJsonToFormData from 'utils/convertJsonToFormData'
-import requestToBackend from 'utils/requestToBackend'
-import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import convertImageToFile from 'utils/convertImageToFile';
+import convertJsonToFormData from 'utils/convertJsonToFormData';
+import requestToBackend from 'utils/requestToBackend';
+import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff){
@@ -37,10 +37,10 @@ function Create({ lng, lngDict, selfUser }) {
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);
 
-  const dummyTimeoutNumber = 200;
-  const dummyUserNumber = 4;
-  const dummyStoreNumber = 2;
-  const allRequestCount = dummyUserNumber + (dummyUserNumber * dummyStoreNumber);
+  const dummyUserNumber = 20;
+  const dummyStoreNumber = 1;
+  const dummyProductNumber = 12;
+  const allRequestCount = dummyUserNumber + (dummyUserNumber * dummyStoreNumber) + (dummyUserNumber * dummyStoreNumber * dummyProductNumber);
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
@@ -60,6 +60,15 @@ function Create({ lng, lngDict, selfUser }) {
       images: imageList.map(image => image.file),
     }
     return await requestToBackend(null, 'api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
+  };
+  
+  const postDummyProduct = async (product, imageList) => {
+    const processedProduct = {
+      ...product,
+      duration: product.duration + ' 00',
+      images: imageList.map(image => image.file),
+    }
+    return await requestToBackend(null, 'api/dummy-products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
   };
 
   const createDummyUser = async () => {
@@ -93,16 +102,38 @@ function Create({ lng, lngDict, selfUser }) {
     let imageList = [];
     /*
     for (const i of Array(faker.datatype.number() % 4).keys()) {
-      await convertImageToFile(faker.image.business(), faker.datatype.hexaDecimal(), (file) => {
-        imageList.push({file});
-      });
+      await convertImageToFile(
+        faker.image.business(),
+        faker.datatype.hexaDecimal(),
+        (file) => {imageList.push({file});}
+      );
     }
     */
-    const storeResult = await postDummyStore(store, imageList);
-    if (storeResult.status === 201) {
+    const storeResponse = await postDummyStore(store, imageList);
+    if (storeResponse.status === 201) {
       increaseRequestedCount();
+      return storeResponse.data;
     } else {
-      console.log(storeResult);
+      console.log(storeResponse);
+      throw new Error();
+    }
+  };
+
+  const createDummyProduct = async (store) => {
+    const product = {
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      price: faker.commerce.price(),
+      duration: faker.datatype.number() % 365,
+      store: store.id,
+    };
+    let imageList = [];
+    const productResponse = await postDummyProduct(product, imageList);
+    if (productResponse.status === 201) {
+      increaseRequestedCount();
+      return productResponse.data;
+    } else {
+      console.log(productResponse);
       throw new Error();
     }
   };
@@ -112,13 +143,15 @@ function Create({ lng, lngDict, selfUser }) {
     for (const i of Array(dummyUserNumber).keys()) {
       const user = await createDummyUser();
       await postDummyTimeout();
-      for (const i of Array(dummyStoreNumber).keys()) {
-        await createDummyStore(user);
+      for (const j of Array(dummyStoreNumber).keys()) {
+        const store = await createDummyStore(user);
         await postDummyTimeout();
+        for (const k of Array(dummyProductNumber).keys()) {
+          await createDummyProduct(store);
+          await postDummyTimeout();
+        }
       }
     }
-    await new Promise(r => setTimeout(r, 1000));
-    router.push('/home/');
   }
 
   return (
@@ -153,7 +186,7 @@ function Create({ lng, lngDict, selfUser }) {
             onClick={async () => {
               await initializeDatabase();
               await new Promise(r => setTimeout(r, 1000));
-              router.push('/');
+              router.push('/home/');
             }}
           >
             {i18n.t('createDatabase')}
