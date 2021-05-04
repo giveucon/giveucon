@@ -1,8 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-import refreshSession from 'utils/refreshSession';
-import verifySession from 'utils/verifySession';
+import getSession from 'utils/getSession';
 
 const jsonRequest = async (session, url, method, data, params) => {
   return await axios({
@@ -44,12 +43,11 @@ const multipartRequest = async (session, url, method, data, params) => {
 
 export default async function requestToBackend(context, url, method, contentType, data=null, params=null, defaultOrigin=true) {
 
-  const verifySessionResponse = await verifySession(context);
-  const session = verifySessionResponse.valid ? verifySessionResponse.session : await refreshSession(context);
+  const session = await getSession(context);
+  if (!session) throw new Error();
 
-  if (!defaultOrigin) {
-    url = new URL(url).pathname;
-  }
+  if (!defaultOrigin) url = new URL(url).pathname;
+  
   let response = null;
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);

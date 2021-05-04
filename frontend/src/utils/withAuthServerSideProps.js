@@ -1,4 +1,4 @@
-import getCookies from 'utils/getCookies';
+import getSession from 'utils/getSession';
 import requestToBackend from 'utils/requestToBackend';
 
 export default function withAuthServerSideProps(getServerSidePropsFunction) {
@@ -7,9 +7,9 @@ export default function withAuthServerSideProps(getServerSidePropsFunction) {
     const defaultLng = 'ko'
     const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
     
-    const cookies = getCookies(context);
     // If session is not found
-    if (!cookies.giveucon_session) {
+    const session = await getSession(context);
+    if (!session) {
       return {
         redirect: {
           permanent: false,
