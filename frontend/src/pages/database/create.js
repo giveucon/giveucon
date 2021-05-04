@@ -63,11 +63,11 @@ function Create({ lng, lngDict, selfUser }) {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
   }
 
-  const getImageList = async () => {
+  const getImageListFromUnsplash = async (keyword) => {
     let imageList = [];
     for (const i of Array(faker.datatype.number() % imageMaxAmount).keys()) {
       await convertImageToFile(
-        '/placeimg/640/480',
+        `/unsplash/1600x900/?${keyword}`,
         faker.datatype.uuid(),
         (file) => {
           const image = {file};
@@ -175,7 +175,8 @@ function Create({ lng, lngDict, selfUser }) {
       tags: Array.from(pickedTagIdSet),
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    const imageList = await getImageList();
+    const imageTypeList = []
+    const imageList = await getImageListFromUnsplash('store');
     setSourcePhrase(`(${store.name})`);
     const storeResponse = await postStore(store, imageList);
     if (storeResponse.status === 201) {
@@ -191,11 +192,11 @@ function Create({ lng, lngDict, selfUser }) {
     const product = {
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
-      price: faker.commerce.price(),
+      price: (faker.commerce.price() % 100) * 100,
       duration: faker.datatype.number() % 365,
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
-    const imageList = await getImageList();
+    const imageList = await getImageListFromUnsplash('product');
     setSourcePhrase(`(${product.name})`);
     const productResponse = await postProduct(product, imageList);
     if (productResponse.status === 201) {
@@ -215,7 +216,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    const imageList = await getImageList();
+    const imageList = await getImageListFromUnsplash();
     setSourcePhrase(`(${centralNotice.article.title})`);
     const centralNoticeResponse = await postCentralNotice(centralNotice, imageList);
     if (centralNoticeResponse.status === 201) {
@@ -235,7 +236,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
-    const imageList = await getImageList();
+    const imageList = await getImageListFromUnsplash();
     setSourcePhrase(`(${storeNotice.article.title})`);
     const storeNoticeResponse = await postStoreNotice(storeNotice, imageList);
     if (storeNoticeResponse.status === 201) {

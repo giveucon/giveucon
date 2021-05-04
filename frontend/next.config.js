@@ -5,8 +5,8 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: '/placeimg/:path*',
-        destination: 'http://placeimg.com/:path*',
+        source: '/unsplash/:path*',
+        destination: 'https://source.unsplash.com/:path*',
       },
     ]
   },
