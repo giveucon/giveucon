@@ -53,4 +53,7 @@ urlpatterns = [
 
     path('favorite-products/', FavoriteProductListView.as_view()),
     path('favorite-products/<int:pk>', FavoriteProductDetailView.as_view()),
+
+    path('dummy-users/', DummyUserCreateView.as_view()),
+    path('dummy-stores/', DummyStoreCreateView.as_view()),
 ]

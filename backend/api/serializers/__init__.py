@@ -27,3 +27,6 @@ from .product_review_update_serializer import ProductReviewUpdateSerializer
 from .favorite_store_serializer import FavoriteStoreSerializer
 from .favorite_product_serializer import FavoriteProductSerializer
 from .user_menuitem_serializer import UserMenuItemSerializer
+
+from .dummy_user_create_serializer import DummyUserCreateSerializer
+from .dummy_store_create_serializer import DummyStoreCreateSerializer

@@ -36,26 +36,79 @@ function Create({ lng, lngDict, selfUser }) {
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);
 
-  const dummyTimeout = 200;
+  const dummyTimeoutNumber = 200;
+  const dummyUserNumber = 4;
+  const dummyStoreNumber = 2;
   const allRequestCount = dummyTimeout;
 
+  const increaseRequestedCount = () => {
+    setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
+  }
+
   const postDummyTimeout = async () => {
-    await new Promise(r => setTimeout(r, 10));
+    await new Promise(r => setTimeout(r, 1000));
   };
   
   const postDummyUser = async (user) => {
     return await requestToBackend('api/dummy-users/', 'post', 'json', user, null);
   };
   
-  const postDummyStore = async (store) => {
-    return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(store), null);
+  const postDummyStore = async (store, imageList) => {
+    const processedStore = {
+      ...store,
+      images: imageList.map(image => image.file),
+    }
+    return await requestToBackend('api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
+  };
+
+  const createDummyUser = async () => {
+    const firstName = faker.name.firstName();
+    const lastName = faker.name.lastName();
+    const user = {
+      email: `${firstName}.${lastName}@giveucon.com`,
+      user_name: selfAccount.username,
+      first_name: firstName,
+      last_name: lastName,
+      locale: 'ko',
+      dark_mode: false,
+    };
+    const userResult = await postDummyUser(user);
+    if (userResult.status === 201) {
+      increaseRequestedCount();
+      return user;
+    } else {
+      createDummyUser();
+    }
+  };
+
+  const createDummyStore = async (user) => {
+    const store = {
+      name: faker.company.companyName(),
+      description: faker.company.catchPhraseDescriptor(),
+      tags: [],
+      user = user.id,
+    };
+    let imageList = [];
+    for (const i of Array(faker.datatype.number() % 4).keys()) {
+      await convertImageToFile(faker.name.findName(), faker.datatype.hexaDecimal(), (file) => {
+        imageList.push({file});
+      });
+    }
+    const storeResult = await postDummyStore(store, imageList);
+    if (storeResult.status === 201) {
+      increaseRequestedCount();
+    }
   };
 
   async function initializeDatabase() {
     setInitializing(true);
-    for (const i of Array(dummyTimeout).keys()) {
+    for (const i of Array(dummyUserNumber).keys()) {
+      const user = await createDummyUser();
       await postDummyTimeout();
-      setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
+      for (const i of Array(dummyStoreNumber).keys()) {
+        await createDummyStore(user);
+        await postDummyTimeout();
+      }
     }
   }
 
