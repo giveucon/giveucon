@@ -55,14 +55,5 @@ export default async function requestToBackend(context, url, method, contentType
     console.log(contentType);
     throw new Error()
   };
-  if (response.status === 401) {
-    toast.error('승인되지 않은 세션입니다.');
-  } else if (response.status === 403) {
-    toast.error('세션이 만료되었습니다. 새로고침 해주세요.');
-  } else if (response.status === 500) {
-    toast.error('서버 오류입니다.');
-  } else if (response.status > 404){
-    toast.error(`서버와 통신하는 중 ${response.status} 오류가 발생했습니다.`);
-  }
   return response;
 }

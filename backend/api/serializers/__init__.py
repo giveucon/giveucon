@@ -31,3 +31,5 @@ from .user_menuitem_serializer import UserMenuItemSerializer
 from .dummy_user_create_serializer import DummyUserCreateSerializer
 from .dummy_store_create_serializer import DummyStoreCreateSerializer
 from .dummy_product_create_serializer import DummyProductCreateSerializer
+from .dummy_central_notice_create_serializer import DummyCentralNoticeCreateSerializer
+from .dummy_store_notice_create_serializer import DummyStoreNoticeCreateSerializer

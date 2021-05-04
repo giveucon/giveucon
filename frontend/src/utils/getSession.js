@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getCookies from 'utils/getCookies'
+import setCookie from 'utils/setCookie'
 
 const requestVerifyTokens = async (session) => {
   try {
@@ -43,15 +44,15 @@ export default async function getSession(context) {
     if (verifyTokensResponse.status === 200) return session;
     else {
       const session = JSON.parse(cookies.giveucon_session);
-      const loginRefreshResponse = await requestRefreshTokens(session);
-      if (verifyTokensResponse.status === 200) {
+      const refreshTokenResponse = await requestRefreshTokens(session);
+      if (refreshTokenResponse.status === 200) {
         const refreshedSession = {
-          'access_token': loginRefreshResponse.data.access,
-          'refresh_token': loginRefreshResponse.data.refresh,
-          'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
-          'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
-          'access_token_expiry': loginRefreshResponse.data.access_expiry,
-          'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+          'access_token': refreshTokenResponse.data.access,
+          'refresh_token': refreshTokenResponse.data.refresh,
+          'access_token_lifetime': refreshTokenResponse.data.access_lifetime,
+          'refresh_token_lifetime': refreshTokenResponse.data.refresh_lifetime,
+          'access_token_expiry': refreshTokenResponse.data.access_expiry,
+          'refresh_token_expiry': refreshTokenResponse.data.refresh_expiry,
         };
         setCookie(context, 'giveucon_session', JSON.stringify(refreshedSession), {
           maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,

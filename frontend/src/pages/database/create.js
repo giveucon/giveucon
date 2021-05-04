@@ -43,11 +43,15 @@ function Create({ lng, lngDict, selfUser }) {
   const userIdList = [];
   const storeIdList = [];
   const productIdList = [];
+  const centralNoticeIdList = [];
+  const storeNoticeIdList = [];
 
-  const userNumber = 20;
-  const storeNumber = 100;
-  const productNumber = 300;
-  const allRequestCount = userNumber + storeNumber + productNumber;
+  const userNumber = 1;
+  const storeNumber = 1;
+  const productNumber = 0;
+  const centralNoticeNumber = 1;
+  const storeNoticeNumber = 0;
+  const allRequestCount = userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
@@ -76,6 +80,22 @@ function Create({ lng, lngDict, selfUser }) {
       images: imageList.map(image => image.file),
     }
     return await requestToBackend(null, 'api/dummy-products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
+  };
+  
+  const postCentralNotice = async (centralNotice, imageList) => {
+    const processedCentralNotice = {
+      ...centralNotice,
+      images: imageList.map(image => image.file),
+    }
+    return await requestToBackend(null, 'api/dummy-central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+  };
+  
+  const postStoreNotice = async (storeNotice, imageList) => {
+    const processedStoreNotice = {
+      ...storeNotice,
+      images: imageList.map(image => image.file),
+    }
+    return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
   };
 
   const createUser = async () => {
@@ -148,6 +168,46 @@ function Create({ lng, lngDict, selfUser }) {
     }
   };
 
+  const createCentralNotice = async () => {
+    const centralNotice = {
+      article: {
+        title: faker.company.bs(),
+        content: faker.hacker.phrase(),
+      },
+      user: userIdList[Math.floor(Math.random() * userIdList.length)]
+    };
+    let imageList = [];
+    setSourcePhrase(`(${centralNotice.article.title})`);
+    const centralNoticeResponse = await postCentralNotice(centralNotice, imageList);
+    if (centralNoticeResponse.status === 201) {
+      centralNoticeIdList.push(centralNoticeResponse.data.id);
+      increaseRequestedCount();
+      await postTimeout();
+    } else {
+      console.log(centralNoticeResponse);
+    }
+  };
+
+  const createStoreNotice = async () => {
+    const storeNotice = {
+      article: {
+        title: faker.company.bs(),
+        content: faker.hacker.phrase(),
+      },
+      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
+    };
+    let imageList = [];
+    setSourcePhrase(`(${storeNotice.article.title})`);
+    const storeNoticeResponse = await postStoreNotice(storeNotice, imageList);
+    if (storeNoticeResponse.status === 201) {
+      storeNoticeIdList.push(storeNoticeResponse.data.id);
+      increaseRequestedCount();
+      await postTimeout();
+    } else {
+      console.log(storeNoticeResponse);
+    }
+  };
+
   async function initializeDatabase() {
     setInitializing(true);
     
@@ -176,6 +236,14 @@ function Create({ lng, lngDict, selfUser }) {
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('product')}`);
     for (const i of Array(productNumber).keys()) {
       await createProduct();
+    }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
+    for (const i of Array(centralNoticeNumber).keys()) {
+      await createCentralNotice();
+    }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
+    for (const i of Array(storeNoticeNumber).keys()) {
+      await createStoreNotice();
     }
 
     setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));

@@ -37,3 +37,5 @@ from .user_menuitem_detail_view import UserMenuItemDetailView
 from .dummy_user_create_view import DummyUserCreateView
 from .dummy_store_create_view import DummyStoreCreateView
 from .dummy_product_create_view import DummyProductCreateView
+from .dummy_central_notice_create_view import DummyCentralNoticeCreateView
+from .dummy_store_notice_create_view import DummyStoreNoticeCreateView
