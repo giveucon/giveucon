@@ -33,9 +33,19 @@ const postSelfUser = async (selfUser) => {
 
 export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
   const selfAccountResponse = await getSelfAccount(context);
-  return {
-    props: { lng, lngDict, selfAccount: selfAccountResponse.data }
-  };
+  if (selfAccountResponse.status === 403) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login/"
+      },
+      props: {}
+    }
+  } else {
+    return {
+      props: { lng, lngDict, selfAccount: selfAccountResponse.data }
+    }
+  }
 })
 
 function Create({ lng, lngDict, setDarkMode, selfAccount }) {

@@ -3,7 +3,7 @@ export default function withoutAuthServerSideProps(getServerSidePropsFunction) {
 
     const defaultLng = 'ko'
     const { default: defaultLngDict = {} } = await import(`locales/${defaultLng}.json`);
-    
+
     if (getServerSidePropsFunction) {
       return {
         props: {

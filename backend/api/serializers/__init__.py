@@ -33,3 +33,4 @@ from .dummy_store_create_serializer import DummyStoreCreateSerializer
 from .dummy_product_create_serializer import DummyProductCreateSerializer
 from .dummy_central_notice_create_serializer import DummyCentralNoticeCreateSerializer
 from .dummy_store_notice_create_serializer import DummyStoreNoticeCreateSerializer
+from .dummy_tag_create_serializer import DummyTagCreateSerializer

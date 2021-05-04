@@ -40,18 +40,23 @@ function Create({ lng, lngDict, selfUser }) {
   const [statePhrase, setStatePhrase] = useState(i18n.t('_waitingUserInput'));
   const [sourcePhrase, setSourcePhrase] = useState(i18n.t(' '));
 
+  const tagIdList = [];
   const userIdList = [];
   const storeIdList = [];
   const productIdList = [];
   const centralNoticeIdList = [];
   const storeNoticeIdList = [];
 
-  const userNumber = 1;
-  const storeNumber = 1;
-  const productNumber = 0;
-  const centralNoticeNumber = 1;
+  const tagNumber = 20;
+  const userNumber = 30;
+  const storeNumber = 100;
+  const productNumber = 400;
+  const centralNoticeNumber = 0;
   const storeNoticeNumber = 0;
-  const allRequestCount = userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
+  const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
+
+  const tagMaxAmount = 3;
+  if (tagMaxAmount > tagNumber) throw new Error();
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
@@ -59,6 +64,10 @@ function Create({ lng, lngDict, selfUser }) {
 
   const postTimeout = async () => {
     await new Promise(r => setTimeout(r, 10));
+  };
+  
+  const postTag = async (user) => {
+    return await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
   };
   
   const postUser = async (user) => {
@@ -98,6 +107,21 @@ function Create({ lng, lngDict, selfUser }) {
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
   };
 
+  const createTag = async () => {
+    const tag = {
+      name: faker.commerce.productAdjective()
+    };
+    setSourcePhrase(`(${tag.name})`);
+    const tagResult = await postTag(tag);
+    if (tagResult.status === 201) {
+      tagIdList.push(tagResult.data.id);
+      increaseRequestedCount();
+      // await postTimeout();
+    } else {
+      console.log(tagResult);
+    }
+  };
+
   const createUser = async () => {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
@@ -114,17 +138,25 @@ function Create({ lng, lngDict, selfUser }) {
     if (userResult.status === 201) {
       userIdList.push(userResult.data.id);
       increaseRequestedCount();
-      await postTimeout();
+      // await postTimeout();
     } else {
       console.log(userResult);
     }
   };
 
   const createStore = async () => {
+    let pickedTagIdSet = new Set();
+    for (const i of Array(Math.floor(Math.random() * tagMaxAmount)).keys()) {
+      while (true) {
+        const pickedTagId = Math.floor(Math.random() * tagIdList.length);
+        if (pickedTagIdSet.has(pickedTagId)) continue;
+        else { pickedTagIdSet.add(pickedTagId); break; };
+      }
+    }
     const store = {
       name: faker.company.companyName(),
       description: faker.company.catchPhrase(),
-      tags: [],
+      tags: Array.from(pickedTagIdSet),
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
     let imageList = [];
@@ -142,7 +174,7 @@ function Create({ lng, lngDict, selfUser }) {
     if (storeResponse.status === 201) {
       storeIdList.push(storeResponse.data.id);
       increaseRequestedCount();
-      await postTimeout();
+      // await postTimeout();
     } else {
       console.log(storeResponse);
     }
@@ -162,7 +194,7 @@ function Create({ lng, lngDict, selfUser }) {
     if (productResponse.status === 201) {
       productIdList.push(productResponse.data.id);
       increaseRequestedCount();
-      await postTimeout();
+      // await postTimeout();
     } else {
       console.log(productResponse);
     }
@@ -182,7 +214,7 @@ function Create({ lng, lngDict, selfUser }) {
     if (centralNoticeResponse.status === 201) {
       centralNoticeIdList.push(centralNoticeResponse.data.id);
       increaseRequestedCount();
-      await postTimeout();
+      // await postTimeout();
     } else {
       console.log(centralNoticeResponse);
     }
@@ -202,7 +234,7 @@ function Create({ lng, lngDict, selfUser }) {
     if (storeNoticeResponse.status === 201) {
       storeNoticeIdList.push(storeNoticeResponse.data.id);
       increaseRequestedCount();
-      await postTimeout();
+      // await postTimeout();
     } else {
       console.log(storeNoticeResponse);
     }
@@ -210,21 +242,11 @@ function Create({ lng, lngDict, selfUser }) {
 
   async function initializeDatabase() {
     setInitializing(true);
-    
-    /*
-    for (const i of Array(userNumber).keys()) {
-      const user = await createUser();
-      await postTimeout();
-      for (const j of Array(storeNumber).keys()) {
-        const store = await createStore(user);
-        await postTimeout();
-        for (const k of Array(productNumber).keys()) {
-          await createProduct(store);
-          await postTimeout();
-        }
-      }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('tag')}`);
+    for (const i of Array(tagNumber).keys()) {
+      await createTag();
     }
-    */
+    if (tagMaxAmount > tagIdList.length) throw new Error();
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
     for (const i of Array(userNumber).keys()) {
       await createUser();
@@ -287,7 +309,7 @@ function Create({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={async () => {
               await initializeDatabase();
-              await new Promise(r => setTimeout(r, 1000));
+              await new Promise(r => setTimeout(r, 2500));
               router.push('/home/');
             }}
           >

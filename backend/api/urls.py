@@ -59,4 +59,5 @@ urlpatterns = [
     path('dummy-products/', DummyProductCreateView.as_view()),
     path('dummy-central-notices/', DummyCentralNoticeCreateView.as_view()),
     path('dummy-store-notices/', DummyStoreNoticeCreateView.as_view()),
+    path('dummy-tags/', DummyTagCreateView.as_view()),
 ]

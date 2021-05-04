@@ -43,7 +43,6 @@ export default async function getSession(context) {
     const verifyTokensResponse = await requestVerifyTokens(session);
     if (verifyTokensResponse.status === 200) return session;
     else {
-      const session = JSON.parse(cookies.giveucon_session);
       const refreshTokenResponse = await requestRefreshTokens(session);
       if (refreshTokenResponse.status === 200) {
         const refreshedSession = {
