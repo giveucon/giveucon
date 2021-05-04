@@ -60,7 +60,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   const i18n = useI18n();
   const router = useRouter();
   const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
-  const [couponListpage, setCouponListpage] = useState(0);
+  const [couponListpage, setCouponListpage] = useState(1);
   const [hasMoreCouponList, setHasMoreCouponList] = useState(initialCouponListResponse.data.next);
 
   const getMoreCouponList = async () => {

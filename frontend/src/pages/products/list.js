@@ -54,7 +54,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
   const i18n = useI18n();
   const router = useRouter();
   const [productList, setProductList] = useState(initialProductListResponse.data.results);
-  const [productListpage, setProductListpage] = useState(0);
+  const [productListpage, setProductListpage] = useState(1);
   const [hasMoreProductList, setHasMoreProductList] = useState(initialProductListResponse.data.next);
 
   const getMoreProductList = async () => {

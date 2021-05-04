@@ -36,7 +36,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
   const i18n = useI18n();
   const router = useRouter();
   const [centralNoticeList, setCentralNoticeList] = useState(initialCentralNoticeListResponse.data.results);
-  const [centralNoticeListpage, setCentralNoticeListpage] = useState(0);
+  const [centralNoticeListpage, setCentralNoticeListpage] = useState(1);
   const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
   const getMoreCentralNoticeList = async () => {

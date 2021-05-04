@@ -45,7 +45,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
   const i18n = useI18n();
   const router = useRouter();
   const [storeNoticeList, setStoreNoticeList] = useState(initialStoreNoticeListResponse.data.results);
-  const [storeNoticeListpage, setStoreNoticeListpage] = useState(0);
+  const [storeNoticeListpage, setStoreNoticeListpage] = useState(1);
   const [hasMoreStoreNoticeList, setHasMoreStoreNoticeList] = useState(initialStoreNoticeListResponse.data.next);
 
   const getMoreStoreNoticeList = async () => {

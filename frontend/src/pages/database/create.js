@@ -47,20 +47,36 @@ function Create({ lng, lngDict, selfUser }) {
   const centralNoticeIdList = [];
   const storeNoticeIdList = [];
 
-  const tagNumber = 20;
-  const userNumber = 30;
-  const storeNumber = 100;
-  const productNumber = 400;
+  const tagNumber = 10;
+  const userNumber = 10;
+  const storeNumber = 10;
+  const productNumber = 30;
   const centralNoticeNumber = 0;
   const storeNoticeNumber = 0;
   const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
 
   const tagMaxAmount = 3;
+  const imageMaxAmount = 3;
   if (tagMaxAmount > tagNumber) throw new Error();
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
   }
+
+  const getImageList = async () => {
+    let imageList = [];
+    for (const i of Array(faker.datatype.number() % imageMaxAmount).keys()) {
+      await convertImageToFile(
+        '/placeimg/640/480',
+        faker.datatype.uuid(),
+        (file) => {
+          const image = {file};
+          imageList.push(image);
+        }
+      );
+    }
+    return imageList;
+  };
 
   const postTimeout = async () => {
     await new Promise(r => setTimeout(r, 10));
@@ -109,7 +125,7 @@ function Create({ lng, lngDict, selfUser }) {
 
   const createTag = async () => {
     const tag = {
-      name: faker.commerce.productAdjective()
+      name: `${faker.commerce.color()}-${faker.commerce.productAdjective()}`
     };
     setSourcePhrase(`(${tag.name})`);
     const tagResult = await postTag(tag);
@@ -159,16 +175,7 @@ function Create({ lng, lngDict, selfUser }) {
       tags: Array.from(pickedTagIdSet),
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    let imageList = [];
-    /*
-    for (const i of Array(faker.datatype.number() % 4).keys()) {
-      await convertImageToFile(
-        faker.image.business(),
-        faker.datatype.hexaDecimal(),
-        (file) => {imageList.push({file});}
-      );
-    }
-    */
+    const imageList = await getImageList();
     setSourcePhrase(`(${store.name})`);
     const storeResponse = await postStore(store, imageList);
     if (storeResponse.status === 201) {
@@ -188,7 +195,7 @@ function Create({ lng, lngDict, selfUser }) {
       duration: faker.datatype.number() % 365,
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
-    let imageList = [];
+    const imageList = await getImageList();
     setSourcePhrase(`(${product.name})`);
     const productResponse = await postProduct(product, imageList);
     if (productResponse.status === 201) {
@@ -208,7 +215,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    let imageList = [];
+    const imageList = await getImageList();
     setSourcePhrase(`(${centralNotice.article.title})`);
     const centralNoticeResponse = await postCentralNotice(centralNotice, imageList);
     if (centralNoticeResponse.status === 201) {
@@ -228,7 +235,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
-    let imageList = [];
+    const imageList = await getImageList();
     setSourcePhrase(`(${storeNotice.article.title})`);
     const storeNoticeResponse = await postStoreNotice(storeNotice, imageList);
     if (storeNoticeResponse.status === 201) {
@@ -297,8 +304,8 @@ function Create({ lng, lngDict, selfUser }) {
             </Box>
           </Box>
           <Box marginY='1rem'>
-            <Typography>{statePhrase}</Typography>
-            <Typography>{sourcePhrase}</Typography>
+            <Typography align='center'>{statePhrase}</Typography>
+            <Typography align='center'>{sourcePhrase}</Typography>
           </Box>
         </Box>
         <Box marginY={1}>

@@ -21,7 +21,7 @@ function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   return (
     <Layout
