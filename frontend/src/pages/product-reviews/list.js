@@ -78,8 +78,8 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
               {productReviewList.map((item, index) => (
                 <Grid item xs={12} key={index}>
                   <ListItemCard
-                    title={item.article.title}
-                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                    title={item.review.article.title}
+                    subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
                     onClick={() => router.push(`/product-reviews/${item.id}/`)}
                   />
                 </Grid>
