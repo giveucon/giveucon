@@ -13,7 +13,12 @@ class StoreNoticeWriteSerializer(ModelSerializer):
 
     def create(self, validated_data):
         article_data = validated_data.pop('article')
-        user = validated_data.pop('user')
+        user = None
+        if 'user' in validated_data:
+            user = validated_data.pop('user')
+        elif 'user' in article_data:
+            user = article_data.pop('user')
+        assert(user is not None)
         article = ArticleWriteSerializer(data=article_data)
         article.is_valid(raise_exception=True)
         with transaction.atomic():

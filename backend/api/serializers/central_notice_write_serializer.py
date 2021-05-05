@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer
 
 from .article_write_serializer import ArticleWriteSerializer
 from .central_notice_read_serializer import CentralNoticeReadSerializer
-from ..models import Article, CentralNotice
+from ..models import CentralNotice
 
 class CentralNoticeWriteSerializer(ModelSerializer):
     article = ArticleWriteSerializer()
@@ -12,8 +12,14 @@ class CentralNoticeWriteSerializer(ModelSerializer):
         fields = '__all__'
         
     def create(self, validated_data):
+        print(validated_data)
         article_data = validated_data.pop('article')
-        user = validated_data.pop('user')
+        user = None
+        if 'user' in validated_data:
+            user = validated_data.pop('user')
+        elif 'user' in article_data:
+            user = article_data.pop('user')
+        assert(user is not None)
         article = ArticleWriteSerializer(data=article_data)
         article.is_valid(raise_exception=True)
         with transaction.atomic():
