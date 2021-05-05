@@ -106,7 +106,14 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                       image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                       actions={[
                         <IconButton><DirectionsIcon /></IconButton>,
-                        <IconButton><CropFreeIcon /></IconButton>
+                        <IconButton>
+                          <CropFreeIcon
+                            onClick={() => router.push({
+                              pathname: '/coupons/use/',
+                              query: { id: item.id },
+                            })}
+                          />
+                        </IconButton>
                       ]}
                       onClick={item.user === selfUser.id
                         ? (() => router.push(`/coupons/${item.id}/`))
