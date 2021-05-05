@@ -1,7 +1,4 @@
 from django.shortcuts import get_object_or_404
-import ecdsa
-from hashlib import sha256
-import json
 from rest_framework import exceptions
 from rest_framework import generics
 from rest_framework import status
@@ -16,7 +13,7 @@ class CouponDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
     serializer_class_read = CouponReadSerializer
     serializer_class_update = CouponUpdateSerializer
-
+'''
     def retrieve(self, request, *args, **kwargs):
         coupon = get_object_or_404(Coupon, pk=kwargs.get('pk'))
         req_type = request.query_params.get('type')
@@ -41,4 +38,4 @@ class CouponDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
             return Response(serializer.data)
         else:
             raise exceptions.ParseError
-
+'''
