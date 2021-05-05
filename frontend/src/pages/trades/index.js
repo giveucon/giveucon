@@ -4,6 +4,10 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -39,7 +43,18 @@ function Index({ lng, lngDict, selfUser }) {
       >
         <AlertBox content='쿠폰 거래 서비스 준비중입니다.' variant='information' />
       </Section>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/trades/register/')}
+        >
+          {i18n.t('registerSelling')}
+        </Button>
+      </Box>
     </Layout>
+    
   );
 }
 
