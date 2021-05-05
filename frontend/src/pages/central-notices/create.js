@@ -42,6 +42,7 @@ const postCentralNotice = async (centralNotice, imageList) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+/*
   if (!selfUser.staff){
     return {
       redirect: {
@@ -50,6 +51,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       }
     }
   }
+*/
   return {
     props: { lng, lngDict, selfUser }
   }

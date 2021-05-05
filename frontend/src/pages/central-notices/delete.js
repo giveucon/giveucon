@@ -37,6 +37,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
+  /*
   if (!selfUser.staff){
     return {
       redirect: {
@@ -45,6 +46,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       }
     }
   }
+  */
   return {
     props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data }
   }

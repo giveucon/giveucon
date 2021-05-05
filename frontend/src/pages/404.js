@@ -21,10 +21,10 @@ function Error404({ lng, lngDict }) {
   const router = useRouter();
 
   return (
-    <Layout title={`404 오류 - ${i18n.t('_appName')}`}>
+    <Layout title={`404 - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='404 오류'
+        title='404'
       >
         <AlertBox content={`${i18n.t('_pageNotFound')}`} variant='error' />
         <Box marginY={1}>

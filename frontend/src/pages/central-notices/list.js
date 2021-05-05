@@ -112,18 +112,16 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
         )}
       </Section>
 
-      {selfUser && selfUser.staff && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push(`/central-notices/create/`)}
-          >
-            {i18n.t('addNotice')}
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push(`/central-notices/create/`)}
+        >
+          {i18n.t('addNotice')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

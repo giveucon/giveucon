@@ -53,21 +53,19 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
           content={centralNotice.article.content}
         />
       </Section>
-      {selfUser.staff && (
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/central-notices/update/',
-              query: { id: centralNotice.id },
-            })}
-          >
-            {i18n.t('editNotice')}
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/central-notices/update/',
+            query: { id: centralNotice.id },
+          })}
+        >
+          {i18n.t('editNotice')}
+        </Button>
+      </Box>
     </Layout>
   );
 }
