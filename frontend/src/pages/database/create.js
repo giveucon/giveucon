@@ -193,7 +193,7 @@ function Create({ lng, lngDict, selfUser }) {
     const product = {
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
-      price: (faker.commerce.price() % 100) * 100,
+      price: ((Math.floor(Math.random() * 490) + 1) * 100) + 1000,
       duration: faker.datatype.number() % 365,
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };

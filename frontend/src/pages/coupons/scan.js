@@ -11,14 +11,11 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const putCouponScan = async (qrData) => {
-  const data = {
-    qr_data: qrData
-  };
-  return await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', data, null);
+  return await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', qrData, null);
 };
 
 const getCoupon = async (qrData) => {
-  return await requestToBackend(null, `api/products/${qrData.id}`, 'get', 'json');
+  return await requestToBackend(null, `api/coupons/${qrData.coupon}`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -48,12 +45,8 @@ function Scan({ lng, lngDict, selfUser }) {
 
     async function verifyQRData(qrData) {
       const couponScanResponse = await putCouponScan(qrData);
-      if (couponScanResponse.status === 200) {
-        const couponResponse = await getCoupon(qrData);
-        if (couponResponse.status === 200) return true;
-        else return false;
-      }
-      else return false;
+      console.log(couponScanResponse);
+      return couponScanResponse.data.valid;
     }
 
     function tick() {
@@ -71,7 +64,7 @@ function Scan({ lng, lngDict, selfUser }) {
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
           try {
             const qrData = JSON.parse(code.data)
-            if (verifyQRData(qrData) === true) {
+            if (verifyQRData(qrData)) {
               // console.log(video.srcObject.getTracks())
               video.srcObject.getTracks().forEach(
                 track => {
