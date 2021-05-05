@@ -19,7 +19,7 @@ const getStore = async (context, storeNotice) => {
   return await requestToBackend(context, `api/stores/${storeNotice.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
   if (storeNoticeResponse.status === 404) {
     return {
@@ -38,7 +38,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Id({ lng, lngDict, darkMode, selfUser, storeNotice, store }) {
+function Id({ lng, lngDict, selfUser, storeNotice, store }) {
   
 const i18n = useI18n();
   const router = useRouter();

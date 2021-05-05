@@ -26,23 +26,18 @@ const getStoreReview = async (context) => {
   return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
 };
 
-const getStore = async (context, StoreReview) => {
-  return await requestToBackend(context, `api/stores/${StoreReview.store}/`, 'get', 'json');
-};
-
 const deleteStoreReview = async (storeReview) => {
   return await requestToBackend(null, `api/store-reviews/${storeReview.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeReviewResponse = await getStoreReview(context);
   if (storeReviewResponse.status === 404) {
     return {
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, storeReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
+  if (!selfUser.staff && (selfUser.id !== storeReviewResponse.data.review.article.user)){
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -51,11 +46,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, storeReview: storeReviewResponse.data }
+    props: { lng, lngDict, selfUser, storeReview: storeReviewResponse.data }
   }
 })
 
-function Delete({ lng, lngDict, darkMode, selfUser, storeReview }) {
+function Delete({ lng, lngDict, selfUser, storeReview }) {
 
   const i18n = useI18n();
   const router = useRouter();

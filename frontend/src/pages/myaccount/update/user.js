@@ -43,19 +43,18 @@ const putSelfUser = async (selfUser) => {
     last_name: selfUser.last_name,
     locale: selfUser.locale,
     dark_mode: selfUser.dark_mode,
-    menu_items: selfUser.menu_items,
+    // menu_items: selfUser.menu_items
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
-  const prevSelfUser = selfUser;
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng, lngDict, darkMode, prevSelfUser }
+    props: { lng, lngDict, selfUser }
   }
 })
 
-function User({ lng, lngDict, darkMode, setDarkMode, prevSelfUser }) {
+function User({ lng, lngDict, selfUser: prevSelfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -188,7 +187,6 @@ function User({ lng, lngDict, darkMode, setDarkMode, prevSelfUser }) {
                 color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
-                  setDarkMode(event.target.checked);
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />

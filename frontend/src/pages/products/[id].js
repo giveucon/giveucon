@@ -34,7 +34,7 @@ const getProductReviewList = async (context) => {
   });
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {
     return {
@@ -55,7 +55,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Id({ lng, lngDict, darkMode, selfUser, product, store, productReviewList }) {
+function Id({ lng, lngDict, selfUser, product, store, productReviewList }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -54,7 +54,7 @@ const putProduct = async (product, imageList) => {
   return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevProductResponse = await getProduct(context);
   if (prevProductResponse.status === 404) {
     return {
@@ -71,11 +71,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     };
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, prevProduct: prevProductResponse.data }
+    props: { lng, lngDict, selfUser, prevProduct: prevProductResponse.data }
   }
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevProduct }) {
+function Update({ lng, lngDict, selfUser, prevProduct }) {
 
   const i18n = useI18n();
   const router = useRouter();

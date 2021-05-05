@@ -56,7 +56,7 @@ const putStore = async (store, imageList) => {
   return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevStoreResponse = await getStore(context);
   if (prevStoreResponse.status === 404) {
     return {
@@ -88,7 +88,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevStore, tagList }) {
+function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
 
   const i18n = useI18n();
   const router = useRouter();

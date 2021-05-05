@@ -1,6 +1,7 @@
 import getSession from 'utils/getSession';
 import requestToBackend from 'utils/requestToBackend';
 import setCookie from 'utils/setCookie';
+import destroyCookie from 'utils/destroyCookie';
 
 export default function withAuthServerSideProps (getServerSidePropsFunction) {
   return async (context) => {
@@ -10,19 +11,34 @@ export default function withAuthServerSideProps (getServerSidePropsFunction) {
     if (!session) {
       return {
         redirect: {
-          permanent: false,
           destination: '/login/',
+          permanent: false
+        }
+      }
+    }
+
+    const selfAccountResponse = await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
+    // If account not found
+    if (selfAccountResponse.status === 403 || selfAccountResponse.status === 404) {
+      destroyCookie(context, 'giveucon_session', {
+        maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+        path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+      });
+      return {
+        redirect: {
+          destination: '/login/',
+          permanent: false
         }
       }
     }
 
     const selfUserResponse = await requestToBackend(context, 'api/users/self/', 'get', 'json');
-    // If account founded but no user models linked
+    // If account found but no user models linked
     if (selfUserResponse.status === 403 || selfUserResponse.status === 404) {
       return {
         redirect: {
-          permanent: false,
           destination: '/users/create/',
+          permanent: false
         }
       }
     }
@@ -31,22 +47,24 @@ export default function withAuthServerSideProps (getServerSidePropsFunction) {
     selfUser.menu_items = [ 'home', 'myWallet', 'stores', 'trades', 'myAccount' ];
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
     const settings = {
-      'dark_mode': selfUser.dark_mode,
-      'locale': selfUser.locale
+      ...session,
+      settings: {
+        'dark_mode': selfUser.dark_mode,
+        'locale': selfUser.locale
+      }
     };
-    setCookie(context, 'giveucon_settings', JSON.stringify(settings), {
+    setCookie(context, 'giveucon_session', JSON.stringify(settings), {
       maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH
     })
 
     // Return props after execute server side functions
     if (getServerSidePropsFunction) {
-      return await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser.dark_mode, selfUser);
+      return await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser);
     } else return {
       props: {
         lng: selfUser.locale,
         lngDict,
-        darkMode: selfUser.dark_mode,
         selfUser
       },
     }

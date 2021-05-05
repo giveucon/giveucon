@@ -53,7 +53,7 @@ const getStoreReviewList = async (context, store) => {
   return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
     return {
@@ -79,11 +79,10 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ lng, lngDict, darkMode, selfUser, store, storeNoticeList, productList, storeReviewList }) {
+function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, storeReviewList }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  console.log(storeNoticeList);
   
   return (
     <Layout

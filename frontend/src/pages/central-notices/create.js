@@ -41,7 +41,7 @@ const postCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   if (!selfUser.staff){
     return {
       redirect: {
@@ -51,11 +51,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser }
+    props: { lng, lngDict, selfUser }
   }
 })
 
-function Create({ lng, lngDict, darkMode, selfUser }) {
+function Create({ lng, lngDict, selfUser }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -189,7 +189,6 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
           variant='contained'
           onClick={async () => {
             const response = await postCentralNotice(centralNotice, imageList);
-            console.log(response.data);
             if (response.status === 201) {
               router.push(`/central-notices/${response.data.id}/`);
               toast.success(i18n.t('_noticeSuccessfullyAdded'));

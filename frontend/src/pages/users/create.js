@@ -31,7 +31,7 @@ const postSelfUser = async (selfUser) => {
   return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
 };
 
-export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict, darkMode) => {
+export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
   const selfAccountResponse = await getSelfAccount(context);
   if (selfAccountResponse.status === 403) {
     return {
@@ -46,7 +46,7 @@ export const getServerSideProps = withoutAuthServerSideProps(async (context, lng
   }
 })
 
-function Create({ lng, lngDict, darkMode, setDarkMode, selfAccount }) {
+function Create({ lng, lngDict, selfAccount }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -176,7 +176,6 @@ function Create({ lng, lngDict, darkMode, setDarkMode, selfAccount }) {
                 color='primary'
                 checked={selfUser.dark_mode}
                 onChange={(event) => {
-                  setDarkMode(event.target.checked);
                   setSelfUser(prevSelfUser => ({ ...prevSelfUser, dark_mode: event.target.checked }));
                 }}
               />

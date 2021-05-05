@@ -8,13 +8,12 @@ export default function withoutAuthServerSideProps(getServerSidePropsFunction) {
 
     const lng = settings ? settings.locale : 'ko';
     const { default: lngDict = {} } = await import(`locales/${lng}.json`);
-    const darkMode = settings ? settings.dark_mode : false;
 
     if (getServerSidePropsFunction) {
-      return await getServerSidePropsFunction(context, lng, lngDict, darkMode);
+      return await getServerSidePropsFunction(context, lng, lngDict);
     } 
     return {
-      props: { lng, lngDict, darkMode }
+      props: { lng, lngDict }
     }
 
   }

@@ -62,12 +62,14 @@ export async function getServerSideProps(context) {
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
 
   const session = {
-    'access_token': loginRefreshResponse.data.access,
-    'refresh_token': loginRefreshResponse.data.refresh,
-    'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
-    'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
-    'access_token_expiry': loginRefreshResponse.data.access_expiry,
-    'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+    tokens: {
+      'access_token': loginRefreshResponse.data.access,
+      'refresh_token': loginRefreshResponse.data.refresh,
+      'access_token_lifetime': loginRefreshResponse.data.access_lifetime,
+      'refresh_token_lifetime': loginRefreshResponse.data.refresh_lifetime,
+      'access_token_expiry': loginRefreshResponse.data.access_expiry,
+      'refresh_token_expiry': loginRefreshResponse.data.refresh_expiry,
+    }
   };
   setCookie(context, 'giveucon_session', JSON.stringify(session), {
     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,

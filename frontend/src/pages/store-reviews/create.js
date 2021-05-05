@@ -50,27 +50,19 @@ const postStoreReview = async (storeReview, imageList) => {
   return await requestToBackend(null, 'api/store-reviews/', 'post', 'multipart', convertJsonToFormData(processedStoreReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
     return {
       notFound: true
     }
   }
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
-    return {
-      redirect: {
-        destination: '/unauthorized/',
-        permanent: false
-      }
-    }
-  }
   return {
-    props: { lng, lngDict, darkMode, selfUser, store: storeResponse.data }
+    props: { lng, lngDict, selfUser, store: storeResponse.data }
   }
 })
 
-function Create({ lng, lngDict, darkMode, selfUser, store }) {
+function Create({ lng, lngDict, selfUser, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -216,7 +208,6 @@ function Create({ lng, lngDict, darkMode, selfUser, store }) {
           variant='contained'
           onClick={async () => {
             const response = await postStoreReview(storeReview, imageList);
-            console.log(response.data);
             if (response.status === 201) {
               router.push(`/store-reviews/${response.data.id}/`);
               toast.success(i18n.t('_reviewSuccessfullyAdded'));

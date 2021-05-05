@@ -53,7 +53,7 @@ const putStoreNotice = async (storeNotice, imageList) => {
   return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevStoreNoticeResponse = await getStoreNotice(context);
   if (prevStoreNoticeResponse.status === 404) {
     return {
@@ -70,11 +70,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, prevStoreNotice: prevStoreNoticeResponse.data }
+    props: { lng, lngDict, selfUser, prevStoreNotice: prevStoreNoticeResponse.data }
   }
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevStoreNotice }) {
+function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();
