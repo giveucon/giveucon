@@ -45,7 +45,6 @@ function Scan({ lng, lngDict, selfUser }) {
 
     async function verifyQRData(qrData) {
       const couponScanResponse = await putCouponScan(qrData);
-      console.log(couponScanResponse);
       return couponScanResponse.data.valid;
     }
 

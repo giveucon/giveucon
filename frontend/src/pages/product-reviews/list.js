@@ -24,22 +24,9 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
-};
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialProductReviewListResponse = await getProductReviewList(context);
   const productResponse = await getProduct(context);
-  const storeResponse = await getStore(context, productResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
-    return {
-      redirect: {
-        destination: '/unauthorized/',
-        permanent: false
-      }
-    }
-  }
   return {
     props: {
       lng,

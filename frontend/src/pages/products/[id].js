@@ -50,7 +50,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       selfUser,
       product: productResponse.data,
       store: storeResponse.data,
-      productReviewList: productReviewListResponse.data
+      productReviewList: productReviewListResponse.data.results
     }
   }
 })

@@ -52,7 +52,7 @@ function Create({ lng, lngDict, selfUser }) {
   const tagNumber = 10;
   const userNumber = 10;
   const storeNumber = 10;
-  const productNumber = 30;
+  const productNumber = 50;
   const centralNoticeNumber = 0;
   const storeNoticeNumber = 0;
   const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
