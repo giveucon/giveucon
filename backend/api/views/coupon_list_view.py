@@ -14,6 +14,7 @@ class CouponListView(SerializerMixin, generics.ListCreateAPIView):
     pagination_class = CouponPagination
     serializer_class_read = CouponReadSerializer
     serializer_class_create = CouponCreateSerializer
+    filterset_fields = ['user']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

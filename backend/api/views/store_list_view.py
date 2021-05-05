@@ -12,13 +12,7 @@ class StoreListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_read = StoreReadSerializer
     serializer_class_write = StoreWriteSerializer
     pagination_class = StorePagination
-
-    def get_queryset(self):
-        queryset = Store.objects.all()
-        user = self.request.query_params.get('user')
-        if user:
-            queryset = queryset.filter(user__id=user)
-        return queryset
+    filterset_fields = ['user', 'tags']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

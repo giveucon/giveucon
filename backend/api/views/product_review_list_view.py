@@ -14,6 +14,7 @@ class ProductReviewListView(SerializerMixin, generics.ListCreateAPIView):
     pagination_class = ProductReviewPagination
     serializer_class_read = ProductReviewReadSerializer
     serializer_class_create = ProductReviewCreateSerializer
+    filterset_fields = ['product', 'product__store', 'product__store__user', 'review__article__user']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

@@ -7,6 +7,7 @@ from ..services import UserService
 class UserMenuItemListView(generics.ListCreateAPIView):
     queryset = UserMenuItem.objects.all()
     serializer_class = UserMenuItemSerializer
+    filterset_fields = ['user']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

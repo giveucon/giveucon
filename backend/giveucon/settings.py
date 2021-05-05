@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_filters',
 
     # Auth
     "rest_framework",
@@ -125,6 +126,7 @@ REST_FRAMEWORK = {
         # "rest_framework.permissions.AllowAny",
         "rest_framework.permissions.IsAuthenticated",
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 ROOT_URLCONF = 'giveucon.urls'

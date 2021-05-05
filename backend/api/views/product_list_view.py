@@ -11,3 +11,4 @@ class ProductListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_read = ProductReadSerializer
     serializer_class_create = ProductCreateSerializer
     pagination_class = ProductPagination
+    filterset_fields = ['store', 'store__user']
