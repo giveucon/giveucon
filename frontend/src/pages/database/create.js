@@ -48,6 +48,8 @@ function Create({ lng, lngDict, selfUser }) {
   const productIdList = [];
   const centralNoticeIdList = [];
   const storeNoticeIdList = [];
+  const storeReviewIdList = [];
+  const productReviewIdList = [];
 
   const tagNumber = 10;
   const userNumber = 10;
@@ -55,7 +57,9 @@ function Create({ lng, lngDict, selfUser }) {
   const productNumber = 50;
   const centralNoticeNumber = 0;
   const storeNoticeNumber = 0;
-  const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber;
+  const storeReviewNumber = 0;
+  const productReviewNumber = 0;
+  const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber + storeReviewNumber + productReviewNumber;
 
   const tagMaxAmount = 3;
   const imageMaxAmount = 3;
@@ -123,6 +127,34 @@ function Create({ lng, lngDict, selfUser }) {
       images: imageList.map(image => image.file),
     }
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+  };
+  
+  const postStoreReview = async (storeReview, imageList) => {
+    const processedStoreReview = {
+      review: {
+        article: {
+          ...storeReview.review.article,
+          images: imageList.map(image => image.file),
+        },
+        score: storeReview.review.score
+      },
+      store: storeReview.store
+    }
+    return await requestToBackend(null, 'api/dummy-store-reviews/', 'post', 'multipart', convertJsonToFormData(processedStoreReview), null);
+  };
+  
+  const postProductReview = async (productReview, imageList) => {
+    const processedProductReview = {
+      review: {
+        article: {
+          ...productReview.review.article,
+          images: imageList.map(image => image.file),
+        },
+        score: productReview.review.score
+      },
+      product: productReview.product
+    }
+    return await requestToBackend(null, 'api/dummy-product-reviews/', 'post', 'multipart', convertJsonToFormData(processedProductReview), null);
   };
 
   const createTag = async () => {
@@ -217,7 +249,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    const imageList = await getImageListFromUnsplash();
+    const imageList = await getImageListFromUnsplash('information');
     setSourcePhrase(`(${centralNotice.article.title})`);
     const centralNoticeResponse = await postCentralNotice(centralNotice, imageList);
     if (centralNoticeResponse.status === 201) {
@@ -237,7 +269,7 @@ function Create({ lng, lngDict, selfUser }) {
       },
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
-    const imageList = await getImageListFromUnsplash();
+    const imageList = await getImageListFromUnsplash('information');
     setSourcePhrase(`(${storeNotice.article.title})`);
     const storeNoticeResponse = await postStoreNotice(storeNotice, imageList);
     if (storeNoticeResponse.status === 201) {
@@ -246,6 +278,52 @@ function Create({ lng, lngDict, selfUser }) {
       // await postTimeout();
     } else {
       console.error(storeNoticeResponse);
+    }
+  };
+
+  const createStoreReview = async () => {
+    const storeReview = {
+      review: {
+        article: {
+          title: faker.company.bs(),
+          content: faker.hacker.phrase(),
+        },
+        score: Math.floor(Math.random() * 5) + 1
+      },
+      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
+    };
+    const imageList = await getImageListFromUnsplash('store');
+    setSourcePhrase(`(${storeReview.review.article.title})`);
+    const storeReviewResponse = await postStoreReview(storeReview, imageList);
+    if (storeReviewResponse.status === 201) {
+      storeReviewIdList.push(storeReviewResponse.data.id);
+      increaseRequestedCount();
+      // await postTimeout();
+    } else {
+      console.error(storeReviewResponse);
+    }
+  };
+
+  const createProductReview = async () => {
+    const productReview = {
+      review: {
+        article: {
+          title: faker.company.bs(),
+          content: faker.hacker.phrase(),
+        },
+        score: Math.floor(Math.random() * 5) + 1
+      },
+      product: productIdList[Math.floor(Math.random() * productIdList.length)]
+    };
+    const imageList = await getImageListFromUnsplash('product');
+    setSourcePhrase(`(${productReview.review.article.title})`);
+    const productReviewResponse = await postProductReview(productReview, imageList);
+    if (productReviewResponse.status === 201) {
+      productReviewIdList.push(productReviewResponse.data.id);
+      increaseRequestedCount();
+      // await postTimeout();
+    } else {
+      console.error(productReviewResponse);
     }
   };
 
@@ -276,7 +354,15 @@ function Create({ lng, lngDict, selfUser }) {
     for (const i of Array(storeNoticeNumber).keys()) {
       await createStoreNotice();
     }
-
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
+    for (const i of Array(storeReviewNumber).keys()) {
+      await createStoreReview();
+    }
+    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
+    for (const i of Array(productReviewNumber).keys()) {
+      await createProductReview();
+    }
+    setRequestedCount(prevRequestedCount => allRequestCount);
     setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));
     setSourcePhrase(' ');
   }
