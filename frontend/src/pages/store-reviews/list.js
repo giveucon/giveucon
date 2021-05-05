@@ -25,23 +25,30 @@ const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialStoreReviewListResponse = await getStoreReviewList(context);
   const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
     };
   }
   return {
-    props: { lng, lngDict, selfUser, initialStoreReviewListResponse, store: storeResponse.data },
-  };
+    props: {
+      lng,
+      lngDict,
+      darkMode,
+      selfUser,
+      initialStoreReviewListResponse,
+      store: storeResponse.data
+    }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store }) {
+function List({ lng, lngDict, darkMode, selfUser, initialStoreReviewListResponse, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

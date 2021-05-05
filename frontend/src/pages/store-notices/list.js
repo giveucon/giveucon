@@ -24,23 +24,23 @@ const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialStoreNoticeListResponse = await getStoreNoticeList(context);
   const storeResponse = await getStore(context);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, initialStoreNoticeListResponse, store: storeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, initialStoreNoticeListResponse, store: storeResponse.data }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store }) {
+function List({ lng, lngDict, darkMode, selfUser, initialStoreNoticeListResponse, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -54,23 +54,28 @@ const putProduct = async (product, imageList) => {
   return await requestToBackend(null, `api/products/${product.id}/`, 'put', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevProductResponse = await getProduct(context);
+  if (prevProductResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeResponse = await getStore(context, prevProductResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
     };
   }
   return {
-    props: { lng, lngDict, selfUser, prevProduct: prevProductResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, prevProduct: prevProductResponse.data }
+  }
 })
 
-function Update({ lng, lngDict, selfUser, prevProduct }) {
+function Update({ lng, lngDict, darkMode, selfUser, prevProduct }) {
 
   const i18n = useI18n();
   const router = useRouter();

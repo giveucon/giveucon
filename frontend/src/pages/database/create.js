@@ -17,21 +17,23 @@ import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+/*
   if (!selfUser.staff){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
+*/
   return {
-    props: { lng, lngDict, selfUser },
-  };
+    props: { lng, lngDict, darkMode, selfUser }
+  }
 })
 
-function Create({ lng, lngDict, selfUser }) {
+function Create({ lng, lngDict, darkMode, selfUser }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -175,7 +177,6 @@ function Create({ lng, lngDict, selfUser }) {
       tags: Array.from(pickedTagIdSet),
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
-    const imageTypeList = []
     const imageList = await getImageListFromUnsplash('store');
     setSourcePhrase(`(${store.name})`);
     const storeResponse = await postStore(store, imageList);

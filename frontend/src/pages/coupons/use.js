@@ -21,15 +21,20 @@ const getCouponQR = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const couponResponse = await getCoupon(context);
+  if (couponResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   const couponQRResponse = await getCouponQR(context);
   return {
@@ -39,11 +44,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       selfUser,
       coupon: couponResponse.data,
       couponQR: couponQRResponse.data,
-    },
-  };
+    }
+  }
 })
 
-function Use({ lng, lngDict, selfUser, coupon, couponQR }) {
+function Use({ lng, lngDict, darkMode, selfUser, coupon, couponQR }) {
 
   const i18n = useI18n();
   const router = useRouter();

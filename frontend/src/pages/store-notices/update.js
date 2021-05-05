@@ -53,23 +53,28 @@ const putStoreNotice = async (storeNotice, imageList) => {
   return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevStoreNoticeResponse = await getStoreNotice(context);
+  if (prevStoreNoticeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeResponse = await getStore(context, prevStoreNoticeResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, prevStoreNotice: prevStoreNoticeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, prevStoreNotice: prevStoreNoticeResponse.data }
+  }
 })
 
-function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
+function Update({ lng, lngDict, darkMode, selfUser, prevStoreNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

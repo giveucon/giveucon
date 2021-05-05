@@ -37,11 +37,11 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevSelfUser = selfUser;
   return {
-    props: { lng, lngDict, prevSelfUser: prevSelfUser },
-  };
+    props: { lng, lngDict, darkMode, prevSelfUser: prevSelfUser }
+  }
 })
 
 function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {

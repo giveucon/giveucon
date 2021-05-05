@@ -30,22 +30,27 @@ const deleteStore = async (store) => {
   return await requestToBackend(null, `api/stores/${store.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const storeResponse = await getStore(context);
+  if (storeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, store: storeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, store: storeResponse.data }
+  }
 })
 
-function Delete({ lng, lngDict, selfUser, store }) {
+function Delete({ lng, lngDict, darkMode, selfUser, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

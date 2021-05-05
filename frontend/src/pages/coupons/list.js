@@ -37,7 +37,7 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialCouponListResponse = await getCouponList(context);
   const userResponse = context.query.user && await getUser(context);
   const storeResponse = context.query.store && await getStore(context);
@@ -51,11 +51,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       user: context.query.user ? userResponse.data : null,
       store: context.query.store ? storeResponse.data : null,
       product: context.query.product ? productResponse.data : null,
-    },
-  };
+    }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, product }) {
+function List({ lng, lngDict, darkMode, selfUser, initialCouponListResponse, user, store, product }) {
 
   const i18n = useI18n();
   const router = useRouter();

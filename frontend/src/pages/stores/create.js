@@ -49,14 +49,19 @@ const postStore = async (store, imageList) => {
   return await requestToBackend(null, 'api/stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const tagListResponse = await getTagList(context);
+  if (tagListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
-    props: { lng, lngDict, selfUser, tagList: tagListResponse.data },
+    props: { lng, lngDict, darkMode, selfUser, tagList: tagListResponse.data }
   }
 })
 
-function Create({ lng, lngDict, selfUser, tagList }) {
+function Create({ lng, lngDict, darkMode, selfUser, tagList }) {
 
   const i18n = useI18n();
   const router = useRouter();

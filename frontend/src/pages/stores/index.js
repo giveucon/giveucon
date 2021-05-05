@@ -29,9 +29,19 @@ const getSelfStoreList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const storeListResponse = await getStoreList(context);
+  if (storeListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
+  if (selfStoreListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
     props: {
       lng,
@@ -43,7 +53,7 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
   };
 })
 
-function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
+function Index({ lng, lngDict, darkMode, selfUser, storeList, selfStoreList }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -31,21 +31,22 @@ const getNearbyCouponList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(context);
   const nearbyCouponListResponse = await getNearbyCouponList(context, selfUser);
   return {
     props: { 
       lng,
       lngDict,
+      darkMode,
       selfUser,
       centralNoticeList: centralNoticeListResponse.data.results,
       nearbyCouponList: nearbyCouponListResponse.data.results
-    },
-  };
+    }
+  }
 })
 
-function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) {
+function Index({ lng, lngDict, darkMode, selfUser, centralNoticeList, nearbyCouponList }) {
 
   const i18n = useI18n();
   const router = useRouter();

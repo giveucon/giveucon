@@ -48,22 +48,27 @@ const putCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
-  if (!selfUser.staff){
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+  const prevCentralNoticeResponse = await getCentralNotice(context);
+  if (prevCentralNoticeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  if (!selfUser.staff) {
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
-  const prevCentralNoticeResponse = await getCentralNotice(context);
   return {
-    props: { lng, lngDict, selfUser, prevCentralNotice: prevCentralNoticeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, prevCentralNotice: prevCentralNoticeResponse.data }
+  }
 })
 
-function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
+function Update({ lng, lngDict, darkMode, selfUser, prevCentralNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

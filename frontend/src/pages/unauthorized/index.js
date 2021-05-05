@@ -3,23 +3,30 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from 'components/AlertBox'
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
+import AlertBox from 'components/AlertBox';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-function Index({}) {
+export const getServerSideProps = withoutAuthServerSideProps (async (context, lng, lngDict, darkMode) => {
+  return {
+    props: { lng, lngDict, darkMode }
+  }
+})
+
+function Index({ lng, lngDict, darkMode }) {
 
   const i18n = useI18n();
   const router = useRouter();
   
   return (
-    <Layout title={`권한 없음 - ${i18n.t('_appName')}`}>
+    <Layout title={`${i18n.t('accessDenied')} - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='권한 없음'
+        title={i18n.t('accessDenied')}
       >
-        <AlertBox content='권한이 없습니다.' variant='error' />
+        <AlertBox content={i18n.t('_doNotHavePermissionToAccess')} variant='error' />
         <Box marginY={1}>
           <Button
             color='default'
@@ -27,7 +34,7 @@ function Index({}) {
             variant='contained'
             onClick={() => router.back()}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -35,9 +42,9 @@ function Index({}) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/`)}
+            onClick={() => router.push('/')}
           >
-            홈으로 가기
+            {i18n.t('goHome')}
           </Button>
         </Box>
       </Section>

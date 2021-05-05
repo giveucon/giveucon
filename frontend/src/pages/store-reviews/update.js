@@ -56,23 +56,28 @@ const putStoreReview = async (storeReview, imageList) => {
   return await requestToBackend(null, `api/store-reviews/${storeReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevStoreReviewResponse = await getStoreReview(context);
+  if (prevStoreReviewResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeResponse = await getStore(context, prevStoreReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
+  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, prevStoreReview: prevStoreReviewResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, prevStoreReview: prevStoreReviewResponse.data }
+  }
 })
 
-function Update({ lng, lngDict, selfUser, prevStoreReview }) {
+function Update({ lng, lngDict, darkMode, selfUser, prevStoreReview }) {
 
   const i18n = useI18n();
   const router = useRouter();

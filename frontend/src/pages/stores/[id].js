@@ -53,8 +53,13 @@ const getStoreReviewList = async (context, store) => {
   return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const storeResponse = await getStore(context);
+  if (storeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
   const storeReviewListResponse = await getStoreReviewList(context, storeResponse.data);
@@ -66,15 +71,15 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       store: storeResponse.data,
       storeNoticeList: storeNoticeListResponse.data.results,
       productList: productListResponse.data.results,
-      storeReviewList: storeReviewListResponse.data.results,
-    },
-  };
+      storeReviewList: storeReviewListResponse.data.results
+    }
+  }
 })
 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, storeReviewList }) {
+function Id({ lng, lngDict, darkMode, selfUser, store, storeNoticeList, productList, storeReviewList }) {
 
   const i18n = useI18n();
   const router = useRouter();

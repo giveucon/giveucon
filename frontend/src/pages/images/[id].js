@@ -10,15 +10,19 @@ const getImage = async (context) => {
   return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const imageResponse = await getImage(context);
-  console.log(imageResponse.data);
+  if (imageResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
-    props: { lng, lngDict, selfUser, image: imageResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, image: imageResponse.data }
+  }
 })
 
-function Id({ lng, lngDict, selfUser, image }) {
+function Id({ lng, lngDict, darkMode, selfUser, image }) {
 
   const i18n = useI18n();
   const router = useRouter();

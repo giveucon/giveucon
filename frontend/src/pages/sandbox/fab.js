@@ -9,13 +9,13 @@ import Section from 'components/Section'
 import Tile from 'components/Tile';
 import withAuthServerSideProps from 'withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, session, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   return {
-    props: { session, selfUser },
+    props: { lng, lngDict, darkMode, selfUser }
   }
 })
 
-function FabTest({ session, selfUser }) {
+function FabTest({ lng, lngDict, darkMode, selfUser }) {
   const router = useRouter();
   return (
     <>

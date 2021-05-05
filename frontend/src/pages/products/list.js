@@ -33,7 +33,7 @@ const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialProductListResponse = await getProductList(context);
   const userResponse = context.query.user && await getUser(context);
   const storeResponse = context.query.store && await getStore(context);
@@ -44,12 +44,12 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       selfUser,
       initialProductListResponse,
       user: context.query.user ? userResponse.data : null,
-      store: context.query.store ? storeResponse.data : null,
-    },
-  };
+      store: context.query.store ? storeResponse.data : null
+    }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialProductListResponse, user, store }) {
+function List({ lng, lngDict, darkMode, selfUser, initialProductListResponse, user, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

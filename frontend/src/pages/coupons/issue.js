@@ -49,15 +49,20 @@ const getStore = async (context, product) => {
   return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const productResponse = await getProduct(context);
+  if (productResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeResponse = await getStore(context, productResponse.data);
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data, store: storeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, product: productResponse.data, store: storeResponse.data }
+  }
 })
 
-function Issue({ lng, lngDict, selfUser, product, store }) {
+function Issue({ lng, lngDict, darkMode, selfUser, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

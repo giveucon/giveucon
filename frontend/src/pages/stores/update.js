@@ -56,17 +56,27 @@ const putStore = async (store, imageList) => {
   return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevStoreResponse = await getStore(context);
+  if (prevStoreResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff && (selfUser.id !== prevStoreResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   const tagListResponse = await getTagList(context);
+  if (tagListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
     props: {
       lng,
@@ -74,11 +84,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       selfUser,
       prevStore: prevStoreResponse.data,
       tagList: tagListResponse.data
-    },
-  };
+    }
+  }
 })
 
-function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
+function Update({ lng, lngDict, darkMode, selfUser, prevStore, tagList }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -2,14 +2,25 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { destroyCookie } from 'nookies'
 
-export default function Logout() {
-  const router = useRouter();
-  useEffect(() => {
-    destroyCookie(null, 'giveucon_session', {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
-    router.push('/');
+export async function getServerSideProps(context) {
+
+  destroyCookie(context, 'giveucon_session', {
+    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
   });
-  return null;
+  destroyCookie(context, 'giveucon_settings', {
+    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+  });
+
+  return {
+    redirect: {
+      destination: process.env.NEXT_PUBLIC_BASE_URL,
+      permanent: false
+    }
+  }
+}
+
+export default function Logout() {
+
 }

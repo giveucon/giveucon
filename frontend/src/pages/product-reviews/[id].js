@@ -23,8 +23,13 @@ const getStore = async (context, product) => {
   return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const productReviewResponse = await getProductReview(context);
+  if (productReviewResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const productResponse = await getProduct(context, productReviewResponse.data);
   const storeResponse = await getStore(context, productResponse.data);
   console.log(productReviewResponse.data);
@@ -36,11 +41,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       productReview: productReviewResponse.data,
       product: productResponse.data,
       store: storeResponse.data
-    },
-  };
+    }
+  }
 })
 
-function Id({ lng, lngDict, selfUser, productReview, product, store }) {
+function Id ({ lng, lngDict, darkMode, selfUser, productReview, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

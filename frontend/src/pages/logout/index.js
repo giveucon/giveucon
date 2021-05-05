@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   return {
-    props: { lng, lngDict, selfUser },
-  };
+    props: { lng, lngDict, darkMode, selfUser }
+  }
 })
 
-function Index({ lng, lngDict, selfUser }) {
+function Index({ lng, lngDict, darkMode, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

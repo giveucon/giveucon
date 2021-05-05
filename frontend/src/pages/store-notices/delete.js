@@ -34,23 +34,28 @@ const deleteStoreNotice = async (storeNotice) => {
   return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
+  if (storeNoticeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const storeResponse = await getStore(context, storeNoticeResponse.data);
   if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, storeNotice: storeNoticeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, storeNotice: storeNoticeResponse.data }
+  }
 })
 
-function Delete({ lng, lngDict, selfUser, storeNotice }) {
+function Delete({ lng, lngDict, darkMode, selfUser, storeNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -44,14 +44,19 @@ const getCoupon = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const couponResponse = await getCoupon(context);
+  if (couponResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
-    props: { lng, lngDict, selfUser, coupon: couponResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, coupon: couponResponse.data }
+  }
 })
 
-function Completed({ lng, lngDict, selfUser, coupon }) {
+function Completed({ lng, lngDict, darkMode, selfUser, coupon }) {
 
   const i18n = useI18n();
   const router = useRouter();

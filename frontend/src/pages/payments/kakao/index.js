@@ -28,19 +28,24 @@ const postCoupon = async (selfUser, product) => {
   const data = {
     used: false,
     user: selfUser.id,
-    product: product.id,
+    product: product.id
   };
   return await requestToBackend(null, `api/coupons/`, 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const productResponse = await getProduct(context);
+  if (productResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, product: productResponse.data }
+  }
 })
 
-function Index({ lng, lngDict, selfUser, product }) {
+function Index({ lng, lngDict, darkMode, selfUser, product }) {
   
   const i18n = useI18n();
   const router = useRouter();

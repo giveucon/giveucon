@@ -1,14 +1,21 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from 'components/AlertBox'
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
+import AlertBox from 'components/AlertBox';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-function Error404() {
+export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict, darkMode) => {
+  return {
+    props: { lng, lngDict, darkMode }
+  }
+})
+
+function Error404({ lng, lngDict, darkMode }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -19,7 +26,7 @@ function Error404() {
         backButton
         title='404 오류'
       >
-        <AlertBox content='페이지를 찾을 수 없습니다.' variant='error' />
+        <AlertBox content={`${i18n.t('_pageNotFound')}`} variant='error' />
         <Box marginY={1}>
           <Button
             color='default'
@@ -27,7 +34,7 @@ function Error404() {
             variant='contained'
             onClick={() => router.back()}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -35,9 +42,9 @@ function Error404() {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/`)}
+            onClick={() => router.push('/')}
           >
-            홈으로 가기
+            {i18n.t('goHome')}
           </Button>
         </Box>
       </Section>

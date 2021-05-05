@@ -3,10 +3,10 @@ import { useRouter } from 'next/router'
 
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   return {
     props: {}
-  };
+  }
 })
 
 function Index() {

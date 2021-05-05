@@ -17,22 +17,27 @@ const getCoupon = async (context) => {
   return await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const couponResponse = await getCoupon(context);
+  if (couponResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, coupon: couponResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, coupon: couponResponse.data }
+  }
 })
 
-function Id({ lng, lngDict, selfUser, coupon }) {
+function Id({ lng, lngDict, darkMode, selfUser, coupon }) {
 
   const i18n = useI18n();
   const router = useRouter();

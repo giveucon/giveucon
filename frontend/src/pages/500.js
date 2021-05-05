@@ -1,25 +1,32 @@
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-import AlertBox from 'components/AlertBox'
-import Layout from 'components/Layout'
-import Section from 'components/Section'
-import useI18n from 'hooks/useI18n'
+import AlertBox from 'components/AlertBox';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import useI18n from 'hooks/useI18n';
+import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-function Error500() {
+export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict, darkMode) => {
+  return {
+    props: { lng, lngDict, darkMode }
+  }
+})
+
+function Error500({ lng, lngDict, darkMode }) {
   
   const i18n = useI18n();
   const router = useRouter();
 
   return (
-    <Layout title={`500 오류 - ${i18n.t('_appName')}`}>
+    <Layout title={`500 - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='500 오류'
+        title='500'
       >
-        <AlertBox content='서버 내부 오류입니다.' variant='error' />
+        <AlertBox content={`${i18n.t('_internalServerError')}`} variant='error' />
         <Box marginY={1}>
           <Button
             color='default'
@@ -27,7 +34,7 @@ function Error500() {
             variant='contained'
             onClick={() => router.back()}
           >
-            뒤로가기
+            {i18n.t('goBack')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -35,9 +42,9 @@ function Error500() {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/`)}
+            onClick={() => router.push('/')}
           >
-            홈으로 가기
+            {i18n.t('goHome')}
           </Button>
         </Box>
       </Section>

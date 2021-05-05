@@ -50,23 +50,28 @@ const postProductReview = async (productReview, imageList) => {
   return await requestToBackend(null, 'api/product-reviews/', 'post', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const productResponse = await getProduct(context);
+  if (productResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   console.log(productResponse);
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data },
+    props: { lng, lngDict, darkMode, selfUser, product: productResponse.data }
   }
 })
 
-function Create({ lng, lngDict, selfUser, product }) {
+function Create ({ lng, lngDict, darkMode, selfUser, product }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();

@@ -48,14 +48,14 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const prevSelfUser = selfUser;
   return {
-    props: { lng, lngDict, prevSelfUser: prevSelfUser },
-  };
+    props: { lng, lngDict, darkMode, prevSelfUser }
+  }
 })
 
-function User({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
+function User({ lng, lngDict, darkMode, setDarkMode, prevSelfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

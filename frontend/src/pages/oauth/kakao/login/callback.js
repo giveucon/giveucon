@@ -76,11 +76,10 @@ export async function getServerSideProps(context) {
 
   return {
     redirect: {
-      permanent: false,
-      destination: `${process.env.NEXT_PUBLIC_BASE_URL}home/`,
-    },
-    props: {}
-  };
+      destination: process.env.NEXT_PUBLIC_BASE_URL,
+      permanent: false
+    }
+  }
 }
 
 export default function Callback() {

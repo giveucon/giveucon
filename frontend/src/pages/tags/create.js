@@ -18,24 +18,22 @@ const postTag = async (tag) => {
   return await requestToBackend(null, 'api/tags/', 'post', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   console.log(!selfUser.staff);
   if(!selfUser.staff) {
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
-      },
-      props: {}
-    };
-  } else {
-    return {
-      props: { lng, lngDict, selfUser },
-    };
+        destination: '/unauthorized/',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: { lng, lngDict, darkMode, selfUser }
   }
 })
 
-function Create({ lng, lngDict, selfUser }) {
+function Create({ lng, lngDict, darkMode, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

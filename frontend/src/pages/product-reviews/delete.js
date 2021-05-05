@@ -34,23 +34,28 @@ const deleteProductReview = async (productReview) => {
   return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const productReviewResponse = await getProductReview(context);
+  if (productReviewResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const productResponse = await getProduct(context, productReviewResponse.data);
   if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
   return {
-    props: { lng, lngDict, selfUser, productReview: productReviewResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, productReview: productReviewResponse.data }
+  }
 })
 
-function Delete({ lng, lngDict, selfUser, productReview }) {
+function Delete({ lng, lngDict, darkMode, selfUser, productReview }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -31,24 +31,22 @@ const postSelfUser = async (selfUser) => {
   return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
 };
 
-export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
+export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict, darkMode) => {
   const selfAccountResponse = await getSelfAccount(context);
   if (selfAccountResponse.status === 403) {
     return {
       redirect: {
         permanent: false,
         destination: "/login/"
-      },
-      props: {}
+      }
     }
-  } else {
-    return {
-      props: { lng, lngDict, selfAccount: selfAccountResponse.data }
-    }
+  }
+  return {
+    props: { lng, lngDict, selfAccount: selfAccountResponse.data }
   }
 })
 
-function Create({ lng, lngDict, setDarkMode, selfAccount }) {
+function Create({ lng, lngDict, darkMode, setDarkMode, selfAccount }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -57,7 +55,7 @@ function Create({ lng, lngDict, setDarkMode, selfAccount }) {
     user_name: selfAccount.username,
     first_name: null,
     last_name: null,
-    locale: 'ko',
+    locale: lng,
     dark_mode: false,
   });
   const [selfUserError, setSelfUserError] = useState({

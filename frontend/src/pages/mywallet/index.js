@@ -18,19 +18,19 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponList = async (context, selfUser) => {
   const params = {
-    user: selfUser.id,
+    user: selfUser.id
   };
   return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const selfCouponListResponse = await getCouponList(context, selfUser);
   return {
-    props: { lng, lngDict, selfUser, selfCouponList: selfCouponListResponse.data.results },
-  };
+    props: { lng, lngDict, darkMode, selfUser, selfCouponList: selfCouponListResponse.data.results }
+  }
 })
 
-function Index({ lng, lngDict, selfUser, selfCouponList }) {
+function Index({ lng, lngDict, darkMode, selfUser, selfCouponList }) {
 
   const i18n = useI18n();
   const router = useRouter();

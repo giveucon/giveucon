@@ -21,13 +21,13 @@ const getCoupon = async (qrData) => {
   return await requestToBackend(null, `api/products/${qrData.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   return {
-    props: { lng, lngDict, selfUser },
-  };
+    props: { lng, lngDict, darkMode, selfUser }
+  }
 })
 
-function Scan({ lng, lngDict, selfUser }) {
+function Scan({ lng, lngDict, darkMode, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

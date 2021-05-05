@@ -30,22 +30,27 @@ const deleteCentralNotice = async (centralNotice) => {
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+  const centralNoticeResponse = await getCentralNotice(context);
+  if (centralNoticeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   if (!selfUser.staff){
     return {
       redirect: {
-        permanent: false,
-        destination: "/unauthorized/"
+        destination: '/unauthorized/',
+        permanent: false
       }
-    };
+    }
   }
-  const centralNoticeResponse = await getCentralNotice(context);
   return {
-    props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, centralNotice: centralNoticeResponse.data }
+  }
 })
 
-function Delete({ lng, lngDict, selfUser, centralNotice }) {
+function Delete({ lng, lngDict, darkMode, selfUser, centralNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

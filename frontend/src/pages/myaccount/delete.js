@@ -26,13 +26,13 @@ const deleteSelfUser = async (selfUser) => {
   return await requestToBackend(null, `api/users/${selfUser.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   return {
-    props: { lng, lngDict, selfUser },
+    props: { lng, lngDict, darkMode, selfUser }
   }
 })
 
-function Delete({ lng, lngDict, selfUser }) {
+function Delete({ lng, lngDict, darkMode, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

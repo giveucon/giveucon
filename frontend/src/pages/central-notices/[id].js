@@ -15,14 +15,19 @@ const getCentralNotice = async (context) => {
   return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const centralNoticeResponse = await getCentralNotice(context);
+  if (centralNoticeResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
-    props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data },
-  };
+    props: { lng, lngDict, darkMode, selfUser, centralNotice: centralNoticeResponse.data }
+  }
 })
 
-function Id({ lng, lngDict, selfUser, centralNotice }) {
+function Id({ lng, lngDict, darkMode, selfUser, centralNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

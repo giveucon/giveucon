@@ -27,7 +27,7 @@ const getUser = async (context) => {
   return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialStoreListResponse = await getStoreList(context);
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
@@ -37,11 +37,11 @@ export const getServerSideProps = withAuthServerSideProps(async (context, lng, l
       selfUser,
       initialStoreListResponse,
       user: context.query.user ? userResponse.data : null
-     },
-  };
+     }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
+function List({ lng, lngDict, darkMode, selfUser, initialStoreListResponse, user }) {
 
   const i18n = useI18n();
   const router = useRouter();

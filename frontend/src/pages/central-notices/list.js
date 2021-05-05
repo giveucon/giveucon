@@ -24,14 +24,14 @@ const getCentralNoticeList = async (context) => {
   return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps(async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
   const initialCentralNoticeListResponse = await getCentralNoticeList(context);
   return {
-    props: { lng, lngDict, selfUser, initialCentralNoticeListResponse },
-  };
+    props: { lng, lngDict, darkMode, selfUser, initialCentralNoticeListResponse }
+  }
 })
 
-function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
+function List({ lng, lngDict, darkMode, selfUser, initialCentralNoticeListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
