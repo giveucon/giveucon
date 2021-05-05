@@ -40,7 +40,7 @@ function Create({ lng, lngDict, selfUser }) {
   const [initializing, setInitializing] = useState(false);
   const [requestedCount, setRequestedCount] = useState(0);
   const [statePhrase, setStatePhrase] = useState(i18n.t('_waitingUserInput'));
-  const [sourcePhrase, setSourcePhrase] = useState(i18n.t(' '));
+  const [sourcePhrase, setSourcePhrase] = useState(i18n.t(''));
 
   const tagIdList = [];
   const userIdList = [];
@@ -53,17 +53,29 @@ function Create({ lng, lngDict, selfUser }) {
 
   const tagNumber = 10;
   const userNumber = 10;
-  const storeNumber = 10;
-  const productNumber = 50;
-  const centralNoticeNumber = 0;
-  const storeNoticeNumber = 0;
+  const storeNumber = 5;
+  const productNumber = 25;
+  const centralNoticeNumber = 5;
+  const storeNoticeNumber = 10;
   const storeReviewNumber = 0;
   const productReviewNumber = 0;
-  const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber + storeReviewNumber + productReviewNumber;
 
   const tagMaxAmount = 3;
   const imageMaxAmount = 3;
   if (tagMaxAmount > tagNumber) throw new Error();
+
+  // const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber + storeReviewNumber + productReviewNumber;
+  const allRequestCount = [
+    tagNumber,
+    userNumber,
+    storeNumber,
+    productNumber,
+    centralNoticeNumber,
+    storeNoticeNumber,
+    storeReviewNumber,
+    productReviewNumber
+  ].reduce((lhs, rhs) => lhs + rhs, 0);
+
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
@@ -246,6 +258,7 @@ function Create({ lng, lngDict, selfUser }) {
       article: {
         title: faker.company.bs(),
         content: faker.hacker.phrase(),
+        user: userIdList[Math.floor(Math.random() * userIdList.length)]
       },
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
@@ -266,6 +279,7 @@ function Create({ lng, lngDict, selfUser }) {
       article: {
         title: faker.company.bs(),
         content: faker.hacker.phrase(),
+        user: userIdList[Math.floor(Math.random() * userIdList.length)]
       },
       store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
     };
@@ -287,6 +301,7 @@ function Create({ lng, lngDict, selfUser }) {
         article: {
           title: faker.company.bs(),
           content: faker.hacker.phrase(),
+          user: userIdList[Math.floor(Math.random() * userIdList.length)]
         },
         score: Math.floor(Math.random() * 5) + 1
       },
@@ -310,6 +325,7 @@ function Create({ lng, lngDict, selfUser }) {
         article: {
           title: faker.company.bs(),
           content: faker.hacker.phrase(),
+          user: userIdList[Math.floor(Math.random() * userIdList.length)]
         },
         score: Math.floor(Math.random() * 5) + 1
       },
@@ -362,9 +378,9 @@ function Create({ lng, lngDict, selfUser }) {
     for (const i of Array(productReviewNumber).keys()) {
       await createProductReview();
     }
-    setRequestedCount(prevRequestedCount => allRequestCount);
+    setRequestedCount(allRequestCount);
     setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));
-    setSourcePhrase(' ');
+    setSourcePhrase('');
   }
 
   return (

@@ -27,14 +27,6 @@ const getStore = async (context) => {
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialStoreNoticeListResponse = await getStoreNoticeList(context);
   const storeResponse = await getStore(context);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
-    return {
-      redirect: {
-        destination: '/unauthorized/',
-        permanent: false
-      }
-    }
-  }
   return {
     props: { lng, lngDict, selfUser, initialStoreNoticeListResponse, store: storeResponse.data }
   }

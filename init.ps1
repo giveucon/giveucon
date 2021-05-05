@@ -1,3 +1,4 @@
+echo "Start initializing..."
 venv\Scripts\Activate.ps1
 Set-Location -Path .\backend
 python manage.py makemigrations
