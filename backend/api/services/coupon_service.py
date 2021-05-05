@@ -23,6 +23,7 @@ class CouponService():
 
     @staticmethod
     def verify_coupon(coupon_qr):
+        print(coupon_qr)
         if 'magic' not in coupon_qr or coupon_qr['magic'] != 'giveucon':
             print('Invalid coupon magic')
             return False
@@ -37,10 +38,14 @@ class CouponService():
 
         coupon_qr = {
             'magic': coupon_qr['magic'],
-            'coupon': coupon_qr['coupon']
+            'coupon': int(coupon_qr['coupon'])
         }
 
         coupon = get_object_or_404(Coupon, pk=coupon_qr['coupon'])
+
+        if coupon.used:
+            print('coupon is already used')
+            return False
 
         public_key = ecdsa.VerifyingKey.from_string(
             bytes.fromhex(coupon.product.store.public_key),
@@ -54,6 +59,7 @@ class CouponService():
         )
 
         if verification == False:
+            print('verification failed')
             return False
 
         return coupon
