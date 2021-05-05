@@ -28,7 +28,7 @@ const getStoreList = async (context, user) => {
   });
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const userResponse = await getUser(context);
   if (userResponse.status === 404) {
     return {
@@ -37,11 +37,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
   const storeListResponse = await getStoreList(context, userResponse.data);
   return {
-    props: { lng, lngDict, darkMode, selfUser, user: userResponse.data, storeList: storeListResponse.data.results }
+    props: { lng, lngDict, selfUser, user: userResponse.data, storeList: storeListResponse.data.results }
   }
 })
 
-function Id({ lng, lngDict, darkMode, selfUser, user, storeList }) {
+function Id({ lng, lngDict, selfUser, user, storeList }) {
 
   const i18n = useI18n();
   const router = useRouter();

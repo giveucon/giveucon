@@ -1,5 +1,4 @@
 import axios from 'axios';
-import toast from 'react-hot-toast';
 
 import getSession from 'utils/getSession';
 
@@ -10,7 +9,7 @@ const jsonRequest = async (session, url, method, data, params) => {
     data,
     baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${session.access_token}`,
+      'Authorization': `Bearer ${session.tokens.access_token}`,
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
@@ -29,7 +28,7 @@ const multipartRequest = async (session, url, method, data, params) => {
     data,
     baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${session.access_token}`,
+      'Authorization': `Bearer ${session.tokens.access_token}`,
       'Content-Type': 'multipart/form-data',
       'Accept': 'application/json'
     },
@@ -52,7 +51,7 @@ export default async function requestToBackend(context, url, method, contentType
   if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);
   else {
-    console.log(contentType);
+    console.error(contentType);
     throw new Error()
   };
   return response;

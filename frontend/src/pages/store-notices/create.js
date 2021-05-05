@@ -46,7 +46,7 @@ const postStoreNotice = async (storeNotice, imageList) => {
   return await requestToBackend(null, 'api/store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
     return {
@@ -62,11 +62,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, store: storeResponse.data }
+    props: { lng, lngDict, selfUser, store: storeResponse.data }
   }
 })
 
-function Create({ lng, lngDict, darkMode, selfUser, store }) {
+function Create({ lng, lngDict, selfUser, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -201,7 +201,6 @@ function Create({ lng, lngDict, darkMode, selfUser, store }) {
           variant='contained'
           onClick={async () => {
             const response = await postStoreNotice(storeNotice, imageList);
-            console.log(response.data);
             if (response.status === 201) {
               router.push(`/store-notices/${response.data.id}/`);
               toast.success(i18n.t('_noticeSuccessfullyAdded'));

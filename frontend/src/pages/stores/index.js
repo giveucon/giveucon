@@ -29,7 +29,7 @@ const getSelfStoreList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeListResponse = await getStoreList(context);
   if (storeListResponse.status === 404) {
     return {
@@ -53,7 +53,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   };
 })
 
-function Index({ lng, lngDict, darkMode, selfUser, storeList, selfStoreList }) {
+function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
 
   const i18n = useI18n();
   const router = useRouter();

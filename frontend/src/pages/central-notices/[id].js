@@ -15,7 +15,7 @@ const getCentralNotice = async (context) => {
   return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const centralNoticeResponse = await getCentralNotice(context);
   if (centralNoticeResponse.status === 404) {
     return {
@@ -23,11 +23,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, centralNotice: centralNoticeResponse.data }
+    props: { lng, lngDict, selfUser, centralNotice: centralNoticeResponse.data }
   }
 })
 
-function Id({ lng, lngDict, darkMode, selfUser, centralNotice }) {
+function Id({ lng, lngDict, selfUser, centralNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -53,21 +53,19 @@ function Id({ lng, lngDict, darkMode, selfUser, centralNotice }) {
           content={centralNotice.article.content}
         />
       </Section>
-      {selfUser.staff && (
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/central-notices/update/',
-              query: { id: centralNotice.id },
-            })}
-          >
-            {i18n.t('editNotice')}
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/central-notices/update/',
+            query: { id: centralNotice.id },
+          })}
+        >
+          {i18n.t('editNotice')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

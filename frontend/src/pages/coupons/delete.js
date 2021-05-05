@@ -30,7 +30,7 @@ const deleteCoupon = async (coupon) => {
   return await requestToBackend(null, `api/coupons/${coupon.id}/`, 'delete', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (couponResponse.status === 404) {
     return {
@@ -46,11 +46,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, coupon: couponResponse.data }
+    props: { lng, lngDict, selfUser, coupon: couponResponse.data }
   }
 })
 
-function Delete({ lng, lngDict, darkMode, selfUser, coupon }) {
+function Delete({ lng, lngDict, selfUser, coupon }) {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withoutAuthServerSideProps (async (context, lng, lngDict, darkMode) => {
+export const getServerSideProps = withoutAuthServerSideProps (async (context, lng, lngDict) => {
   const cookies = getCookies(context)
   if (cookies.giveucon_session) {
     return {
@@ -41,11 +41,11 @@ export const getServerSideProps = withoutAuthServerSideProps (async (context, ln
     }
   }
   return {
-    props: { lng, lngDict, darkMode }
+    props: { lng, lngDict }
   };
 })
 
-function Index( lng, lngDict, darkMode ) {
+function Index( lng, lngDict ) {
 
   const i18n = useI18n();
   const router = useRouter();

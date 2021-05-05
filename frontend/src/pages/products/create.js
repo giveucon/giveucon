@@ -47,7 +47,7 @@ const postProduct = async (product, imageList) => {
   return await requestToBackend(null, '/api/products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
     return {
@@ -63,11 +63,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     };
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, store: storeResponse.data }
+    props: { lng, lngDict, selfUser, store: storeResponse.data }
   }
 })
 
-function Create({ lng, lngDict, darkMode, selfUser, store }) {
+function Create({ lng, lngDict, selfUser, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -255,7 +255,6 @@ function Create({ lng, lngDict, darkMode, selfUser, store }) {
               setProductError(prevProductError => ({...prevProductError, price: !!response.data.price}));
               setProductError(prevProductError => ({...prevProductError, duration: !!response.data.duration}));
               toast.error(i18n.t('_checkInputFields'));
-              console.log(response.data);
             }
           }}
         >

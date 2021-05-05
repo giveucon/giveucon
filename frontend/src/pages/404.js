@@ -9,22 +9,22 @@ import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict, darkMode) => {
+export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict) => {
   return {
-    props: { lng, lngDict, darkMode }
+    props: { lng, lngDict }
   }
 })
 
-function Error404({ lng, lngDict, darkMode }) {
+function Error404({ lng, lngDict }) {
 
   const i18n = useI18n();
   const router = useRouter();
 
   return (
-    <Layout title={`404 오류 - ${i18n.t('_appName')}`}>
+    <Layout title={`404 - ${i18n.t('_appName')}`}>
       <Section
         backButton
-        title='404 오류'
+        title='404'
       >
         <AlertBox content={`${i18n.t('_pageNotFound')}`} variant='error' />
         <Box marginY={1}>

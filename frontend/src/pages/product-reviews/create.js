@@ -50,28 +50,19 @@ const postProductReview = async (productReview, imageList) => {
   return await requestToBackend(null, 'api/product-reviews/', 'post', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {
     return {
       notFound: true
     }
   }
-  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
-    return {
-      redirect: {
-        destination: '/unauthorized/',
-        permanent: false
-      }
-    }
-  }
-  console.log(productResponse);
   return {
-    props: { lng, lngDict, darkMode, selfUser, product: productResponse.data }
+    props: { lng, lngDict, selfUser, product: productResponse.data }
   }
 })
 
-function Create ({ lng, lngDict, darkMode, selfUser, product }) {
+function Create ({ lng, lngDict, selfUser, product }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
@@ -224,7 +215,6 @@ function Create ({ lng, lngDict, darkMode, selfUser, product }) {
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, content: !!response.data.content}));
               toast.error(i18n.t('_checkInputFields'));
-              console.log(response.data);
             }
           }}
         >

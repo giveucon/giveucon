@@ -17,15 +17,12 @@ function RootApp({ Component, pageProps }) {
   const router = useRouter();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [theme, setTheme] = useState(
-    pageProps.darkMode ? darkTheme : lightTheme
-  );
-  const [darkMode, setDarkMode] = useState(
-    pageProps.selfUser && pageProps.selfUser.dark_mode ? true : false
+    (pageProps.selfUser && pageProps.selfUser.dark_mode) ? darkTheme : lightTheme
   );
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
-    const handleStart = () => { 
+    const handleStart = () => {
       setPageLoading(true);
     };
     const handleComplete = () => {
@@ -43,7 +40,7 @@ function RootApp({ Component, pageProps }) {
   }, []);
 
   useEffect(() => {
-    pageProps.darkMode ? setTheme(darkTheme) : setTheme(lightTheme);
+    setTheme((pageProps.selfUser && pageProps.selfUser.dark_mode) ? darkTheme : lightTheme)
   });
 
   return (
@@ -64,9 +61,9 @@ function RootApp({ Component, pageProps }) {
             toastOptions={{
               className: null,
               style: {
-                background: darkMode ? 'black' : 'white',
+                background: (pageProps.selfUser && pageProps.selfUser.dark_mode) ? 'black' : 'white',
                 borderRadius: '1.5rem',
-                color: darkMode ? 'white' : 'black',
+                color: (pageProps.selfUser && pageProps.selfUser.dark_mode) ? 'white' : 'black',
                 margin: '1.2rem 0 0 0'
               },
             }}
@@ -74,7 +71,7 @@ function RootApp({ Component, pageProps }) {
           <Backdrop style={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: 'transparent'}} open={pageLoading}>
             <LinearProgress style={{ position: 'absolute', top: '0', width: '100%' }} color='primary' />
           </Backdrop>
-          <Component {...pageProps} setDarkMode={setDarkMode} />
+          <Component {...pageProps} />
         </ThemeProvider>
       </I18n>
     </>

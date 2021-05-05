@@ -17,7 +17,7 @@ import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
 /*
   if (!selfUser.staff){
     return {
@@ -29,11 +29,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 */
   return {
-    props: { lng, lngDict, darkMode, selfUser }
+    props: { lng, lngDict, selfUser }
   }
 })
 
-function Create({ lng, lngDict, darkMode, selfUser }) {
+function Create({ lng, lngDict, selfUser }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -127,7 +127,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
 
   const createTag = async () => {
     const tag = {
-      name: `${faker.commerce.color()}-${faker.commerce.productAdjective()}`
+      name: `${faker.commerce.productAdjective()}-${faker.commerce.color()}`
     };
     setSourcePhrase(`(${tag.name})`);
     const tagResult = await postTag(tag);
@@ -136,7 +136,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(tagResult);
+      console.error(tagResult);
     }
   };
 
@@ -158,7 +158,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(userResult);
+      console.error(userResult);
     }
   };
 
@@ -185,7 +185,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(storeResponse);
+      console.error(storeResponse);
     }
   };
 
@@ -205,7 +205,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(productResponse);
+      console.error(productResponse);
     }
   };
 
@@ -225,7 +225,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(centralNoticeResponse);
+      console.error(centralNoticeResponse);
     }
   };
 
@@ -245,7 +245,7 @@ function Create({ lng, lngDict, darkMode, selfUser }) {
       increaseRequestedCount();
       // await postTimeout();
     } else {
-      console.log(storeNoticeResponse);
+      console.error(storeNoticeResponse);
     }
   };
 

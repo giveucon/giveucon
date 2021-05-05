@@ -22,7 +22,7 @@ const getCouponList = async (context) => {
     store: context.query.store || null,
     product: context.query.product || null,
   };
-  return await requestToBackend(context, 'api/products', 'get', 'json', null, params);
+  return await requestToBackend(context, 'api/coupons', 'get', 'json', null, params);
 };
 
 const getUser = async (context) => {
@@ -37,8 +37,13 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialCouponListResponse = await getCouponList(context);
+  if (initialCouponListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const userResponse = context.query.user && await getUser(context);
   const storeResponse = context.query.store && await getStore(context);
   const productResponse = context.query.product && await getProduct(context);
@@ -55,16 +60,15 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function List({ lng, lngDict, darkMode, selfUser, initialCouponListResponse, user, store, product }) {
+function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, product }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const [couponList, setCouponList] = useState(initialCouponListResponse.data.results);
   const [couponListpage, setCouponListpage] = useState(1);
   const [hasMoreCouponList, setHasMoreCouponList] = useState(initialCouponListResponse.data.next);
-
   const getMoreCouponList = async () => {
-    const couponListResponse = await await requestToBackend('api/coupons/', 'get', 'json', null, {
+    const couponListResponse = await await requestToBackend(null, 'api/coupons/', 'get', 'json', null, {
       user: user ? user.id : null,
       store: store ? store.id : null,
       product: product ? product.id : null,
@@ -74,7 +78,6 @@ function List({ lng, lngDict, darkMode, selfUser, initialCouponListResponse, use
     setCouponListpage(prevCouponListpage => prevCouponListpage + 1);
     if (couponListpage.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
   }
-  console.log(couponList);
 
   return (
     <Layout
@@ -99,8 +102,8 @@ function List({ lng, lngDict, darkMode, selfUser, initialCouponListResponse, use
                 {couponList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile
-                      title={item.name}
-                      image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
+                      title={item.product.name}
+                      image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                       actions={[
                         <IconButton><DirectionsIcon /></IconButton>,
                         <IconButton><CropFreeIcon /></IconButton>

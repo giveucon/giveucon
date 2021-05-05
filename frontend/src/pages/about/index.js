@@ -11,13 +11,13 @@ import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng, lngDict, darkMode, selfUser },
+    props: { lng, lngDict, selfUser },
   };
 })
 
-function Index({ lng, lngDict, darkMode, selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();

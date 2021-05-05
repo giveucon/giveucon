@@ -24,14 +24,14 @@ const getCentralNoticeList = async (context) => {
   return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialCentralNoticeListResponse = await getCentralNoticeList(context);
   return {
-    props: { lng, lngDict, darkMode, selfUser, initialCentralNoticeListResponse }
+    props: { lng, lngDict, selfUser, initialCentralNoticeListResponse }
   }
 })
 
-function List({ lng, lngDict, darkMode, selfUser, initialCentralNoticeListResponse }) {
+function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -40,7 +40,7 @@ function List({ lng, lngDict, darkMode, selfUser, initialCentralNoticeListRespon
   const [hasMoreCentralNoticeList, setHasMoreCentralNoticeList] = useState(initialCentralNoticeListResponse.data.next);
 
   const getMoreCentralNoticeList = async () => {
-    const centralNoticeListResponse = await requestToBackend('api/central-notices/', 'get', 'json', null, {
+    const centralNoticeListResponse = await requestToBackend(null, 'api/central-notices/', 'get', 'json', null, {
       page: centralNoticeListpage + 1,
     });
     setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
@@ -112,18 +112,16 @@ function List({ lng, lngDict, darkMode, selfUser, initialCentralNoticeListRespon
         )}
       </Section>
 
-      {selfUser && selfUser.staff && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push(`/central-notices/create/`)}
-          >
-            {i18n.t('addNotice')}
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push(`/central-notices/create/`)}
+        >
+          {i18n.t('addNotice')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

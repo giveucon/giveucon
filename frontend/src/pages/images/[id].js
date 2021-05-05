@@ -10,7 +10,7 @@ const getImage = async (context) => {
   return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const imageResponse = await getImage(context);
   if (imageResponse.status === 404) {
     return {
@@ -18,11 +18,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, image: imageResponse.data }
+    props: { lng, lngDict, selfUser, image: imageResponse.data }
   }
 })
 
-function Id({ lng, lngDict, darkMode, selfUser, image }) {
+function Id({ lng, lngDict, selfUser, image }) {
 
   const i18n = useI18n();
   const router = useRouter();

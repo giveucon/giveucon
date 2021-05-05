@@ -46,13 +46,13 @@ const swipeableTileList = [
   />
 ]
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng, lngDict, darkMode, selfUser }
+    props: { lng, lngDict, selfUser }
   };
 })
 
-export default function Components({ lng, lngDict, darkMode, selfUser }) {
+export default function Components({ lng, lngDict, selfUser }) {
   const i18n = useI18n();
   return (
     <Layout

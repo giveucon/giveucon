@@ -37,14 +37,13 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
-  const prevSelfUser = selfUser;
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng, lngDict, darkMode, prevSelfUser: prevSelfUser }
+    props: { lng, lngDict, selfUser }
   }
 })
 
-function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
+function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
   const i18n = useI18n();
   const router = useRouter();
   const [selfUser, setSelfUser] = useState({
@@ -162,7 +161,6 @@ function MenuItems({ lng, lngDict, setDarkMode, selfUser: prevSelfUser }) {
           onClick={async () => {
             const response = await putSelfUser(selfUser);
             if (response.status === 200) {
-              setDarkMode(selfUser.dark_mode);
               router.push('/myaccount/update/');
               toast.success(i18n.t('_myAccountSuccessfullyEdited'));
             }

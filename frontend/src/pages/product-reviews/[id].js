@@ -23,7 +23,7 @@ const getStore = async (context, product) => {
   return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
   if (productReviewResponse.status === 404) {
     return {
@@ -32,7 +32,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
   const productResponse = await getProduct(context, productReviewResponse.data);
   const storeResponse = await getStore(context, productResponse.data);
-  console.log(productReviewResponse.data);
   return {
     props: {
       lng,
@@ -45,7 +44,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Id ({ lng, lngDict, darkMode, selfUser, productReview, product, store }) {
+function Id ({ lng, lngDict, selfUser, productReview, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();

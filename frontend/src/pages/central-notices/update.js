@@ -48,13 +48,14 @@ const putCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'put', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevCentralNoticeResponse = await getCentralNotice(context);
   if (prevCentralNoticeResponse.status === 404) {
     return {
       notFound: true
     }
   }
+/*
   if (!selfUser.staff) {
     return {
       redirect: {
@@ -63,12 +64,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       }
     }
   }
+*/
   return {
-    props: { lng, lngDict, darkMode, selfUser, prevCentralNotice: prevCentralNoticeResponse.data }
+    props: { lng, lngDict, selfUser, prevCentralNotice: prevCentralNoticeResponse.data }
   }
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevCentralNotice }) {
+function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
 
   const i18n = useI18n();
   const router = useRouter();

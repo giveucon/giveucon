@@ -38,10 +38,6 @@ const getStoreReview = async (context) => {
   return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
 };
 
-const getStore = async (context, StoreReview) => {
-  return await requestToBackend(context, `api/stores/${StoreReview.store.id}/`, 'get', 'json');
-};
-
 const putStoreReview = async (storeReview, imageList) => {
   const processedStoreReview = {
     review: {
@@ -56,15 +52,14 @@ const putStoreReview = async (storeReview, imageList) => {
   return await requestToBackend(null, `api/store-reviews/${storeReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedStoreReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevStoreReviewResponse = await getStoreReview(context);
   if (prevStoreReviewResponse.status === 404) {
     return {
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, prevStoreReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)) {
+  if (!selfUser.staff && (selfUser.id !== prevStoreReviewResponse.data.review.article.user)) {
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -73,11 +68,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, prevStoreReview: prevStoreReviewResponse.data }
+    props: { lng, lngDict, selfUser, prevStoreReview: prevStoreReviewResponse.data }
   }
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevStoreReview }) {
+function Update({ lng, lngDict, selfUser, prevStoreReview }) {
 
   const i18n = useI18n();
   const router = useRouter();

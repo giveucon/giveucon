@@ -21,13 +21,13 @@ const getCoupon = async (qrData) => {
   return await requestToBackend(null, `api/products/${qrData.id}`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
-    props: { lng, lngDict, darkMode, selfUser }
+    props: { lng, lngDict, selfUser }
   }
 })
 
-function Scan({ lng, lngDict, darkMode, selfUser }) {
+function Scan({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -72,7 +72,7 @@ function Scan({ lng, lngDict, darkMode, selfUser }) {
           try {
             const qrData = JSON.parse(code.data)
             if (verifyQRData(qrData) === true) {
-              console.log(video.srcObject.getTracks())
+              // console.log(video.srcObject.getTracks())
               video.srcObject.getTracks().forEach(
                 track => {
                   track.stop();
@@ -83,7 +83,7 @@ function Scan({ lng, lngDict, darkMode, selfUser }) {
               router.push(`/coupons/${qrData.coupon}/`)
             }
           } catch (exception) {
-            console.log(exception);
+            console.error(exception);
           }
         }
       }

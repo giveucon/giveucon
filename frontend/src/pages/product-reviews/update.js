@@ -38,10 +38,6 @@ const getProductReview = async (context) => {
   return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
 };
 
-const getProduct = async (context, ProductReview) => {
-  return await requestToBackend(context, `api/products/${ProductReview.product.id}/`, 'get', 'json');
-};
-
 const putProductReview = async (productReview, imageList) => {
   const processedProductReview = {
     review: {
@@ -56,15 +52,14 @@ const putProductReview = async (productReview, imageList) => {
   return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'put', 'multipart', convertJsonToFormData(processedProductReview), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const prevProductReviewResponse = await getProductReview(context);
   if (prevProductReviewResponse.status === 404) {
     return {
       notFound: true
     }
   }
-  const productResponse = await getProduct(context, prevProductReviewResponse.data);
-  if (!selfUser.staff && (selfUser.id !== productResponse.data.user)){
+  if (!selfUser.staff && (selfUser.id !== prevProductReviewResponse.data.review.article.user)){
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -73,11 +68,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     };
   }
   return {
-    props: { lng, lngDict, darkMode, selfUser, prevProductReview: prevProductReviewResponse.data },
+    props: { lng, lngDict, selfUser, prevProductReview: prevProductReviewResponse.data },
   };
 })
 
-function Update({ lng, lngDict, darkMode, selfUser, prevProductReview }) {
+function Update({ lng, lngDict, selfUser, prevProductReview }) {
 
   const i18n = useI18n();
   const router = useRouter();

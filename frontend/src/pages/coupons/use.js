@@ -16,12 +16,10 @@ const getCoupon = async (context) => {
 };
 
 const getCouponQR = async (context) => {
-  let params = new Object;
-  params.type = `qr`;
-  return await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json', null, params);
+  return await requestToBackend(context, `api/coupons/${context.query.id}/qr/`, 'get', 'json');
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, darkMode, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
   if (couponResponse.status === 404) {
     return {
@@ -48,7 +46,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Use({ lng, lngDict, darkMode, selfUser, coupon, couponQR }) {
+function Use({ lng, lngDict, selfUser, coupon, couponQR }) {
 
   const i18n = useI18n();
   const router = useRouter();
