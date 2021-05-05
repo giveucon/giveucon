@@ -106,22 +106,22 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
           </Box>
         </Box>
       </Section>
-      {(selfUser.id !== store.owner) && (store.id === product.store) && (
-        <Box marginY={1}>
-          <Button
-            // color='primary'
-            className={classes.kakaoButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/payments/kakao/',
-              query: { product: product.id },
-            })}
-          >
-            {i18n.t('issueCoupon')}
-          </Button>
-        </Box>
-      )}
+
+      <Box marginY={1}>
+        <Button
+          // color='primary'
+          className={classes.kakaoButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/payments/kakao/',
+            query: { product: product.id },
+          })}
+        >
+          {i18n.t('issueCoupon')}
+        </Button>
+      </Box>
+
       <Box marginY={1}>
         <Button
           color='default'
