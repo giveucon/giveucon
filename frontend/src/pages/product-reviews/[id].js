@@ -15,12 +15,8 @@ const getProductReview = async (context) => {
   return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
 };
 
-const getProduct = async (context, productReview) => {
-  return await requestToBackend(context, `api/products/${productReview.product.id}/`, 'get', 'json');
-};
-
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+const getUser = async (context, productReview) => {
+  return await requestToBackend(context, `api/users/${productReview.review.article.user}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -30,21 +26,19 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const productResponse = await getProduct(context, productReviewResponse.data);
-  const storeResponse = await getStore(context, productResponse.data);
+  const userResponse = await getUser(context, productReviewResponse.data);
   return {
     props: {
       lng,
       lngDict,
       selfUser,
       productReview: productReviewResponse.data,
-      product: productResponse.data,
-      store: storeResponse.data
+      user: userResponse.data
     }
   }
 })
 
-function Id ({ lng, lngDict, selfUser, productReview, product, store }) {
+function Id ({ lng, lngDict, selfUser, productReview, user }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -62,7 +56,7 @@ function Id ({ lng, lngDict, selfUser, productReview, product, store }) {
       >
         <ReviewBox
           title={productReview.review.article.title}
-          subtitle={new Date(productReview.review.article.created_at).toLocaleDateString()}
+          subtitle={`${user.user_name} | ${new Date(productReview.review.article.created_at).toLocaleDateString()}`}
           score={productReview.review.score}
           imageList={
             productReview.review.article.images.length > 0
@@ -72,7 +66,7 @@ function Id ({ lng, lngDict, selfUser, productReview, product, store }) {
           content={productReview.review.article.content}
         />
       </Section>
-      {selfUser.id === store.user && (
+      {selfUser.id === productReview.review.article.user && (
         <Box marginY={1}>
           <Button
             color='default'

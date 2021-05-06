@@ -286,6 +286,19 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           </Box>
         </>
       )}
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/store-reviews/create/',
+            query: { store: store.id },
+          })}
+        >
+          {i18n.t('addReview')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

@@ -127,16 +127,22 @@ function Create({ lng, lngDict, selfUser }) {
   
   const postCentralNotice = async (centralNotice, imageList) => {
     const processedCentralNotice = {
-      ...centralNotice,
-      images: imageList.map(image => image.file),
+      article: {
+        ...centralNotice.article,
+        images: imageList.map(image => image.file),
+      }
     }
-    return await requestToBackend(null, 'api/dummy-central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+    return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
+    // return await requestToBackend(null, 'api/dummy-central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
   };
   
   const postStoreNotice = async (storeNotice, imageList) => {
     const processedStoreNotice = {
-      ...storeNotice,
-      images: imageList.map(image => image.file),
+      article: {
+        ...storeNotice.article,
+        images: imageList.map(image => image.file),
+      },
+      store: storeNotice.store
     }
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
   };
@@ -258,7 +264,7 @@ function Create({ lng, lngDict, selfUser }) {
       article: {
         title: faker.company.bs(),
         content: faker.hacker.phrase(),
-        user: userIdList[Math.floor(Math.random() * userIdList.length)]
+        // user: userIdList[Math.floor(Math.random() * userIdList.length)]
       },
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };

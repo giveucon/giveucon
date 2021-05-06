@@ -26,10 +26,6 @@ const getStoreNotice = async (context) => {
   return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 };
 
-const getStore = async (context, StoreNotice) => {
-  return await requestToBackend(context, `api/stores/${StoreNotice.store}/`, 'get', 'json');
-};
-
 const deleteStoreNotice = async (storeNotice) => {
   return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 };
@@ -41,8 +37,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, storeNoticeResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user)){
+  if (!selfUser.staff && (selfUser.id !== storeNoticeResponse.data.article.user)){
     return {
       redirect: {
         destination: '/unauthorized/',

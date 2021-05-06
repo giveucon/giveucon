@@ -85,9 +85,6 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
                     title={item.name}
                     image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                     onClick={() => router.push(`/stores/${item.id}/`)}
-                    menuItems={
-                      <MenuItem>Menu Item</MenuItem>
-                    }
                   />
                 </Grid>
               ))}

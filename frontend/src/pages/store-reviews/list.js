@@ -84,8 +84,8 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
               {storeReviewList.map((item, index) => (
                 <Grid item xs={12} key={index}>
                   <ListItemCard
-                    title={item.article.title}
-                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                    title={item.review.article.title}
+                    subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
                     onClick={() => router.push(`/store-reviews/${item.id}/`)}
                   />
                 </Grid>
@@ -97,21 +97,19 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-      {(store.user === selfUser.id) && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/store-reviews/create/',
-              query: { store: store.id },
-            })}
-          >
-            {i18n.t('addReview')}
-          </Button>
-        </Box>
-      )}
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/store-reviews/create/',
+            query: { store: store.id },
+          })}
+        >
+          {i18n.t('addReview')}
+        </Button>
+      </Box>
     </Layout>
   );
 }
