@@ -1,14 +1,17 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import FavoriteStore
 from ..paginations import FavoriteStorePagination
-from ..serializers import FavoriteStoreSerializer
+from ..serializers import FavoriteStoreReadSerializer
+from ..serializers import FavoriteStoreWriteSerializer
 from ..services import UserService
 
-class FavoriteStoreListView(generics.ListCreateAPIView):
+class FavoriteStoreListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = FavoriteStore.objects.all()
     pagination_class = FavoriteStorePagination
-    serializer_class = FavoriteStoreSerializer
+    serializer_class_read = FavoriteStoreReadSerializer
+    serializer_class_write = FavoriteStoreWriteSerializer
     filterset_fields = ['user']
 
     def perform_create(self, serializer):

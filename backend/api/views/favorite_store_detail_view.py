@@ -1,8 +1,12 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import FavoriteStore
-from ..serializers import FavoriteStoreSerializer
+from ..serializers import FavoriteStoreReadSerializer
+from ..serializers import FavoriteStoreWriteSerializer
 
-class FavoriteStoreDetailView(generics.RetrieveUpdateDestroyAPIView):
+class FavoriteStoreDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = FavoriteStore.objects.all()
-    serializer_class = FavoriteStoreSerializer
+    serializer_class_read = FavoriteStoreReadSerializer
+    serializer_class_write = FavoriteStoreWriteSerializer
+
