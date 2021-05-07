@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
+from ..serializers import ProductReadSerializer
 from ..models import FavoriteProduct
 
-class FavoriteProductSerializer(serializers.ModelSerializer):
+class FavoriteProductReadSerializer(serializers.ModelSerializer):
+    product = ProductReadSerializer()
     class Meta:
         model = FavoriteProduct
         fields = '__all__'

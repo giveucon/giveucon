@@ -6,7 +6,7 @@ class CouponUpdateSerializer(ModelSerializer):
     class Meta:
         model = Coupon
         exclude = ('otp_key',)
-        read_only_fields = ('signature', 'product', 'user')
+        read_only_fields = ('signature', 'product', 'used')
 
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
