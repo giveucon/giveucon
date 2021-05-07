@@ -14,13 +14,13 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getFriendList = async (context) => {
   const params = {
-    from_user: context.query.user,
+    from_user: context.query.from_user,
   };
   return await requestToBackend(context, 'api/friends/', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  if (!context.query.user) {
+  if (!context.query.from_user) {
     return {
       notFound: true
     }

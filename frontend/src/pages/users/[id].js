@@ -65,7 +65,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const storeListResponse = await getStoreList(context, userResponse.data);
-  const friendResponse = await getFriend(context, selfUser);
+  const initialFriendResponse = await getFriend(context, selfUser);
   console.log(friendResponse.data.results[0]);
   return {
     props: {
@@ -74,7 +74,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       selfUser,
       user: userResponse.data,
       storeList: storeListResponse.data.results,
-      initialFriend: (friendResponse.data.results.length === 1) ? friendResponse.data.results[0] : null
+      initialFriend: (initialFriendResponse.data.results.length === 1) ? initialFriendResponse.data.results[0] : null
     }
   }
 })
@@ -101,34 +101,38 @@ function Id({ lng, lngDict, selfUser, user, storeList, initialFriend }) {
         subtitle={user.email}
         image={gravatar.url(user.email, {default: 'identicon'})}
       >
-        <Box display={!friend ? 'block' : 'none'} marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const postFriendResult = await postFriend(user);
-              if (postFriendResult.status === 201) setFriend(postFriendResult.data);
-              else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-            }}
-          >
-            {i18n.t('addFriend')}
-          </Button>
-        </Box>
-        <Box display={friend ? 'block' : 'none'} marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={async () => {
-              const postFriendResult = await deleteFriend(friend);
-              if (postFriendResult.status === 204) setFriend(undefined);
-              else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-            }}
-          >
-            {i18n.t('deleteFriend')}
-          </Button>
-        </Box>
+        {!friend && (
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const postFriendResult = await postFriend(user);
+                if (postFriendResult.status === 201) setFriend(postFriendResult.data);
+                else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              }}
+            >
+              {i18n.t('addFriend')}
+            </Button>
+          </Box>
+        )}
+        {friend && (
+          <Box marginY={1}>
+            <Button
+              className={classes.errorButton}
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const deleteFriendResult = await deleteFriend(friend);
+                if (deleteFriendResult.status === 204) setFriend(null);
+                else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              }}
+            >
+              {i18n.t('deleteFriend')}
+            </Button>
+          </Box>
+        )}
       </UserProfileSection>
 
 

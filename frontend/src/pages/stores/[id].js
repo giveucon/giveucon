@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -29,6 +30,16 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
+const useStyles = makeStyles((theme) => ({
+  errorButton: {
+    background: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    '&:hover': {
+       background: theme.palette.error.dark,
+    },
+  },
+}));
+
 const getStore = async (context) => {
   return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
 };
@@ -54,6 +65,23 @@ const getStoreReviewList = async (context, store) => {
   return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
 };
 
+const getFavoriteStore = async (context, selfUser) => {
+  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+    user: selfUser.id,
+    store: context.query.id
+  });
+};
+
+const postFavoriteStore = async (store) => {
+  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+    store: store.id
+  }, null);
+};
+
+const deleteFavoriteStore = async (favoriteStore) => {
+  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
@@ -64,6 +92,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
   const storeReviewListResponse = await getStoreReviewList(context, storeResponse.data);
+  const initialFavoriteStoreResponse = await getFavoriteStore(context, selfUser);
   return {
     props: {
       lng,
@@ -72,7 +101,8 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       store: storeResponse.data,
       storeNoticeList: storeNoticeListResponse.data.results,
       productList: productListResponse.data.results,
-      storeReviewList: storeReviewListResponse.data.results
+      storeReviewList: storeReviewListResponse.data.results,
+      initialFavoriteStore: (initialFavoriteStoreResponse.data.results.length === 1) ? initialFavoriteStoreResponse.data.results[0] : null
     }
   }
 })
@@ -80,10 +110,21 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 const latitude = 37.506502;
 const longitude = 127.053617;
 
-function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, storeReviewList }) {
+function Id({
+  lng,
+  lngDict,
+  selfUser,
+  store,
+  storeNoticeList,
+  productList,
+  storeReviewList,
+  initialFavoriteStore
+}) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const classes = useStyles();
+  const [favoriteStore, setFavoriteStore] = useState(initialFavoriteStore)
   
   return (
     <Layout
@@ -135,6 +176,38 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           <Box marginTop={1}>
             <Typography>{store.description}</Typography>
           </Box>
+          {!favoriteStore && (
+            <Box marginY={1}>
+              <Button
+                color='primary'
+                fullWidth
+                variant='contained'
+                onClick={async () => {
+                  const postFavoriteStoreResult = await postFavoriteStore(store);
+                  if (postFavoriteStoreResult.status === 201) setFavoriteStore(postFavoriteStoreResult.data);
+                  else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                }}
+              >
+                {i18n.t('addFavoriteStore')}
+              </Button>
+            </Box>
+          )}
+          {favoriteStore && (
+            <Box marginY={1}>
+              <Button
+                className={classes.errorButton}
+                fullWidth
+                variant='contained'
+                onClick={async () => {
+                  const deleteFavoriteStoreResult = await deleteFavoriteStore(favoriteStore);
+                  if (deleteFavoriteStoreResult.status === 204) setFavoriteStore(null);
+                  else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                }}
+              >
+                {i18n.t('deleteFavoriteStore')}
+              </Button>
+            </Box>
+          )}
         </Box>
       </Section>
 
