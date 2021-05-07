@@ -174,6 +174,7 @@ class ProductReview(models.Model):
 
 class Coupon(models.Model):
     signature = models.CharField(max_length=64, blank=False, null=True, unique=True)
+    otp_key = models.CharField(max_length=16, blank=False, null=False, unique=True)
     created_at = models.DateTimeField(null=False, editable=False, default=timezone.now)
     used = models.BooleanField(default=False)
     user = models.ForeignKey(

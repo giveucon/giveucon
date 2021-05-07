@@ -1,5 +1,6 @@
 import ecdsa
 import json
+import pyotp
 from hashlib import sha256
 from django.shortcuts import get_object_or_404
 from ..models import Coupon
@@ -33,8 +34,12 @@ class CouponService():
         if 'signature' not in coupon_qr:
             print('Invalid coupon signature')
             return False
+        if 'otp' not in coupon_qr:
+            print('Invalid coupon otp')
+            return False
 
         signature = coupon_qr['signature']
+        otp = coupon_qr['otp']
 
         coupon_qr = {
             'magic': coupon_qr['magic'],
@@ -44,7 +49,12 @@ class CouponService():
         coupon = get_object_or_404(Coupon, pk=coupon_qr['coupon'])
 
         if coupon.used:
-            print('coupon is already used')
+            print('Coupon is already used')
+            return False
+
+        totp = pyotp.TOTP(coupon.otp_key)
+        if totp.verify(otp) == False:
+            print('OTP verification failed')
             return False
 
         public_key = ecdsa.VerifyingKey.from_string(
@@ -59,7 +69,7 @@ class CouponService():
         )
 
         if verification == False:
-            print('verification failed')
+            print('Signature verification failed')
             return False
 
         return coupon

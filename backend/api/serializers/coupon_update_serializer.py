@@ -5,7 +5,7 @@ from ..services import CouponService
 class CouponUpdateSerializer(ModelSerializer):
     class Meta:
         model = Coupon
-        fields = '__all__'
+        exclude = ('otp_key',)
         read_only_fields = ('signature', 'product', 'user')
 
     def update(self, instance, validated_data):

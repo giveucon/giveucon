@@ -7,4 +7,4 @@ class CouponReadSerializer(ModelSerializer):
     product = ProductReadSerializer(read_only=True)
     class Meta:
         model = Coupon
-        fields = '__all__'
+        exclude = ('otp_key',)

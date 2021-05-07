@@ -1,5 +1,5 @@
+import pyotp
 from django.db import transaction
-from hashlib import sha256
 from rest_framework.serializers import ModelSerializer
 from ..models import Coupon
 from ..services import CouponService
@@ -7,12 +7,13 @@ from ..services import CouponService
 class CouponCreateSerializer(ModelSerializer):
     class Meta:
         model = Coupon
-        fields = '__all__'
+        exclude = ('otp_key',)
         read_only_fields = ('signature', 'used', 'user')
 
     def create(self, validated_data):
         with transaction.atomic():
             coupon = Coupon(**validated_data)
+            coupon.otp_key = pyotp.random_base32()
             coupon.save()
             coupon = CouponService.sign_coupon(coupon)
             coupon.save()
