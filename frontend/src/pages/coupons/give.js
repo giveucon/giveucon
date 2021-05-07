@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
 import Filter1Icon from '@material-ui/icons/Filter1';
 import Filter2Icon from '@material-ui/icons/Filter2';
@@ -15,6 +13,7 @@ import Filter7Icon from '@material-ui/icons/Filter7';
 import Filter8Icon from '@material-ui/icons/Filter8';
 import Filter9Icon from '@material-ui/icons/Filter9';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
+import IconButton from '@material-ui/core/IconButton';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
@@ -26,23 +25,17 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: '100%',
-  },
-  imageArea: {
-    height: '10rem',
-    width: '10rem',
-    position: 'relative',
-  },
-  media: {
-    height: '10rem',
-    width: '10rem',
-  },
-}));
-
 const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
+};
+
+const getStore = async (context, product) => {
+  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
+};
+
+const getSelfFriendList = async (context, selfUser) => {
+  const params = {user: selfUser.id}
+  return await requestToBackend(context, `api/friends/`, 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -52,19 +45,28 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
+  const storeResponse = await getStore(context, productResponse.data);
+  // const selfFriendListResponse = await getSelfFriendList(context, selfUser);
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data }
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      product: productResponse.data,
+      store: storeResponse.data,
+      // selfFriendList: selfFriendListResponse.data
+    }
   }
 })
 
-function Issue({ lng, lngDict, selfUser, product }) {
+function Give({ lng, lngDict, selfUser, product, store }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [amount, setAmount] = useState(1);
   const [amountIcon, setAmountIcon] = useState(<Filter1Icon />);
-  
+  const [infinite, setInfinite] = useState(false);
+
   return (
     <Layout
       locale={lng}
@@ -88,6 +90,40 @@ function Issue({ lng, lngDict, selfUser, product }) {
           lngDict={lngDict}
         />
       </Section>
+
+
+{/*
+      <Section
+        title={i18n.t('myFriends')}
+        titlePrefix={<IconButton><PaymentIcon /></IconButton>}
+      >
+        <Autocomplete
+          style={{ width: 300 }}
+          getOptionSelected={(option, value) => option.name === value.name}
+          getOptionLabel={(option) => option.name}
+          options={selfFriendList}
+          loading={loading}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Asynchronous"
+              variant="outlined"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              }}
+            />
+          )}
+        />
+      </Section>
+*/}
+
+
       <Section
         title={i18n.t('amount')}
         titlePrefix={<IconButton>{amountIcon}</IconButton>}
@@ -148,4 +184,4 @@ function Issue({ lng, lngDict, selfUser, product }) {
   );
 }
 
-export default Issue;
+export default Give;

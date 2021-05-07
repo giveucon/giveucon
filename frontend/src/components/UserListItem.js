@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 
-export default function NoticeListItem({ title=null, onClick=null, prefix=null, suffix=null, skeleton=false, subtitle=null }) {
+export default function UserListItem({ content=null, image=null, name=null, onClick=null, suffix=null, skeleton=false }) {
   return (
     <>
       {
@@ -24,8 +24,8 @@ export default function NoticeListItem({ title=null, onClick=null, prefix=null, 
           >
 
             {/* Avatar, Icon, etc... */}
-            <Box display={prefix ? 'block' : 'none'} margin='0.5rem'>
-              {prefix}
+            <Box margin='0.5rem'>
+              <Avatar alt={name} src={image} />
             </Box>
 
             {/* Body */}
@@ -36,8 +36,8 @@ export default function NoticeListItem({ title=null, onClick=null, prefix=null, 
                 paddingRight={suffix ? 0 : 2}
                 paddingY={1}
               >
-                <Typography variant='h6'>{title}</Typography>
-                <Typography variant='subtitle2'>{subtitle}</Typography>
+                <Typography variant='h6'>{name}</Typography>
+                <Typography variant='subtitle2'>{content}</Typography>
               </Box>
             </CardActionArea>
 

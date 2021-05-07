@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import * as constants from 'constants';
+import CouponBox from 'components/CouponBox'
 import Layout from 'components/Layout'
 import Tile from 'components/Tile';
 import Section from 'components/Section'
@@ -57,10 +58,14 @@ function Id({ lng, lngDict, selfUser, coupon }) {
         title={coupon.product.name}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
       >
-        <Tile
-          title={coupon.product.description}
+        <CouponBox
+          lng={lng}
+          lngDict={lngDict}
+          name={coupon.product.name}
           image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
-        />
+          price={coupon.product.price}
+        >
+        </CouponBox>
       </Section>
       <Box marginY={1}>
         <Button

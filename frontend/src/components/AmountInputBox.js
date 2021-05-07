@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AmountInputBox({
   addAmountList=constants.AMOUNT_LIST,
+  defaultAmount=0,
   enableInfinite=false,
   endAdornment,
   label,
@@ -35,7 +36,7 @@ export default function AmountInputBox({
   onChangeInfinite=()=>{} 
 }) {
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(defaultAmount);
   const [infinite, setInfinite] = useState(false);
   const i18n = useI18n();
   const classes = useStyles();
@@ -73,7 +74,7 @@ export default function AmountInputBox({
               color='default'
               variant='contained'
               onClick={() => {
-                onChangeAmount(amount);
+                onChangeAmount(amount + addAmount);
                 onChangeInfinite(false);
                 setAmount(prevAmount => prevAmount + addAmount);
                 setInfinite(prevInfinite => false);
@@ -104,9 +105,9 @@ export default function AmountInputBox({
             className={classes.errorButton}
             variant='contained'
             onClick={() => {
-              onChangeAmount(0);
+              onChangeAmount(defaultAmount);
               onChangeInfinite(false);
-              setAmount(prevAmount => 0);
+              setAmount(prevAmount => defaultAmount);
               setInfinite(prevInfinite => false);
             }}
           >

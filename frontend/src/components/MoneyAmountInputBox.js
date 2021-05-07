@@ -25,12 +25,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MoneyAmountInputBox({ 
   addAmountList=constants.MONEY_AMOUNT_LIST,
+  defaultAmount=0,
   lng,
   lngDict, 
   onChangeAmount
 }) {
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(defaultAmount);
   const i18n = useI18n();
   const classes = useStyles();
 
@@ -71,8 +72,8 @@ export default function MoneyAmountInputBox({
             className={classes.errorButton}
             variant='contained'
             onClick={() => {
-              onChangeAmount(0);
-              setAmount(prevAmount => 0);
+              onChangeAmount(defaultAmount);
+              setAmount(prevAmount => defaultAmount);
             }}
           >
             {i18n.t('reset')}

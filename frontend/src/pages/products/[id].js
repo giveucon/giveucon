@@ -99,6 +99,36 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
               {i18n.t('goToStore')}
             </Button>
           </Box>
+          {(selfUser.id !== product.store.user) && (
+            <>
+              <Box marginY={1}>
+                <Button
+                  color='default'
+                  fullWidth
+                  variant='contained'
+                  onClick={() => router.push({
+                    pathname: '/coupons/purchase/',
+                    query: { product: product.id },
+                  })}
+                >
+                  {i18n.t('purchaseCoupons')}
+                </Button>
+              </Box>
+              <Box marginY={1}>
+                <Button
+                  color='primary'
+                  fullWidth
+                  variant='contained'
+                  onClick={() => router.push({
+                    pathname: '/coupons/give/',
+                    query: { product: product.id },
+                  })}
+                >
+                  {i18n.t('giveCoupons')}
+                </Button>
+              </Box>
+            </>
+          )}
         </Box>
       </Section>
 
@@ -181,6 +211,7 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
           </Box>
         </Section>
       )}
+
 
     </Layout>
   );

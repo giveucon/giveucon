@@ -85,17 +85,15 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
         }
       >
         {selfStoreList.results.length > 0 ? (
-          <Grid container spacing={1}>
+          <SwipeableTileList half>
             {selfStoreList.results.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile
-                  title={item.name}
-                  image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                  onClick={() => router.push(`/stores/${item.id}/` )}
-                />
-              </Grid>
+              <Tile
+                title={item.name}
+                image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
+                onClick={() => router.push(`/stores/${item.id}/` )}
+              />
             ))}
-          </Grid>
+          </SwipeableTileList>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
@@ -113,8 +111,8 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
       >
         {(storeList.results.length > 0) ? (
           <SwipeableTileList half>
-            {storeList.results.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => {
-              return <Tile
+            {storeList.results.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+              <Tile
                 key={index}
                 title={item.name}
                 image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
@@ -123,7 +121,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
                 ]}
                 onClick={() => router.push(`/stores/${item.id}/`)}
               />
-            })}
+            ))}
           </SwipeableTileList>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
@@ -132,17 +130,15 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
 
 
       <Box marginY={1}>
-        <Button
-          color='primary'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push('/stores/create/')}
-        >
-          {i18n.t('addStore')}
-        </Button>
-      </Box>
-
-
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/stores/create/')}
+          >
+            {i18n.t('addStore')}
+          </Button>
+        </Box>
     </Layout>
   );
 }

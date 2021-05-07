@@ -34,7 +34,15 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function UserProfileSection({ actions=null, children, image=null, name=null, onClick=null, subtitle=null }) {
+export default function UserProfileSection({
+  actions=null,
+  children,
+  image=null,
+  name=null,
+  onClick=null,
+  padding=true,
+  subtitle=null
+}) {
   const classes = useStyles();
 
   return (
@@ -58,7 +66,7 @@ export default function UserProfileSection({ actions=null, children, image=null,
             </Box>
           </Box>
           <Divider />
-          <Box display={children ? 'block' : 'none'} padding={2}>
+          <Box display={children ? 'block' : 'none'} padding={ padding ? 1 : 0}>
             {children}
           </Box>
         </Paper>

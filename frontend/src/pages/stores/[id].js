@@ -112,17 +112,22 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           }
         </SwipeableTileList>
         <Box padding={1}>
-          <Box marginBottom={1}>
+          <Box display='flex' flexWrap='wrap' marginBottom={1}>
             {
               store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
-                <Chip
+                <Box
                   key={index}
-                  label={item.name}
-                  color='primary'
-                  size='small'
-                  variant='outlined'
-                  // onClick={() => router.push(`/tags/${item.id}/`)}
-                />
+                  marginLeft={index > 0 ? '0.25rem' : '0rem'}
+                  marginRight={index < store.tags.length ? '0.25rem' : '0rem'}
+                >
+                  <Chip
+                    label={item.name}
+                    color='primary'
+                    size='small'
+                    variant='outlined'
+                    // onClick={() => router.push(`/tags/${item.id}/`)}
+                  />
+                </Box>
               ))
             }
           </Box>
