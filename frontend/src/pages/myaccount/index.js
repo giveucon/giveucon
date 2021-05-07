@@ -60,10 +60,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push({
-              pathname: '/friends/list/',
-              query: { user: selfUser.id },
-            })}
+            onClick={() => router.push('/friends/')}
           >
             {i18n.t('myFriends')}
           </Button>

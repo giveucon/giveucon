@@ -3,16 +3,15 @@ import gravatar from 'gravatar';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ContactsIcon from '@material-ui/icons/Contacts';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
-import Tile from 'components/Tile';
 import UserListItem from 'components/UserListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
@@ -26,7 +25,7 @@ const getSelfFriendList = async (context, selfUser) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const selfFriendListResponse = await getSelfFriendList(context);
+  const selfFriendListResponse = await getSelfFriendList(context, selfUser);
   if (selfFriendListResponse.status === 404) {
     return {
       notFound: true
@@ -38,8 +37,8 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       selfFriendList: selfFriendListResponse.data.results
-    },
-  };
+    }
+  }
 })
 
 function Index({ lng, lngDict, selfUser, selfFriendList }) {
@@ -75,12 +74,15 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
       >
         {selfFriendList.length > 0 ? (
           selfFriendList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
-            <UserListItem
-              key={index}
-              name={item.to_user.name}
-              onClick={() => router.push(`/users/${item.id}/` )}
-              image={gravatar.url(item.to_user.email, {default: 'identicon'})}
-            />
+            <>
+              <UserListItem
+                key={index}
+                name={item.to_user.user_name}
+                onClick={() => router.push(`/users/${item.to_user.id}/` )}
+                image={gravatar.url(item.to_user.email, {default: 'identicon'})}
+              />
+              {index < selfFriendList.length - 1 && (<Divider />)}
+            </>
           ))
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />

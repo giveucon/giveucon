@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
@@ -14,13 +16,16 @@ import Filter8Icon from '@material-ui/icons/Filter8';
 import Filter9Icon from '@material-ui/icons/Filter9';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
 import IconButton from '@material-ui/core/IconButton';
+import ContactsIcon from '@material-ui/icons/Contacts';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
 import AmountInputBox from 'components/AmountInputBox'
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
 import ProductBox from 'components/ProductBox'
 import Section from 'components/Section'
+import UserListItem from 'components/UserListItem'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
@@ -29,13 +34,10 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
-};
-
 const getSelfFriendList = async (context, selfUser) => {
-  const params = {user: selfUser.id}
-  return await requestToBackend(context, `api/friends/`, 'get', 'json', null, params);
+  return await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
+    from_user: selfUser.id
+  });
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -45,37 +47,48 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, productResponse.data);
-  // const selfFriendListResponse = await getSelfFriendList(context, selfUser);
+  const initialSelfFriendListResponse = await getSelfFriendList(context, selfUser);
   return {
     props: {
       lng,
       lngDict,
       selfUser,
       product: productResponse.data,
-      store: storeResponse.data,
-      // selfFriendList: selfFriendListResponse.data
+      initialSelfFriendListResponse
     }
   }
 })
 
-function Give({ lng, lngDict, selfUser, product, store }) {
+function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const [amount, setAmount] = useState(1);
   const [amountIcon, setAmountIcon] = useState(<Filter1Icon />);
-  const [infinite, setInfinite] = useState(false);
+
+  const [selfFriendList, setSelfFriendList] = useState(initialSelfFriendListResponse.data.results);
+  const [selfFriendnListpage, setSelfFriendListpage] = useState(1);
+  const [hasMoreSelfFriendList, setHasMoreSelfFriendList] = useState(initialSelfFriendListResponse.data.next);
+  const getMoreSelfFriendList = async () => {
+    const selfFriendListResponse = await requestToBackend(null, 'api/friends/', 'get', 'json', null, {
+      from_user: selfUser.id,
+      page: selfFriendnListpage + 1
+    });
+    setSelfFriendList(prevSelfFriendList => (prevSelfFriendList || []).concat(selfFriendListResponse.data.results));
+    setSelfFriendListpage(prevSelfFriendListpage => prevSelfFriendListpage + 1);
+    if (selfFriendListpage.data.next === null) setHasMoreSelfFriendList(prevHasMoreSelfFriendList => false);
+  }
+
 
   return (
     <Layout
       locale={lng}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('giveCoupons')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('issueCoupon')}
+        title={i18n.t('giveCoupons')}
       >
       </Section>
       <Section
@@ -92,36 +105,32 @@ function Give({ lng, lngDict, selfUser, product, store }) {
       </Section>
 
 
-{/*
       <Section
-        title={i18n.t('myFriends')}
-        titlePrefix={<IconButton><PaymentIcon /></IconButton>}
+        title={i18n.t('friendList')}
+        titlePrefix={<IconButton><ContactsIcon /></IconButton>}
       >
-        <Autocomplete
-          style={{ width: 300 }}
-          getOptionSelected={(option, value) => option.name === value.name}
-          getOptionLabel={(option) => option.name}
-          options={selfFriendList}
-          loading={loading}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Asynchronous"
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <React.Fragment>
-                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </React.Fragment>
-                ),
-              }}
-            />
-          )}
-        />
+        {(selfFriendList.length > 0) ? (
+          <InfiniteScroll
+            dataLength={selfFriendList.length}
+            next={getMoreSelfFriendList}
+            hasMore={hasMoreSelfFriendList}
+            height='10rem'
+            loader={<InfiniteScrollLoader loading={true} />}
+            endMessage={<InfiniteScrollLoader loading={false} />}
+          >
+            {selfFriendList && selfFriendList.map((item, index) => (
+              <UserListItem
+                key={index}
+                name={item.to_user.user_name}
+                image={gravatar.url(item.to_user.email, {default: 'identicon'})}
+                onClick={() => router.push(`/users/${item.to_user.id}/`)}
+              />
+            ))}
+          </InfiniteScroll>
+        ) : (
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+        )}
       </Section>
-*/}
 
 
       <Section
@@ -148,9 +157,6 @@ function Give({ lng, lngDict, selfUser, product, store }) {
               amount === 8 && setAmountIcon(<Filter8Icon />)
               amount === 9 && setAmountIcon(<Filter9Icon />)
               amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
-            }}
-            onChangeInfinite={(infinite) => {
-              setInfinite(prevInfinite => infinite);
             }}
           />
         </Box>
