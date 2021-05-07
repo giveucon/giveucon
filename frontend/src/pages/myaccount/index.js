@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CodeIcon from '@material-ui/icons/Code';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import SettingsIcon from '@material-ui/icons/Settings';
+import MenuIcon from '@material-ui/icons/Menu';
+import StoreIcon from '@material-ui/icons/Store';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -50,6 +50,8 @@ function Index({ lng, lngDict, selfUser }) {
         title={i18n.t('myAccount')}
       >
       </Section>
+
+
       <Section
         title={i18n.t('myInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
@@ -66,32 +68,6 @@ function Index({ lng, lngDict, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/stores/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myStores')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/products/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myProducts')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
               pathname: '/coupons/list/',
               query: { user: selfUser.id },
             })}
@@ -99,21 +75,6 @@ function Index({ lng, lngDict, selfUser }) {
             {i18n.t('myCoupons')}
           </Button>
         </Box>
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/coupons/scan/')}
-          >
-            {i18n.t('scanCoupon')}
-          </Button>
-        </Box>
-      </Section>
-      <Section
-        title={i18n.t('favorites')}
-        titlePrefix={<IconButton><FavoriteIcon /></IconButton>}
-      >
         <Box marginY={1}>
           <Button
             color='default'
@@ -154,9 +115,54 @@ function Index({ lng, lngDict, selfUser }) {
           </Button>
         </Box>
       </Section>
+
+
       <Section
-        title={i18n.t('managements')}
-        titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        title={i18n.t('myBusiness')}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
+      >
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/stores/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('myStores')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/products/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('myProducts')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push('/coupons/scan/')}
+          >
+            {i18n.t('scanCoupon')}
+          </Button>
+        </Box>
+      </Section>
+
+
+      <Section
+        title={i18n.t('general')}
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
@@ -199,6 +205,8 @@ function Index({ lng, lngDict, selfUser }) {
           </Button>
         </Box>
       </Section>
+
+
       <Section
         title={i18n.t('developerTools')}
         titlePrefix={<IconButton><CodeIcon /></IconButton>}
@@ -246,8 +254,9 @@ function Index({ lng, lngDict, selfUser }) {
             React-Hot-Toast 테스트
           </Button>
         </Box>
-
       </Section>
+
+
     </Layout>
   );
 }

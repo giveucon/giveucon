@@ -15,7 +15,6 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -219,21 +218,16 @@ function User({ lng, lngDict, selfUser: prevSelfUser }) {
           {i18n.t('submit')}
         </Button>
       </Box>
-      <Section
-        title={i18n.t('dangerZone')}
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/myaccount/delete/')}
-          >
-            {i18n.t('deleteMyAccount')}
-          </Button>
-        </Box>
-      </Section>
+      <Box marginY={1}>
+        <Button
+          className={classes.errorButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/myaccount/delete/')}
+        >
+          {i18n.t('deleteMyAccount')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

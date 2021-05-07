@@ -13,6 +13,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import SettingsIcon from '@material-ui/icons/Settings';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
 import * as constants from 'constants';
@@ -90,6 +91,8 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
       menuItemList={selfUser.menu_items}
       title={`${store.name} - ${i18n.t('_appName')}`}
     >
+
+
       <Section
         backButton
         title={store.name}
@@ -129,6 +132,8 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           </Box>
         </Box>
       </Section>
+
+
       <Section
         title={i18n.t('notices')}
         titlePrefix={<IconButton><ChatIcon /></IconButton>}
@@ -159,6 +164,8 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
+
+
       <Section
         title={i18n.t('products')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
@@ -194,6 +201,8 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
+
+
       <Section
         title={i18n.t('reviews')}
         titlePrefix={<IconButton><RateReviewIcon /></IconButton>}
@@ -214,7 +223,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               <Grid item xs={12} key={index}>
                 <ReviewListItem
                   title={item.review.article.title}
-                  subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
+                  date={new Date(item.review.article.created_at)}
                   score={item.review.score}
                   onClick={() => router.push(`/store-reviews/${item.id}/`)}
                 />
@@ -224,7 +233,22 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/store-reviews/create/',
+              query: { store: store.id },
+            })}
+          >
+            {i18n.t('addReview')}
+          </Button>
+        </Box>
       </Section>
+
+
       <Section
         title={i18n.t('location')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
@@ -232,19 +256,24 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
         <Card>
           <KakaoMapBox latitude={latitude} longitude={longitude}/>
         </Card>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
+          >
+            {i18n.t('findPath')}
+          </Button>
+        </Box>
       </Section>
-      <Box marginY={1}>
-        <Button
-          color='default'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
-        >
-          {i18n.t('findPath')}
-        </Button>
-      </Box>
+
+
       {selfUser && store && (selfUser.id === store.user) && (
-        <>
+        <Section
+          title={i18n.t('managements')}
+          titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        >
           <Box marginY={1}>
             <Button
               color='primary'
@@ -284,21 +313,10 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
               {i18n.t('editStore')}
             </Button>
           </Box>
-        </>
+        </Section>
       )}
-      <Box marginY={1}>
-        <Button
-          color='default'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push({
-            pathname: '/store-reviews/create/',
-            query: { store: store.id },
-          })}
-        >
-          {i18n.t('addReview')}
-        </Button>
-      </Box>
+
+
     </Layout>
   );
 }

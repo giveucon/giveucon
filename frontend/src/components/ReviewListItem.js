@@ -6,7 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
 
-export default function ReviewListItem({ title=null, onClick=null, prefix=null, suffix=null, score=null, skeleton=false, subtitle=null }) {
+export default function ReviewListItem({ date=null, onClick=null, prefix=null, suffix=null, score=null, skeleton=false, title=null }) {
   return (
     <Box marginY={1}>
       {
@@ -35,7 +35,7 @@ export default function ReviewListItem({ title=null, onClick=null, prefix=null, 
               {/* Body */}
               <CardActionArea onClick={onClick}>
                 <Box
-                  display={(title || subtitle) ? 'block' : 'none'}
+                  display={(title || date) ? 'block' : 'none'}
                   flexGrow={1}
                   paddingLeft={prefix ? 0 : 2}
                   paddingRight={suffix ? 0 : 2}
@@ -51,7 +51,7 @@ export default function ReviewListItem({ title=null, onClick=null, prefix=null, 
                     </Box>
                     <Divider orientation='vertical' flexItem />
                     <Box marginLeft={1}>
-                      <Typography variant='subtitle2'>{subtitle}</Typography>
+                      <Typography variant='subtitle2'>{date.toLocaleDateString()}</Typography>
                     </Box>
                   </Box>
                 </Box>

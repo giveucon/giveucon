@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import * as constants from 'constants';
 import Layout from 'components/Layout';
@@ -56,7 +57,8 @@ function Id ({ lng, lngDict, selfUser, productReview, user }) {
       >
         <ReviewBox
           title={productReview.review.article.title}
-          subtitle={`${user.user_name} | ${new Date(productReview.review.article.created_at).toLocaleDateString()}`}
+          author={user.user_name}
+          date={new Date(productReview.review.article.created_at)}
           score={productReview.review.score}
           imageList={
             productReview.review.article.images.length > 0
@@ -66,20 +68,27 @@ function Id ({ lng, lngDict, selfUser, productReview, user }) {
           content={productReview.review.article.content}
         />
       </Section>
+
+
       {selfUser.id === productReview.review.article.user && (
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/product-reviews/update/',
-              query: { id: productReview.id },
-            })}
-          >
-            {i18n.t('editReview')}
-          </Button>
-        </Box>
+        <Section
+          title={i18n.t('managements')}
+          titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        >
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/product-reviews/update/',
+                query: { id: productReview.id },
+              })}
+            >
+              {i18n.t('editReview')}
+            </Button>
+          </Box>
+        </Section>
       )}
     </Layout>
   );

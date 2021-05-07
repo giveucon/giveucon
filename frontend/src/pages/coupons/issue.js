@@ -14,6 +14,7 @@ import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
 import Layout from 'components/Layout'
+import ProductBox from 'components/ProductBox'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -31,13 +32,6 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: '10rem',
     width: '10rem',
-  },
-  kakaoButton: {
-    background: theme.palette.kakao.main,
-    color: theme.palette.kakao.contrastText,
-    '&:hover': {
-       background: theme.palette.kakao.dark,
-    },
   },
 }));
 
@@ -83,34 +77,18 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
         title={i18n.t('paymentInfo')}
         titlePrefix={<IconButton><PaymentIcon /></IconButton>}
       >
-        <Box display='flex' alignItems='center' justifyContent='flex-start'>
-          <Box className={classes.imageArea}>
-            <Card>
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
-                  title={product.name}
-                />
-              </CardActionArea>
-            </Card>
-          </Box>
-          <Box margin='1rem'>
-            <Box marginBottom='0.5rem'>
-              <Typography variant='h5'>{product.name}</Typography>
-            </Box>
-            <Divider />
-            <Box marginTop='0.5rem'>
-              <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
-            </Box>
-          </Box>
-        </Box>
+        <ProductBox
+          name={product.name}
+          price={product.price}
+          image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
+          lng={lng}
+          lngDict={lngDict}
+        />
       </Section>
 
       <Box marginY={1}>
         <Button
-          // color='primary'
-          className={classes.kakaoButton}
+          color='primary'
           fullWidth
           variant='contained'
           onClick={() => router.push({

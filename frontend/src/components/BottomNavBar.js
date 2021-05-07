@@ -44,8 +44,8 @@ export default function BottomNavBar({ menuItemList, locale }) {
         key: ++key,
         icon: menuItem.icon,
         label: i18n.t(menuItem.label),
-        onClick: () => {router.push(`${menuItem.link}`)},
-        value: menuItem.link
+        onClick: menuItem.link,
+        value: menuItem.value
       }
     );
   };

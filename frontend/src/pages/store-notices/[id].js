@@ -2,6 +2,8 @@ import React from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import * as constants from 'constants';
 import Layout from 'components/Layout'
@@ -49,6 +51,8 @@ const i18n = useI18n();
       menuItemList={selfUser.menu_items}
       title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}
     >
+
+
       <Section
         backButton
         title={storeNotice.article.title}
@@ -64,20 +68,27 @@ const i18n = useI18n();
           content={storeNotice.article.content}
         />
       </Section>
-      {selfUser.id === store.user && (
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/store-notices/update/',
-              query: { id: storeNotice.id },
-            })}
-          >
-            {i18n.t('editNotice')}
-          </Button>
-        </Box>
+
+
+      {selfUser.id === storeNotice.article.user && (
+        <Section
+          title={i18n.t('managements')}
+          titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+        >
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/store-notices/update/',
+                query: { id: storeNotice.id },
+              })}
+            >
+              {i18n.t('editNotice')}
+            </Button>
+          </Box>
+        </Section>
       )}
     </Layout>
   );

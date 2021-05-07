@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import ChatIcon from '@material-ui/icons/Chat';
 
-import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import NoticeListItem from 'components/NoticeListItem';
 import Section from 'components/Section';
-import SwipeableTileList from 'components/SwipeableTileList';
-import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
@@ -52,40 +44,11 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
     <Layout
       locale={lng}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('notices')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('noticeList')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('notices')}
-      />
-      <Section
-        titlePrefix={<IconButton><AnnouncementIcon /></IconButton>}
-        title={i18n.t('newNotices')}
-        padding={false}
-      >
-        {(centralNoticeList.length > 0) ? (
-          <SwipeableTileList autoplay={true}>
-            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => {
-              return <Tile
-                key={index}
-                title={item.article.title}
-                image={
-                  item.article.images && (item.article.images.length > 0)
-                  ? item.article.images[0].image
-                  : constants.NO_IMAGE_PATH
-                }
-                onClick={() => router.push(`/central-notices/${item.id}`)}
-              />
-            })}
-          </SwipeableTileList>
-        ) : (
-          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
-        )}
-      </Section>
-
-      <Section
-        title={i18n.t('allNotices')}
-        titlePrefix={<IconButton><ChatIcon /></IconButton>}
+        title={i18n.t('noticeList')}
       >
         {(centralNoticeList.length > 0) ? (
           <InfiniteScroll
@@ -111,17 +74,6 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-
-      <Box marginY={1}>
-        <Button
-          color='primary'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push(`/central-notices/create/`)}
-        >
-          {i18n.t('addNotice')}
-        </Button>
-      </Box>
     </Layout>
   );
 }

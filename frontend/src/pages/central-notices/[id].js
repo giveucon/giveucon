@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import * as constants from 'constants';
 import Layout from 'components/Layout';
@@ -38,6 +39,8 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
       menuItemList={selfUser.menu_items}
       title={`${centralNotice.article.title} - ${i18n.t('_appName')}`}
     >
+
+
       <Section
         backButton
         title={centralNotice.article.title}
@@ -53,19 +56,30 @@ function Id({ lng, lngDict, selfUser, centralNotice }) {
           content={centralNotice.article.content}
         />
       </Section>
-      <Box marginY={1}>
-        <Button
-          color='default'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push({
-            pathname: '/central-notices/update/',
-            query: { id: centralNotice.id },
-          })}
+
+
+      {((selfUser.staff) || (selfUser.id === centralNotice.article.user)) && (
+        <Section
+          title={i18n.t('managements')}
+          titlePrefix={<IconButton><SettingsIcon /></IconButton>}
         >
-          {i18n.t('editNotice')}
-        </Button>
-      </Box>
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/central-notices/update/',
+                query: { id: centralNotice.id },
+              })}
+            >
+              {i18n.t('editNotice')}
+            </Button>
+          </Box>
+        </Section>
+      )}
+
+
     </Layout>
   );
 }

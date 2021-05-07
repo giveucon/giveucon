@@ -11,7 +11,6 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -286,10 +285,6 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
           {i18n.t('submit')}
         </Button>
       </Box>
-      <Section
-        title={i18n.t('dangerZone')}
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
       <Box marginY={1}>
         <Button
           className={classes.errorButton}
@@ -303,7 +298,6 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
           {i18n.t('deleteProduct')}
         </Button>
       </Box>
-      </Section>
     </Layout>
   );
 }

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function ReviewBox({ actions=null, content=null, imageList=null, title=null, onClick=null, score=null, skeleton=false, subtitle=null }) {
+export default function ReviewBox({ actions=null, author=null, content=null, date=null, imageList=null, onClick=null, score=null, skeleton=false, title=null }) {
   const classes = useStyles();
   return (
     skeleton ? (
@@ -41,17 +41,18 @@ export default function ReviewBox({ actions=null, content=null, imageList=null, 
             <Box alignItems='center' display='flex' justifyContent='flex-start'>
               <Box marginRight={1}>
                 <Typography variant='subtitle1'>
-                  {subtitle}
+                  {author}
                 </Typography>
               </Box>
               <Divider orientation='vertical' flexItem />
               <Box marginLeft={1}>
-                <Rating
-                  value={score}
-                  readOnly 
-                />
+                {date.toLocaleDateString()}
               </Box>
             </Box>
+            <Rating
+              value={score}
+              readOnly 
+            />
           </Box>
           <Box display={imageList && (imageList.length > 0) ? 'block' : 'none'} paddingY={1}>
             <SwipeableTileList autoplay={true}>

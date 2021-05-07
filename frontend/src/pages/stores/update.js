@@ -14,7 +14,6 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -279,24 +278,19 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
           {i18n.t('submit')}
         </Button>
       </Box>
-      <Section
-        title={i18n.t('dangerZone')}
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/stores/delete/',
-              query: { id: store.id },
-            })}
-          >
-            {i18n.t('deleteStore')}
-          </Button>
-        </Box>
-      </Section>
+      <Box marginY={1}>
+        <Button
+          className={classes.errorButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/stores/delete/',
+            query: { id: store.id },
+          })}
+        >
+          {i18n.t('deleteStore')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

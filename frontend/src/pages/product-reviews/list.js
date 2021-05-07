@@ -79,7 +79,7 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
                 <Grid item xs={12} key={index}>
                   <ListItemCard
                     title={item.review.article.title}
-                    subtitle={new Date(item.review.article.created_at).toLocaleDateString()}
+                    date={new Date(item.review.article.created_at)}
                     onClick={() => router.push(`/product-reviews/${item.id}/`)}
                   />
                 </Grid>

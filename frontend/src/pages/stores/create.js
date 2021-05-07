@@ -83,10 +83,14 @@ function Create({ lng, lngDict, selfUser, tagList }) {
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addStore')} - ${i18n.t('_appName')}`}
     >
+
+
       <Section
         backButton
         title={i18n.t('addStore')}
       />
+
+
       <Section
         title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoIcon /></IconButton>}
@@ -151,6 +155,8 @@ function Create({ lng, lngDict, selfUser, tagList }) {
           />
         </Box>
       </Section>
+
+
       <Section
         title={i18n.t('images')}
         titlePrefix={<IconButton><ImageIcon /></IconButton>}
@@ -215,6 +221,8 @@ function Create({ lng, lngDict, selfUser, tagList }) {
           )}
         </ImageUploading>
       </Section>
+
+      
       <Box marginY={1}>
         <Button
           color='primary'
@@ -236,6 +244,8 @@ function Create({ lng, lngDict, selfUser, tagList }) {
           {i18n.t('submit')}
         </Button>
       </Box>
+
+
     </Layout>
   );
 }

@@ -10,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -56,7 +55,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  if (!selfUser.staff && (selfUser.id !== storeNoticeResponse.data.article.user)){
+  if (!selfUser.staff && (selfUser.id !== prevStoreNoticeResponse.data.article.user)){
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -234,24 +233,19 @@ function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
           {i18n.t('submit')}
         </Button>
       </Box>
-      <Section
-        title={i18n.t('dangerZone')}
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/store-notices/delete/',
-              query: { id: storeNotice.id },
-            })}
-          >
-            {i18n.t('deleteNotice')}
-          </Button>
-        </Box>
-      </Section>
+      <Box marginY={1}>
+        <Button
+          className={classes.errorButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/store-notices/delete/',
+            query: { id: storeNotice.id },
+          })}
+        >
+          {i18n.t('deleteNotice')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

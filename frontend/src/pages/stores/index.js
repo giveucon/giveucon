@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import StorefrontIcon from '@material-ui/icons/Storefront';
+import StoreIcon from '@material-ui/icons/Store';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
@@ -69,9 +69,11 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
         title={i18n.t('stores')}
       >
       </Section>
+
+
       <Section
         title={i18n.t('myStores')}
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
           <IconButton 
             onClick={() => router.push({
@@ -98,9 +100,11 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
+
+
       <Section
         title={i18n.t('allStores')}
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
           <IconButton onClick={() => router.push('/stores/list/')}>
             <ArrowForwardIcon />
@@ -125,6 +129,8 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
+
+
       <Box marginY={1}>
         <Button
           color='primary'
@@ -135,6 +141,8 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
           {i18n.t('addStore')}
         </Button>
       </Box>
+
+
     </Layout>
   );
 }

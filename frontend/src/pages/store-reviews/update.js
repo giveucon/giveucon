@@ -10,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 import Rating from '@material-ui/lab/Rating';
 
 import Layout from 'components/Layout'
@@ -248,24 +247,19 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
           {i18n.t('submit')}
         </Button>
       </Box>
-      <Section
-        title={i18n.t('dangerZone')}
-        titlePrefix={<IconButton><WarningIcon /></IconButton>}
-      >
-        <Box marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/store-reviews/delete/',
-              query: { id: storeReview.id },
-            })}
-          >
-            {i18n.t('deleteReview')}
-          </Button>
-        </Box>
-      </Section>
+      <Box marginY={1}>
+        <Button
+          className={classes.errorButton}
+          fullWidth
+          variant='contained'
+          onClick={() => router.push({
+            pathname: '/store-reviews/delete/',
+            query: { id: storeReview.id },
+          })}
+        >
+          {i18n.t('deleteReview')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

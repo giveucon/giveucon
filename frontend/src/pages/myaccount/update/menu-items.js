@@ -56,7 +56,7 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
     dark_mode: prevSelfUser.dark_mode,
     menu_items: prevSelfUser.menu_items,
   });
-  const [unusedMenuItemList, setUnusedMenuItemKeyList] = useState(['scan']);
+  const [unusedMenuItemList, setUnusedMenuItemKeyList] = useState(['scan', 'goBack']);
   const [menuItemList, setMenuItemKeyList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
   
   function not(lhs, rhs) {

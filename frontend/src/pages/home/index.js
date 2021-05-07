@@ -61,7 +61,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
-          <IconButton onClick={() => router.push('/central-notices/list/')}>
+          <IconButton onClick={() => router.push('/central-notices/')}>
             <AnnouncementIcon />
           </IconButton>,
           <IconButton>
