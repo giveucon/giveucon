@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 
+import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
@@ -58,17 +59,16 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container>
-              {centralNoticeList.map((item, index) => (
-                <Grid item xs={12} key={index}>
-                  <NoticeListItem
-                    title={item.article.title}
-                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                    onClick={() => router.push(`/central-notices/${item.id}/`)}
-                  />
-                </Grid>
-              ))}
-              </Grid>
+            {centralNoticeList.map((item, index) => (
+              <>
+                <NoticeListItem
+                  title={item.article.title}
+                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                  onClick={() => router.push(`/central-notices/${item.id}/`)}
+                />
+              {index < centralNoticeList.length - 1 && (<Divider />)}
+              </>
+            ))}
             </InfiniteScroll>
           ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />

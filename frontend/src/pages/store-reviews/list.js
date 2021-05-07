@@ -3,13 +3,12 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
 
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import ListItemCard from 'components/ListItemCard';
+import ReviewListItem from 'components/ReviewListItem';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -80,18 +79,17 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container>
-              {storeReviewList.map((item, index) => (
-                <Grid item xs={12} key={index}>
-                  <ListItemCard
-                    title={item.review.article.title}
-                    date={new Date(item.review.article.created_at)}
-                    onClick={() => router.push(`/store-reviews/${item.id}/`)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
+            {storeReviewList.map((item, index) => (
+              <>
+                <ReviewListItem
+                  title={item.review.article.title}
+                  date={new Date(item.review.article.created_at)}
+                  score={item.review.score}
+                  onClick={() => router.push(`/store-reviews/${item.id}/`)}
+                />
+              {index < storeReviewList.length - 1 && (<Divider />)}
+              </>
+            ))}
           </InfiniteScroll>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -119,18 +118,17 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
         }
       >
         {productReviewList.length > 0 ? (
-          <Grid container spacing={1}>
-            {productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
-              <Grid item xs={12} key={index}>
-                <ReviewListItem
-                  title={item.review.article.title}
-                  data={new Date(item.review.article.created_at)}
-                  score={item.review.score}
-                  onClick={() => router.push(`/product-reviews/${item.id}/`)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+            <>
+              <ReviewListItem
+                title={item.review.article.title}
+                date={new Date(item.review.article.created_at)}
+                score={item.review.score}
+                onClick={() => router.push(`/product-reviews/${item.id}/`)}
+              />
+              {index < productReviewList.slice(0, constants.LIST_SLICE_NUMBER).length - 1 && (<Divider />)}
+            </>
+          ))
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}

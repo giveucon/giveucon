@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -82,17 +82,16 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
         }
       >
         {(centralNoticeList.length > 0) ? (
-          <Grid container>
-            {centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
-              <Grid item xs={12} key={index}>
-                <NoticeListItem
-                  title={item.article.title}
-                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                  onClick={() => router.push(`/central-notices/${item.id}/`)}
-                />
-              </Grid>
-            ))}
-            </Grid>
+          centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+            <>
+              <NoticeListItem
+                title={item.article.title}
+                subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                onClick={() => router.push(`/central-notices/${item.id}/`)}
+              />
+              {index < centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).length - 1 && (<Divider />)}
+            </>
+          ))
           ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}

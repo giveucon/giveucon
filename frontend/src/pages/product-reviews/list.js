@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import ListItemCard from 'components/ListItemCard';
+import ReviewListItem from 'components/ReviewListItem';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -74,18 +74,17 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container>
-              {productReviewList.map((item, index) => (
-                <Grid item xs={12} key={index}>
-                  <ListItemCard
-                    title={item.review.article.title}
-                    date={new Date(item.review.article.created_at)}
-                    onClick={() => router.push(`/product-reviews/${item.id}/`)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
+            {productReviewList.map((item, index) => (
+              <>
+                <ReviewListItem
+                  title={item.review.article.title}
+                  date={new Date(item.review.article.created_at)}
+                  score={item.review.score}
+                  onClick={() => router.push(`/product-reviews/${item.id}/`)}
+                />
+              {index < productReviewList.length - 1 && (<Divider />)}
+              </>
+            ))}
           </InfiniteScroll>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
@@ -68,18 +68,16 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container>
-              {storeNoticeList.map((item, index) => (
-                <Grid item xs={12} key={index}>
-                  <NoticeListItem
-                    title={item.article.title}
-                    subtitle={new Date(item.article.created_at).toLocaleDateString()}
-                    onClick={() => router.push(`/store-notices/${item.id}/`)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
+            {storeNoticeList.map((item, index) => (
+              <>
+                <NoticeListItem
+                  title={item.article.title}
+                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                  onClick={() => router.push(`/store-notices/${item.id}/`)}
+                />
+              {index < storeNoticeList.length - 1 && (<Divider />)}
+              </>
+            ))}
           </InfiniteScroll>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
