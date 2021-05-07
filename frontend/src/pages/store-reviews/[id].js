@@ -17,6 +17,10 @@ const getStoreReview = async (context) => {
   return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
 };
 
+const getUser = async (context, storeReview) => {
+  return await requestToBackend(context, `api/users/${storeReview.review.article.user}/`, 'get', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeReviewResponse = await getStoreReview(context);
   if (storeReviewResponse.status === 404) {
@@ -31,11 +35,12 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       storeReview: storeReviewResponse.data,
+      user: userResponse.data,
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, storeReview }) {
+function Id({ lng, lngDict, selfUser, storeReview, user }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -53,7 +58,7 @@ function Id({ lng, lngDict, selfUser, storeReview }) {
       >
         <ReviewBox
           title={storeReview.review.article.title}
-          author={storeReview.review.article.user_name}
+          author={user.user_name}
           date={new Date(storeReview.review.article.created_at)}
           score={storeReview.review.score}
           imageList={

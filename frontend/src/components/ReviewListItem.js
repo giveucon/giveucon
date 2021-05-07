@@ -8,7 +8,7 @@ import Rating from '@material-ui/lab/Rating';
 
 export default function ReviewListItem({ date=null, onClick=null, prefix=null, suffix=null, score=null, skeleton=false, title=null }) {
   return (
-    <Box marginY={1}>
+    <>
       {
         skeleton ? (
           <Box display='flex' alignItems='center' justifyContent='flex-start' margin='1rem'>
@@ -19,7 +19,7 @@ export default function ReviewListItem({ date=null, onClick=null, prefix=null, s
             </Box>
           </Box>
         ) : (
-          <Card>
+          <>
             <Box
               alignItems='center'
               display='flex'
@@ -63,9 +63,9 @@ export default function ReviewListItem({ date=null, onClick=null, prefix=null, s
               </Box>
 
             </Box>
-          </Card>
+          </>
         )
       }
-    </Box>
+    </>
   );
 }

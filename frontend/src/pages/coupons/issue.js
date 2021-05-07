@@ -1,18 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
+import AmountInputBox from 'components/AmountInputBox'
 import Layout from 'components/Layout'
 import ProductBox from 'components/ProductBox'
 import Section from 'components/Section'
@@ -61,6 +56,8 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
+  const [amount, setAmount] = useState(1);
+  const [infinite, setInfinite] = useState(false);
   
   return (
     <Layout
@@ -84,6 +81,26 @@ function Issue({ lng, lngDict, selfUser, product, store }) {
           lng={lng}
           lngDict={lngDict}
         />
+      </Section>
+      <Section
+        title={i18n.t('paymentInfo')}
+        titlePrefix={<IconButton><PaymentIcon /></IconButton>}
+      >
+        <Box paddingY={1}>
+          <AmountInputBox
+            label={i18n.t('amount')}
+            lng={lng}
+            lngDict={lngDict}
+            addAmountList={constants.AMOUNT_LIST}
+            enableInfinite
+            onChangeAmount={(amount) => {
+              setAmount(prevAmount => amount);
+            }}
+            onChangeInfinite={(infinite) => {
+              setInfinite(prevInfinite => infinite);
+            }}
+          />
+        </Box>
       </Section>
 
       <Box marginY={1}>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -13,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function ListItemCard({ onClick=null, title=null, prefix=null, skeleton=false, subtitle=null, suffix=null }) {
+export default function ListItem({ children=null, onClick=null, prefix=null, skeleton=false, subtitle=null, suffix=null, title=null }) {
   const classes = useStyles();
   return (
-    <Box marginY={1}>
+    <>
       {
         skeleton ? (
           <Box display='flex' alignItems='center' justifyContent='flex-start' margin='1rem'>
@@ -27,7 +26,7 @@ export default function ListItemCard({ onClick=null, title=null, prefix=null, sk
             </Box>
           </Box>
         ) : (
-          <Card>
+          <>
             <Box
               alignItems='center'
               display='flex'
@@ -45,12 +44,12 @@ export default function ListItemCard({ onClick=null, title=null, prefix=null, sk
                   display={(title || subtitle) ? 'block' : 'none'}
                   paddingLeft={prefix ? 0 : 2}
                   paddingRight={suffix ? 0 : 2}
-                  flexGrow={1}
                   paddingY={1}
                 >
                   <Typography variant='h6'>{title}</Typography>
                   <Typography variant='subtitle2'>{subtitle}</Typography>
                 </Box>
+                {children}
               </CardActionArea>
 
               {/* Button, etc... */}
@@ -58,9 +57,9 @@ export default function ListItemCard({ onClick=null, title=null, prefix=null, sk
                 {suffix}
               </Box>
             </Box>
-          </Card>
+          </>
         )
       }
-    </Box>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 
-import * as constants from 'constants';
+import * as constants from '../constants';
 import useI18n from 'hooks/useI18n'
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ export default function AmountInputBox({
       </Box>
       <Box display={infinite ? 'block' : 'none'}>
         <TextField
-          label={i18n.t('amount')}
+          label={label}
           value={i18n.t('infinite')}
           disabled
           fullWidth

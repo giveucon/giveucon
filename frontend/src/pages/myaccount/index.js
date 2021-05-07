@@ -6,10 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import CodeIcon from '@material-ui/icons/Code';
 import MenuIcon from '@material-ui/icons/Menu';
-import StoreIcon from '@material-ui/icons/Store';
 
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -49,19 +49,42 @@ function Index({ lng, lngDict, selfUser }) {
         backButton
         title={i18n.t('myAccount')}
       >
-      </Section>
-
-
-      <Section
-        title={i18n.t('myInfo')}
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
-      >
         <UserProfileBox
           name={selfUser.user_name}
           subtitle={selfUser.email}
           image={gravatar.url(selfUser.email, {default: 'identicon'})}
           onClick={() => router.push(`/users/${selfUser.id}/`)}
         />
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/friends/list/',
+              query: { user: selfUser.id },
+            })}
+          >
+            {i18n.t('myFriends')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            className={classes.errorButton}
+            fullWidth
+            variant='contained'
+            onClick={() => {router.push('/oauth/kakao/logout/')}}
+          >
+            {i18n.t('logout')}
+          </Button>
+        </Box>
+      </Section>
+
+
+      <Section
+        title={i18n.t('myWallet')}
+        titlePrefix={<IconButton><AccountBalanceWalletIcon /></IconButton>}
+      >
         <Box marginY={1}>
           <Button
             color='default'
@@ -81,24 +104,11 @@ function Index({ lng, lngDict, selfUser }) {
             fullWidth
             variant='contained'
             onClick={() => router.push({
-              pathname: '/friends/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('friends')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
               pathname: '/favorite-stores/list/',
               query: { user: selfUser.id },
             })}
           >
-            {i18n.t('favoriteStores')}
+            {i18n.t('myFavoriteStores')}
           </Button>
         </Box>
         <Box marginY={1}>
@@ -111,7 +121,7 @@ function Index({ lng, lngDict, selfUser }) {
               query: { user: selfUser.id },
             })}
           >
-            {i18n.t('favoriteProducts')}
+            {i18n.t('myFavoriteProducts')}
           </Button>
         </Box>
       </Section>
@@ -119,7 +129,7 @@ function Index({ lng, lngDict, selfUser }) {
 
       <Section
         title={i18n.t('myBusiness')}
-        titlePrefix={<IconButton><StoreIcon /></IconButton>}
+        titlePrefix={<IconButton><BusinessCenterIcon /></IconButton>}
       >
         <Box marginY={1}>
           <Button
@@ -194,16 +204,6 @@ function Index({ lng, lngDict, selfUser }) {
             {i18n.t('about')}
           </Button>
         </Box>
-        <Box marginY={1}>
-          <Button
-            className={classes.errorButton}
-            fullWidth
-            variant='contained'
-            onClick={() => {router.push('/oauth/kakao/logout/')}}
-          >
-            {i18n.t('logout')}
-          </Button>
-        </Box>
       </Section>
 
 
@@ -231,17 +231,6 @@ function Index({ lng, lngDict, selfUser }) {
             {i18n.t('components')}
           </Button>
         </Box>
-
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/sandbox/scanner/')}
-          >
-            QR코드 스캐너
-          </Button>
-        </Box>
         <Box marginY={1}>
           <Button
             color='default'
@@ -253,8 +242,6 @@ function Index({ lng, lngDict, selfUser }) {
           </Button>
         </Box>
       </Section>
-
-
     </Layout>
   );
 }

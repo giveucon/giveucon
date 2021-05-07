@@ -27,6 +27,11 @@ const getUser = async (context) => {
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialFavoriteProductListResponse = await getFavoriteProductList(context);
+  if (initialFavoriteProductListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
     props: {
