@@ -12,7 +12,7 @@ class FriendListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_read = FriendReadSerializer
     serializer_class_write = FriendWriteSerializer
     pagination_class = FriendPagination
-    filterset_fields = ['from_user']
+    filterset_fields = ['from_user', 'to_user']
 
     def perform_create(self, serializer):
         from_user = UserService.get_current_user(self.request)
