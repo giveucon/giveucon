@@ -12,7 +12,7 @@ class FavoriteStoreListView(SerializerMixin, generics.ListCreateAPIView):
     pagination_class = FavoriteStorePagination
     serializer_class_read = FavoriteStoreReadSerializer
     serializer_class_write = FavoriteStoreWriteSerializer
-    filterset_fields = ['user']
+    filterset_fields = ['user', 'store']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)
