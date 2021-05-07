@@ -247,9 +247,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => {
-              toast.success('Hello World');
-            }}
+            onClick={() => toast.success('Hello World')}
           >
             React-Hot-Toast 테스트
           </Button>

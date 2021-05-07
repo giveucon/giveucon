@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import * as constants from 'constants';
 import useI18n from 'hooks/useI18n'
@@ -30,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ProductBox({ image, lng, lngDict, name, onClick, price }) {
-  
+
   const i18n = useI18n();
   const classes = useStyles();
 
@@ -53,7 +49,7 @@ export default function ProductBox({ image, lng, lngDict, name, onClick, price }
         </Box>
         <Divider />
         <Box marginTop='0.5rem'>
-          <Typography variant='h6'>{`${price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}</Typography>
+          <Typography variant='h6'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
         </Box>
       </Box>
     </Box>

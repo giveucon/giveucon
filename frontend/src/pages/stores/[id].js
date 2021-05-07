@@ -187,7 +187,7 @@ function Id({ lng, lngDict, selfUser, store, storeNoticeList, productList, store
                 <Tile
                   margin={false}
                   title={item.name}
-                  subtitle={`${item.price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}
+                  subtitle={item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
                     <IconButton><FavoriteIcon /></IconButton>

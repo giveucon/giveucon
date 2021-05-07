@@ -91,7 +91,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
                 <Grid item xs={6} key={index}>
                   <Tile
                     title={item.name}
-                    subtitle={`${item.price.toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}
+                    subtitle={`${item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                     image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                     actions={[
                       <IconButton><FavoriteIcon /></IconButton>

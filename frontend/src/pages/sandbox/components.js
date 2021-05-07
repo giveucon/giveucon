@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,7 +10,9 @@ import Layout from 'components/Layout';
 import Section from 'components/Section';
 import AccordionSection from 'components/AccordionSection';
 import AlertBox from 'components/AlertBox';
+import AmountInputBox from 'components/AmountInputBox';
 import KakaoMapBox from 'components/KakaoMapBox';
+import MoneyAmountInputBox from 'components/MoneyAmountInputBox';
 import NoticeBox from 'components/NoticeBox';
 import ReviewBox from 'components/ReviewBox';
 import SwipeableTileList from 'components/SwipeableTileList';
@@ -153,6 +156,35 @@ export default function Components({ lng, lngDict, selfUser }) {
       </Section>
 
       <Section
+        title='AmountInputBox'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+        lng={lng}
+        lngDict={lngDict}
+      >
+        <AmountInputBox
+          label='Amount'
+          onChangeAmount={(amount) => {}}
+          onChangeInfinite={(infinite) => {}}
+        />
+      </Section>
+
+      <Section
+        title='AmountInputBox - with Infinite'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+        lng={lng}
+        lngDict={lngDict}
+      >
+        <AmountInputBox
+          enableInfinite
+          label='Amount'
+          onChangeAmount={(amount) => {}}
+          onChangeInfinite={(infinite) => {}}
+        />
+      </Section>
+
+      <Section
         title='KakaoMapBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
@@ -162,16 +194,26 @@ export default function Components({ lng, lngDict, selfUser }) {
       </Section>
 
       <Section
-        title='ArticleBox'
+        title='MoneyAmountInputBox'
+        titlePrefix={<IconButton><MenuIcon /></IconButton>}
+        titleSuffix={<Button>Edit</Button>}
+        lng={lng}
+        lngDict={lngDict}
+      >
+        <MoneyAmountInputBox  onChangeAmount={(amount) => {}} />
+      </Section>
+
+      <Section
+        title='NoticeBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
         <NoticeBox skeleton />
         <NoticeBox
-          title='ArticleBox Title ArticleBox Title ArticleBox Title ArticleBox Title'
-          subtitle='ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle ArticleBox Subtitle'
+          title='NoticeBox Title NoticeBox Title NoticeBox Title NoticeBox Title'
+          subtitle='NoticeBox Subtitle NoticeBox Subtitle NoticeBox Subtitle NoticeBox Subtitle'
           imageList={['https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg']}
-          content='ArticleBox Content ArticleBox Content ArticleBox Content '
+          content='NoticeBox Content NoticeBox Content NoticeBox Content '
           onClick={() => alert( 'Tapped' )}
         >
           <Button>Edit</Button>
@@ -185,7 +227,8 @@ export default function Components({ lng, lngDict, selfUser }) {
       >
         <ReviewBox
           title='Review Box'
-          subtitle='Review Author'
+          author='Review Author'
+          date={new Date()}
           imageList={['https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg']}
           content='Excellent'
           score={4}

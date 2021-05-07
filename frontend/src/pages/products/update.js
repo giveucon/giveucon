@@ -6,13 +6,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoIcon from '@material-ui/icons/Info';
 
+import * as constants from 'constants';
+import AmountInputBox from 'components/AmountInputBox'
 import Layout from 'components/Layout'
+import MoneyAmountInputBox from 'components/MoneyAmountInputBox'
 import Section from 'components/Section'
 import SwipeableTileList from 'components/SwipeableTileList'
 import Tile from 'components/Tile'
@@ -159,43 +161,24 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
           />
         </Box>
         <Box paddingY={1}>
-          <TextField
-            name='price'
-            value={product.price}
-            error={productError.price}
-            fullWidth
-            label={i18n.t('price')}
-            type='number'
-            InputLabelProps={{
-              shrink: true,
+          <MoneyAmountInputBox
+            lng={lng}
+            lngDict={lngDict}
+            addAmountList={constants.MONEY_AMOUNT_LIST}
+            onChangeAmount={(amount) => {
+              setProduct(prevProduct => ({ ...prevProduct, price: amount }));
             }}
-            onChange={(event) => {
-              setProduct(prevProduct => ({ ...prevProduct, price: event.target.value }));
-            }}
-            InputProps={{
-              endAdornment: (<InputAdornment position='end'>{i18n.t('_localeCurrencyKoreanWon')}</InputAdornment>),
-            }}
-            required
           />
         </Box>
         <Box paddingY={1}>
-          <TextField
-            name='duration'
-            value={product.duration}
-            error={productError.duration}
-            fullWidth
-            type='number'
-            label={i18n.t('expiryDate')}
-            InputLabelProps={{
-              shrink: true,
+          <AmountInputBox
+            label={i18n.t('duration')}
+            lng={lng}
+            lngDict={lngDict}
+            addAmountList={constants.DATE_AMOUNT_LIST}
+            onChangeAmount={(amount) => {
+              setProduct(prevProduct => ({ ...prevProduct, duration: amount }));
             }}
-            onChange={(event) => {
-              setProduct(prevProduct => ({ ...prevProduct, duration: event.target.value }));
-            }}
-            InputProps={{
-              endAdornment: (<InputAdornment position='end'>{i18n.t('days')}</InputAdornment>),
-            }}
-            required
           />
         </Box>
       </Section>

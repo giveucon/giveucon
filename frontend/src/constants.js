@@ -7,7 +7,9 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirectoryOutlined';
 
+export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
 export const APP_VERSION = '0.1.0-alpha';
+export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
 export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LIST_SLICE_NUMBER = 3;
 export const LOGO_PATH = '/logo.png';
@@ -55,5 +57,6 @@ export const MENU_ITEM_LIST = [
     link: () => {Router.push('/trades/')}
   }
 ];
+export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
 export const NO_IMAGE_PATH = '/no_image.png';
 export const TILE_LIST_SLICE_NUMBER = 3;

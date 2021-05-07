@@ -84,7 +84,7 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
         <Box padding={1}>
           <Box marginBottom={1}>
             <Typography variant='h5'>{product.name}</Typography>
-            <Typography variant='h6'>{`${(product.price || 0).toLocaleString('ko-KR')}${i18n.t('_localeCurrencyKoreanWon')}`}</Typography>
+            <Typography variant='h6'>{product.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
           </Box>
           <Divider />
           <Box marginTop={1}>
