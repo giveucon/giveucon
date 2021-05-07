@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
+import gravatar from 'gravatar';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 
-import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
-import Tile from 'components/Tile';
+import UserListItem from 'components/UserListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getFriendList = async (context) => {
   const params = {
-    user: context.query.user,
+    from_user: context.query.user,
   };
   return await requestToBackend(context, 'api/friends/', 'get', 'json', null, params);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+  if (!context.query.user) {
+    return {
+      notFound: true
+    }
+  }
   const initialFriendListResponse = await getFriendList(context);
   if (initialFriendListResponse.status === 404) {
     return {
@@ -75,20 +78,14 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container spacing={1}>
-              {storeList && storeList.map((item, index) => (
-                <Grid item xs={6} key={index}>
-                  <Tile
-                    title={item.name}
-                    image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                    onClick={() => router.push(`/users/${item.id}/`)}
-                    menuItems={
-                      <MenuItem>Menu Item</MenuItem>
-                    }
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            {friendList && friendList.map((item, index) => (
+              <UserListItem
+                key={index}
+                name={item.to_user.user_name}
+                image={gravatar.url(item.to_user.email, {default: 'identicon'})}
+                onClick={() => router.push(`/users/${item.to_user.id}/`)}
+              />
+            ))}
           </InfiniteScroll>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />

@@ -83,6 +83,7 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
             <ArrowForwardIcon />
           </IconButton>
         }
+        padding={false}
       >
         {selfStoreList.results.length > 0 ? (
           <SwipeableTileList half>
@@ -130,15 +131,15 @@ function Index({ lng, lngDict, selfUser, storeList, selfStoreList }) {
 
 
       <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/stores/create/')}
-          >
-            {i18n.t('addStore')}
-          </Button>
-        </Box>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/stores/create/')}
+        >
+          {i18n.t('addStore')}
+        </Button>
+      </Box>
     </Layout>
   );
 }
