@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import * as constants from 'constants';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
@@ -44,7 +45,7 @@ function Use({ lng, lngDict, selfUser, coupon }) {
 // process.env.NEXT_PUBLIC_COUPON_OTP_INTERVAL
   const i18n = useI18n();
   const router = useRouter();
-  const [timestamp, setTimestamp] = useState(new Date().getTime() % process.env.NEXT_PUBLIC_COUPON_OTP_REFRESH_INTERVAL);
+  const [timestamp, setTimestamp] = useState(new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL);
   const [couponQr, setCouponQr] = useState(null);
 
   useEffect(() => {
@@ -61,12 +62,12 @@ function Use({ lng, lngDict, selfUser, coupon }) {
       setCouponQr(newCouponQr);
     };
     const timestampId = setTimeout(() => {
-      const newTimestamp = new Date().getTime() % process.env.NEXT_PUBLIC_COUPON_OTP_REFRESH_INTERVAL;
+      const newTimestamp = new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL;
       if (timestamp > newTimestamp) {
         getCouponQR(coupon);
       }
-      setTimestamp(new Date().getTime() % process.env.NEXT_PUBLIC_COUPON_OTP_REFRESH_INTERVAL);
-    }, process.env.NEXT_PUBLIC_COUPON_QR_REFRESH_INTERVAL);
+      setTimestamp(new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL);
+    }, constants.COUPON_TIMESTAMP_REFRESH_INTERVAL);
     return () => clearTimeout(timestampId);
   })
 
