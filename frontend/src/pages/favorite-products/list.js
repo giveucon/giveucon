@@ -82,12 +82,12 @@ function List({ lng, lngDict, selfUser, initialFavoriteProductListResponse, user
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container spacing={1}>
-              {productList && productList.map((item, index) => (
+              {favoriteProductList && favoriteProductList.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
-                    title={item.name}
-                    image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                    onClick={() => router.push(`/products/${item.id}/`)}
+                    title={item.product.name}
+                    image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
+                    onClick={() => router.push(`/products/${item.product.id}/`)}
                     menuItems={
                       <MenuItem>Menu Item</MenuItem>
                     }

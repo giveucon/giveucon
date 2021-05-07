@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -20,6 +21,16 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
+const useStyles = makeStyles((theme) => ({
+  errorButton: {
+    background: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    '&:hover': {
+       background: theme.palette.error.dark,
+    },
+  },
+}));
+
 const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
 };
@@ -30,6 +41,23 @@ const getProductReviewList = async (context) => {
   });
 };
 
+const getFavoriteProduct = async (context, selfUser) => {
+  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
+    user: selfUser.id,
+    product: context.query.id
+  });
+};
+
+const postFavoriteProduct = async (product) => {
+  return await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
+    product: product.id
+  }, null);
+};
+
+const deleteFavoriteProduct = async (favoriteProduct) => {
+  return await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {
@@ -38,21 +66,25 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const productReviewListResponse = await getProductReviewList(context);
+  const initialFavoriteProductResponse = await getFavoriteProduct(context, selfUser);
   return {
     props: {
       lng,
       lngDict,
       selfUser,
       product: productResponse.data,
-      productReviewList: productReviewListResponse.data.results
+      productReviewList: productReviewListResponse.data.results,
+      initialFavoriteProduct: (initialFavoriteProductResponse.data.results.length === 1) ? initialFavoriteProductResponse.data.results[0] : null
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, product, productReviewList }) {
+function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavoriteProduct }) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const classes = useStyles();
+  const [favoriteProduct, setFavoriteProduct] = useState(initialFavoriteProduct)
 
   return (
     <Layout
@@ -60,8 +92,6 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
       menuItemList={selfUser.menu_items}
       title={`${product.name} - ${i18n.t('_appName')}`}
     >
-
-
       <Section
         backButton
         title={product.name}
@@ -127,6 +157,38 @@ function Id({ lng, lngDict, selfUser, product, productReviewList }) {
                   {i18n.t('giveCoupons')}
                 </Button>
               </Box>
+              {!favoriteProduct && (
+                <Box marginY={1}>
+                  <Button
+                    color='primary'
+                    fullWidth
+                    variant='contained'
+                    onClick={async () => {
+                      const postFavoriteProductResult = await postFavoriteProduct(product);
+                      if (postFavoriteProductResult.status === 201) setFavoriteProduct(postFavoriteProductResult.data);
+                      else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                    }}
+                  >
+                    {i18n.t('addFavoriteProduct')}
+                  </Button>
+                </Box>
+              )}
+              {favoriteProduct && (
+                <Box marginY={1}>
+                  <Button
+                    className={classes.errorButton}
+                    fullWidth
+                    variant='contained'
+                    onClick={async () => {
+                      const deleteFavoriteProductResult = await deleteFavoriteProduct(favoriteProduct);
+                      if (deleteFavoriteProductResult.status === 204) setFavoriteProduct(null);
+                      else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                    }}
+                  >
+                    {i18n.t('deleteFavoriteProduct')}
+                  </Button>
+                </Box>
+              )}
             </>
           )}
         </Box>

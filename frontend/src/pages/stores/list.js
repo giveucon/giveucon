@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { makeStyles } from '@material-ui/core/styles';
+import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
@@ -15,6 +18,16 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
+
+const useStyles = makeStyles((theme) => ({
+  favoriteButton: {
+    background: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    '&:hover': {
+       background: theme.palette.error.dark,
+    },
+  },
+}));
 
 const getStoreList = async (context) => {
   const params = {
@@ -27,8 +40,34 @@ const getUser = async (context) => {
   return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 };
 
+const getFavoriteStore = async (context, selfUser, store) => {
+  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+    user: selfUser.id,
+    store: store.id
+  });
+};
+
+const postFavoriteStore = async (store) => {
+  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+    store: store.id
+  }, null);
+};
+
+const deleteFavoriteStore = async (favoriteStore) => {
+  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialStoreListResponse = await getStoreList(context);
+  if (initialStoreListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  for (const store of initialStoreListResponse.data.results) {
+    const favoriteStoreResponse = await getFavoriteStore(context, selfUser, store);
+    store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
+  }
   const userResponse = context.query.user ? await getUser(context) : null;
   return {
     props: {
@@ -45,6 +84,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const classes = useStyles();
   const [storeList, setStoreList] = useState(initialStoreListResponse.data.results);
   const [storeListpage, setStoreListpage] = useState(1);
   const [hasMoreStoreList, setHasMoreStoreList] = useState(initialStoreListResponse.data.next);
@@ -55,6 +95,10 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
       page: storeListpage + 1,
     };
     const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
+    for (const store of storeListResponse.data.results) {
+      const favoriteStoreResponse = await getFavoriteStore(context, selfUser, store);
+      store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
+    }
     setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
     setStoreListpage(prevStoreListpage => prevStoreListpage + 1);
     if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
@@ -84,6 +128,35 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
                   <Tile
                     title={item.name}
                     image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
+                    actions={[
+                      <IconButton className={item.favorite ? classes.favoriteButton : null}>
+                        <FavoriteIcon
+                          onClick={async () => {
+                            if (!item.favorite) {
+                              const postFavoriteStoreResult = await postFavoriteStore(item);
+                              if (postFavoriteStoreResult.status === 201) {
+                                setStoreList(storeList.map(store => 
+                                  store.id === item.id 
+                                  ? {...store, favorite: postFavoriteStoreResult.data} 
+                                  : store 
+                                ));
+                              }
+                              else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                            } else {
+                              const deleteFavoriteStoreResult = await deleteFavoriteStore(item.favorite);
+                              if (deleteFavoriteStoreResult.status === 204) {
+                                setStoreList(storeList.map(store => 
+                                  store.id === item.id 
+                                  ? {...store, favorite: null} 
+                                  : store 
+                                ));
+                              }
+                              else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                            }
+                          }}
+                        />
+                      </IconButton>
+                    ]}
                     onClick={() => router.push(`/stores/${item.id}/`)}
                   />
                 </Grid>

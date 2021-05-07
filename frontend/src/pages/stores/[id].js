@@ -176,37 +176,41 @@ function Id({
           <Box marginTop={1}>
             <Typography>{store.description}</Typography>
           </Box>
-          {!favoriteStore && (
-            <Box marginY={1}>
-              <Button
-                color='primary'
-                fullWidth
-                variant='contained'
-                onClick={async () => {
-                  const postFavoriteStoreResult = await postFavoriteStore(store);
-                  if (postFavoriteStoreResult.status === 201) setFavoriteStore(postFavoriteStoreResult.data);
-                  else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                }}
-              >
-                {i18n.t('addFavoriteStore')}
-              </Button>
-            </Box>
-          )}
-          {favoriteStore && (
-            <Box marginY={1}>
-              <Button
-                className={classes.errorButton}
-                fullWidth
-                variant='contained'
-                onClick={async () => {
-                  const deleteFavoriteStoreResult = await deleteFavoriteStore(favoriteStore);
-                  if (deleteFavoriteStoreResult.status === 204) setFavoriteStore(null);
-                  else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                }}
-              >
-                {i18n.t('deleteFavoriteStore')}
-              </Button>
-            </Box>
+          {selfUser.id !== store.user && (
+            <>
+            {!favoriteStore && (
+              <Box marginY={1}>
+                <Button
+                  color='primary'
+                  fullWidth
+                  variant='contained'
+                  onClick={async () => {
+                    const postFavoriteStoreResult = await postFavoriteStore(store);
+                    if (postFavoriteStoreResult.status === 201) setFavoriteStore(postFavoriteStoreResult.data);
+                    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                  }}
+                >
+                  {i18n.t('addFavoriteStore')}
+                </Button>
+              </Box>
+            )}
+            {favoriteStore && (
+              <Box marginY={1}>
+                <Button
+                  className={classes.errorButton}
+                  fullWidth
+                  variant='contained'
+                  onClick={async () => {
+                    const deleteFavoriteStoreResult = await deleteFavoriteStore(favoriteStore);
+                    if (deleteFavoriteStoreResult.status === 204) setFavoriteStore(null);
+                    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                  }}
+                >
+                  {i18n.t('deleteFavoriteStore')}
+                </Button>
+              </Box>
+            )}
+            </>
           )}
         </Box>
       </Section>

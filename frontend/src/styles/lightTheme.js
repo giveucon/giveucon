@@ -21,6 +21,12 @@ const theme = createMuiTheme({
       dark: '#aa2e25',
       contrastText: '#ffffff',
     },
+    favorite: { // Pink
+      light: '#ed4b82',
+      main: '#e91e63',
+      dark: '#a31545',
+      contrastText: '#ffffff',
+    },
     kakao: { // Yellow
       light: '#ffef62',
       main: '#ffeb3b',
