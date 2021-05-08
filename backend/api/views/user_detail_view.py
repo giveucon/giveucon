@@ -1,8 +1,11 @@
 from rest_framework import generics
 
+from ..mixins import SerializerMixin
 from ..models import User
-from ..serializers import UserSerializer
+from ..serializers import UserReadSerializer
+from ..serializers import UserWriteSerializer
 
-class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+class UserDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class_read = UserReadSerializer
+    serializer_class_write = UserWriteSerializer

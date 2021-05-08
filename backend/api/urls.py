@@ -57,6 +57,7 @@ urlpatterns = [
 
     path('friends/', FriendListView.as_view()),
     path('friends/<int:pk>/', FriendDetailView.as_view()),
+    path('phone-verification-codes/', PhoneVerificationCodeView.as_view()),
 
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),

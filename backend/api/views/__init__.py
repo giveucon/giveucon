@@ -36,6 +36,7 @@ from .user_menuitem_list_view import UserMenuItemListView
 from .user_menuitem_detail_view import UserMenuItemDetailView
 from .friend_list_view import FriendListView
 from .friend_detail_view import FriendDetailView
+from .phone_verification_code_view import PhoneVerificationCodeView
 
 from .dummy_user_create_view import DummyUserCreateView
 from .dummy_store_create_view import DummyStoreCreateView

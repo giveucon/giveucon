@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Account(AbstractUser):
     class Meta:
@@ -11,6 +12,7 @@ class Account(AbstractUser):
 
 class User(models.Model):
     email = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    phone_number = PhoneNumberField(blank=False, null=False, unique=True)
     user_name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     first_name = models.CharField(max_length=255, blank=False, null=False)
     last_name = models.CharField(max_length=255, blank=False, null=False)
