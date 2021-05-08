@@ -21,10 +21,9 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const useStyles = makeStyles((theme) => ({
   favoriteButton: {
-    background: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
+    color: theme.palette.favorite.main,
     '&:hover': {
-       background: theme.palette.error.dark,
+      color: theme.palette.favorite.dark,
     },
   },
 }));

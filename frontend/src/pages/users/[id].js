@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import * as constants from 'constants';
@@ -26,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.contrastText,
     '&:hover': {
        background: theme.palette.error.dark,
+    },
+  },
+  favoriteButton: {
+    color: theme.palette.favorite.main,
+    '&:hover': {
+      color: theme.palette.favorite.dark,
     },
   },
 }));
@@ -57,6 +64,23 @@ const deleteFriend = async (friend) => {
   return await requestToBackend(null, `api/friends/${friend.id}/`, 'delete', 'json');
 };
 
+const getFavoriteStore = async (context, selfUser, store) => {
+  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+    user: selfUser.id,
+    store: store.id
+  });
+};
+
+const postFavoriteStore = async (store) => {
+  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+    store: store.id
+  }, null);
+};
+
+const deleteFavoriteStore = async (favoriteStore) => {
+  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const userResponse = await getUser(context);
   if (userResponse.status === 404) {
@@ -65,8 +89,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const storeListResponse = await getStoreList(context, userResponse.data);
-  const initialFriendResponse = await getFriend(context, selfUser);
-  console.log(friendResponse.data.results[0]);
+  for (const store of storeListResponse.data.results) {
+    const favoriteStoreResponse = await getFavoriteStore(context, selfUser, store);
+    store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
+  }
+  const friendResponse = await getFriend(context, selfUser);
   return {
     props: {
       lng,
@@ -74,17 +101,18 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       selfUser,
       user: userResponse.data,
       storeList: storeListResponse.data.results,
-      initialFriend: (initialFriendResponse.data.results.length === 1) ? initialFriendResponse.data.results[0] : null
+      friend: (friendResponse.data.results.length === 1) ? friendResponse.data.results[0] : null
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, user, storeList, initialFriend }) {
+function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _friend }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [friend, setFriend] = useState(initialFriend)
+  const [storeList, setStoreList] = useState(_storeList);
+  const [friend, setFriend] = useState(_friend)
   
   return (
     <Layout
@@ -157,6 +185,35 @@ function Id({ lng, lngDict, selfUser, user, storeList, initialFriend }) {
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/stores/${item.id}/` )}
+                  actions={[
+                    <IconButton className={item.favorite ? classes.favoriteButton : null}>
+                      <FavoriteIcon
+                        onClick={async () => {
+                          if (!item.favorite) {
+                            const postFavoriteStoreResult = await postFavoriteStore(item);
+                            if (postFavoriteStoreResult.status === 201) {
+                              setStoreList(storeList.map(store => 
+                                store.id === item.id 
+                                ? {...store, favorite: postFavoriteStoreResult.data} 
+                                : store 
+                              ));
+                            }
+                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                          } else {
+                            const deleteFavoriteStoreResult = await deleteFavoriteStore(item.favorite);
+                            if (deleteFavoriteStoreResult.status === 204) {
+                              setStoreList(storeList.map(store => 
+                                store.id === item.id 
+                                ? {...store, favorite: null} 
+                                : store 
+                              ));
+                            }
+                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                          }
+                        }}
+                      />
+                    </IconButton>
+                  ]}
                 />
               </Grid>
             ))}

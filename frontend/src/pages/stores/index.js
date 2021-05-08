@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   favoriteButton: {
     color: theme.palette.favorite.main,
     '&:hover': {
-       background: theme.palette.favorite.dark,
+      color: theme.palette.favorite.dark,
     },
   },
 }));

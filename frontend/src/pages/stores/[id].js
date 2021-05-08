@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -36,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.contrastText,
     '&:hover': {
        background: theme.palette.error.dark,
+    },
+  },
+  favoriteButton: {
+    color: theme.palette.favorite.main,
+    '&:hover': {
+      color: theme.palette.favorite.dark,
     },
   },
 }));
@@ -82,6 +89,23 @@ const deleteFavoriteStore = async (favoriteStore) => {
   return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
 };
 
+const getFavoriteProduct = async (context, selfUser, product) => {
+  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
+    user: selfUser.id,
+    product: product.id
+  });
+};
+
+const postFavoriteProduct = async (product) => {
+  return await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
+    product: product.id
+  }, null);
+};
+
+const deleteFavoriteProduct = async (favoriteProduct) => {
+  return await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
   if (storeResponse.status === 404) {
@@ -91,8 +115,12 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
   const storeNoticeListResponse = await getStoreNoticeList(context, storeResponse.data);
   const productListResponse = await getProductList(context, storeResponse.data);
+  for (const product of productListResponse.data.results) {
+    const favoriteProductResponse = await getFavoriteProduct(context, selfUser, product);
+    product.favorite = (favoriteProductResponse.data.results.length === 1) ? favoriteProductResponse.data.results[0] : null
+  }
   const storeReviewListResponse = await getStoreReviewList(context, storeResponse.data);
-  const initialFavoriteStoreResponse = await getFavoriteStore(context, selfUser);
+  const favoriteStoreResponse = await getFavoriteStore(context, selfUser);
   return {
     props: {
       lng,
@@ -102,7 +130,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       storeNoticeList: storeNoticeListResponse.data.results,
       productList: productListResponse.data.results,
       storeReviewList: storeReviewListResponse.data.results,
-      initialFavoriteStore: (initialFavoriteStoreResponse.data.results.length === 1) ? initialFavoriteStoreResponse.data.results[0] : null
+      favoriteStore: (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
     }
   }
 })
@@ -116,15 +144,16 @@ function Id({
   selfUser,
   store,
   storeNoticeList,
-  productList,
+  productList: _productList,
   storeReviewList,
-  initialFavoriteStore
+  favoriteStore: _favoriteStore
 }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [favoriteStore, setFavoriteStore] = useState(initialFavoriteStore)
+  const [productList, setProductList] = useState(_productList)
+  const [favoriteStore, setFavoriteStore] = useState(_favoriteStore)
   
   return (
     <Layout
@@ -270,10 +299,36 @@ function Id({
                   title={item.name}
                   subtitle={item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                  actions={[
-                    <IconButton><FavoriteIcon /></IconButton>
-                  ]}
                   onClick={() => router.push(`/products/${item.id}/`)}
+                  actions={[
+                    <IconButton className={item.favorite ? classes.favoriteButton : null}>
+                      <FavoriteIcon
+                        onClick={async () => {
+                          if (!item.favorite) {
+                            const postFavoriteProductResult = await postFavoriteProduct(item);
+                            if (postFavoriteProductResult.status === 201) {
+                              setProductList(productList.map(product => 
+                                product.id === item.id 
+                                ? {...product, favorite: postFavoriteProductResult.data} 
+                                : product 
+                              ));
+                            }
+                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                          } else {
+                            const deleteFavoriteProductResult = await deleteFavoriteProduct(item.favorite);
+                            if (deleteFavoriteProductResult.status === 204) {
+                              setProductList(productList.map(product => 
+                                product.id === item.id 
+                                ? {...product, favorite: null} 
+                                : product 
+                              ));
+                            }
+                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                          }
+                        }}
+                      />
+                    </IconButton>
+                  ]}
                 />
               </Grid>
             ))}
