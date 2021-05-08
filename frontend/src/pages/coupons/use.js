@@ -67,7 +67,7 @@ function Use({ lng, lngDict, selfUser, coupon }) {
         getCouponQR(coupon);
       }
       setTimestamp(new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL);
-    }, constants.COUPON_TIMESTAMP_REFRESH_INTERVAL);
+    }, constants.TIMESTAMP_REFRESH_INTERVAL);
     return () => clearTimeout(timestampId);
   })
 
@@ -90,7 +90,7 @@ function Use({ lng, lngDict, selfUser, coupon }) {
         </Box>
         <Box marginBottom='1rem'>
           <Typography align='center' variant='subtitle1'>
-            {`${i18n.t('_QrCodeWillBeRefreshedIn')}${Math.floor((constants.COUPON_OTP_REFRESH_INTERVAL - timestamp) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
+            {`${i18n.t('_qrCodeWillBeRefreshedIn')}${Math.floor((constants.COUPON_OTP_REFRESH_INTERVAL - timestamp) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
           </Typography>
         </Box>
       </Section>

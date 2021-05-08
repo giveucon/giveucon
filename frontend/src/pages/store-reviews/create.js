@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Rating from '@material-ui/lab/Rating';
 
 import Layout from 'components/Layout'
@@ -91,7 +91,7 @@ function Create({ lng, lngDict, selfUser, store }) {
       />
       <Section
         title={i18n.t('basicInfo')}
-        titlePrefix={<IconButton><InfoIcon /></IconButton>}
+        titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}
       >
         <Box display='flex' justifyContent='center' paddingY={1}>
           <Rating

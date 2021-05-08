@@ -13,8 +13,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Typography from '@material-ui/core/Typography';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import PhoneIcon from '@material-ui/icons/Phone';
 
+import * as constants from 'constants';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
@@ -27,8 +30,18 @@ const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
 };
 
+const postPhoneVerificationCode = async (selfUser) => {
+  return await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
+    phone_number: `+82${selfUser.phone_number}`
+  }, null);
+};
+
 const postSelfUser = async (selfUser) => {
-  return await requestToBackend(null, 'api/users/', 'post', 'json', selfUser, null);
+  const processedSelfUser = {
+    ...selfUser,
+    phone_number: `+82${selfUser.phone_number}`
+  }
+  return await requestToBackend(null, 'api/users/', 'post', 'json', processedSelfUser, null);
 };
 
 export const getServerSideProps = withoutAuthServerSideProps(async (context, lng, lngDict) => {
@@ -57,18 +70,39 @@ function Create({ lng, lngDict, selfAccount }) {
     last_name: null,
     locale: lng,
     dark_mode: false,
+    phone_number: null,
+    verification_code: null,
   });
   const [selfUserError, setSelfUserError] = useState({
     email: false,
     user_name: false,
     first_name: false,
     last_name: false,
+    phone_number: false,
+    verification_code: false,
+  });
+
+  const [currentTimestamp, setCurrentTimestamp] = useState(new Date().getTime());
+  const [timestamp, setTimestamp] = useState(new Date().getTime());
+  const [timestampActivation, setTimestampActivation] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timestampActivation) {
+        if ((new Date().getTime() - timestamp) > constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT) {
+          setTimestampActivation(false);
+          toast.error(i18n.t('_verificationCodeIsExpired'));
+        }
+      }
+      setCurrentTimestamp(new Date().getTime());
+    }, constants.TIMESTAMP_REFRESH_INTERVAL);
+    return () => clearInterval(interval);
   });
 
   return (
     <Layout
       locale={lng}
-      menuItemList={selfUser.menu_items}
+      menuItemList={null}
       title={`${i18n.t('createAccount')} - ${i18n.t('_appName')}`}
     >
       <Section
@@ -78,7 +112,7 @@ function Create({ lng, lngDict, selfAccount }) {
       </Section>
       <Section
         title={i18n.t('basicInfo')}
-        titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
+        titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -185,23 +219,94 @@ function Create({ lng, lngDict, selfAccount }) {
           </FormGroup>
         </Box>
       </Section>
+
+
+      <Section
+        title={i18n.t('phoneVerification')}
+        titlePrefix={<IconButton><PhoneIcon /></IconButton>}
+      >
+        <Box paddingY={1}>
+          <TextField
+            name='phone_number'
+            type='number'
+            value={selfUser.phone_number}
+            error={selfUserError.phone_number}
+            fullWidth
+            label={i18n.t('phoneNumber')}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(event) => {
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, phone_number: event.target.value }));
+            }}
+            required
+          />
+        </Box>
+        <Box display={!timestampActivation ? 'block' : 'none'}>
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const phoneVerificationResponse = await postPhoneVerificationCode(selfUser);
+                if (phoneVerificationResponse.status === 200) {
+                  setTimestamp(new Date().getTime());
+                  setTimestampActivation(true);
+                  toast.success(i18n.t('_verificationCodeHasBeenSent'));
+                }
+                else {
+                  toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                }
+              }}
+            >
+              {i18n.t('getVerificationCode')}
+            </Button>
+          </Box>
+        </Box>
+        <Box display={timestampActivation ? 'block' : 'none'}>
+          <Box paddingY={1}>
+            <TextField
+              name='verification_code'
+              type='number'
+              value={selfUser.verification_code}
+              error={selfUserError.verification_code}
+              fullWidth
+              label={i18n.t('verificationCode')}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(event) => {
+                setSelfUser(prevSelfUser => ({ ...prevSelfUser, verification_code: event.target.value }));
+              }}
+              required
+            />
+          </Box>
+          <Typography align='center' variant='subtitle1'>
+            {`${i18n.t('_verificationCodeWillBeExpiredIn')}${Math.floor((constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT - (currentTimestamp - timestamp)) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
+          </Typography>
+        </Box>
+      </Section>
+
+
       <Box marginY={1}>
         <Button
           color='primary'
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postSelfUser(selfUser);
-            if (response.status === 201) {
+            const postSelfUserResponse = await postSelfUser(selfUser);
+            if (postSelfUserResponse.status === 201) {
               router.push('/my-account/');
               toast.success(i18n.t('_myAccountSuccessfullyCreated'));
             }
-            else if (response.status === 400) {
-              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!response.data.email}));
-              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
-              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
-              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
+            else if (postSelfUserResponse.status === 400) {
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!postSelfUserResponse.data.email}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!postSelfUserResponse.data.user_name}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!postSelfUserResponse.data.first_name}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!postSelfUserResponse.data.last_name}));
               toast.error(i18n.t('_checkInputFields'));
+              console.log(postSelfUserResponse);
             }
           }}
         >

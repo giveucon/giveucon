@@ -10,7 +10,6 @@ import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirector
 export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
 export const APP_VERSION = '0.1.0-alpha';
 export const COUPON_OTP_REFRESH_INTERVAL = 30000;
-export const COUPON_TIMESTAMP_REFRESH_INTERVAL = 100;
 export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
 export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LIST_SLICE_NUMBER = 3;
@@ -61,4 +60,6 @@ export const MENU_ITEM_LIST = [
 ];
 export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
 export const NO_IMAGE_PATH = '/no_image.png';
+export const SIGNUP_PHONE_VERIFICATION_TIME_LIMIT = 180000;
 export const TILE_LIST_SLICE_NUMBER = 3;
+export const TIMESTAMP_REFRESH_INTERVAL = 100;

@@ -26,7 +26,7 @@ const getSelfStoreList = async (context, selfUser) => {
 
 const getSelfProductList = async (context, selfUser) => {
   const params = {
-    user: selfUser.id
+    store__user: selfUser.id
   };
   return await requestToBackend(context, 'api/products/', 'get', 'json', null, params);
 };

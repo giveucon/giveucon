@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import * as constants from 'constants';
 import AmountInputBox from 'components/AmountInputBox'
@@ -124,7 +124,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
       />
       <Section
         title={i18n.t('basicInfo')}
-        titlePrefix={<IconButton><InfoIcon /></IconButton>}
+        titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField

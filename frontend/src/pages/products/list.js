@@ -92,7 +92,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
 
   const getMoreProductList = async () => {
     const productListResponse = await requestToBackend(null, 'api/products/', 'get', 'json', null, {
-      user: user ? user.id : null,
+      store__user: user ? user.id : null,
       store: store ? store.id : null,
       page: productListpage + 1,
     });
