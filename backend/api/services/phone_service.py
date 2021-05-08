@@ -1,7 +1,7 @@
 import pyotp
 from base64 import b32encode
 
-OTP_INTERVAL = 300
+OTP_INTERVAL = 180
 
 class PhoneService():
     @staticmethod
