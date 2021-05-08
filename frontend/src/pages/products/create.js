@@ -14,7 +14,6 @@ import InfoIcon from '@material-ui/icons/Info';
 import * as constants from 'constants';
 import AmountInputBox from 'components/AmountInputBox'
 import Layout from 'components/Layout'
-import MoneyAmountInputBox from 'components/MoneyAmountInputBox'
 import Section from 'components/Section'
 import SwipeableTileList from 'components/SwipeableTileList'
 import Tile from 'components/Tile'
@@ -137,7 +136,9 @@ function Create({ lng, lngDict, selfUser, store }) {
           />
         </Box>
         <Box paddingY={1}>
-          <MoneyAmountInputBox
+          <AmountInputBox
+            variant='money'
+            label={i18n.t('price')}
             lng={lng}
             lngDict={lngDict}
             addAmountList={constants.MONEY_AMOUNT_LIST}
@@ -148,6 +149,7 @@ function Create({ lng, lngDict, selfUser, store }) {
         </Box>
         <Box paddingY={1}>
           <AmountInputBox
+            variant='date'
             label={i18n.t('duration')}
             lng={lng}
             lngDict={lngDict}

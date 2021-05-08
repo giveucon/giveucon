@@ -88,6 +88,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
       <Section
         backButton
         title={i18n.t('couponList')}
+        padding={false}
       >
         {couponList && (
           (couponList.length > 0) ? (
@@ -98,7 +99,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
               loader={<InfiniteScrollLoader loading={true} />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
-              <Grid container spacing={1}>
+              <Grid container>
                 {couponList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile

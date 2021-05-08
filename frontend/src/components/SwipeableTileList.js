@@ -1,7 +1,6 @@
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import Box from '@material-ui/core/Box';
 
 import Pagination from 'components/Pagination';
 
@@ -42,11 +41,9 @@ class SwipeableTileList extends React.Component {
       return (
         <div style={styles.root}>
           <SwipeableViews enableMouseEvents style={styles.root} containerStyle={styles.halfContainer}>
-            {React.Children.map(children, child => (
-              <Box margin={1}>
-                {child}
-              </Box>
-            ))}
+            {React.Children.map(children, child => 
+              child
+            )}
           </SwipeableViews>
         </div>
       )
@@ -60,11 +57,9 @@ class SwipeableTileList extends React.Component {
             interval={interval ? interval : 5000}
             onChangeIndex={this.handleChangeIndex}
           >
-            {React.Children.map(children, child => (
-              <Box margin={1}>
-                {child}
-              </Box>
-            ))}
+            {React.Children.map(children, child => 
+              child
+            )}
           </AutoPlaySwipeableViews>
           {children.length > 1 && (
             <Pagination dots={children.length} index={index} onChangeIndex={this.handleChangeIndex} />

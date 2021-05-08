@@ -62,7 +62,7 @@ function Issue({ lng, lngDict, selfUser, product }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [amountIcon, setAmountIcon] = useState(<Filter1Icon />);
   
   return (
@@ -97,7 +97,7 @@ function Issue({ lng, lngDict, selfUser, product }) {
             label={i18n.t('amount')}
             lng={lng}
             lngDict={lngDict}
-            defaultAmount={1}
+            defaultAmount={0}
             addAmountList={constants.AMOUNT_LIST}
             onChangeAmount={(amount) => {
               setAmount(prevAmount => amount);
@@ -112,9 +112,6 @@ function Issue({ lng, lngDict, selfUser, product }) {
               amount === 8 && setAmountIcon(<Filter8Icon />)
               amount === 9 && setAmountIcon(<Filter9Icon />)
               amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
-            }}
-            onChangeInfinite={(infinite) => {
-              setInfinite(prevInfinite => infinite);
             }}
           />
         </Box>

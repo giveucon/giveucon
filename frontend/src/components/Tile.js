@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tile({ actions=null, image=null, imageType='http', title=null, menuItems=null, onClick=null, skeleton=false, subtitle=null }) {
+export default function Tile({ actions=null, image=null, imageType='http', margin=true, menuItems=null, onClick=null, skeleton=false, subtitle=null, title=null }) {
   
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -62,7 +62,7 @@ export default function Tile({ actions=null, image=null, imageType='http', title
   };
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} margin={margin ? '0.5rem' : '0rem'}>
       {
         skeleton ? (
           <>

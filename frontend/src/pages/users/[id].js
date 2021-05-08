@@ -178,7 +178,7 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
         }
       >
         {storeList.length > 0 ? (
-          <Grid container spacing={1}>
+          <Grid container>
             {storeList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Grid item xs={6} key={index}>
                 <Tile

@@ -20,6 +20,7 @@ import ContactsIcon from '@material-ui/icons/Contacts';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
+import AlertBox from 'components/AlertBox'
 import AmountInputBox from 'components/AmountInputBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
@@ -63,7 +64,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
 
   const i18n = useI18n();
   const router = useRouter();
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [amountIcon, setAmountIcon] = useState(<Filter1Icon />);
 
   const [selfFriendList, setSelfFriendList] = useState(initialSelfFriendListResponse.data.results);
@@ -142,7 +143,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
             label={i18n.t('amount')}
             lng={lng}
             lngDict={lngDict}
-            defaultAmount={1}
+            defaultAmount={0}
             addAmountList={constants.AMOUNT_LIST}
             onChangeAmount={(amount) => {
               setAmount(prevAmount => amount);

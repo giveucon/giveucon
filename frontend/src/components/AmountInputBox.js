@@ -28,12 +28,12 @@ export default function AmountInputBox({
   addAmountList=constants.AMOUNT_LIST,
   defaultAmount=0,
   enableInfinite=false,
-  endAdornment,
   label,
   lng,
   lngDict,
   onChangeAmount,
-  onChangeInfinite=()=>{} 
+  onChangeInfinite=()=>{},
+  variant='default'
 }) {
 
   const [amount, setAmount] = useState(defaultAmount);
@@ -55,7 +55,14 @@ export default function AmountInputBox({
             setAmount(prevAmount => (event.target.value || 0));
           }}
           InputProps={{
-            endAdornment: <InputAdornment position="end">{endAdornment}</InputAdornment>,
+            startAdornment: 
+              (variant==='money')
+              ? <InputAdornment position="start">{i18n.t('_localeCurrencyKRW')}</InputAdornment>
+              : null,
+            endAdornment: 
+              (variant==='date')
+              ? <InputAdornment position="end">{i18n.t('days')}</InputAdornment>
+              : null,
           }}
         />
       </Box>
@@ -80,7 +87,9 @@ export default function AmountInputBox({
                 setInfinite(prevInfinite => false);
               }}
             >
-              {`+ ${new Number(addAmount)}`}
+              {variant==='default' && `+ ${new Number(addAmount)}`}
+              {variant==='date' && `+ ${new Number(addAmount)}${i18n.t('days')}`}
+              {variant==='money' && `+ ${new Number(addAmount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
             </Button>
           </Box>
         )}

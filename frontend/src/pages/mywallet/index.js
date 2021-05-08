@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CropFreeIcon from '@material-ui/icons/CropFree';
@@ -11,6 +10,7 @@ import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
+import SwipeableTileList from 'components/SwipeableTileList'
 import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -50,12 +50,13 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
         title={i18n.t('myCoupons')}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
         titleSuffix={<IconButton><ArrowForwardIcon /></IconButton>}
+        padding={false}
       >
         {(selfCouponList.length > 0) ? (
-          <Grid container spacing={1}>
+          <SwipeableTileList half>
             {selfCouponList.map((item, index) => (
-              <Grid item xs={6} key={index}>
                 <Tile
+                  key={index}
                   title={item.product.name}
                   image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
@@ -71,9 +72,8 @@ function Index({ lng, lngDict, selfUser, selfCouponList }) {
                   ]}
                   onClick={() => router.push(`/coupons/${item.id}/`)}
                 />
-              </Grid>
             ))}
-          </Grid>
+          </SwipeableTileList>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}

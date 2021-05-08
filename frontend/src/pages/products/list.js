@@ -114,6 +114,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
       <Section
         backButton
         title={i18n.t('productList')}
+        padding={false}
       >
         {(productList.length > 0) ? (
           <InfiniteScroll
@@ -123,7 +124,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container spacing={1}>
+            <Grid container>
               {productList && productList.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile

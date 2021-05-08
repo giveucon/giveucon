@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -289,50 +288,49 @@ function Id({
             <ArrowForwardIcon />
           </IconButton>
         }
+        padding={false}
       >
         {productList.length > 0 ? (
-          <Grid container spacing={1}>
+          <SwipeableTileList half>
             {productList && productList.map((item, index) => (
-              <Grid item xs={6} key={index}>
-                <Tile
-                  margin={false}
-                  title={item.name}
-                  subtitle={item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-                  image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                  onClick={() => router.push(`/products/${item.id}/`)}
-                  actions={[
-                    <IconButton className={item.favorite ? classes.favoriteButton : null}>
-                      <FavoriteIcon
-                        onClick={async () => {
-                          if (!item.favorite) {
-                            const postFavoriteProductResult = await postFavoriteProduct(item);
-                            if (postFavoriteProductResult.status === 201) {
-                              setProductList(productList.map(product => 
-                                product.id === item.id 
-                                ? {...product, favorite: postFavoriteProductResult.data} 
-                                : product 
-                              ));
-                            }
-                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                          } else {
-                            const deleteFavoriteProductResult = await deleteFavoriteProduct(item.favorite);
-                            if (deleteFavoriteProductResult.status === 204) {
-                              setProductList(productList.map(product => 
-                                product.id === item.id 
-                                ? {...product, favorite: null} 
-                                : product 
-                              ));
-                            }
-                            else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              <Tile
+                key={index}
+                title={item.name}
+                subtitle={item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
+                onClick={() => router.push(`/products/${item.id}/`)}
+                actions={[
+                  <IconButton className={item.favorite ? classes.favoriteButton : null}>
+                    <FavoriteIcon
+                      onClick={async () => {
+                        if (!item.favorite) {
+                          const postFavoriteProductResult = await postFavoriteProduct(item);
+                          if (postFavoriteProductResult.status === 201) {
+                            setProductList(productList.map(product => 
+                              product.id === item.id 
+                              ? {...product, favorite: postFavoriteProductResult.data} 
+                              : product 
+                            ));
                           }
-                        }}
-                      />
-                    </IconButton>
-                  ]}
-                />
-              </Grid>
+                          else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                        } else {
+                          const deleteFavoriteProductResult = await deleteFavoriteProduct(item.favorite);
+                          if (deleteFavoriteProductResult.status === 204) {
+                            setProductList(productList.map(product => 
+                              product.id === item.id 
+                              ? {...product, favorite: null} 
+                              : product 
+                            ));
+                          }
+                          else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                        }
+                      }}
+                    />
+                  </IconButton>
+                ]}
+              />
             ))}
-          </Grid>
+          </SwipeableTileList>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}

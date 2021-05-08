@@ -11,7 +11,6 @@ import AccordionSection from 'components/AccordionSection';
 import AlertBox from 'components/AlertBox';
 import AmountInputBox from 'components/AmountInputBox';
 import KakaoMapBox from 'components/KakaoMapBox';
-import MoneyAmountInputBox from 'components/MoneyAmountInputBox';
 import NoticeBox from 'components/NoticeBox';
 import ReviewBox from 'components/ReviewBox';
 import SwipeableTileList from 'components/SwipeableTileList';
@@ -193,16 +192,6 @@ export default function Components({ lng, lngDict, selfUser }) {
       </Section>
 
       <Section
-        title='MoneyAmountInputBox'
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        titleSuffix={<Button>Edit</Button>}
-        lng={lng}
-        lngDict={lngDict}
-      >
-        <MoneyAmountInputBox  onChangeAmount={(amount) => {}} />
-      </Section>
-
-      <Section
         title='NoticeBox'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
@@ -274,7 +263,7 @@ export default function Components({ lng, lngDict, selfUser }) {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <Grid container spacing={1}>
+        <Grid container>
           <Grid item xs={6}>
             <Tile skeleton/>
           </Grid>

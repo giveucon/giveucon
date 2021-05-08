@@ -81,7 +81,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
             loader={<InfiniteScrollLoader loading={true} />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            <Grid container spacing={1}>
+            <Grid container>
               {favoriteStoreList && favoriteStoreList.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <Tile
