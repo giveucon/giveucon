@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import gravatar from 'gravatar';
 import { useRouter } from 'next/router';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -11,20 +12,13 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import UserListItem from 'components/UserListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
-
-const getUserList = async (keywords) => {
-  const params = {
-    user_name: keywords.user_name || null,
-    email: keywords.email || null
-  }
-  return await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
-};
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   return {
@@ -44,7 +38,38 @@ function Search({ lng, lngDict, selfUser }) {
     user_name: null,
     email: null
   });
-  const [searchResultList, setSearchResultList] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [userListpage, setUserListpage] = useState(1);
+  const [hasMoreUserList, setHasMoreUserList] = useState(true);
+
+  const getUserList = async () => {
+    const params = {
+      user: keywords.user_name || null,
+      email: keywords.email || null
+    };
+    const getUserListResponse = await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
+    if (getUserListResponse.status === 200) {
+      setUserList(prevUserList => prevUserList.concat(getUserListResponse.data.results));
+      setUserListpage(prevUserListpage => 1);
+      if (getUserListResponse.data.next === null) setHasMoreUserList(prevHasMoreUserList => false);
+    }
+    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+  };
+
+  const getMoreUserList = async () => {
+    const params = {
+      user: keywords.user_name || null,
+      email: keywords.email || null,
+      page: userListpage + 1,
+    };
+    const getUserListResponse = await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
+    if (getUserListResponse.status === 200) {
+      setUserList(prevUserList => prevUserList.concat(getUserListResponse.data.results));
+      setUserListpage(prevUserListpage => prevUserListpage + 1);
+      if (getUserListResponse.data.next === null) setHasMoreUserList(prevHasMoreUserList => false);
+    }
+    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+  }
 
   return (
     <Layout
@@ -97,9 +122,6 @@ function Search({ lng, lngDict, selfUser }) {
             variant='contained'
             onClick={async () => {
               const getUserListResult = await getUserList(keywords);
-              console.log(getUserListResult);
-              if (getUserListResult.status === 200) setSearchResultList(getUserListResult.data.results);
-              else toast.error(i18n.t('_errorOccurredProcessingRequest'));
             }}
           >
             {i18n.t('searchUser')}
@@ -111,8 +133,15 @@ function Search({ lng, lngDict, selfUser }) {
         title={i18n.t('searchResults')}
         titlePrefix={<IconButton><SearchIcon /></IconButton>}
       >
-        {searchResultList.length > 0 ? (
-          searchResultList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+        {userList.length > 0 ? (
+          <InfiniteScroll
+            dataLength={userList.length}
+            next={getMoreUserList}
+            hasMore={hasMoreUserList}
+            loader={<InfiniteScrollLoader loading={true} />}
+            endMessage={<InfiniteScrollLoader loading={false} />}
+          >
+          {userList.map((item, index) => (
             <>
               <UserListItem
                 key={index}
@@ -120,14 +149,14 @@ function Search({ lng, lngDict, selfUser }) {
                 image={gravatar.url(item.email, {default: 'identicon'})}
                 onClick={() => router.push(`/users/${item.id}/` )}
               />
-              {index < searchResultList.length - 1 && (<Divider />)}
+              {index < userList.length - 1 && (<Divider />)}
             </>
-          ))
+          ))}
+          </InfiniteScroll>
         ) : (
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-
     </Layout>
   );
 }

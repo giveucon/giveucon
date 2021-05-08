@@ -70,7 +70,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
             </Badge>
           </IconButton>,
           <IconButton>
-            <AccountCircleIcon onClick={() => router.push('/myaccount/')} />
+            <AccountCircleIcon onClick={() => router.push('/my-account/')} />
           </IconButton>
         ]}
         padding={false}

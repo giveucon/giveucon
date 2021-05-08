@@ -193,7 +193,7 @@ function Create({ lng, lngDict, selfAccount }) {
           onClick={async () => {
             const response = await postSelfUser(selfUser);
             if (response.status === 201) {
-              router.push('/myaccount/');
+              router.push('/my-account/');
               toast.success(i18n.t('_myAccountSuccessfullyCreated'));
             }
             else if (response.status === 400) {

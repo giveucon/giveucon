@@ -203,7 +203,7 @@ function User({ lng, lngDict, selfUser: prevSelfUser }) {
           onClick={async () => {
             const response = await putSelfUser(selfUser);
             if (response.status === 200) {
-              router.push('/myaccount/update/');
+              router.push('/my-account/update/');
               toast.success(i18n.t('_myAccountSuccessfullyEdited'));
             } 
             else if (response.status === 400) {
@@ -223,7 +223,7 @@ function User({ lng, lngDict, selfUser: prevSelfUser }) {
           className={classes.errorButton}
           fullWidth
           variant='contained'
-          onClick={() => router.push('/myaccount/delete/')}
+          onClick={() => router.push('/my-account/delete/')}
         >
           {i18n.t('deleteMyAccount')}
         </Button>

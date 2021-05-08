@@ -230,7 +230,7 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount/')}
+            onClick={() => router.push('/my-account/')}
           >
             {i18n.t('goToMyAccount')}
           </Button>

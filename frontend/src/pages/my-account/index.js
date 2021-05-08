@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import CodeIcon from '@material-ui/icons/Code';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -81,6 +82,11 @@ function Index({ lng, lngDict, selfUser }) {
       <Section
         title={i18n.t('myWallet')}
         titlePrefix={<IconButton><AccountBalanceWalletIcon /></IconButton>}
+        titleSuffix={
+          <IconButton>
+            <ArrowForwardIcon onClick={() => router.push('/my-wallet/')}/>
+          </IconButton>
+        }
       >
         <Box marginY={1}>
           <Button
@@ -127,6 +133,11 @@ function Index({ lng, lngDict, selfUser }) {
       <Section
         title={i18n.t('myBusiness')}
         titlePrefix={<IconButton><BusinessCenterIcon /></IconButton>}
+        titleSuffix={
+          <IconButton>
+            <ArrowForwardIcon onClick={() => router.push('/my-business/')}/>
+          </IconButton>
+        }
       >
         <Box marginY={1}>
           <Button
@@ -186,7 +197,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount/update/')}
+            onClick={() => router.push('/my-account/update/')}
           >
             {i18n.t('settings')}
           </Button>

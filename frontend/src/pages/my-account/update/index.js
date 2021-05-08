@@ -34,7 +34,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount/update/user/')}
+            onClick={() => router.push('/my-account/update/user/')}
           >
             {i18n.t('userSettings')}
           </Button>
@@ -44,7 +44,7 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push('/myaccount/update/menu-items/')}
+            onClick={() => router.push('/my-account/update/menu-items/')}
           >
             {i18n.t('menuItems')}
           </Button>

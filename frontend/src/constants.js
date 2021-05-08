@@ -32,13 +32,13 @@ export const MENU_ITEM_LIST = [
     value: 'myAccount',
     icon: <AccountCircleOutlinedIcon />,
     label: 'account',
-    link: () => {Router.push('/myaccount/')}
+    link: () => {Router.push('/my-account/')}
   },
   {
     value: 'myWallet',
     icon: <AccountBalanceWalletOutlinedIcon />,
     label: 'wallet',
-    link: () => {Router.push('/mywallet/')}
+    link: () => {Router.push('/my-wallet/')}
   },
   {
     value: 'scan',

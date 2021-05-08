@@ -72,6 +72,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
       <Section
         backButton
         title={i18n.t('favoriteStoreList')}
+        padding={false}
       >
         {(favoriteStoreList.length > 0) ? (
           <InfiniteScroll
@@ -88,9 +89,6 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
                     title={item.store.name}
                     image={item.store.images.length > 0 ? item.store.images[0].image : constants.NO_IMAGE_PATH}
                     onClick={() => router.push(`/stores/${item.id}/`)}
-                    menuItems={
-                      <MenuItem>Menu Item</MenuItem>
-                    }
                   />
                 </Grid>
               ))}
