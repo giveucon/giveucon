@@ -45,6 +45,22 @@ http://localhost:3000/oauth/kakao/logout/callback/
 ```
 
 
+## Create Twilio account
+
+Go to Twilio page and create account:
+```
+https://www.twilio.com/
+```
+
+Create you trial number, then get these codes:
+```
+Account SID
+Auth Token
+Trial Number
+```
+
+
+
 ## Create Secret File
 
 Move to Backend core application directory:
