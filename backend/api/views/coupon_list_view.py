@@ -6,14 +6,14 @@ from ..mixins import SerializerMixin
 from ..models import Coupon
 from ..paginations import CouponPagination
 from ..serializers import CouponReadSerializer
-from ..serializers import CouponCreateSerializer
+from ..serializers import CouponMultiCreateSerializer
 from ..services import UserService
 
 class CouponListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = Coupon.objects.all()
     pagination_class = CouponPagination
     serializer_class_read = CouponReadSerializer
-    serializer_class_create = CouponCreateSerializer
+    serializer_class_create = CouponMultiCreateSerializer
     filterset_fields = ['user']
 
     def perform_create(self, serializer):
