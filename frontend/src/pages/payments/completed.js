@@ -40,23 +40,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCoupon = async (context) => {
-  return await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
+const getProduct = async (context) => {
+  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const couponResponse = await getCoupon(context);
-  if (couponResponse.status === 404) {
+  const productResponse = await getProduct(context);
+  if (productResponse.status === 404) {
     return {
       notFound: true
     }
   }
   return {
-    props: { lng, lngDict, selfUser, coupon: couponResponse.data }
+    props: { lng, lngDict, selfUser, product: productResponse.data }
   }
 })
 
-function Completed({ lng, lngDict, selfUser, coupon }) {
+function Completed({ lng, lngDict, selfUser, product }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -78,19 +78,19 @@ function Completed({ lng, lngDict, selfUser, coupon }) {
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
-                  image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
-                  title={coupon.product.name}
+                  image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
+                  title={product.name}
                 />
               </CardActionArea>
             </Card>
           </Box>
           <Box margin='1rem'>
             <Box marginBottom='0.5rem'>
-              <Typography variant='h5'>{coupon.product.name}</Typography>
+              <Typography variant='h5'>{product.name}</Typography>
             </Box>
             <Divider />
             <Box marginTop='0.5rem'>
-              <Typography variant='h6'>{coupon.product.price.toLocaleString('ko-KR') + '원'}</Typography>
+              <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
             </Box>
           </Box>
         </Box>
@@ -101,9 +101,9 @@ function Completed({ lng, lngDict, selfUser, coupon }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/coupons/${coupon.id}`)}
+            onClick={() => router.push(`/products/${product.id}`)}
           >
-            {i18n.t('goToCoupon')}
+            {i18n.t('goToProduct')}
           </Button>
         </Box>
       )}

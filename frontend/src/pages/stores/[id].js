@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
@@ -153,7 +153,24 @@ function Id({
   const classes = useStyles();
   const [productList, setProductList] = useState(_productList)
   const [favoriteStore, setFavoriteStore] = useState(_favoriteStore)
+  const [position, setPosition] = useState({
+    latitude: 37.506502,
+    longitude: 127.053617,
+  })
   
+  useEffect(() => {
+    const getPosition = async () => {
+      await navigator.geolocation.getCurrentPosition(newPosition => {
+        setPosition(prevPosition => ({
+          ...prevPosition, 
+          latitude: newPosition.coords.latitude, 
+          longitude: newPosition.coords.longitude
+        }))
+      });
+    }
+    getPosition();
+  }, []);
+
   return (
     <Layout
       locale={lng}
@@ -388,14 +405,18 @@ function Id({
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
       >
         <Card>
-          <KakaoMapBox latitude={latitude} longitude={longitude}/>
+          <KakaoMapBox
+            latitude={position.latitude}
+            longitude={position.longitude}
+            setPosition={setPosition}
+          />
         </Card>
         <Box marginY={1}>
           <Button
             color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`https://map.kakao.com/link/map/${latitude},${longitude}`)}
+            onClick={() => router.push(`https://map.kakao.com/link/map/${position.latitude},${position.longitude}`)}
           >
             {i18n.t('findPath')}
           </Button>

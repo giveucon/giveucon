@@ -200,6 +200,7 @@ function Create({ lng, lngDict, selfUser }) {
       last_name: lastName,
       locale: 'ko',
       dark_mode: false,
+      phone_number: `+8210${Math.floor(Math.random() * 100000000)}`
     };
     setSourcePhrase(`(${user.user_name})`);
     const userResult = await postUser(user);
