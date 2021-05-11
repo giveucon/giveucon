@@ -24,16 +24,18 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-const postCoupon = async (selfUser, product) => {
+const postCoupon = async (selfUser, count, product) => {
   const data = {
-    used: false,
-    user: selfUser.id,
-    product: product.id
+    count: count,
+    coupon: {
+      product: product.id
+    }
   };
   return await requestToBackend(null, `api/coupons/`, 'post', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+  const count = context.query.count;
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {
     return {
@@ -41,11 +43,11 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, selfUser, product: productResponse.data }
+    props: { lng, lngDict, selfUser, count, product: productResponse.data }
   }
 })
 
-function Index({ lng, lngDict, selfUser, product }) {
+function Index({ lng, lngDict, selfUser, count, product }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -54,11 +56,11 @@ function Index({ lng, lngDict, selfUser, product }) {
   useEffect(() => {
     async function dummyPayment() {
       await new Promise(r => setTimeout(r, 3000));
-      const response = await postCoupon(selfUser, product);
+      const response = await postCoupon(selfUser, count, product);
       if (response.status === 201) {
         router.push({
           pathname: '/payments/completed/',
-          query: { coupon: response.data.id },
+          query: { product: product.id },
         });
         toast.success(i18n.t('_couponSuccessfullyIssued'));
       }

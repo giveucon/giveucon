@@ -65,7 +65,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
   const i18n = useI18n();
   const router = useRouter();
   const [amount, setAmount] = useState(0);
-  const [amountIcon, setAmountIcon] = useState(<Filter1Icon />);
+  const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
 
   const [selfFriendList, setSelfFriendList] = useState(initialSelfFriendListResponse.data.results);
   const [selfFriendnListpage, setSelfFriendListpage] = useState(1);

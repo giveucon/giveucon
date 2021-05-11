@@ -12,15 +12,21 @@ const KakaoMaps = styled.div`
 
 class KakaoMapBox extends React.Component{
 
+  static defaultProps = {
+    setLevel: ()=>{},
+    setPosition: ()=>{}
+  }
+
     componentDidMount() {
-      const { latitude, longitude } = this.props;
+      const { latitude, longitude, setLevel, setPosition } = this.props;
+
       const script = document.createElement('script');
       script.async = true;
-      script.src =
-        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY + '&autoload=false';
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY}&autoload=false`;
       document.head.appendChild(script);
 
       script.onload = () => {
+
         kakao.maps.load(() => {
           let container = document.getElementById('kakao_map');
           let options = {
@@ -29,9 +35,14 @@ class KakaoMapBox extends React.Component{
           };
           var map = new window.kakao.maps.Map(container, options);
           var marker = new window.kakao.maps.Marker({
-              position: new window.kakao.maps.LatLng(latitude, longitude),
+            position: new window.kakao.maps.LatLng(latitude, longitude),
           });
           marker.setMap(map);
+
+          kakao.maps.event.addListener(map, 'center_changed', function() {
+            setLevel(map.getLevel());
+            setPosition({latitude: map.getCenter().La, longitude: map.getCenter().Ma}); 
+          });
         });
       };
     }
