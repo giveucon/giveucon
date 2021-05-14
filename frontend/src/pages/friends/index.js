@@ -12,7 +12,7 @@ import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
-import UserListItem from 'components/UserListItem';
+import ListItem from 'components/ListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
@@ -75,8 +75,9 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
         {selfFriendList.length > 0 ? (
           selfFriendList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
-              <UserListItem
+              <ListItem
                 key={index}
+                variant='user'
                 name={item.to_user.user_name}
                 onClick={() => router.push(`/users/${item.to_user.id}/` )}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}

@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import * as constants from '../constants';
 import destroyCookie from 'utils/destroyCookie'
 import getCookies from 'utils/getCookies'
 import setCookie from 'utils/setCookie'
@@ -13,10 +15,32 @@ const requestVerifyTokens = async (session) => {
         token: session.tokens.access_token,
       }
     })
-    return { status: response.status, data: response.data };
+    return {
+      responseType: constants.RESPONSE_TYPE_OK,
+      status: response.status,
+      data: response.data
+    };
   } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
+    if (error.response) {
+      return {
+        responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
+        status: error.response.status,
+        headers: error.response.headers,
+        data: error.response.data
+      }
+    }
+    else if (error.request) {
+      return {
+        responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
+        request: error.request
+      }
+    }
+    else {
+      return {
+        responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
+        message: error.message
+      }
+    }
   }
 };
 
@@ -30,10 +54,32 @@ const requestRefreshTokens = async (session) => {
         refresh: session.tokens.refresh_token,
       }
     })
-    return { status: response.status, data: response.data };
+    return {
+      responseType: constants.RESPONSE_TYPE_OK,
+      status: response.status,
+      data: response.data
+    };
   } catch (error) {
-    console.error(error);
-    return { status: error.response.status, data: error.response.data }
+    if (error.response) {
+      return {
+        responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
+        status: error.response.status,
+        headers: error.response.headers,
+        data: error.response.data
+      }
+    }
+    else if (error.request) {
+      return {
+        responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
+        request: error.request
+      }
+    }
+    else {
+      return {
+        responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
+        message: error.message
+      }
+    }
   }
 };
 

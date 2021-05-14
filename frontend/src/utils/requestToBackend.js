@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import * as constants from '../constants';
 import getSession from 'utils/getSession';
 
 const jsonRequest = async (session, url, method, data, params) => {
@@ -14,10 +15,33 @@ const jsonRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(res => {
-    return {status: res.status, data: res.data}
+  }).then(response => {
+    return {
+      responseType: constants.RESPONSE_TYPE_OK,
+      status: response.status,
+      data: response.data
+    };
   }).catch(error => {
-    return {status: error.response.status, data: error.response.data}
+    if (error.response) {
+      return {
+        responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
+        status: error.response.status,
+        headers: error.response.headers,
+        data: error.response.data
+      }
+    }
+    else if (error.request) {
+      return {
+        responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
+        request: error.request
+      }
+    }
+    else {
+      return {
+        responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
+        message: error.message
+      }
+    }
   });
 }
 
@@ -33,10 +57,33 @@ const multipartRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(res => {
-    return {status: res.status, data: res.data}
+  }).then(response => {
+    return {
+      responseType: constants.RESPONSE_TYPE_OK,
+      status: response.status,
+      data: response.data
+    };
   }).catch(error => {
-    return {status: error.response.status, data: error.response.data}
+    if (error.response) {
+      return {
+        responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
+        status: error.response.status,
+        headers: error.response.headers,
+        data: error.response.data
+      }
+    }
+    else if (error.request) {
+      return {
+        responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
+        request: error.request
+      }
+    }
+    else {
+      return {
+        responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
+        message: error.message
+      }
+    }
   });
 }
 

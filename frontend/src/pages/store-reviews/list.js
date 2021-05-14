@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import ReviewListItem from 'components/ReviewListItem';
+import ListItem from 'components/ListItem';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -81,7 +81,8 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
           >
             {storeReviewList.map((item, index) => (
               <>
-                <ReviewListItem
+                <ListItem
+                  variant='review'
                   title={item.review.article.title}
                   date={new Date(item.review.article.created_at)}
                   score={item.review.score}

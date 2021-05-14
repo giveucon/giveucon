@@ -15,7 +15,7 @@ import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
-import UserListItem from 'components/UserListItem';
+import ListItem from 'components/ListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
@@ -143,8 +143,9 @@ function Search({ lng, lngDict, selfUser }) {
           >
           {userList.map((item, index) => (
             <>
-              <UserListItem
+              <ListItem
                 key={index}
+                variant='user'
                 name={item.user_name}
                 image={gravatar.url(item.email, {default: 'identicon'})}
                 onClick={() => router.push(`/users/${item.id}/` )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import Layout from 'components/Layout';
-import NoticeListItem from 'components/NoticeListItem';
+import ListItem from 'components/ListItem';
 import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
@@ -84,9 +84,10 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
         {(centralNoticeList.length > 0) ? (
           centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
-              <NoticeListItem
+              <ListItem
+                variant='notice'
                 title={item.article.title}
-                subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                date={item.article.created_at}
                 onClick={() => router.push(`/central-notices/${item.id}/`)}
               />
               {index < centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).length - 1 && (<Divider />)}

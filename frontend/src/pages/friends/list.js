@@ -7,7 +7,7 @@ import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
-import UserListItem from 'components/UserListItem';
+import ListItem from 'components/ListItem';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
@@ -79,8 +79,9 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {friendList && friendList.map((item, index) => (
-              <UserListItem
+              <ListItem
                 key={index}
+                variant='user'
                 name={item.to_user.user_name}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}
                 onClick={() => router.push(`/users/${item.to_user.id}/`)}

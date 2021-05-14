@@ -1,8 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import Rating from '@material-ui/lab/Rating';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,11 +13,22 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
-export default function ListItem({ children=null, onClick=null, prefix=null, skeleton=false, subtitle=null, suffix=null, title=null }) {
+export default function ListItem({
+  children=null,
+  date=null,
+  image=null,
+  onClick=null,
+  prefix=null,
+  score=null,
+  skeleton=false,
+  subtitle=null,
+  suffix=null,
+  title=null,
+  variant='default'
+}) {
   const classes = useStyles();
   return (
-    <>
+    <Box className={classes.root}>
       {
         skeleton ? (
           <Box display='flex' alignItems='center' justifyContent='flex-start' margin='1rem'>
@@ -37,17 +50,29 @@ export default function ListItem({ children=null, onClick=null, prefix=null, ske
               <Box display={prefix ? 'block' : 'none'} margin='0.5rem'>
                 {prefix}
               </Box>
+              <Box display={image ? 'block' : 'none'} margin='0.5rem'>
+                <Avatar alt={title} src={image} />
+              </Box>
 
               {/* Body */}
               <CardActionArea onClick={onClick}>
-                <Box
-                  display={(title || subtitle) ? 'block' : 'none'}
-                  paddingLeft={prefix ? 0 : 2}
-                  paddingRight={suffix ? 0 : 2}
-                  paddingY={1}
-                >
-                  <Typography variant='h6'>{title}</Typography>
-                  <Typography variant='subtitle2'>{subtitle}</Typography>
+                <Box paddingLeft={prefix ? 0 : 2} paddingRight={suffix ? 0 : 2} paddingY={1}>
+                  <Box display={title ? 'block' : 'none'}>
+                    <Typography variant='h6'>{title}</Typography>
+                  </Box>
+                  <Box display={(date || score) ? 'block' : 'none'}>
+                    <Box display='flex' alignItems='center'>
+                      <Box display={score ? 'block' : 'none'} marginRight={1}>
+                        <Rating value={score} readOnly />
+                      </Box>
+                      <Box display={date ? 'block' : 'none'} marginRight={1}>
+                        <Typography variant='date'>{new Date(date).toLocaleDateString()}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box display={subtitle ? 'block' : 'none'}>
+                    <Typography variant='subtitle2'>{subtitle}</Typography>
+                  </Box>
                 </Box>
                 {children}
               </CardActionArea>
@@ -60,6 +85,6 @@ export default function ListItem({ children=null, onClick=null, prefix=null, ske
           </>
         )
       }
-    </>
+    </Box>
   );
 }

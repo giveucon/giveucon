@@ -13,7 +13,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
-import ReviewListItem from 'components/ReviewListItem'
+import ListItem from 'components/ListItem'
 import Section from 'components/Section'
 import SwipeableTileList from 'components/SwipeableTileList';
 import Tile from 'components/Tile';
@@ -212,7 +212,8 @@ function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavorit
         {productReviewList.length > 0 ? (
           productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
-              <ReviewListItem
+              <ListItem
+                variant='review'
                 title={item.review.article.title}
                 date={new Date(item.review.article.created_at)}
                 score={item.review.score}

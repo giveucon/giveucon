@@ -1,9 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import Layout from 'components/Layout'
+import ListItem from 'components/ListItem'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
@@ -29,26 +32,19 @@ function Index({ lng, lngDict, selfUser }) {
         backButton
         title={i18n.t('settings')}
       >
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/my-account/update/user/')}
-          >
-            {i18n.t('userSettings')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/my-account/update/menu-items/')}
-          >
-            {i18n.t('menuItems')}
-          </Button>
-        </Box>
+        <ListItem
+          variant='default'
+          prefix={<IconButton><AccountCircleIcon /></IconButton>}
+          title={i18n.t('userSettings')}
+          onClick={() => router.push('/my-account/update/user/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          prefix={<IconButton><MenuIcon /></IconButton>}
+          title={i18n.t('menuItems')}
+          onClick={() => router.push('/my-account/update/menu-items/')}
+        />
       </Section>
     </Layout>
   );

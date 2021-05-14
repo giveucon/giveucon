@@ -305,6 +305,7 @@ function Create({ lng, lngDict, selfAccount }) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!postSelfUserResponse.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!postSelfUserResponse.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!postSelfUserResponse.data.last_name}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!postSelfUserResponse.data.phone_number}));
               toast.error(i18n.t('_checkInputFields'));
               console.log(postSelfUserResponse);
             }

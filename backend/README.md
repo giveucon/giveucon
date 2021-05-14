@@ -84,8 +84,8 @@ DJANGO_SECRET_KEY = 'your_django_secert_key_here'
 DJANGO_TWILIO_SID = 'your_twilio_sid_here'
 DJANGO_TWILIO_TOKEN = 'your_twilio_token_here'
 DJANGO_TWILIO_SENDER = 'your_twilio_trial_number_here'
-DJANGO_PAYPAL_CLIENT_ID = 'your paypal client id'
-DJANGO_PAYPAL_CLIENT_SECRET = 'your paypal client secret'
+DJANGO_PAYPAL_CLIENT_ID = 'your_paypal_client_id_here'
+DJANGO_PAYPAL_CLIENT_SECRET = 'your_paypal_client_secret_here'
 
 ```
 

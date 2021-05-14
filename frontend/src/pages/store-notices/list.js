@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import NoticeListItem from 'components/NoticeListItem';
+import ListItem from 'components/ListItem';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -70,9 +70,10 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
           >
             {storeNoticeList.map((item, index) => (
               <>
-                <NoticeListItem
+                <ListItem
+                  variant='notice'
                   title={item.article.title}
-                  subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                  subtitle={item.article.created_at}
                   onClick={() => router.push(`/store-notices/${item.id}/`)}
                 />
               {index < storeNoticeList.length - 1 && (<Divider />)}

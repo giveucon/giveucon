@@ -21,9 +21,8 @@ import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import KakaoMapBox from 'components/KakaoMapBox';
 import Layout from 'components/Layout';
-import NoticeListItem from 'components/NoticeListItem';
+import ListItem from 'components/ListItem';
 import Tile from 'components/Tile';
-import ReviewListItem from 'components/ReviewListItem';
 import Section from 'components/Section';
 import SwipeableTileList from 'components/SwipeableTileList';
 import useI18n from 'hooks/useI18n';
@@ -278,9 +277,10 @@ function Id({
         {storeNoticeList.length > 0 ? (
           storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
             <>
-              <NoticeListItem
+              <ListItem
+                variant='notice'
                 title={item.article.title}
-                subtitle={new Date(item.article.created_at).toLocaleDateString()}
+                subtitle={item.article.created_at}
                 onClick={() => router.push(`/store-notices/${item.id}/`)}
               />
               {index < storeNoticeList.slice(0, constants.LIST_SLICE_NUMBER).length - 1 && (<Divider />)}
@@ -371,8 +371,9 @@ function Id({
         {storeReviewList.length > 0 ? (
             storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <>
-                <ReviewListItem
+                <ListItem
                   key={index}
+                  variant='review'
                   title={item.review.article.title}
                   date={new Date(item.review.article.created_at)}
                   score={item.review.score}

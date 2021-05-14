@@ -3,12 +3,11 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import ReviewListItem from 'components/ReviewListItem';
+import ListItem from 'components/ListItem';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -76,7 +75,8 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
           >
             {productReviewList.map((item, index) => (
               <>
-                <ReviewListItem
+                <ListItem
+                  variant='review'
                   title={item.review.article.title}
                   date={new Date(item.review.article.created_at)}
                   score={item.review.score}

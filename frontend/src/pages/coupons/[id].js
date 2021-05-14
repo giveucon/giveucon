@@ -8,7 +8,6 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import * as constants from 'constants';
 import CouponBox from 'components/CouponBox'
 import Layout from 'components/Layout'
-import Tile from 'components/Tile';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -64,8 +63,7 @@ function Id({ lng, lngDict, selfUser, coupon }) {
           name={coupon.product.name}
           image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
           price={coupon.product.price}
-        >
-        </CouponBox>
+        />
       </Section>
       <Box marginY={1}>
         <Button

@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import StorefrontIcon from '@material-ui/icons/Storefront';
+import StoreIcon from '@material-ui/icons/Store';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
@@ -166,7 +166,7 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
 
       <Section
         title={i18n.t('ownedStores')}
-        titlePrefix={<IconButton><StorefrontIcon /></IconButton>}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
           <IconButton 
             onClick={() => router.push({
