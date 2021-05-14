@@ -37,6 +37,8 @@ from .user_menuitem_detail_view import UserMenuItemDetailView
 from .friend_list_view import FriendListView
 from .friend_detail_view import FriendDetailView
 from .phone_verification_code_view import PhoneVerificationCodeView
+from .notification_list_view import NotificationListView
+from .notification_detail_view import NotificationDetailView
 
 from .dummy_user_create_view import DummyUserCreateView
 from .dummy_store_create_view import DummyStoreCreateView
@@ -44,3 +46,4 @@ from .dummy_product_create_view import DummyProductCreateView
 from .dummy_central_notice_create_view import DummyCentralNoticeCreateView
 from .dummy_store_notice_create_view import DummyStoreNoticeCreateView
 from .dummy_tag_create_view import DummyTagCreateView
+from .paypal_test_view import PayPalTestView

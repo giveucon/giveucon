@@ -10,3 +10,4 @@ from .friend_pagination import FriendPagination
 from .favorite_store_pagination import FavoriteStorePagination
 from .favorite_product_pagination import FavoriteProductPagination
 from .friend_pagination import FriendPagination
+from .notification_pagination import NotificationPagination

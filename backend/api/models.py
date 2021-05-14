@@ -286,4 +286,16 @@ class FavoriteProduct(models.Model):
     class Meta:
         unique_together = ('product', 'user')
 
-#class Notification(models.Model):
+class Notification(models.Model):
+    article = models.OneToOneField(
+        Article,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name='notificaion'
+    )
+    to_user = models.ForeignKey(
+        User,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name='notification_to'
+    )

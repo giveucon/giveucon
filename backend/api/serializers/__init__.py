@@ -35,6 +35,8 @@ from .favorite_product_write_serializer import FavoriteProductWriteSerializer
 from .user_menuitem_serializer import UserMenuItemSerializer
 from .friend_read_serializer import FriendReadSerializer
 from .friend_write_serializer import FriendWriteSerializer
+from .notification_read_serializer import NotificationReadSerializer
+from .notification_create_serializer import NotificationCreateSerializer
 
 from .dummy_article_write_serializer import DummyArticleWriteSerializer
 from .dummy_user_create_serializer import DummyUserCreateSerializer

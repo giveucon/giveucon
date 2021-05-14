@@ -59,10 +59,14 @@ urlpatterns = [
     path('friends/<int:pk>/', FriendDetailView.as_view()),
     path('phone-verification-codes/', PhoneVerificationCodeView.as_view()),
 
+    path('notifications/', NotificationListView.as_view()),
+    path('notifications/<int:pk>/', NotificationDetailView.as_view()),
+
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),
     path('dummy-products/', DummyProductCreateView.as_view()),
     path('dummy-central-notices/', DummyCentralNoticeCreateView.as_view()),
     path('dummy-store-notices/', DummyStoreNoticeCreateView.as_view()),
     path('dummy-tags/', DummyTagCreateView.as_view()),
+    path('paypal-test/', PayPalTestView.as_view())
 ]

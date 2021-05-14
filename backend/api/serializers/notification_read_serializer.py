@@ -1,10 +1,10 @@
 from rest_framework.serializers import ModelSerializer
 
 from .article_read_serializer import ArticleReadSerializer
-from ..models import CentralNotice
+from ..models import Notification
 
-class CentralNoticeReadSerializer(ModelSerializer):
+class NotificationReadSerializer(ModelSerializer):
     article = ArticleReadSerializer()
     class Meta:
-        model = CentralNotice
+        model = Notification
         fields = '__all__'
