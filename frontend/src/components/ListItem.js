@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ListItem({
   children=null,
   date=null,
+  icon=null,
   image=null,
   onClick=null,
+  onClickBody=null,
   prefix=null,
   score=null,
   skeleton=false,
@@ -40,23 +42,21 @@ export default function ListItem({
           </Box>
         ) : (
           <>
-            <Box
-              alignItems='center'
-              display='flex'
-              flexDirection='row'
-              justifyContent='flex-start'
-            >
-              {/* Avatar, Icon, etc... */}
-              <Box display={prefix ? 'block' : 'none'} margin='0.5rem'>
-                {prefix}
-              </Box>
-              <Box display={image ? 'block' : 'none'} margin='0.5rem'>
-                <Avatar alt={title} src={image} />
-              </Box>
-
-              {/* Body */}
-              <CardActionArea onClick={onClick}>
-                <Box paddingLeft={prefix ? 0 : 2} paddingRight={suffix ? 0 : 2} paddingY={1}>
+            {/* Body */}
+            <CardActionArea onClickBody={onClickBody}>
+              <Box
+                alignItems='center'
+                display='flex'
+                flexDirection='row'
+                justifyContent='flex-start'
+              >
+                <Box display={image ? 'block' : 'none'} margin='0.5rem'>
+                  <Avatar alt={title} src={image} />
+                </Box>
+                <Box display={icon ? 'block' : 'none'} margin='0.5rem'>
+                  {icon}
+                </Box>
+                <Box paddingLeft={(image || icon) ? 0 : 2} paddingRight={suffix ? 0 : 2} paddingY={1}>
                   <Box display={title ? 'block' : 'none'}>
                     <Typography variant='h6'>{title}</Typography>
                   </Box>
@@ -74,13 +74,13 @@ export default function ListItem({
                     <Typography variant='subtitle2'>{subtitle}</Typography>
                   </Box>
                 </Box>
-                {children}
-              </CardActionArea>
-
-              {/* Button, etc... */}
-              <Box display={suffix ? 'block' : 'none'} flexShrink={0}>
-                {suffix}
               </Box>
+              {children}
+            </CardActionArea>
+
+            {/* Button, etc... */}
+            <Box display={suffix ? 'block' : 'none'} flexShrink={0}>
+              {suffix}
             </Box>
           </>
         )

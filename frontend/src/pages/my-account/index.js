@@ -187,6 +187,19 @@ function Index({ lng, lngDict, selfUser }) {
             color='default'
             fullWidth
             variant='contained'
+            onClick={() => router.push({
+              pathname: '/notifications/list/',
+              query: { to_user: selfUser.id },
+            })}
+          >
+            {i18n.t('notifications')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
             onClick={() => router.push('/central-notices/')}
           >
             {i18n.t('notices')}
