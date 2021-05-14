@@ -34,15 +34,15 @@ function Index({ lng, lngDict, selfUser }) {
       >
         <ListItem
           variant='default'
-          prefix={<IconButton><AccountCircleIcon /></IconButton>}
           title={i18n.t('userSettings')}
+          icon={<AccountCircleIcon />}
           onClick={() => router.push('/my-account/update/user/')}
         />
         <Divider />
         <ListItem
           variant='default'
-          prefix={<IconButton><MenuIcon /></IconButton>}
           title={i18n.t('menuItems')}
+          icon={<MenuIcon />}
           onClick={() => router.push('/my-account/update/menu-items/')}
         />
       </Section>

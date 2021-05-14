@@ -66,7 +66,12 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
           </IconButton>,
           <IconButton>
             <Badge badgeContent={100} color='error' max={99}>
-              <NotificationsIcon />
+              <NotificationsIcon
+                onClick={() => router.push({
+                  pathname: '/notifications/list/',
+                  query: { to_user: selfUser.id },
+                })}
+              />
             </Badge>
           </IconButton>,
           <IconButton>
