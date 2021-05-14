@@ -13,6 +13,8 @@ class UserWriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
+        if self.context['request'].user.is_superuser:
+            return data
         phone_number = data['phone_number']
         verification_code = data['verification_code']
         if not PhoneService.verify_phone_number(phone_number, verification_code):
@@ -23,6 +25,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data.pop('verification_code')
             account = validated_data.pop('account')
+            print('account is ', account)
             user = User.objects.create(**validated_data)
             AccountUser.objects.create(account=account, user=user)
             return user
