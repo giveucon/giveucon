@@ -9,7 +9,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
     verification_code = serializers.CharField(required=False)
     class Meta:
         model = User
-        read_only_fields = ('staff', 'location')
+        read_only_fields = ('staff')
         fields = '__all__'
 
     def validate(self, data):
