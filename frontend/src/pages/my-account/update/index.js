@@ -4,9 +4,10 @@ import toast from 'react-hot-toast';
 import Divider from '@material-ui/core/Divider';
 import Switch from '@material-ui/core/Switch';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AppsIcon from '@material-ui/icons/Apps';
 import BrightnessMediumIcon from '@material-ui/icons/BrightnessMedium';
 import LanguageIcon from '@material-ui/icons/Language';
-import MenuIcon from '@material-ui/icons/Menu';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PhoneIcon from '@material-ui/icons/Phone';
 
 import Layout from 'components/Layout'
@@ -62,6 +63,13 @@ function Index({ lng, lngDict, selfUser }) {
           icon={<PhoneIcon />}
           onClick={() => router.push('/my-account/update/phone/')}
         />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('location')}
+          icon={<LocationOnIcon />}
+          onClick={() => router.push('/my-account/update/location/')}
+        />
       </Section>
 
 
@@ -71,7 +79,7 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('menuItems')}
-          icon={<MenuIcon />}
+          icon={<AppsIcon />}
           onClick={() => router.push('/my-account/update/menu-items/')}
         />
         <Divider />

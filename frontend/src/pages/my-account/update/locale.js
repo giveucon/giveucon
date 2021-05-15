@@ -67,14 +67,14 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
     <Layout
       locale={lng}
       menuItemList={prevSelfUser.menu_items}
-      title={`${i18n.t('locales')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('locale')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('locales')}
+        title={i18n.t('locale')}
       />
       <Section
-        title={i18n.t('locales')}
+        title={i18n.t('locale')}
         titlePrefix={<IconButton><LanguageIcon /></IconButton>}
       >
         <Box padding={1}>

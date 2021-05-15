@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
@@ -133,9 +133,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-const latitude = 37.506502;
-const longitude = 127.053617;
-
 function Id({
   lng,
   lngDict,
@@ -152,23 +149,6 @@ function Id({
   const classes = useStyles();
   const [productList, setProductList] = useState(_productList)
   const [favoriteStore, setFavoriteStore] = useState(_favoriteStore)
-  const [position, setPosition] = useState({
-    latitude: 37.506502,
-    longitude: 127.053617,
-  })
-  
-  useEffect(() => {
-    const getPosition = async () => {
-      await navigator.geolocation.getCurrentPosition(newPosition => {
-        setPosition(prevPosition => ({
-          ...prevPosition, 
-          latitude: newPosition.coords.latitude, 
-          longitude: newPosition.coords.longitude
-        }))
-      });
-    }
-    getPosition();
-  }, []);
 
   return (
     <Layout
@@ -176,8 +156,6 @@ function Id({
       menuItemList={selfUser.menu_items}
       title={`${store.name} - ${i18n.t('_appName')}`}
     >
-
-
       <Section
         backButton
         title={store.name}
@@ -401,28 +379,29 @@ function Id({
       </Section>
 
 
-      <Section
-        title={i18n.t('location')}
-        titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
-      >
-        <Card>
-          <KakaoMapBox
-            latitude={position.latitude}
-            longitude={position.longitude}
-            setPosition={setPosition}
-          />
-        </Card>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push(`https://map.kakao.com/link/map/${position.latitude},${position.longitude}`)}
-          >
-            {i18n.t('findPath')}
-          </Button>
-        </Box>
-      </Section>
+      {store.location && (
+        <Section
+          title={i18n.t('location')}
+          titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
+        >
+          <Card>
+            <KakaoMapBox
+              latitude={store.location.latitude}
+              longitude={store.location.longitude}
+            />
+          </Card>
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push(`https://map.kakao.com/link/map/${position.latitude},${position.longitude}`)}
+            >
+              {i18n.t('findPath')}
+            </Button>
+          </Box>
+        </Section>
+      )}
 
 
       {selfUser && store && (selfUser.id === store.user) && (
