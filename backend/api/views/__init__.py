@@ -43,6 +43,7 @@ from .location_list_view import LocationListView
 from .location_detail_view import LocationDetailView
 from .user_location_list_view import UserLocationListView
 from .user_location_detail_view import UserLocationDetailView
+from .self_user_location_detail_view import SelfUserLocationDetailView
 from .store_location_list_view import StoreLocationListView
 from .store_location_detail_view import StoreLocationDetailView
 

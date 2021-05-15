@@ -25,7 +25,7 @@ class UserLocationSerializer(ModelSerializer):
         location.is_valid(raise_exception=True)
         user = validated_data.pop('user', instance.user)
         with transaction.atomic():
-            location.save()
+            location = location.save()
             instance.location = location
             instance.user = user
             instance.save()
