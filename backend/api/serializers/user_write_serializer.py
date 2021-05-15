@@ -9,7 +9,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
     verification_code = serializers.CharField(required=False)
     class Meta:
         model = User
-        read_only_fields = ('staff',)
+        read_only_fields = ('staff', 'location')
         fields = '__all__'
 
     def validate(self, data):
@@ -18,7 +18,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         with transaction.atomic():
-            validation_code = validated_data.pop('verification_code', None)
+            verification_code = validated_data.pop('verification_code', None)
             if not self.context['request'].user.is_superuser:
                 phone_number = validated_data['phone_number']
                 if not PhoneService.verify_phone_number(phone_number, verification_code):
@@ -32,7 +32,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         with transaction.atomic():
-            validation_code = validated_data.pop('verification_code', None)
+            verification_code = validated_data.pop('verification_code', None)
             phone_number = validated_data['phone_number']
             if instance.phone_number != phone_number:
                 if (not self.context['request'].user.is_superuser
