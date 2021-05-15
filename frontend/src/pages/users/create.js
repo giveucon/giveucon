@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { PhoneNumberUtil, PhoneNumberFormat as PNF } from 'google-libphonenumber';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
@@ -39,7 +40,7 @@ const postPhoneVerificationCode = async (selfUser) => {
 const postSelfUser = async (selfUser) => {
   const processedSelfUser = {
     ...selfUser,
-    phone_number: `+82${selfUser.phone_number}`
+    phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164),
   }
   return await requestToBackend(null, 'api/users/', 'post', 'json', processedSelfUser, null);
 };
@@ -63,6 +64,7 @@ function Create({ lng, lngDict, selfAccount }) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const phoneUtil = PhoneNumberUtil.getInstance();
   const [selfUser, setSelfUser] = useState({
     email: selfAccount.email,
     user_name: selfAccount.username,
@@ -295,7 +297,7 @@ function Create({ lng, lngDict, selfAccount }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const postSelfUserResponse = await postSelfUser(selfUser);
+            const postSelfUserResponse = await postSelfUser(selfUser, phoneUtil);
             if (postSelfUserResponse.status === 201) {
               router.push('/my-account/');
               toast.success(i18n.t('_myAccountSuccessfullyCreated'));

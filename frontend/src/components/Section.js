@@ -66,7 +66,7 @@ export default function Section({
               <Box
                 display={title ? 'block' : 'none'}
                 flexGrow={1}
-                paddingLeft={(backButton || titlePrefix) ? 0 : 2}
+                paddingLeft={(backButton || titlePrefix) ? 0 : 1}
                 paddingRight={(titleSuffix) ? 0 : 2}
                 paddingY={1}
               >
