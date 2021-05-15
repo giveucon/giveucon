@@ -29,6 +29,7 @@ urlpatterns = [
     path('products/', ProductListView.as_view()),
     path('products/<int:pk>/', ProductDetailView.as_view()),
 
+
     path('images/', ImageListView.as_view()),
     path('images/<int:pk>/', ImageDetailView.as_view()),
 
@@ -61,6 +62,15 @@ urlpatterns = [
 
     path('notifications/', NotificationListView.as_view()),
     path('notifications/<int:pk>/', NotificationDetailView.as_view()),
+
+    path('locations/', LocationListView.as_view()),
+    path('locations/<int:pk>/', LocationDetailView.as_view()),
+
+    path('user-locations/', UserLocationListView.as_view()),
+    path('user-locations/<int:pk>/', UserLocationDetailView.as_view()),
+
+    path('store-locations/', StoreLocationListView.as_view()),
+    path('store-locations/<int:pk>/', StoreLocationDetailView.as_view()),
 
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),

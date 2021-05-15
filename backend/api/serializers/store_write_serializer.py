@@ -11,7 +11,7 @@ class StoreWriteSerializer(serializers.ModelSerializer):
     images = serializers.ListField(child=serializers.ImageField(), required=False)
     class Meta:
         model = Store
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'location')
         exclude = ('private_key', 'public_key')
 
     def create(self, validated_data):
