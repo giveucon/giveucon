@@ -3,6 +3,7 @@ import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -171,7 +172,19 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('notifications')}
-          icon={<NotificationsIcon />}
+          icon={
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent=''
+              variant="dot"
+            >
+              <NotificationsIcon />
+            </Badge>
+          }
           onClick={() => router.push({
             pathname: '/notifications/list/',
             query: { to_user: selfUser.id },
