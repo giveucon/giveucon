@@ -74,7 +74,7 @@ function List({ lng, lngDict, selfUser, initialNotificationListResponse, user })
                   date={item.article.created_at}
                   onClick={() => router.push(`/notifications/${item.id}/`)}
                 />
-              {index < notificationList.length - 1 && (<Divider />)}
+                {index < notificationList.length - 1 && (<Divider />)}
               </>
             ))}
           </InfiniteScroll>

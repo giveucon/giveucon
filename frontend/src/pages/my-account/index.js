@@ -3,16 +3,26 @@ import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import CodeIcon from '@material-ui/icons/Code';
-import MenuIcon from '@material-ui/icons/Menu';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import DataUsageIcon from '@material-ui/icons/DataUsage';
+import InfoIcon from '@material-ui/icons/Info';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import StoreIcon from '@material-ui/icons/Store';
 
 import Layout from 'components/Layout'
+import ListItem from 'components/ListItem'
 import Section from 'components/Section'
 import UserProfileBox from 'components/UserProfileBox'
 import useI18n from 'hooks/useI18n'
@@ -81,187 +91,152 @@ function Index({ lng, lngDict, selfUser }) {
 
       <Section
         title={i18n.t('myWallet')}
-        titlePrefix={<IconButton><AccountBalanceWalletIcon /></IconButton>}
         titleSuffix={
           <IconButton>
             <ArrowForwardIcon onClick={() => router.push('/my-wallet/')}/>
           </IconButton>
         }
       >
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/coupons/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myCoupons')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/favorite-stores/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myFavoriteStores')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/favorite-products/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myFavoriteProducts')}
-          </Button>
-        </Box>
+        <ListItem
+          variant='default'
+          title={i18n.t('myCoupons')}
+          icon={<LoyaltyIcon />}
+          onClick={() => router.push({
+            pathname: '/coupons/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('myFavoriteStores')}
+          icon={<StoreIcon />}
+          onClick={() => router.push({
+            pathname: '/favorite-stores/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('myFavoriteProducts')}
+          icon={<ShoppingBasketIcon />}
+          onClick={() => router.push({
+            pathname: '/favorite-products/list/',
+            query: { user: selfUser.id },
+          })}
+        />
       </Section>
 
 
       <Section
         title={i18n.t('myBusiness')}
-        titlePrefix={<IconButton><BusinessCenterIcon /></IconButton>}
         titleSuffix={
           <IconButton>
             <ArrowForwardIcon onClick={() => router.push('/my-business/')}/>
           </IconButton>
         }
       >
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/stores/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myStores')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/products/list/',
-              query: { user: selfUser.id },
-            })}
-          >
-            {i18n.t('myProducts')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/coupons/scan/')}
-          >
-            {i18n.t('scanCoupon')}
-          </Button>
-        </Box>
+        <ListItem
+          variant='default'
+          title={i18n.t('myStores')}
+          icon={<StoreIcon />}
+          onClick={() => router.push({
+            pathname: '/stores/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('myProducts')}
+          icon={<ShoppingBasketIcon />}
+          onClick={() => router.push({
+            pathname: '/products/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('scanCoupon')}
+          icon={<CropFreeIcon />}
+          onClick={() => router.push('/coupons/scan/')}
+        />
       </Section>
 
 
       <Section
         title={i18n.t('general')}
-        titlePrefix={<IconButton><MenuIcon /></IconButton>}
       >
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/notifications/list/',
-              query: { to_user: selfUser.id },
-            })}
-          >
-            {i18n.t('notifications')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/central-notices/')}
-          >
-            {i18n.t('notices')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/my-account/update/')}
-          >
-            {i18n.t('settings')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/about/')}
-          >
-            {i18n.t('about')}
-          </Button>
-        </Box>
+        <ListItem
+          variant='default'
+          title={i18n.t('notifications')}
+          icon={
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent=''
+              variant="dot"
+            >
+              <NotificationsIcon />
+            </Badge>
+          }
+          onClick={() => router.push({
+            pathname: '/notifications/list/',
+            query: { to_user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('notices')}
+          icon={<AnnouncementIcon />}
+          onClick={() => router.push('/central-notices/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('settings')}
+          icon={<SettingsIcon />}
+          onClick={() => router.push('/my-account/update/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('about')}
+          icon={<InfoIcon />}
+          onClick={() => router.push('/about/')}
+        />
       </Section>
 
 
       <Section
         title={i18n.t('developerTools')}
-        titlePrefix={<IconButton><CodeIcon /></IconButton>}
       >
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push('/database/create/')}
-          >
-            {i18n.t('createDatabase')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => {router.push('/sandbox/components/')}}
-          >
-            {i18n.t('components')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => toast.success('Hello World')}
-          >
-            React-Hot-Toast 테스트
-          </Button>
-        </Box>
+        <ListItem
+          variant='default'
+          title={i18n.t('createDatabase')}
+          icon={<DataUsageIcon />}
+          onClick={() => router.push('/database/create/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('components')}
+          icon={<DashboardIcon />}
+          onClick={() => {router.push('/sandbox/components/')}}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title='React-Hot-Toast 테스트'
+          icon={<CodeIcon />}
+          onClick={() => toast.success('Hello World')}
+        />
       </Section>
     </Layout>
   );

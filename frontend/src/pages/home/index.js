@@ -61,11 +61,16 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
-          <IconButton onClick={() => router.push('/central-notices/')}>
-            <AnnouncementIcon />
-          </IconButton>,
           <IconButton>
-            <Badge badgeContent={100} color='error' max={99}>
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent=''
+              variant="dot"
+            >
               <NotificationsIcon
                 onClick={() => router.push({
                   pathname: '/notifications/list/',
@@ -73,6 +78,9 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
                 })}
               />
             </Badge>
+          </IconButton>,
+          <IconButton onClick={() => router.push('/central-notices/')}>
+            <AnnouncementIcon />
           </IconButton>,
           <IconButton>
             <AccountCircleIcon onClick={() => router.push('/my-account/')} />

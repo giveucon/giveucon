@@ -35,13 +35,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const putSelfUser = async (selfUser) => {
+  console.log(data);
   const data = {
-    email: selfUser.email,
-    user_name: selfUser.user_name,
-    first_name: selfUser.first_name,
-    last_name: selfUser.last_name,
-    locale: selfUser.locale,
-    dark_mode: selfUser.dark_mode,
+    ...selfUser,
     // menu_items: selfUser.menu_items
   };
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
@@ -53,39 +49,33 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function User({ lng, lngDict, selfUser: prevSelfUser }) {
+function Basic({ lng, lngDict, selfUser: prevSelfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
-    id: prevSelfUser.id,
-    email: prevSelfUser.email,
-    user_name: prevSelfUser.user_name,
-    first_name: prevSelfUser.first_name,
-    last_name: prevSelfUser.last_name,
-    locale: prevSelfUser.locale,
-    dark_mode: prevSelfUser.dark_mode,
-    menu_items: prevSelfUser.menu_items,
+    ...prevSelfUser,
+    // menu_items: prevSelfUser.menu_items,
   });
   const [selfUserError, setSelfUserError] = useState({
     email: false,
     user_name: false,
     first_name: false,
     last_name: false,
+    phone_number: false,
   });
 
   return (
     <Layout
       locale={lng}
       menuItemList={prevSelfUser.menu_items}
-      title={`${i18n.t('userSettings')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('basicInfo')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('userSettings')}
-      >
-      </Section>
+        title={i18n.t('basicInfo')}
+      />
       <Section
         title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><AccountCircleIcon /></IconButton>}
@@ -211,6 +201,7 @@ function User({ lng, lngDict, selfUser: prevSelfUser }) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!response.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!response.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!response.data.last_name}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!response.data.phone_number}));
               toast.error(i18n.t('_checkInputFields'));
             }
           }}
@@ -232,4 +223,4 @@ function User({ lng, lngDict, selfUser: prevSelfUser }) {
   );
 }
 
-export default User;
+export default Basic;

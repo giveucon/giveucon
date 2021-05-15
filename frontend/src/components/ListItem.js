@@ -19,7 +19,6 @@ export default function ListItem({
   icon=null,
   image=null,
   onClick=null,
-  onClickBody=null,
   prefix=null,
   score=null,
   skeleton=false,
@@ -41,9 +40,14 @@ export default function ListItem({
             </Box>
           </Box>
         ) : (
-          <>
+          <Box
+            alignItems='center'
+            display='flex'
+            flexDirection='row'
+            justifyContent='flex-start'
+          >
             {/* Body */}
-            <CardActionArea onClickBody={onClickBody}>
+            <CardActionArea onClick={onClick}>
               <Box
                 alignItems='center'
                 display='flex'
@@ -82,7 +86,7 @@ export default function ListItem({
             <Box display={suffix ? 'block' : 'none'} flexShrink={0}>
               {suffix}
             </Box>
-          </>
+          </Box>
         )
       }
     </Box>
