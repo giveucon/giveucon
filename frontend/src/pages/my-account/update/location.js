@@ -58,10 +58,7 @@ function Location({ lng, lngDict, selfUser: prevSelfUser }) {
     last_name: false,
     phone_number: false,
   });
-  const [position, setPosition] = useState({
-    latitude: null,
-    longitude: null,
-  })
+  const [position, setPosition] = useState({latitude: 37.56682420267543, longitude: 126.978652258823})
   const [address, setAddress] = useState('')
 
   return (
@@ -94,6 +91,7 @@ function Location({ lng, lngDict, selfUser: prevSelfUser }) {
         <Card>
           <KakaoMapBox
             // findCurrentLocation
+            position={position}
             setPosition={setPosition}
             setAddress={setAddress}
           />
@@ -108,16 +106,13 @@ function Location({ lng, lngDict, selfUser: prevSelfUser }) {
             fullWidth
             variant='contained'
             onClick={() => {
-              const getPosition = async () => {
-                await navigator.geolocation.getCurrentPosition(newPosition => {
-                  setPosition(prevPosition => ({
-                    ...prevPosition, 
-                    latitude: newPosition.coords.latitude, 
-                    longitude: newPosition.coords.longitude
-                  }))
-                });
-              }
-              getPosition();
+              new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+              }).then(
+                (position) => setPosition({
+                  latitude: position.coords.latitude, longitude: position.coords.longitude
+                })
+              );
             }}
           >
             {i18n.t('findCurrentLocation')}
