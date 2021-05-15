@@ -5,7 +5,6 @@ import Divider from '@material-ui/core/Divider';
 import Switch from '@material-ui/core/Switch';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import BrightnessMediumIcon from '@material-ui/icons/BrightnessMedium';
-import IconButton from '@material-ui/core/IconButton';
 import LanguageIcon from '@material-ui/icons/Language';
 import MenuIcon from '@material-ui/icons/Menu';
 import PhoneIcon from '@material-ui/icons/Phone';
