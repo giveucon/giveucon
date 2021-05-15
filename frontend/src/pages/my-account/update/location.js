@@ -93,7 +93,7 @@ function Location({ lng, lngDict, selfUser: prevSelfUser }) {
       >
         <Card>
           <KakaoMapBox
-            findCurrentLocation
+            // findCurrentLocation
             setPosition={setPosition}
             setAddress={setAddress}
           />

@@ -58,6 +58,8 @@ export const MENU_ITEM_LIST = [
     link: () => {Router.push('/trades/')}
   }
 ];
+export const DEFAULT_LATITUDE = 37.56682420267543;
+export const DEFAULT_LONGITUDE = 126.978652258823;
 export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
 export const NO_IMAGE_PATH = '/no_image.png';
 export const SIGNUP_PHONE_VERIFICATION_TIME_LIMIT = 180000;
