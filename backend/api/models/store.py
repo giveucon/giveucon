@@ -2,7 +2,6 @@ from django.db import models
 from .user import User
 from .image import Image
 from .tag import Tag
-from .store_location import StoreLocation
 
 class Store(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True)
@@ -17,11 +16,5 @@ class Store(models.Model):
     )
     images = models.ManyToManyField(Image, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
-    location = models.OneToOneField(
-        StoreLocation,
-        null=True,
-        on_delete=models.CASCADE,
-        related_name='%(app_label)s_%(class)s'
-    )
     def __str__(self):
         return f"[{self.id}] {self.name}"
