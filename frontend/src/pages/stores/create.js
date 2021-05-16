@@ -5,16 +5,21 @@ import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImageIcon from '@material-ui/icons/Image';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
+import * as constants from 'constants';
+import KakaoMapBox from 'components/KakaoMapBox';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import SwipeableTileList from 'components/SwipeableTileList';
@@ -44,9 +49,17 @@ const getTagList = async (context) => {
 const postStore = async (store, imageList) => {
   const processedStore = {
     ...store,
-    images: imageList.map(image => image.file),
+    images: imageList.map(image => image.file)
   }
   return await requestToBackend(null, 'api/stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
+};
+
+const postStoreLocation = async (store, location) => {
+  const data = {
+    store: store.id,
+    location
+  };
+  return await requestToBackend(null, '/api/store-locations/', 'post', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -76,6 +89,11 @@ function Create({ lng, lngDict, selfUser, tagList }) {
     description: false,
   });
   const [imageList, setImageList] = useState([]);
+  const [location, setLocation] = useState({
+    latitude: constants.DEFAULT_LATITUDE,
+    longitude: constants.DEFAULT_LONGITUDE
+  });
+  const [address, setAddress] = useState('');
 
   return (
     <Layout
@@ -83,14 +101,10 @@ function Create({ lng, lngDict, selfUser, tagList }) {
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addStore')} - ${i18n.t('_appName')}`}
     >
-
-
       <Section
         backButton
         title={i18n.t('addStore')}
       />
-
-
       <Section
         title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}
@@ -222,6 +236,42 @@ function Create({ lng, lngDict, selfUser, tagList }) {
         </ImageUploading>
       </Section>
 
+
+      <Section
+        title={i18n.t('location')}
+        titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
+      >
+        <Card>
+          <KakaoMapBox
+            location={location}
+            setLocation={setLocation}
+            setAddress={setAddress}
+            enablePinMove
+          />
+        </Card>
+        <Box paddingY='0.5rem'>
+          <Typography>{address}</Typography>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => {
+              new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+              }).then(
+                (location) => setLocation({
+                  latitude: location.coords.latitude, longitude: location.coords.longitude
+                })
+              );
+            }}
+          >
+            {i18n.t('findCurrentLocation')}
+          </Button>
+        </Box>
+      </Section>
+
       
       <Box marginY={1}>
         <Button
@@ -229,14 +279,19 @@ function Create({ lng, lngDict, selfUser, tagList }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postStore(store, imageList);
-            if (response.status === 201) {
-              router.push(`/stores/${response.data.id}/`);
-              toast.success(i18n.t('_storeSuccessfullyAdded'));
-            } 
-            else if (response.status === 400) {
-              setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
-              setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
+            const postStoreResponse = await postStore(store, imageList);
+            if (postStoreResponse.status === 201) {
+              const postStoreLocationResponse = await postStoreLocation(postStoreResponse.data, location);
+              if (postStoreLocationResponse.status === 201) {
+                router.push(`/stores/${postStoreResponse.data.id}/`);
+                toast.success(i18n.t('_storeSuccessfullyAdded'));
+              } else {
+                toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              }
+            }
+            else if (postStoreResponse.status === 400) {
+              setStoreError(prevStoreError => ({...prevStoreError, name: !!postStoreResponse.data.name}));
+              setStoreError(prevStoreError => ({...prevStoreError, description: !!postStoreResponse.data.description}));
               toast.error(i18n.t('_checkInputFields'));
             }
           }}

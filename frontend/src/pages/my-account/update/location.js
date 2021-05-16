@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,10 +6,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
+import * as constants from '../../../constants';
 import KakaoMapBox from 'components/KakaoMapBox';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -27,13 +27,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const putSelfUser = async (selfUser) => {
-  console.log(data);
+const postSelfUserLocation = async (selfUser, location) => {
   const data = {
-    ...selfUser,
-    // menu_items: selfUser.menu_items
+    id: selfUser.id,
+    location
   };
-  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
+  return await requestToBackend(null, '/api/user-locations/', 'post', 'json', data, null);
+};
+
+const putSelfUserLocation = async (location) => {
+  return await requestToBackend(null, '/api/user-locations/self/', 'put', 'json', {location}, null);
+};
+
+const deleteSelfUserLocation = async () => {
+  return await requestToBackend(null, '/api/user-locations/self/', 'delete', 'json');
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -42,29 +49,21 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Location({ lng, lngDict, selfUser: prevSelfUser }) {
+function Location({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [selfUser, setSelfUser] = useState({
-    ...prevSelfUser,
-    // menu_items: prevSelfUser.menu_items,
+  const [location, setLocation] = useState({
+    latitude: selfUser.location ? selfUser.location.latitude : constants.DEFAULT_LATITUDE,
+    longitude: selfUser.location ? selfUser.location.longitude : constants.DEFAULT_LONGITUDE
   });
-  const [selfUserError, setSelfUserError] = useState({
-    email: false,
-    user_name: false,
-    first_name: false,
-    last_name: false,
-    phone_number: false,
-  });
-  const [position, setPosition] = useState({latitude: 37.56682420267543, longitude: 126.978652258823})
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState('');
 
   return (
     <Layout
       locale={lng}
-      menuItemList={prevSelfUser.menu_items}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('location')} - ${i18n.t('_appName')}`}
     >
       <Section
@@ -74,50 +73,84 @@ function Location({ lng, lngDict, selfUser: prevSelfUser }) {
       <Section
         title={i18n.t('location')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
-        titleSuffix={
-          <Switch
-            checked={selfUser.dark_mode}
-            color='primary'
-          /*
-            onChange={async () => {
-              const response = await toggleSelfUserDarkMode(selfUser);
-              if (response.status === 200) router.reload();
-              else toast.error(i18n.t('_checkInputFields'));
-            }}
-          */
-          />
-        }
       >
-        <Card>
-          <KakaoMapBox
-            // findCurrentLocation
-            position={position}
-            setPosition={setPosition}
-            setAddress={setAddress}
-          />
-        </Card>
-        <Box>
-          <Typography>{position.latitude}, {position.longitude}</Typography>
-          <Typography>{address}</Typography>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => {
-              new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
-              }).then(
-                (position) => setPosition({
-                  latitude: position.coords.latitude, longitude: position.coords.longitude
-                })
-              );
-            }}
-          >
-            {i18n.t('findCurrentLocation')}
-          </Button>
-        </Box>
+        {selfUser.location && (
+        <>
+          <Card>
+            <KakaoMapBox
+              location={location}
+              setLocation={setLocation}
+              setAddress={setAddress}
+              enablePinMove
+            />
+          </Card>
+          <Box paddingY='0.5rem'>
+            <Typography>{address}</Typography>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              color='default'
+              fullWidth
+              variant='contained'
+              onClick={() => {
+                new Promise((resolve, reject) => {
+                  navigator.geolocation.getCurrentPosition(resolve, reject);
+                }).then(
+                  (location) => setLocation({
+                    latitude: location.coords.latitude, longitude: location.coords.longitude
+                  })
+                );
+              }}
+            >
+              {i18n.t('findCurrentLocation')}
+            </Button>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const response = await putSelfUserLocation(location);
+                if (response.status === 200) router.reload();
+                else toast.error(i18n.t('_checkInputFields'));
+              }}
+            >
+              {i18n.t('editLocation')}
+            </Button>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              className={classes.errorButton}
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const response = await deleteSelfUserLocation();
+                if (response.status === 204) router.reload();
+                else toast.error(i18n.t('_checkInputFields'));
+              }}
+            >
+              {i18n.t('deleteLocation')}
+            </Button>
+          </Box>
+        </>
+        )}
+        {!selfUser.location && (
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={async () => {
+                const response = await postSelfUserLocation(selfUser, location);
+                if (response.status === 201) router.reload();
+                else toast.error(i18n.t('_checkInputFields'));
+              }}
+            >
+              {i18n.t('addLocation')}
+            </Button>
+          </Box>
+        )}
       </Section>
     </Layout>
   );

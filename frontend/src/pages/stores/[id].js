@@ -386,8 +386,7 @@ function Id({
         >
           <Card>
             <KakaoMapBox
-              latitude={store.location.latitude}
-              longitude={store.location.longitude}
+              location={store.location}
             />
           </Card>
           <Box marginY={1}>
@@ -395,7 +394,7 @@ function Id({
               color='default'
               fullWidth
               variant='contained'
-              onClick={() => router.push(`https://map.kakao.com/link/map/${position.latitude},${position.longitude}`)}
+              onClick={() => router.push(`https://map.kakao.com/link/to/${store.name},${store.location.latitude},${store.location.longitude}`)}
             >
               {i18n.t('findPath')}
             </Button>

@@ -45,6 +45,7 @@ class MyDocument extends Document {
             rel='stylesheet'
             href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap"
           />
+          <script src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY}&autoload=false&libraries=services`}></script>
         </Head>
         <body>
           <style global jsx>{`
