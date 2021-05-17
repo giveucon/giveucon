@@ -6,3 +6,4 @@ from ..serializers import StoreLocationSerializer
 class StoreLocationListView(generics.ListCreateAPIView):
     queryset = StoreLocation.objects.all()
     serializer_class = StoreLocationSerializer
+    filterset_fields = ['store']
