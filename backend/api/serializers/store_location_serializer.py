@@ -24,7 +24,7 @@ class StoreLocationSerializer(ModelSerializer):
         location.is_valid(raise_exception=True)
         store = validated_data.pop('store', instance.store)
         with transaction.atomic():
-            location.save()
+            location = location.save()
             instance.location = location
             instance.store = store
             instance.save()
