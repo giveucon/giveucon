@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image'
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import LanguageIcon from '@material-ui/icons/Language';
 
 import * as constants from '../../constants';
 import Section from 'components/Section'
@@ -50,6 +60,8 @@ function Index( lng, lngDict ) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
+  const [language, setLanguage] = useState('ko');
+  const [openLanguageMenu, setOpenLanguageMenu] = useState(false);
 
   return (
     <>
@@ -64,7 +76,9 @@ function Index( lng, lngDict ) {
         justifyContent='center'
       >
         <Box style={{ minHeight: '8rem', minWidth: '16rem' }}>
-          <Section>
+          <Section
+            title={i18n.t('welcome')}
+          >
             <Box margin='2rem'>
               <Box style={{ position: 'relative', width: '100%', paddingTop: '35%' }} >
                 <Image
@@ -76,6 +90,34 @@ function Index( lng, lngDict ) {
               </Box>
               <Typography align='center'>{`${i18n.t('version')}: ${constants.APP_VERSION}`}</Typography>
             </Box>
+
+            <List disablePadding>
+              <ListItem button onClick={() => setOpenLanguageMenu(!openLanguageMenu)}>
+                <ListItemIcon><LanguageIcon /></ListItemIcon>
+                <ListItemText primary={i18n.t('language')} />
+                {openLanguageMenu ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openLanguageMenu}>
+                <List disablePadding>
+                  {constants.LANGUAGE_LIST.map((item, index) => (
+                    <>
+                      <ListItem
+                        key={item.lng}
+                        button
+                        selected={item.lng === language}
+                        onClick={() => {
+                          i18n.locale(item.lng, item.lngDict);
+                          setLanguage(item.lng);
+                        }}
+                      >
+                        <ListItemText primary={item.name} />
+                      </ListItem>
+                    </>
+                  ))}
+                </List>
+              </Collapse>
+            </List>
+
             <Box marginY={1}>
               <Button
                 className={classes.kakaoButton}

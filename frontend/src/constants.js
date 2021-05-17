@@ -7,11 +7,18 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirectoryOutlined';
 
+import EN from 'locales/en.json'
+import KO from 'locales/ko.json'
+
 export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
 export const APP_VERSION = '0.2.0-alpha';
 export const COUPON_OTP_REFRESH_INTERVAL = 30000;
 export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
 export const HALF_TILE_LIST_SLICE_NUMBER = 5;
+export const LANGUAGE_LIST = [
+  { name: 'English', lng: 'en', lngDict: EN },
+  { name: '한국어', lng: 'ko', lngDict: KO }
+];
 export const LIST_SLICE_NUMBER = 3;
 export const LOGO_PATH = '/logo.png';
 export const MENU_ITEM_LIST = [
