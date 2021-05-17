@@ -6,8 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,6 +19,7 @@ import * as constants from '../../constants';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import getCookies from 'utils/getCookies';
+import setCookie from 'utils/setCookie';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
@@ -123,7 +122,13 @@ function Index( lng, lngDict ) {
                 className={classes.kakaoButton}
                 fullWidth
                 variant='contained'
-                onClick={() => router.push('/oauth/kakao/login/')}
+                onClick={() =>{
+                  setCookie(context, 'giveucon_temp', JSON.stringify({lng: language}), {
+                    maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+                    path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+                  })
+                  router.push('/oauth/kakao/login/')
+                }}
               >
                 {i18n.t('loginAsKakaoAccount')}
               </Button>

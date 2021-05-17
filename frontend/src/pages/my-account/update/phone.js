@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { PhoneNumberUtil, PhoneNumberFormat as PNF } from 'google-libphonenumber';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,15 +16,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const useStyles = makeStyles((theme) => ({
-  errorButton: {
-    background: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
+const postPhoneVerificationCode = async (selfUser, phoneUtil) => {
+  return await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
+    phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164)
+  }, null);
+};
 
 const putSelfUser = async (selfUser, phoneUtil) => {
   console.log(data);

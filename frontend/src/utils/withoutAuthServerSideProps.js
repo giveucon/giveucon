@@ -4,9 +4,9 @@ export default function withoutAuthServerSideProps(getServerSidePropsFunction) {
   return async (context) => {
 
     const cookies = getCookies(context);
-    const settings = cookies.giveucon_settings ? JSON.parse(cookies.giveucon_settings) : undefined;
+    const temp = cookies.giveucon_temp ? JSON.parse(cookies.giveucon_temp) : undefined;
 
-    const lng = settings ? settings.locale : 'ko';
+    const lng = temp ? temp.lng : 'ko';
     const { default: lngDict = {} } = await import(`locales/${lng}.json`);
 
     if (getServerSidePropsFunction) {

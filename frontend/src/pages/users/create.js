@@ -22,8 +22,6 @@ import * as constants from 'constants';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
-import EN from 'locales/en.json'
-import KO from 'locales/ko.json'
 import requestToBackend from 'utils/requestToBackend'
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
 
@@ -31,13 +29,13 @@ const getSelfAccount = async (context) => {
   return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
 };
 
-const postPhoneVerificationCode = async (selfUser) => {
+const postPhoneVerificationCode = async (selfUser, phoneUtil) => {
   return await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
-    phone_number: `+82${selfUser.phone_number}`
+    phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164)
   }, null);
 };
 
-const postSelfUser = async (selfUser) => {
+const postSelfUser = async (selfUser, phoneUtil) => {
   const processedSelfUser = {
     ...selfUser,
     phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164),
@@ -182,23 +180,21 @@ function Create({ lng, lngDict, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>{i18n.t('locale')}</FormLabel>
+            <FormLabel>{i18n.t('language')}</FormLabel>
             <RadioGroup
-              name='locale'
+              name='language'
               value={selfUser.locale}
               onChange={(event) => {
-                event.target.value === 'en' && i18n.locale('en', EN);
-                event.target.value === 'ko' && i18n.locale('ko', KO);
-                setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
+                i18n.locale('ko', constants.LANGUAGE_LIST.find(item => item.lng === event.target.value).lngDict);
+                setSelfUser(prevSelfUser => ({  ...prevSelfUser, locale: event.target.value }));
               }}
             >
               <Grid container>
-                <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_localeNameKorean')} />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_localeNameEnglish')} />
-                </Grid>
+                {constants.LANGUAGE_LIST.map((item, index) => (
+                  <Grid item xs={6}>
+                    <FormControlLabel value={item.lng} control={<Radio />} label={item.name} />
+                  </Grid>
+                ))}
               </Grid>
             </RadioGroup>
           </FormControl>
@@ -251,7 +247,7 @@ function Create({ lng, lngDict, selfAccount }) {
               fullWidth
               variant='contained'
               onClick={async () => {
-                const phoneVerificationResponse = await postPhoneVerificationCode(selfUser);
+                const phoneVerificationResponse = await postPhoneVerificationCode(selfUser, phoneUtil);
                 if (phoneVerificationResponse.status === 200) {
                   setTimestamp(new Date().getTime());
                   setTimestampActivation(true);
