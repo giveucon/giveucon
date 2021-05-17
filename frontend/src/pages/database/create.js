@@ -64,7 +64,6 @@ function Create({ lng, lngDict, selfUser }) {
   const imageMaxAmount = 3;
   if (tagMaxAmount > tagNumber) throw new Error();
 
-  // const allRequestCount = tagNumber + userNumber + storeNumber + productNumber + centralNoticeNumber + storeNoticeNumber + storeReviewNumber + productReviewNumber;
   const allRequestCount = [
     tagNumber,
     userNumber,
@@ -114,6 +113,14 @@ function Create({ lng, lngDict, selfUser }) {
       images: imageList.map(image => image.file),
     }
     return await requestToBackend(null, 'api/dummy-stores/', 'post', 'multipart', convertJsonToFormData(processedStore), null);
+  };
+
+  const postStoreLocation = async (store, location) => {
+    const data = {
+      store: store.id,
+      location
+    };
+    return await requestToBackend(null, '/api/store-locations/', 'post', 'json', data, null);
   };
   
   const postProduct = async (product, imageList) => {
@@ -229,12 +236,21 @@ function Create({ lng, lngDict, selfUser }) {
       user: userIdList[Math.floor(Math.random() * userIdList.length)]
     };
     const imageList = await getImageListFromUnsplash('store');
+    const location = {
+      latitude: 37.56682420267543,
+      longitude: 126.978652258823
+    };
     setSourcePhrase(`(${store.name})`);
     const storeResponse = await postStore(store, imageList);
     if (storeResponse.status === 201) {
+      const storeLocationResponse = await postStoreLocation(storeResponse.data, location);
+      if (storeLocationResponse.status === 201) {
       storeIdList.push(storeResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
+      } else {
+        console.error(storeLocationResponse);
+      }
     } else {
       console.error(storeResponse);
     }

@@ -95,7 +95,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
     };
     const storeListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
     for (const store of storeListResponse.data.results) {
-      const favoriteStoreResponse = await getFavoriteStore(context, selfUser, store);
+      const favoriteStoreResponse = await getFavoriteStore(null, selfUser, store);
       store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
     }
     setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));

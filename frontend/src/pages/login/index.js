@@ -123,7 +123,7 @@ function Index( lng, lngDict ) {
                 fullWidth
                 variant='contained'
                 onClick={() =>{
-                  setCookie(context, 'giveucon_temp', JSON.stringify({lng: language}), {
+                  setCookie(null, 'giveucon_temp', JSON.stringify({lng: language}), {
                     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
                     path: process.env.NEXT_PUBLIC_COOKIE_PATH,
                   })
