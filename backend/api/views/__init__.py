@@ -3,6 +3,8 @@ from .article_list_view import ArticleListView
 from .article_detail_view import ArticleDetailView
 from .central_notice_list_view import CentralNoticeListView
 from .central_notice_detail_view import CentralNoticeDetailView
+from .coupon_selling_list_view import CouponSellingListView
+from .coupon_selling_detail_view import CouponSellingDetailView
 from .self_account_detail_view import SelfAccountDetailView
 from .store_notice_detail_view import StoreNoticeDetailView
 from .store_notice_list_view import StoreNoticeListView
@@ -53,4 +55,3 @@ from .dummy_product_create_view import DummyProductCreateView
 from .dummy_central_notice_create_view import DummyCentralNoticeCreateView
 from .dummy_store_notice_create_view import DummyStoreNoticeCreateView
 from .dummy_tag_create_view import DummyTagCreateView
-from .paypal_test_view import PayPalTestView

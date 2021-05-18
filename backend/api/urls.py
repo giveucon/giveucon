@@ -38,6 +38,9 @@ urlpatterns = [
     path('coupons/<int:pk>/', CouponDetailView.as_view()),
     path('coupons/<int:pk>/qr/', CouponQrDetailView.as_view()),
 
+    path('coupon-sellings/', CouponSellingListView.as_view()),
+    path('coupon-sellings/<int:pk>/', CouponSellingDetailView.as_view()),
+
     path('tags/', TagListView.as_view()),
     path('tags/<int:pk>/', TagDetailView.as_view()),
 
@@ -79,5 +82,4 @@ urlpatterns = [
     path('dummy-central-notices/', DummyCentralNoticeCreateView.as_view()),
     path('dummy-store-notices/', DummyStoreNoticeCreateView.as_view()),
     path('dummy-tags/', DummyTagCreateView.as_view()),
-    path('paypal-test/', PayPalTestView.as_view())
 ]

@@ -9,4 +9,3 @@ class CouponSelling(models.Model):
         on_delete=models.CASCADE,
         related_name='%(app_label)s_%(class)s'
     )
-
