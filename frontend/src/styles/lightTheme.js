@@ -33,6 +33,11 @@ const theme = createMuiTheme({
       dark: '#b2a429',
       contrastText: '#000000',
     },
+    paypal: { // Blue
+      main: '#0079C1',
+      dark: '#00457C',
+      contrastText: '#ffffff',
+    },
     background: { // White
       default: '#ffffff',
     },

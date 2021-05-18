@@ -195,7 +195,11 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                         title={item.product.name}
                         image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                         actions={[
-                          <IconButton><DirectionsIcon /></IconButton>,
+                          <IconButton
+                            onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
+                          >
+                            <DirectionsIcon/>
+                          </IconButton>,
                           <IconButton>
                             <CropFreeIcon
                               onClick={() => router.push({

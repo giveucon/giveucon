@@ -184,7 +184,7 @@ function Create({ lng, lngDict, selfUser }) {
 
   const createTag = async () => {
     const tag = {
-      name: `${faker.commerce.productAdjective()}-${faker.commerce.color()}`
+      name: `${faker.commerce.productAdjective()}${Math.floor(Math.random() * 10000)}`
     };
     setSourcePhrase(`(${tag.name})`);
     const tagResult = await postTag(tag);
@@ -224,7 +224,7 @@ function Create({ lng, lngDict, selfUser }) {
     let pickedTagIdSet = new Set();
     for (const i of Array(Math.floor(Math.random() * tagMaxAmount)).keys()) {
       while (true) {
-        const pickedTagId = Math.floor(Math.random() * tagIdList.length);
+        const pickedTagId = tagIdList[Math.floor(Math.random() * tagIdList.length)];
         if (pickedTagIdSet.has(pickedTagId)) continue;
         else { pickedTagIdSet.add(pickedTagId); break; };
       }
