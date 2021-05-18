@@ -49,7 +49,7 @@ function Search({ lng, lngDict, selfUser }) {
     };
     const getUserListResponse = await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
     if (getUserListResponse.status === 200) {
-      setUserList(prevUserList => prevUserList.concat(getUserListResponse.data.results));
+      setUserList(prevUserList => getUserListResponse.data.results);
       setUserListpage(prevUserListpage => 1);
       if (getUserListResponse.data.next === null) setHasMoreUserList(prevHasMoreUserList => false);
     }

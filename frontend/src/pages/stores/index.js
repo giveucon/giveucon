@@ -191,6 +191,18 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
 
       <Box marginY={1}>
         <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/stores/search/')}
+        >
+          {i18n.t('searchStores')}
+        </Button>
+      </Box>
+
+
+      <Box marginY={1}>
+        <Button
           color='primary'
           fullWidth
           variant='contained'
