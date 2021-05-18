@@ -64,7 +64,8 @@ function Search({ lng, lngDict, selfUser }) {
   const router = useRouter();
   const classes = useStyles();
   const [keywords, setKeywords] = useState({
-    name: null
+    name: null,
+    tagName: null
   });
   const [storeList, setStoreList] = useState([]);
   const [storeListpage, setStoreListpage] = useState(1);
@@ -73,6 +74,7 @@ function Search({ lng, lngDict, selfUser }) {
   const getStoreList = async () => {
     const params = {
       name: keywords.name || null,
+      tags__name: keywords.tagName || null,
     };
     const getStoreListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
     if (getStoreListResponse.status === 200) {
@@ -90,6 +92,7 @@ function Search({ lng, lngDict, selfUser }) {
   const getMoreStoreList = async () => {
     const params = {
       name: keywords.name || null,
+      tags__name: keywords.tagName || null,
       page: storeListpage + 1,
     };
     const getStoreListResponse = await requestToBackend(null, 'api/stores/', 'get', 'json', null, params);
@@ -132,6 +135,20 @@ function Search({ lng, lngDict, selfUser }) {
             }}
             onChange={(event) => {
               setKeywords(prevKeywords => ({ ...prevKeywords, name: event.target.value }));
+            }}
+          />
+        </Box>
+        <Box paddingY={1}>
+          <TextField
+            name='tag'
+            value={keywords.tagName}
+            fullWidth
+            label={i18n.t('tag')}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(event) => {
+              setKeywords(prevKeywords => ({ ...prevKeywords, tagName: event.target.value }));
             }}
           />
         </Box>

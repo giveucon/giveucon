@@ -313,7 +313,7 @@ function Id({
                           if (deleteFavoriteProductResult.status === 204) {
                             setProductList(productList.map(product => 
                               product.id === item.id 
-                              ? {...product, favorite: null} 
+                              ? {...product, favorite: null}
                               : product 
                             ));
                           }
