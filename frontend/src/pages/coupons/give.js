@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
 import Filter1Icon from '@material-ui/icons/Filter1';
 import Filter2Icon from '@material-ui/icons/Filter2';
@@ -79,7 +82,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
     setSelfFriendListpage(prevSelfFriendListpage => prevSelfFriendListpage + 1);
     if (selfFriendListpage.data.next === null) setHasMoreSelfFriendList(prevHasMoreSelfFriendList => false);
   }
-
+  const [selectedFriendList, setSelectedFriendList] = useState([]);
 
   return (
     <Layout
@@ -123,8 +126,18 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
               <ListItem
                 key={index}
                 variant='user'
-                name={item.to_user.user_name}
+                title={item.to_user.user_name}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}
+                prefix={
+                  <Checkbox
+                    checked={selectedFriendList.includes(item.id)}
+                    onChange={(event) => {
+                      if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
+                      else setSelectedFriendList(selectedFriendList.concat(item.id));
+                      selectedFriendList.sort((lhs, rhs) => {return lhs - rhs;});
+                    }}
+                  />
+                }
                 onClick={() => router.push(`/users/${item.to_user.id}/`)}
               />
             ))}

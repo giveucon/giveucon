@@ -46,6 +46,10 @@ export default function ListItem({
             flexDirection='row'
             justifyContent='flex-start'
           >
+            <Box display={prefix ? 'block' : 'none'}>
+              {prefix}
+            </Box>
+            
             {/* Body */}
             <CardActionArea onClick={onClick}>
               <Box

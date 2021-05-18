@@ -146,7 +146,7 @@ function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavorit
               </Box>
               <Box marginY={1}>
                 <Button
-                  color='primary'
+                  color='default'
                   fullWidth
                   variant='contained'
                   onClick={() => router.push({

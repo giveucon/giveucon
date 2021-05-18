@@ -146,7 +146,7 @@ function Search({ lng, lngDict, selfUser }) {
               <ListItem
                 key={index}
                 variant='user'
-                name={item.user_name}
+                title={item.user_name}
                 image={gravatar.url(item.email, {default: 'identicon'})}
                 onClick={() => router.push(`/users/${item.id}/` )}
               />

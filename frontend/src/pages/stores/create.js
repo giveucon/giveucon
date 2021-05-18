@@ -29,9 +29,6 @@ import convertJsonToFormData from 'utils/convertJsonToFormData'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
-const checkedIcon = <CheckBoxIcon fontSize='small' />;
-
 const useStyles = makeStyles((theme) => ({
   errorButton: {
     background: theme.palette.error.main,
@@ -154,8 +151,8 @@ function Create({ lng, lngDict, selfUser, tagList }) {
             renderOption={(option, { selected }) => (
               <React.Fragment>
                 <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
+                  icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
+                  checkedIcon={<CheckBoxIcon fontSize='small' />}
                   style={{ marginRight: 8 }}
                   checked={selected}
                 />
