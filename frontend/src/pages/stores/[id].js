@@ -313,7 +313,7 @@ function Id({
                           if (deleteFavoriteProductResult.status === 204) {
                             setProductList(productList.map(product => 
                               product.id === item.id 
-                              ? {...product, favorite: null} 
+                              ? {...product, favorite: null}
                               : product 
                             ));
                           }
@@ -379,28 +379,26 @@ function Id({
       </Section>
 
 
-      {store.location && (
-        <Section
-          title={i18n.t('location')}
-          titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
-        >
-          <Card>
-            <KakaoMapBox
-              location={store.location}
-            />
-          </Card>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push(`https://map.kakao.com/link/to/${store.name},${store.location.latitude},${store.location.longitude}`)}
-            >
-              {i18n.t('findPath')}
-            </Button>
-          </Box>
-        </Section>
-      )}
+      <Section
+        title={i18n.t('location')}
+        titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
+      >
+        <Card>
+          <KakaoMapBox
+            location={store.location}
+          />
+        </Card>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push(`https://map.kakao.com/link/to/${store.name},${store.location.latitude},${store.location.longitude}`)}
+          >
+            {i18n.t('findPath')}
+          </Button>
+        </Box>
+      </Section>
 
 
       {selfUser && store && (selfUser.id === store.user) && (

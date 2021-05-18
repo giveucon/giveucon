@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const getProductList = async (context) => {
   const params = {
-    user: context.query.user || null,
+    store__user: context.query.user || null,
     store: context.query.store || null,
   };
   return await requestToBackend(context, 'api/products', 'get', 'json', null, params);

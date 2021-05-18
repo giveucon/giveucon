@@ -9,6 +9,7 @@ import BrightnessMediumIcon from '@material-ui/icons/BrightnessMedium';
 import LanguageIcon from '@material-ui/icons/Language';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PhoneIcon from '@material-ui/icons/Phone';
+import StoreIcon from '@material-ui/icons/Store';
 
 import Layout from 'components/Layout'
 import ListItem from 'components/ListItem'
@@ -69,6 +70,13 @@ function Index({ lng, lngDict, selfUser }) {
           title={i18n.t('location')}
           icon={<LocationOnIcon />}
           onClick={() => router.push('/my-account/update/location/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('seller')}
+          icon={<StoreIcon />}
+          onClick={() => router.push('/my-account/update/seller/')}
         />
       </Section>
 
