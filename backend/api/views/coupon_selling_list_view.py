@@ -9,3 +9,5 @@ class CouponSellingListView(SerializerMixin, generics.ListCreateAPIView):
     queryset = CouponSelling.objects.all()
     serializer_class_read = CouponSellingReadSerializer
     serializer_class_write = CouponSellingWriteSerializer
+    filterset_fields = ['coupon__product']
+    ordering_fields = ['expires_at']
