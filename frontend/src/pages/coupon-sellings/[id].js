@@ -46,11 +46,11 @@ function Id({ lng, lngDict, selfUser, couponSelling }) {
     <Layout
       locale={lng}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('couponTradings')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('couponTrades')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('couponTradings')}
+        title={i18n.t('couponTrades')}
       >
       </Section>
       <Section

@@ -160,7 +160,7 @@ function Index({ lng, lngDict, selfUser }) {
         <Divider />
         <ListItem
           variant='default'
-          title={i18n.t('myCouponTradings')}
+          title={i18n.t('myCouponTrades')}
           icon={<InsertCommentIcon />}
           onClick={() => router.push({
             pathname: '/coupon-sellings/list/',

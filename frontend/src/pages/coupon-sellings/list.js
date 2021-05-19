@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
-import CouponBox from 'components/CouponBox'
-import CouponListItem from 'components/CouponListItem';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -92,11 +86,11 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
     <Layout
       locale={lng}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('couponTradingList')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('couponTradeList')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('couponTradingList')}
+        title={i18n.t('couponTradeList')}
         padding={false}
       >
         {couponSellingList && (
