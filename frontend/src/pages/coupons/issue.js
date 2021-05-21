@@ -45,6 +45,24 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
+const postCoupon = async (selfUser, count, product) => {
+  const data = {
+    count,
+    coupon: {
+      product: product.id
+    }
+  };
+  return await requestToBackend(null, `api/coupons/`, 'post', 'json', data, null);
+};
+
+const postCouponSelling = async (price, coupon) => {
+  const data = {
+    price,
+    coupon: coupon.id
+  }
+  return await requestToBackend(null, '/api/coupon-sellings/', 'post', 'json', data, null);
+};
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {
@@ -122,13 +140,16 @@ function Issue({ lng, lngDict, selfUser, product }) {
           color='primary'
           fullWidth
           variant='contained'
-          onClick={() => router.push({
-            pathname: '/payments/kakao/',
-            query: {
-              count: amount,
-              product: product.id
-            },
-          })}
+          onClick={() => {
+            const response = await postCoupon(count, product);
+            if (response.status === 201) {
+              router.push({
+                pathname: '/payments/completed/',
+                query: { product: product.id },
+              });
+              toast.success(i18n.t('_couponSuccessfullyIssued'));
+            }
+          }}
         >
           {i18n.t('issueCoupon')}
         </Button>

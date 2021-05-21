@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import PhoneIcon from '@material-ui/icons/Phone';
 
-import * as constants from 'constants';
+import * as constants from '../../constants';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'

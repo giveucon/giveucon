@@ -15,6 +15,7 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import InfoIcon from '@material-ui/icons/Info';
+import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -153,6 +154,16 @@ function Index({ lng, lngDict, selfUser }) {
           icon={<ShoppingBasketIcon />}
           onClick={() => router.push({
             pathname: '/products/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('myCouponTrades')}
+          icon={<InsertCommentIcon />}
+          onClick={() => router.push({
+            pathname: '/coupon-sellings/list/',
             query: { user: selfUser.id },
           })}
         />

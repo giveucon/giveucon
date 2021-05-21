@@ -2,6 +2,7 @@ from .user_pagination import UserPagination
 from .store_pagination import StorePagination
 from .product_pagination import ProductPagination
 from .coupon_pagination import CouponPagination
+from .coupon_selling_pagination import CouponSellingPagination
 from .central_notice_pagination import CentralNoticePagination
 from .store_notice_pagination import StoreNoticePagination
 from .store_review_pagination import StoreReviewPagination

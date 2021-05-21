@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
 import Filter1Icon from '@material-ui/icons/Filter1';
 import Filter2Icon from '@material-ui/icons/Filter2';
@@ -27,6 +25,7 @@ import AlertBox from 'components/AlertBox'
 import AmountInputBox from 'components/AmountInputBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
+import PayPalButton from 'components/PayPalButton'
 import ProductBox from 'components/ProductBox'
 import Section from 'components/Section'
 import ListItem from 'components/ListItem'
@@ -84,124 +83,132 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
   }
   const [selectedFriendList, setSelectedFriendList] = useState([]);
 
+  const merchantId = 'AAAAAAAAAAAA';
+
   return (
-    <Layout
-      locale={lng}
-      menuItemList={selfUser.menu_items}
-      title={`${i18n.t('giveCoupons')} - ${i18n.t('_appName')}`}
-    >
-      <Section
-        backButton
-        title={i18n.t('giveCoupons')}
+    <>
+      <Layout
+        locale={lng}
+        menuItemList={selfUser.menu_items}
+        title={`${i18n.t('giveCoupons')} - ${i18n.t('_appName')}`}
       >
-      </Section>
-      <Section
-        title={i18n.t('paymentInfo')}
-        titlePrefix={<IconButton><PaymentIcon /></IconButton>}
-      >
-        <ProductBox
-          name={product.name}
-          price={product.price}
-          image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
-          lng={lng}
-          lngDict={lngDict}
-        />
-      </Section>
-
-
-      <Section
-        title={i18n.t('friendList')}
-        titlePrefix={<IconButton><ContactsIcon /></IconButton>}
-      >
-        {(selfFriendList.length > 0) ? (
-          <InfiniteScroll
-            dataLength={selfFriendList.length}
-            next={getMoreSelfFriendList}
-            hasMore={hasMoreSelfFriendList}
-            height='10rem'
-            loader={<InfiniteScrollLoader loading={true} />}
-            endMessage={<InfiniteScrollLoader loading={false} />}
-          >
-            {selfFriendList && selfFriendList.map((item, index) => (
-              <ListItem
-                key={index}
-                variant='user'
-                title={item.to_user.user_name}
-                image={gravatar.url(item.to_user.email, {default: 'identicon'})}
-                prefix={
-                  <Checkbox
-                    checked={selectedFriendList.includes(item.id)}
-                    onChange={(event) => {
-                      if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
-                      else setSelectedFriendList(selectedFriendList.concat(item.id));
-                      selectedFriendList.sort((lhs, rhs) => {return lhs - rhs;});
-                    }}
-                  />
-                }
-                onClick={() => router.push(`/users/${item.to_user.id}/`)}
-              />
-            ))}
-          </InfiniteScroll>
-        ) : (
-          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
-        )}
-      </Section>
-
-
-      <Section
-        title={i18n.t('amount')}
-        titlePrefix={<IconButton>{amountIcon}</IconButton>}
-      >
-        <Box paddingY={1}>
-          <AmountInputBox
-            label={i18n.t('amount')}
+        <Section
+          backButton
+          title={i18n.t('giveCoupons')}
+        >
+        </Section>
+        <Section
+          title={i18n.t('paymentInfo')}
+          titlePrefix={<IconButton><PaymentIcon /></IconButton>}
+        >
+          <ProductBox
+            name={product.name}
+            price={product.price}
+            image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
             lng={lng}
             lngDict={lngDict}
-            defaultAmount={0}
-            addAmountList={constants.AMOUNT_LIST}
-            onChangeAmount={(amount) => {
-              setAmount(prevAmount => amount);
-              amount <=  0 && setAmountIcon(<FilterNoneIcon />)
-              amount === 1 && setAmountIcon(<Filter1Icon />)
-              amount === 2 && setAmountIcon(<Filter2Icon />)
-              amount === 3 && setAmountIcon(<Filter3Icon />)
-              amount === 4 && setAmountIcon(<Filter4Icon />)
-              amount === 5 && setAmountIcon(<Filter5Icon />)
-              amount === 6 && setAmountIcon(<Filter6Icon />)
-              amount === 7 && setAmountIcon(<Filter7Icon />)
-              amount === 8 && setAmountIcon(<Filter8Icon />)
-              amount === 9 && setAmountIcon(<Filter9Icon />)
-              amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
-            }}
           />
+        </Section>
+
+
+        <Section
+          title={i18n.t('friendList')}
+          titlePrefix={<IconButton><ContactsIcon /></IconButton>}
+        >
+          {(selfFriendList.length > 0) ? (
+            <InfiniteScroll
+              dataLength={selfFriendList.length}
+              next={getMoreSelfFriendList}
+              hasMore={hasMoreSelfFriendList}
+              height='10rem'
+              loader={<InfiniteScrollLoader loading={true} />}
+              endMessage={<InfiniteScrollLoader loading={false} />}
+            >
+              {selfFriendList && selfFriendList.map((item, index) => (
+                <ListItem
+                  key={index}
+                  variant='user'
+                  title={item.to_user.user_name}
+                  image={gravatar.url(item.to_user.email, {default: 'identicon'})}
+                  prefix={
+                    <Checkbox
+                      checked={selectedFriendList.includes(item.id)}
+                      onChange={(event) => {
+                        if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
+                        else setSelectedFriendList(selectedFriendList.concat(item.id));
+                        selectedFriendList.sort((lhs, rhs) => {return lhs - rhs;});
+                      }}
+                    />
+                  }
+                  onClick={() => router.push(`/users/${item.to_user.id}/`)}
+                />
+              ))}
+            </InfiniteScroll>
+          ) : (
+            <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+          )}
+        </Section>
+
+
+        <Section
+          title={i18n.t('amount')}
+          titlePrefix={<IconButton>{amountIcon}</IconButton>}
+        >
+          <Box paddingY={1}>
+            <AmountInputBox
+              label={i18n.t('amount')}
+              lng={lng}
+              lngDict={lngDict}
+              defaultAmount={0}
+              addAmountList={constants.AMOUNT_LIST}
+              onChangeAmount={(amount) => {
+                setAmount(prevAmount => amount);
+                amount <=  0 && setAmountIcon(<FilterNoneIcon />)
+                amount === 1 && setAmountIcon(<Filter1Icon />)
+                amount === 2 && setAmountIcon(<Filter2Icon />)
+                amount === 3 && setAmountIcon(<Filter3Icon />)
+                amount === 4 && setAmountIcon(<Filter4Icon />)
+                amount === 5 && setAmountIcon(<Filter5Icon />)
+                amount === 6 && setAmountIcon(<Filter6Icon />)
+                amount === 7 && setAmountIcon(<Filter7Icon />)
+                amount === 8 && setAmountIcon(<Filter8Icon />)
+                amount === 9 && setAmountIcon(<Filter9Icon />)
+                amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
+              }}
+            />
+          </Box>
+        </Section>
+
+
+        <PayPalButton merchantId={merchantId} price='0.01' description='test' />
+
+
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/payments/kakao/',
+              query: { product: product.id },
+            })}
+          >
+            {i18n.t('issueCoupon')}
+          </Button>
         </Box>
-      </Section>
 
-      <Box marginY={1}>
-        <Button
-          color='primary'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push({
-            pathname: '/payments/kakao/',
-            query: { product: product.id },
-          })}
-        >
-          {i18n.t('issueCoupon')}
-        </Button>
-      </Box>
-
-      <Box marginY={1}>
-        <Button
-          color='default'
-          fullWidth
-          variant='contained'
-          onClick={() => router.back()}
-        >
-          {i18n.t('goBack')}
-        </Button>
-      </Box>
-    </Layout>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.back()}
+          >
+            {i18n.t('goBack')}
+          </Button>
+        </Box>
+      </Layout>
+    </>
   );
 }
 
