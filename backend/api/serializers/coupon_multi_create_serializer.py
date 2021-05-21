@@ -9,16 +9,15 @@ class CouponMultiCreateSerializer(serializers.Serializer):
     coupon = CouponCreateSerializer()
 
     def create(self, validated_data):
+        user = validated_data.pop('user')
+        count = validated_data.pop('count')
+        coupon_data = dict(to_external_value(validated_data.pop('coupon')))
         with transaction.atomic():
-            user = validated_data.pop('user')
-            count = validated_data.pop('count')
-            coupon_data = dict(to_external_value(validated_data.pop('coupon')))
-            with transaction.atomic():
-                for _ in range(count):
-                    coupon = CouponCreateSerializer(data=coupon_data)
-                    coupon.is_valid(raise_exception=True)
-                    coupon.save(user=user)
-                return count
+            for _ in range(count):
+                coupon = CouponCreateSerializer(data=coupon_data)
+                coupon.is_valid(raise_exception=True)
+                coupon.save(user=user)
+            return count
 
     def to_representation(self, count):
         return {'count': count}

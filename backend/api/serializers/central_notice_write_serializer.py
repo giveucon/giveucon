@@ -12,7 +12,6 @@ class CentralNoticeWriteSerializer(ModelSerializer):
         fields = '__all__'
         
     def create(self, validated_data):
-        print(validated_data)
         article_data = validated_data.pop('article')
         user = None
         if 'user' in validated_data:
