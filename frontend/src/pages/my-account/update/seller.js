@@ -30,13 +30,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const getSellerOnboardLink = async () => {
+  return await requestToBackend(null, '/api/seller-onboard-link/', 'get', 'json');
+};
+
+const getSellerOnboardStatus = async () => {
+  return await requestToBackend(null, '/api/seller-onboard-status/', 'get', 'json');
+};
+
 const putSelfUser = async (selfUser) => {
   console.log(data);
   const data = {
     ...selfUser,
     // menu_items: selfUser.menu_items
   };
-  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
+  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data, null);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -87,9 +95,29 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
             className={classes.paypalButton}
             fullWidth
             variant='contained'
-            onClick={async () => {}}
+            onClick={async () => {
+              const GetOnboardSellerResponse = await getSellerOnboardLink();
+              if (GetOnboardSellerResponse.status === 200) {
+                router.push(GetOnboardSellerResponse.data.onboard_link)
+              } else {
+                console.log(GetOnboardSellerResponse);
+              }
+            }}
           >
             {i18n.t('linkWithPayPalAccount')}
+          </Button>
+        </Box>
+        <Box marginY={1}>
+          <Button
+            className={classes.paypalButton}
+            fullWidth
+            variant='contained'
+            onClick={async () => {
+              const GetOnboardSellerResponse = await getSellerOnboardStatus();
+              console.log(GetOnboardSellerResponse);
+            }}
+          >
+            asdfasdf
           </Button>
         </Box>
       </Section>

@@ -149,7 +149,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
               setStore(prevStore => ({...prevStore, tags: value.map(value => value.id)}));
             }}
             renderOption={(option, { selected }) => (
-              <React.Fragment>
+              <>
                 <Checkbox
                   icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
                   checkedIcon={<CheckBoxIcon fontSize='small' />}
@@ -157,11 +157,11 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                   checked={selected}
                 />
                 {option.name}
-              </React.Fragment>
+              </>
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('pages.stores.create.tags')} />
+              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('tags')} />
             )}
           />
         </Box>
