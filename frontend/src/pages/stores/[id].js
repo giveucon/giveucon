@@ -175,7 +175,7 @@ function Id({
           }
         </SwipeableTileList>
         <Box padding={1}>
-          <Box display='flex' flexWrap='wrap' marginBottom={1}>
+          <Box display='flex' flexWrap='wrap' marginBottom={store.tags && (store.tags.length > 0) ? 1 : 0}>
             {
               store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
                 <Box
@@ -193,45 +193,58 @@ function Id({
                 </Box>
               ))
             }
+            <Divider />
           </Box>
-          <Divider />
-          <Box marginTop={1}>
+          <Box marginTop={store.tags && (store.tags.length > 0) ? 1 : 0}>
             <Typography>{store.description}</Typography>
           </Box>
           {selfUser.id !== store.user && (
             <>
-            {!favoriteStore && (
-              <Box marginY={1}>
-                <Button
-                  color='primary'
-                  fullWidth
-                  variant='contained'
-                  onClick={async () => {
-                    const postFavoriteStoreResult = await postFavoriteStore(store);
-                    if (postFavoriteStoreResult.status === 201) setFavoriteStore(postFavoriteStoreResult.data);
-                    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                  }}
-                >
-                  {i18n.t('addFavoriteStore')}
-                </Button>
-              </Box>
-            )}
-            {favoriteStore && (
+              {!favoriteStore && (
+                <Box marginY={1}>
+                  <Button
+                    color='primary'
+                    fullWidth
+                    variant='contained'
+                    onClick={async () => {
+                      const postFavoriteStoreResult = await postFavoriteStore(store);
+                      if (postFavoriteStoreResult.status === 201) setFavoriteStore(postFavoriteStoreResult.data);
+                      else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                    }}
+                  >
+                    {i18n.t('addFavoriteStore')}
+                  </Button>
+                </Box>
+              )}
+              {favoriteStore && (
+                <Box marginY={1}>
+                  <Button
+                    className={classes.errorButton}
+                    fullWidth
+                    variant='contained'
+                    onClick={async () => {
+                      const deleteFavoriteStoreResult = await deleteFavoriteStore(favoriteStore);
+                      if (deleteFavoriteStoreResult.status === 204) setFavoriteStore(null);
+                      else toast.error(i18n.t('_errorOccurredProcessingRequest'));
+                    }}
+                  >
+                    {i18n.t('deleteFavoriteStore')}
+                  </Button>
+                </Box>
+              )}
               <Box marginY={1}>
                 <Button
                   className={classes.errorButton}
                   fullWidth
                   variant='contained'
-                  onClick={async () => {
-                    const deleteFavoriteStoreResult = await deleteFavoriteStore(favoriteStore);
-                    if (deleteFavoriteStoreResult.status === 204) setFavoriteStore(null);
-                    else toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                  }}
+                  onClick={() => router.push({
+                    pathname: '/store-reports/create/',
+                    query: { seller: store.user },
+                  })}
                 >
-                  {i18n.t('deleteFavoriteStore')}
+                  {i18n.t('reportSeller')}
                 </Button>
               </Box>
-            )}
             </>
           )}
         </Box>

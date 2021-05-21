@@ -20,6 +20,7 @@ export default function ListItem({
   image=null,
   onClick=null,
   prefix=null,
+  price=null,
   score=null,
   skeleton=false,
   subtitle=null,
@@ -70,11 +71,20 @@ export default function ListItem({
                   </Box>
                   <Box display={(date || score) ? 'block' : 'none'}>
                     <Box display='flex' alignItems='center'>
+                      <Box display={price ? 'block' : 'none'} marginRight={1}>
+                        <Typography variant='subtitle2'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+                      </Box>
+                      <Box display={price && score ? 'block' : 'none'} marginRight={1}>
+                        <Typography variant='subtitle2'>·</Typography>
+                      </Box>
                       <Box display={score ? 'block' : 'none'} marginRight={1}>
                         <Rating value={score} readOnly />
                       </Box>
+                      <Box display={(price || score) && date ? 'block' : 'none'} marginRight={1}>
+                        <Typography variant='subtitle2'>·</Typography>
+                      </Box>
                       <Box display={date ? 'block' : 'none'} marginRight={1}>
-                        <Typography variant='date'>{new Date(date).toLocaleDateString()}</Typography>
+                        <Typography variant='subtitle2'>{new Date(date).toLocaleDateString()}</Typography>
                       </Box>
                     </Box>
                   </Box>

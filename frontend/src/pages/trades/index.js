@@ -1,5 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router'
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
@@ -100,6 +102,61 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
+      
+
+      <Section
+        title={i18n.t('couponTrades')}
+        titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
+        titleSuffix={
+          <IconButton>
+            <ArrowForwardIcon
+              onClick={() => router.push('/coupon-sellings/list/')}
+            />
+          </IconButton>
+        }
+        padding={false}
+      >
+        {selfCouponSellingList.length > 0 ? (
+          <SwipeableTileList half>
+            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+              <Tile
+                key={index}
+                title={item.coupon.product.name}
+                image={
+                  item.coupon.product.images && (item.coupon.product.images.length > 0)
+                  ? item.coupon.product.images[0].image
+                  : constants.NO_IMAGE_PATH
+                }
+                onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
+              />
+            ))}
+          </SwipeableTileList>
+        ) : (
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+        )}
+      </Section>
+
+      
+      <Box marginY={1}>
+        <Button
+          color='default'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/coupon-sellings/search/')}
+        >
+          {i18n.t('searchCouponTrades')}
+        </Button>
+      </Box>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/coupon-sellings/create/')}
+        >
+          {i18n.t('addCouponTrade')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

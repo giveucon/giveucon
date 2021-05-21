@@ -210,7 +210,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
-              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('pages.stores.update.tags')} />
+              <TextField {...params} label={i18n.t('tags')} placeholder={i18n.t('tags')} />
             )}
           />
         </Box>

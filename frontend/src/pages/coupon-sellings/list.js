@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import CropFreeIcon from '@material-ui/icons/CropFree';
-import DirectionsIcon from '@material-ui/icons/Directions';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
@@ -106,27 +103,9 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
                 {couponSellingList.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <Tile
-                      title={item.product.name}
-                      image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
-                      actions={[
-                        <IconButton
-                          onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
-                        >
-                          <DirectionsIcon/>
-                        </IconButton>,
-                        <IconButton>
-                          <CropFreeIcon
-                            onClick={() => router.push({
-                              pathname: '/coupons/use/',
-                              query: { id: item.id },
-                            })}
-                          />
-                        </IconButton>
-                      ]}
-                      onClick={item.user === selfUser.id
-                        ? (() => router.push(`/coupons/${item.id}/`))
-                        : null
-                      }
+                      title={item.coupon.product.name}
+                      image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
+                      onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
                     />
                   </Grid>
                 ))}

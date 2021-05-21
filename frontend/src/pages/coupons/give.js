@@ -5,6 +5,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import ContactsIcon from '@material-ui/icons/Contacts';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
 import Filter1Icon from '@material-ui/icons/Filter1';
 import Filter2Icon from '@material-ui/icons/Filter2';
@@ -16,8 +18,6 @@ import Filter7Icon from '@material-ui/icons/Filter7';
 import Filter8Icon from '@material-ui/icons/Filter8';
 import Filter9Icon from '@material-ui/icons/Filter9';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
-import IconButton from '@material-ui/core/IconButton';
-import ContactsIcon from '@material-ui/icons/Contacts';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
