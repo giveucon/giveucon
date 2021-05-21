@@ -61,12 +61,12 @@ class PaypalService():
         return {'onboard_link': res['links'][1]['href']}
 
     def get_seller_onboarding_status(self, access_token, seller_id):
+        print('seller id', seller_id)
         res = requests.get(
-            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations',
+            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations/{seller_id}',
             headers={
                 'Authorization': f'Bearer {access_token}'
             },
-            params={'tracking_id': seller_id}
         ).json()
         return res
 
