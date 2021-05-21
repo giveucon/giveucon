@@ -89,7 +89,7 @@ export default function AmountInputBox({
             >
               {variant==='default' && `+ ${new Number(addAmount)}`}
               {variant==='date' && `+ ${new Number(addAmount)}${i18n.t('days')}`}
-              {variant==='money' && `+ ${new Number(addAmount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+              {variant==='money' && `${addAmount >= 0 ? '+' : '-'} ${new Number(Math.abs(addAmount)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
             </Button>
           </Box>
         )}

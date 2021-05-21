@@ -147,6 +147,16 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
           {i18n.t('searchCouponTrades')}
         </Button>
       </Box>
+      <Box marginY={1}>
+        <Button
+          color='primary'
+          fullWidth
+          variant='contained'
+          onClick={() => router.push('/coupon-sellings/create/')}
+        >
+          {i18n.t('addCouponTrade')}
+        </Button>
+      </Box>
     </Layout>
   );
 }

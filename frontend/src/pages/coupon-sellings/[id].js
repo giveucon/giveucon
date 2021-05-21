@@ -68,6 +68,33 @@ function Id({ lng, lngDict, selfUser, couponSelling }) {
           {i18n.t('goToProduct')}
         </Button>
       </Box>
+      {selfUser.id !== couponSelling.coupon.user && (
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push(`/products/${couponSelling.coupon.product.id}/`)}
+          >
+            {i18n.t('purchaseCoupon')}
+          </Button>
+        </Box>
+      )}
+      {selfUser.id === couponSelling.coupon.user && (
+        <Box marginY={1}>
+          <Button
+            color='primary'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/coupon-sellings/update/',
+              query: { id: couponSelling.id },
+            })}
+          >
+            {i18n.t('editCouponTrade')}
+          </Button>
+        </Box>
+      )}
     </Layout>
   );
 }
