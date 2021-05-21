@@ -79,6 +79,9 @@ urlpatterns = [
     path('seller-onboard-status/', SellerOnboardStatusView.as_view()),
     path('seller-onboard-link/', SellerOnboardLinkView.as_view()),
 
+    path('orders/', OrderView.as_view()),
+    path('order-captures/', OrderCaptureView.as_view()),
+
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),
     path('dummy-products/', DummyProductCreateView.as_view()),

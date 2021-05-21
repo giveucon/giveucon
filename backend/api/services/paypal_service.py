@@ -19,7 +19,6 @@ class PaypalService():
             auth=HTTPBasicAuth(self.client_id, self.client_secret),
             data={'grant_type': 'client_credentials'},
         ).json()
-        print(res)
         return res['access_token']
 
     def get_seller_onboarding_link(self, access_token, seller_id):
@@ -59,7 +58,6 @@ class PaypalService():
                ]
             }),
         ).json()
-        print(res)
         return {'onboard_link': res['links'][1]['href']}
 
     def get_seller_onboarding_status(self, access_token, seller_id):
@@ -93,9 +91,11 @@ class PaypalService():
                 }]
             })
         ).json()
+        print(res)
         return res['id']
 
     def capture_order(self, access_token, order_id):
+        print(f'Bearer {access_token}')
         res = requests.post(
             f'https://api-m.paypal.com/v2/checkout/orders/{order_id}/capture',
             headers={
@@ -104,5 +104,6 @@ class PaypalService():
                 'PayPal-Partner-Attribution-Id': self.bn_code
             },
             data=json.dumps({})
-        ).json()
-        return res
+        )
+        print(dir(res))
+        return res.json()
