@@ -46,7 +46,7 @@ function RootApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>{'Loading...'}</title>
+        <title>_app.js is loading...</title>
         <link rel='icon' href='/favicon.ico' />
         <meta
           name='viewport'
