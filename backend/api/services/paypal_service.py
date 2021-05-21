@@ -6,7 +6,7 @@ class PaypalService():
     def __init__(self, **kwargs):
         self.client_id = kwargs['client_id']
         self.client_secret = kwargs['client_secret']
-        self.partner_id = kwargs['partner_id']
+        self.merchant_id = kwargs['merchant_id']
         self.bn_code = kwargs['bn_code']
 
     def get_access_token(self):
@@ -19,6 +19,7 @@ class PaypalService():
             auth=HTTPBasicAuth(self.client_id, self.client_secret),
             data={'grant_type': 'client_credentials'},
         ).json()
+        print(res)
         return res['access_token']
 
     def create_seller_onboarding(self, access_token, seller_id):
@@ -58,11 +59,12 @@ class PaypalService():
                ]
             }),
         ).json()
-        return res
+        print(res)
+        return {'onboard_link': res['links'][1]['href']}
 
     def get_seller_onboard_status(self, access_token, seller_id):
         res = requests.get(
-            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.partner_id}/merchant-integrations',
+            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations',
             headers={
                 'Authorization': f'Bearer {access_token}'
             },
