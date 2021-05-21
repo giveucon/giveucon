@@ -1,6 +1,8 @@
 import requests
 import json
+import os.path
 from requests.auth import HTTPBasicAuth
+from urllib.parse import urlparse
 
 class PaypalService():
     def __init__(self, **kwargs):
@@ -58,12 +60,27 @@ class PaypalService():
                ]
             }),
         ).json()
-        return {'onboard_link': res['links'][1]['href']}
+        return {'info_link': res['links'][0]['href'], 'onboard_link': res['links'][1]['href']}
 
-    def get_seller_onboarding_status(self, access_token, seller_id):
-        print('seller id', seller_id)
+    def get_seller_referral_id(self, access_token, seller_id):
+        links = self.get_seller_onboarding_link(access_token, seller_id)
+        return os.path.split(urlparse(links['info_link']).path)[-1]
+
+    def get_seller_merchant_id(self, access_token, referral_id):
+
         res = requests.get(
-            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations/{seller_id}',
+            f'https://api-m.sandbox.paypal.com/v1/customer/partner-referrals/{referral_id}',
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {access_token}'
+            }
+        ).json()
+        return res['referral_data']['customer_data']['referral_user_payer_id']['value']
+
+    def get_seller_onboarding_status(self, access_token, seller_merchant_id):
+        print('seller merchant id', seller_merchant_id)
+        res = requests.get(
+            f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations/{seller_merchant_id}',
             headers={
                 'Authorization': f'Bearer {access_token}'
             },

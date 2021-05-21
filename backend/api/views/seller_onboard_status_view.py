@@ -7,6 +7,7 @@ from ..serializers import CouponScanUpdateSerializer
 from ..services import PaypalService
 from ..services import UserService
 from rest_framework.views import APIView
+import os.path
 
 class SellerOnboardStatusView(APIView):
     def __init__(self):
@@ -19,6 +20,11 @@ class SellerOnboardStatusView(APIView):
     def get(self, request):
         access_token = self.paypal_service.get_access_token()
         user = UserService.get_current_user(request)
-        res = self.paypal_service.get_seller_onboarding_status(access_token, user.pk)
+        seller_merchant_id = self.paypal_service.get_seller_merchant_id(
+            access_token,
+            self.paypal_service.get_seller_referral_id(access_token, user.pk)
+        )
+
+        res = self.paypal_service.get_seller_onboarding_status(access_token, seller_merchant_id)
         return Response(res)
 
