@@ -105,10 +105,7 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
                     <Tile
                       title={item.coupon.product.name}
                       image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
-                      onClick={item.user === selfUser.id
-                        ? (() => router.push(`/coupons/${item.id}/`))
-                        : null
-                      }
+                      onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
                     />
                   </Grid>
                 ))}

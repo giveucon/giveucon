@@ -56,7 +56,6 @@ function Update ({ lng, lngDict, selfUser, couponSelling: prevCouponSelling }) {
   const [couponSelling, setCouponSelling] = useState({
     ...prevCouponSelling
   });
-  console.log(prevCouponSelling)
   
   return (
     <Layout

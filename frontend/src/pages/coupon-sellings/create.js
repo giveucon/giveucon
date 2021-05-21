@@ -181,6 +181,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
                   key={index}
                   variant='coupon'
                   title={item.product.name}
+                  price={item.product.price}
                   date={item.expires_at}
                   image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   prefix={
