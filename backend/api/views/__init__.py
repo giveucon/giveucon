@@ -48,7 +48,8 @@ from .user_location_detail_view import UserLocationDetailView
 from .self_user_location_detail_view import SelfUserLocationDetailView
 from .store_location_list_view import StoreLocationListView
 from .store_location_detail_view import StoreLocationDetailView
-from .onboard_seller_view import OnboardSellerView
+from .seller_onboard_link_view import SellerOnboardLinkView
+from .seller_onboard_status_view import SellerOnboardStatusView
 
 from .dummy_user_create_view import DummyUserCreateView
 from .dummy_store_create_view import DummyStoreCreateView

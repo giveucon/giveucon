@@ -76,7 +76,8 @@ urlpatterns = [
     path('store-locations/', StoreLocationListView.as_view()),
     path('store-locations/<int:pk>/', StoreLocationDetailView.as_view()),
 
-    path('onboard-seller', OnboardSellerView.as_view()),
+    path('seller-onboard-status/', SellerOnboardStatusView.as_view()),
+    path('seller-onboard-link/', SellerOnboardLinkView.as_view()),
 
     path('dummy-users/', DummyUserCreateView.as_view()),
     path('dummy-stores/', DummyStoreCreateView.as_view()),

@@ -8,7 +8,7 @@ from ..services import PaypalService
 from ..services import UserService
 from rest_framework.views import APIView
 
-class OnboardSellerView(APIView):
+class SellerOnboardStatusView(APIView):
     def __init__(self):
         self.paypal_service = PaypalService(
             client_id=settings.DJANGO_PAYPAL_CLIENT_ID,
@@ -19,6 +19,6 @@ class OnboardSellerView(APIView):
     def get(self, request):
         access_token = self.paypal_service.get_access_token()
         user = UserService.get_current_user(request)
-        res = self.paypal_service.create_seller_onboarding(access_token, user.pk)
+        res = self.paypal_service.get_seller_onboarding_status(access_token, user.pk)
         return Response(res)
 
