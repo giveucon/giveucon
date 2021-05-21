@@ -15,7 +15,7 @@ export const getStaticProps = withoutAuthServerSideProps (async (context, lng, l
   }
 })
 
-function Error404({ lng, lngDict }) {
+function Offline({ lng, lngDict }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -52,4 +52,4 @@ function Error404({ lng, lngDict }) {
   );
 }
 
-export default Error404;
+export default Offline;

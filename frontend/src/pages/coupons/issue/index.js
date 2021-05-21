@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/styles';
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -45,10 +46,11 @@ const getProduct = async (context) => {
   return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 };
 
-const postCoupon = async (selfUser, count, product) => {
+const postCoupon = async (amount, product) => {
   const data = {
-    count,
+    count: amount,
     coupon: {
+      price: product.price,
       product: product.id
     }
   };
@@ -75,7 +77,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Issue({ lng, lngDict, selfUser, product }) {
+function Index({ lng, lngDict, selfUser, product }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -140,14 +142,16 @@ function Issue({ lng, lngDict, selfUser, product }) {
           color='primary'
           fullWidth
           variant='contained'
-          onClick={() => {
-            const response = await postCoupon(count, product);
-            if (response.status === 201) {
+          onClick={async () => {
+            const postCouponResponse = await postCoupon(amount, product);
+            if (postCouponResponse.status === 201) {
               router.push({
-                pathname: '/payments/completed/',
+                pathname: '/coupons/issue/completed/',
                 query: { product: product.id },
               });
               toast.success(i18n.t('_couponSuccessfullyIssued'));
+            } else {
+              toast.success(i18n.t('_errorOccurredProcessingRequest'));
             }
           }}
         >
@@ -169,4 +173,4 @@ function Issue({ lng, lngDict, selfUser, product }) {
   );
 }
 
-export default Issue;
+export default Index;

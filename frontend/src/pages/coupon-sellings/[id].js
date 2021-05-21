@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import * as constants from 'constants';
-import CouponBox from 'components/CouponBox'
+import CouponSellingBox from 'components/CouponSellingBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
@@ -22,14 +22,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   if (couponSellingResponse.status === 404) {
     return {
       notFound: true
-    }
-  }
-  if (!selfUser.staff && (selfUser.id !== couponSellingResponse.data.user)){
-    return {
-      redirect: {
-        destination: '/unauthorized/',
-        permanent: false
-      }
     }
   }
   return {
@@ -57,12 +49,13 @@ function Id({ lng, lngDict, selfUser, couponSelling }) {
         title={couponSelling.coupon.product.name}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
       >
-        <CouponBox
+        <CouponSellingBox
           lng={lng}
           lngDict={lngDict}
           name={couponSelling.coupon.product.name}
           image={couponSelling.coupon.product.images.length > 0 ? couponSelling.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
           price={couponSelling.price}
+          productPrice={couponSelling.coupon.product.price}
         />
       </Section>
       <Box marginY={1}>
