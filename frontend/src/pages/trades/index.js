@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
@@ -15,6 +14,10 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
+const getCouponSellingList = async (context) => {
+  return await requestToBackend(context, 'api/coupon-sellings', 'get', 'json');
+};
+
 const getSelfCouponSellingList = async (context, selfUser) => {
   const params = {
     user: selfUser.id
@@ -23,6 +26,12 @@ const getSelfCouponSellingList = async (context, selfUser) => {
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+  const couponSellingListResponse = await getCouponSellingList(context);
+  if (couponSellingListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const selfCouponSellingListResponse = await getSelfCouponSellingList(context, selfUser);
   if (selfCouponSellingListResponse.status === 404) {
     return {
@@ -30,11 +39,16 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, selfUser, selfCouponSellingListResponse }
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      couponSellingList: couponSellingListResponse.data.results,
+      selfCouponSellingList: selfCouponSellingListResponse.data.results }
   }
 })
 
-function Index({ lng, lngDict, selfUser, selfCouponSellingListResponse }) {
+function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingList }) {
   
   const i18n = useI18n();
   const router = useRouter();
@@ -67,9 +81,9 @@ function Index({ lng, lngDict, selfUser, selfCouponSellingListResponse }) {
         }
         padding={false}
       >
-        {selfCouponSellingListResponse.length > 0 ? (
+        {selfCouponSellingList.length > 0 ? (
           <SwipeableTileList half>
-            {selfCouponSellingListResponse.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
                 key={index}
                 title={item.coupon.product.name}
@@ -78,18 +92,7 @@ function Index({ lng, lngDict, selfUser, selfCouponSellingListResponse }) {
                   ? item.coupon.product.images[0].image
                   : constants.NO_IMAGE_PATH
                 }
-                onClick={() => router.push(`/coupons/${item.id}/`)}
-                actions={[
-                  <IconButton><DirectionsIcon /></IconButton>,
-                  <IconButton>
-                    <CropFreeIcon
-                      onClick={() => router.push({
-                        pathname: '/coupons/use/',
-                        query: { id: item.id },
-                      })}
-                    />
-                  </IconButton>
-                ]}
+                onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
               />
             ))}
           </SwipeableTileList>
