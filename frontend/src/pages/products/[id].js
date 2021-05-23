@@ -35,17 +35,21 @@ const useStyles = makeStyles((theme) => ({
 const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
 
 const getProductReviewList = async (context) => await requestToBackend(context, `api/product-reviews/`, 'get', 'json', null, {
-    product: context.query.id
-  });
+  product: context.query.id
+});
+const getCouponList = async (context, product) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
+  user: product.store.user,
+  used: false
+});
 
 const getFavoriteProduct = async (context, selfUser) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
-    user: selfUser.id,
-    product: context.query.id
-  });
+  user: selfUser.id,
+  product: context.query.id
+});
 
 const postFavoriteProduct = async (product) => await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
-    product: product.id
-  }, null);
+  product: product.id
+}, null);
 
 const deleteFavoriteProduct = async (favoriteProduct) => await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
 
@@ -56,6 +60,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
+  const couponListResponse = await getCouponList(context, productResponse.data);
   const productReviewListResponse = await getProductReviewList(context);
   const initialFavoriteProductResponse = await getFavoriteProduct(context, selfUser);
   return {
@@ -64,13 +69,14 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       product: productResponse.data,
+      couponListResponse,
       productReviewList: productReviewListResponse.data.results,
       initialFavoriteProduct: (initialFavoriteProductResponse.data.results.length === 1) ? initialFavoriteProductResponse.data.results[0] : null
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavoriteProduct }) {
+function Id({ lng, lngDict, selfUser, product, couponListResponse, productReviewList, initialFavoriteProduct }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -109,44 +115,51 @@ function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavorit
           <Box marginTop={1}>
             <Typography variant='body1'>{product.description}</Typography>
           </Box>
+          <Box marginTop={1}>
+            <Typography variant='h5'>{i18n.t('stock')}: {couponListResponse.data.count}</Typography>
+          </Box>
           <Box marginY={1}>
             <Button
               color='default'
               fullWidth
               variant='contained'
-              onClick={() => router.push(`/stores/${product.store.id}/`,)}
+              onClick={() => router.push(`/stores/${product.store.id}/`)}
             >
               {i18n.t('goToStore')}
             </Button>
           </Box>
           {(selfUser.id !== product.store.user) && (
             <>
-              <Box marginY={1}>
-                <Button
-                  color='default'
-                  fullWidth
-                  variant='contained'
-                  onClick={() => router.push({
-                    pathname: '/coupons/purchase/',
-                    query: { product: product.id },
-                  })}
-                >
-                  {i18n.t('purchaseCoupons')}
-                </Button>
-              </Box>
-              <Box marginY={1}>
-                <Button
-                  color='default'
-                  fullWidth
-                  variant='contained'
-                  onClick={() => router.push({
-                    pathname: '/coupons/give/',
-                    query: { product: product.id },
-                  })}
-                >
-                  {i18n.t('giveCoupons')}
-                </Button>
-              </Box>
+              {couponListResponse.data.count > 0 && (
+                <>
+                  <Box marginY={1}>
+                    <Button
+                      color='default'
+                      fullWidth
+                      variant='contained'
+                      onClick={() => router.push({
+                        pathname: '/coupons/buy/',
+                        query: { coupon: couponListResponse.data.results[0].id },
+                      })}
+                    >
+                      {i18n.t('purchaseCoupons')}
+                    </Button>
+                  </Box>
+                  <Box marginY={1}>
+                    <Button
+                      color='default'
+                      fullWidth
+                      variant='contained'
+                      onClick={() => router.push({
+                        pathname: '/coupons/give/',
+                        query: { coupon: couponListResponse.data.results[0].id },
+                      })}
+                    >
+                      {i18n.t('giveCoupons')}
+                    </Button>
+                  </Box>
+                </>
+              )}
               {!favoriteProduct && (
                 <Box marginY={1}>
                   <Button

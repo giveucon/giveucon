@@ -26,22 +26,22 @@ import AmountInputBox from 'components/AmountInputBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
 import PayPalButton from 'components/PayPalButton'
-import ProductBox from 'components/ProductBox'
+import CouponBox from 'components/CouponBox'
 import Section from 'components/Section'
 import ListItem from 'components/ListItem'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
 
 const getSelfFriendList = async (context, selfUser) => await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
     from_user: selfUser.id
   });
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const productResponse = await getProduct(context);
-  if (productResponse.status === 404) {
+  const couponResponse = await getCoupon(context);
+  if (couponResponse.status === 404) {
     return {
       notFound: true
     }
@@ -52,13 +52,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lng,
       lngDict,
       selfUser,
-      product: productResponse.data,
+      coupon: couponResponse.data,
       initialSelfFriendListResponse
     }
   }
 })
 
-function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }) {
+function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -97,10 +97,10 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
           title={i18n.t('paymentInfo')}
           titlePrefix={<IconButton><PaymentIcon /></IconButton>}
         >
-          <ProductBox
-            name={product.name}
-            price={product.price}
-            image={product.images.length > 0 ? product.images[0].image : constants.NO_IMAGE_PATH}
+          <CouponBox
+            name={coupon.product.name}
+            price={coupon.product.price}
+            image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
             lng={lng}
             lngDict={lngDict}
           />
@@ -145,39 +145,40 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
           )}
         </Section>
 
+        {/*
+          <Section
+            title={i18n.t('amount')}
+            titlePrefix={<IconButton>{amountIcon}</IconButton>}
+          >
+            <Box paddingY={1}>
+              <AmountInputBox
+                label={i18n.t('amount')}
+                lng={lng}
+                lngDict={lngDict}
+                defaultAmount={0}
+                addAmountList={constants.AMOUNT_LIST}
+                onChangeAmount={(amount) => {
+                  setAmount(prevAmount => amount);
+                  if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
+                  if (amount === 1) setAmountIcon(<Filter1Icon />)
+                  if (amount === 2) setAmountIcon(<Filter2Icon />)
+                  if (amount === 3) setAmountIcon(<Filter3Icon />)
+                  if (amount === 4) setAmountIcon(<Filter4Icon />)
+                  if (amount === 5) setAmountIcon(<Filter5Icon />)
+                  if (amount === 6) setAmountIcon(<Filter6Icon />)
+                  if (amount === 7) setAmountIcon(<Filter7Icon />)
+                  if (amount === 8) setAmountIcon(<Filter8Icon />)
+                  if (amount === 9) setAmountIcon(<Filter9Icon />)
+                  if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
+                }}
+              />
+            </Box>
+          </Section>
+        */}
 
-        <Section
-          title={i18n.t('amount')}
-          titlePrefix={<IconButton>{amountIcon}</IconButton>}
-        >
-          <Box paddingY={1}>
-            <AmountInputBox
-              label={i18n.t('amount')}
-              lng={lng}
-              lngDict={lngDict}
-              defaultAmount={0}
-              addAmountList={constants.AMOUNT_LIST}
-              onChangeAmount={(amount) => {
-                setAmount(prevAmount => amount);
-                if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
-                if (amount === 1) setAmountIcon(<Filter1Icon />)
-                if (amount === 2) setAmountIcon(<Filter2Icon />)
-                if (amount === 3) setAmountIcon(<Filter3Icon />)
-                if (amount === 4) setAmountIcon(<Filter4Icon />)
-                if (amount === 5) setAmountIcon(<Filter5Icon />)
-                if (amount === 6) setAmountIcon(<Filter6Icon />)
-                if (amount === 7) setAmountIcon(<Filter7Icon />)
-                if (amount === 8) setAmountIcon(<Filter8Icon />)
-                if (amount === 9) setAmountIcon(<Filter9Icon />)
-                if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
-              }}
-            />
-          </Box>
-        </Section>
-
-
-        <PayPalButton merchantId={merchantId} price='0.01' description='test' />
-
+        {/*
+          <PayPalButton merchantId={merchantId} price='0.01' description='test' />
+        */}
 
         <Box marginY={1}>
           <Button
