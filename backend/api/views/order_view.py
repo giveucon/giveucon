@@ -22,10 +22,10 @@ class OrderView(APIView):
         access_token = self.paypal_service.get_access_token()
         print('order access token', access_token)
         user = UserService.get_current_user(request)
-        order_id = self.paypal_service.create_order(
+        res = self.paypal_service.create_order(
             access_token,
             'USD',
             coupon_selling.price,
             coupon_selling.coupon.user.email
         )
-        return Response({"order_id": order_id})
+        return Response(res)
