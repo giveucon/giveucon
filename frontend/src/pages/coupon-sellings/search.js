@@ -56,8 +56,7 @@ function Search({ lng, lngDict, selfUser }) {
 
   const getCouponSellingList = async () => {
     const params = {
-      name: keywords.name || null,
-      tags__name: keywords.tagName || null,
+      coupon__product__name: keywords.name || null
     };
     const getCouponSellingListResponse = await requestToBackend(null, 'api/coupon-sellings/', 'get', 'json', null, params);
     if (getCouponSellingListResponse.status === 200) {

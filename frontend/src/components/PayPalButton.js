@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Head from 'next/head'
 
 export default function PayPalButton ({merchantId, price, description}) {
 
@@ -16,6 +15,13 @@ export default function PayPalButton ({merchantId, price, description}) {
       if (document.readyState === "complete") {
         window.paypal
           .Buttons({
+            env: 'sandbox',
+            style: {
+              color: 'blue',
+              label: 'pay',
+              layout: 'vertical',
+              shape: 'pill'
+            },
             createOrder: (data, actions) => {
               return actions.order.create({
                 intent: 'CAPTURE',

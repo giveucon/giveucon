@@ -19,6 +19,7 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import * as constants from 'constants';
 import AmountInputBox from 'components/AmountInputBox'
 import Layout from 'components/Layout'
+import PayPalButton from 'components/PayPalButton'
 import ProductBox from 'components/ProductBox'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
@@ -53,6 +54,8 @@ function Purchase({ lng, lngDict, selfUser, product }) {
   const [amount, setAmount] = useState(0);
   const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
 
+  const merchantId = 'AAAAAAAAAAAA';
+  
   return (
     <Layout
       locale={lng}
@@ -106,19 +109,9 @@ function Purchase({ lng, lngDict, selfUser, product }) {
           />
         </Box>
       </Section>
-      <Box marginY={1}>
-        <Button
-          color='primary'
-          fullWidth
-          variant='contained'
-          onClick={() => router.push({
-            pathname: '/payments/kakao/',
-            query: { product: product.id },
-          })}
-        >
-          {i18n.t('issueCoupon')}
-        </Button>
-      </Box>
+
+      <PayPalButton merchantId={merchantId} price='0.01' description='test' />
+
       <Box marginY={1}>
         <Button
           color='default'

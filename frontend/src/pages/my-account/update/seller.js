@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -98,9 +99,9 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
             onClick={async () => {
               const GetOnboardSellerResponse = await getSellerOnboardLink();
               if (GetOnboardSellerResponse.status === 200) {
-                router.push(GetOnboardSellerResponse.data.onboard_link)
+                router.push(GetOnboardSellerResponse.data.onboard_link);
               } else {
-                console.log(GetOnboardSellerResponse);
+                toast.error(i18n.t('_errorOccurredProcessingRequest'));
               }
             }}
           >
@@ -109,7 +110,7 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
-            className={classes.paypalButton}
+            variant='default'
             fullWidth
             variant='contained'
             onClick={async () => {
@@ -117,7 +118,7 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
               console.log(GetOnboardSellerResponse);
             }}
           >
-            asdfasdf
+            Get Seller Onboard Status
           </Button>
         </Box>
       </Section>

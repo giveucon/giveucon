@@ -11,5 +11,5 @@ class CouponSellingListView(SerializerMixin, generics.ListCreateAPIView):
     pagination_class = CouponSellingPagination
     serializer_class_read = CouponSellingReadSerializer
     serializer_class_write = CouponSellingWriteSerializer
-    filterset_fields = ['coupon__product']
+    filterset_fields = ['coupon__product__name']
     ordering_fields = ['expires_at']
