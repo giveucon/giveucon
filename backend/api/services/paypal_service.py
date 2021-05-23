@@ -75,10 +75,10 @@ class PaypalService():
                 'Authorization': f'Bearer {access_token}'
             }
         ).json()
+        print(res)
         return res['referral_data']['customer_data']['referral_user_payer_id']['value']
 
     def get_seller_onboarding_status(self, access_token, seller_merchant_id):
-        print('seller merchant id', seller_merchant_id)
         res = requests.get(
             f'https://api-m.sandbox.paypal.com/v1/customer/partners/{self.merchant_id}/merchant-integrations/{seller_merchant_id}',
             headers={
@@ -109,7 +109,7 @@ class PaypalService():
             })
         ).json()
         print(res)
-        return res['id']
+        return res
 
     def capture_order(self, access_token, order_id):
         print(f'Bearer {access_token}')
