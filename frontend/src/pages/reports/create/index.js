@@ -34,44 +34,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSeller = async (context) => await requestToBackend(context, `api/users/${context.query.seller}/`, 'get', 'json');
+const getSeller = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
-const postSellerReport = async (sellerReport, imageList) => {
-  const processedSellerReport = {
+const postReport = async (report, imageList) => {
+  const processedReport = {
     article: {
-      title: sellerReport.title,
-      content: sellerReport.content,
+      title: report.title,
+      content: report.content,
       images: imageList.map(image => image.file),
     },
-    seller: sellerReport.seller,
+    to_user: report.user,
   };
-  return await requestToBackend(null, 'api/seller-reports/', 'post', 'multipart', convertJsonToFormData(processedSellerReport), null);
+  return await requestToBackend(null, 'api/reports/', 'post', 'multipart', convertJsonToFormData(processedReport), null);
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const sellerResponse = await getSeller(context);
-  if (sellerResponse.status === 404) {
+  const userResponse = await getSeller(context);
+  if (userResponse.status === 404) {
     return {
       notFound: true
     }
   }
   return {
-    props: { lng, lngDict, selfUser, seller: sellerResponse.data }
+    props: { lng, lngDict, selfUser, user: userResponse.data }
   }
 })
 
-function Index({ lng, lngDict, selfUser, seller }) {
+function Index({ lng, lngDict, selfUser, user }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [sellerReport, setSellerReport] = useState({
+  const [report, setReport] = useState({
     category: null,
     title: null,
     content: null,
-    seller: seller.id
+    user: user.id
   });
-  const [sellerReportError, setSellerReportError] = useState({
+  const [reportError, setReportError] = useState({
     title: false,
     content: false,
   });
@@ -102,44 +102,46 @@ function Index({ lng, lngDict, selfUser, seller }) {
         title={i18n.t('reportForm')}
         titlePrefix={<IconButton><ReportIcon /></IconButton>}
       >
-        <Box paddingY={1}>
-          <Autocomplete
-            // multiple
-            options={dummyCategoryList}
-            disableCloseOnSelect
-            getOptionLabel={(option) => option.name}
-            onChange={(event, value) => {
-              setSellerReport(prevSellerReport => ({...prevSellerReport, category: value}));
-            }}
-            renderOption={(option, { selected }) => (
-              <>
-                <Checkbox
-                  icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
-                  checkedIcon={<CheckBoxIcon fontSize='small' />}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.name}
-              </>
-            )}
-            style={{ minWidth: '2rem' }}
-            renderInput={(params) => (
-              <TextField {...params} label={i18n.t('categories')} placeholder={i18n.t('categories')} />
-            )}
-          />
-        </Box>
+        {/*
+          <Box paddingY={1}>
+            <Autocomplete
+              // multiple
+              options={dummyCategoryList}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              onChange={(event, value) => {
+                setReport(prevReport => ({...prevReport, category: value}));
+              }}
+              renderOption={(option, { selected }) => (
+                <>
+                  <Checkbox
+                    icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
+                    checkedIcon={<CheckBoxIcon fontSize='small' />}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name}
+                </>
+              )}
+              style={{ minWidth: '2rem' }}
+              renderInput={(params) => (
+                <TextField {...params} label={i18n.t('categories')} placeholder={i18n.t('categories')} />
+              )}
+            />
+          </Box>
+        */}
         <Box paddingY={1}>
           <TextField
             name='title'
-            value={sellerReport.title}
-            error={sellerReportError.title}
+            value={report.title}
+            error={reportError.title}
             fullWidth
             label={i18n.t('title')}
             InputLabelProps={{
               shrink: true,
             }}
             onChange={(event) => {
-              setSellerReport(prevSellerReport => ({ ...prevSellerReport, title: event.target.value }));
+              setReport(prevReport => ({ ...prevReport, title: event.target.value }));
             }}
             required
           />
@@ -147,8 +149,8 @@ function Index({ lng, lngDict, selfUser, seller }) {
         <Box paddingY={1}>
           <TextField
             name='content'
-            value={sellerReport.content}
-            error={sellerReportError.content}
+            value={report.content}
+            error={reportError.content}
             fullWidth
             label={i18n.t('content')}
             multiline
@@ -156,7 +158,7 @@ function Index({ lng, lngDict, selfUser, seller }) {
               shrink: true,
             }}
             onChange={(event) => {
-              setSellerReport(prevSellerReport => ({ ...prevSellerReport, content: event.target.value }));
+              setReport(prevReport => ({ ...prevReport, content: event.target.value }));
             }}
             required
           />
@@ -232,15 +234,16 @@ function Index({ lng, lngDict, selfUser, seller }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const response = await postSellerReport(sellerReport, imageList);
-            if (response.status === 201) {
-              router.push('/seller-reports/create/completed/');
+            const postReportResponse = await postReport(report, imageList);
+            if (postReportResponse.status === 201) {
+              router.push('/reports/create/completed/');
               toast.success(i18n.t('_sellerSuccessfullyReported'));
             }
-            else if (response.status === 400) {
-              setSellerReportError(prevSellerReportError => ({...prevSellerReportError, title: !!response.data.title}));
-              setSellerReportError(prevSellerReportError => ({...prevSellerReportError, content: !!response.data.content}));
+            else if (postReportResponse.status === 400) {
+              setReportError(prevReportError => ({...prevReportError, title: !!postReportResponse.data.title}));
+              setReportError(prevReportError => ({...prevReportError, content: !!postReportResponse.data.content}));
               toast.error(i18n.t('_checkInputFields'));
+              console.log(postReportResponse)
             }
           }}
         >

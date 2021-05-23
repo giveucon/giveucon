@@ -224,8 +224,8 @@ function Id({
                   fullWidth
                   variant='contained'
                   onClick={() => router.push({
-                    pathname: '/store-reports/create/',
-                    query: { seller: store.user },
+                    pathname: '/reports/create/',
+                    query: { user: store.user },
                   })}
                 >
                   {i18n.t('reportSeller')}
