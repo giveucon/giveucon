@@ -42,6 +42,8 @@ from .notification_create_serializer import NotificationCreateSerializer
 from .location_serializer import LocationSerializer
 from .user_location_serializer import UserLocationSerializer
 from .store_location_serializer import StoreLocationSerializer
+from .report_read_serializer import ReportReadSerializer
+from .report_create_serializer import ReportCreateSerializer
 
 from .dummy_article_write_serializer import DummyArticleWriteSerializer
 from .dummy_user_create_serializer import DummyUserCreateSerializer

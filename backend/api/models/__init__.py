@@ -13,6 +13,7 @@ from .menu_item import MenuItem
 from .notification import Notification
 from .product import Product
 from .product_review import ProductReview
+from .report import Report
 from .review import Review
 from .stamp import Stamp
 from .stamp_selling import StampSelling

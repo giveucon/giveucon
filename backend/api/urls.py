@@ -69,6 +69,9 @@ urlpatterns = [
     path('locations/', LocationListView.as_view()),
     path('locations/<int:pk>/', LocationDetailView.as_view()),
 
+    path('reports/', ReportListView.as_view()),
+    path('reports/<int:pk>/', ReportDetailView.as_view()),
+
     path('user-locations/', UserLocationListView.as_view()),
     path('user-locations/<int:pk>/', UserLocationDetailView.as_view()),
     path('user-locations/self/', SelfUserLocationDetailView.as_view()),
