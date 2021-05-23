@@ -1,4 +1,4 @@
-const withOffline = require('next-offline')
+const withOffline = require("next-offline");
 
 const nextConfig = {
   images: {
@@ -21,4 +21,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withOffline(nextConfig)
+module.exports = withOffline(nextConfig);

@@ -1,27 +1,30 @@
-const { createServer } = require('http')
-const { join } = require('path')
-const { parse } = require('url')
-const next = require('next')
+const express = require("express");
+const path = require("path");
+const next = require("next");
 
-const app = next({ dev: process.env.NODE_ENV !== 'production' })
-const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
-app.prepare()
+app
+  .prepare()
   .then(() => {
-    createServer((req, res) => {
-      const parsedUrl = parse(req.url, true)
-      const { pathname } = parsedUrl
+    const server = express();
 
-      // handle GET request to /service-worker.js
-      if (pathname === '/service-worker.js') {
-        const filePath = join(__dirname, '.next', pathname)
+    // requests to /service-worker.js
+    server.get(
+      "/service-worker.js",
+      express.static(path.join(__dirname, ".next"))
+    );
 
-        app.serveStatic(req, res, filePath)
-      } else {
-        handle(req, res, parsedUrl)
-      }
-    })
-    .listen(3000, () => {
-      console.log(`> Ready on http://localhost:${3000}`)
-    })
+    // all other requests
+    server.get("*", (req, res) => handle(req, res));
+    server.listen(3000, (err) => {
+      if (err) throw err;
+      console.log("> Ready on http://localhost:3000");
+    });
   })
+  .catch((ex) => {
+    console.error(ex.stack);
+    process.exit(1);
+  });

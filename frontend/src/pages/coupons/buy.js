@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FilterNoneIcon from '@material-ui/icons/FilterNone';
@@ -27,10 +28,7 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
-
-const putCouponBuy = async (coupon) => {
-  return await requestToBackend(null, `api/coupons/${coupon.id}/buy/`, 'put', 'json');
-};
+const putCouponBuy = async (coupon) => await requestToBackend(null, `api/coupons/${coupon.id}/buy/`, 'put', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
@@ -112,7 +110,7 @@ function Buy({ lng, lngDict, selfUser, coupon }) {
           </Box>
         </Section>
       */}
-      
+
       {/*
         <PayPalButton merchantId={merchantId} price='0.01' description='test' />
       */}

@@ -116,7 +116,12 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
             <Typography variant='body1'>{product.description}</Typography>
           </Box>
           <Box marginTop={1}>
-            <Typography variant='h5'>{i18n.t('stock')}: {couponListResponse.data.count}</Typography>
+            <Typography variant='h5'>
+{i18n.t('stock')}
+:
+{' '}
+{couponListResponse.data.count}
+</Typography>
           </Box>
           <Box marginY={1}>
             <Button

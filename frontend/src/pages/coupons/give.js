@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -34,6 +35,7 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
+const putCouponBuy = async (coupon) => await requestToBackend(null, `api/coupons/${coupon.id}/buy/`, 'put', 'json');
 
 const getSelfFriendList = async (context, selfUser) => await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
     from_user: selfUser.id
@@ -185,10 +187,16 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
             color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push({
-              pathname: '/payments/kakao/',
-              query: { product: product.id },
-            })}
+            onClick={async () => {
+              const putCouponBuyResponse = await putCouponBuy(coupon);
+              if (putCouponBuyResponse.status === 201) {
+                router.push(`/coupons/${putCouponBuyResponse.data.id}/`);
+                toast.success(i18n.t('_couponSuccessfullyPurchased'));
+              }
+              else {
+                toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              }
+            }}
           >
             {i18n.t('issueCoupon')}
           </Button>

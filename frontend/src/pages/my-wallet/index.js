@@ -18,12 +18,10 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getSelfCouponList = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
-    user: selfUser.id,
-    used: false
-  });
-};
+const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
+  user: selfUser.id,
+  used: false
+});
 
 const getSelfFavoriteStoreList = async (context, selfUser) => {
   const params = {

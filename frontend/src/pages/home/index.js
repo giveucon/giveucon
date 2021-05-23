@@ -21,12 +21,10 @@ import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getCentralNoticeList = async (context) => await requestToBackend(context, 'api/central-notices/', 'get', 'json');
-const getNearbyCouponList = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
+const getNearbyCouponList = async (context, selfUser) => await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
     user: selfUser.id,
     used: false
   });
-};
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(context);

@@ -21,6 +21,7 @@
     "@svgr/webpack": "^5.5.0",
     "array-move": "^3.0.1",
     "axios": "^0.21.1",
+    "express": "^4.17.1",
     "faker": "^5.5.3",
     "google-libphonenumber": "^3.2.21",
     "gravatar": "^1.8.1",
