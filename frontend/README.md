@@ -41,7 +41,7 @@ NEXT_PUBLIC_PAYPAL_CLIENT_ID=your_paypal_client_id_here
 
 ## Launch
 
-Launch frontend:
+Launch frontend in development mode:
 
 > using npm: 
 > ```
@@ -50,5 +50,19 @@ Launch frontend:
 
 > using yarn: 
 > ```
+> yarn run dev
+> ```
+
+Launch frontend in production mode:
+
+> using npm: 
+> ```
+> npm run build
+> npm start
+> ```
+
+> using yarn: 
+> ```
+> yarn run build
 > yarn start
 > ```
