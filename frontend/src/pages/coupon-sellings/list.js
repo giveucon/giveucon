@@ -23,9 +23,7 @@ const getCouponSellingList = async (context) => {
 };
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-
 const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-
 const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {

@@ -23,18 +23,16 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponList = async (context) => {
-  const params = {
+  return await requestToBackend(context, 'api/coupons', 'get', 'json', null, {
     user: context.query.user || null,
     store: context.query.store || null,
     product: context.query.product || null,
-  };
-  return await requestToBackend(context, 'api/coupons', 'get', 'json', null, params);
+    used: false
+  });
 };
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-
 const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-
 const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -162,66 +160,64 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
     )
   }
 
-
-    return (
-      <Layout
-        lng={lng}
-      lngDict={lngDict}
-        menuItemList={selfUser.menu_items}
-        title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
+  return (
+    <Layout
+      lng={lng}
+    lngDict={lngDict}
+      menuItemList={selfUser.menu_items}
+      title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
+    >
+      <Section
+        backButton
+        title={i18n.t('couponList')}
+        padding={false}
       >
-        <Section
-          backButton
-          title={i18n.t('couponList')}
-          padding={false}
-        >
-          {couponList && (
-            (couponList.length > 0) ? (
-              <InfiniteScroll
-                dataLength={couponList.length}
-                next={getMoreCouponList}
-                hasMore={hasMoreCouponList}
-                loader={<InfiniteScrollLoader loading />}
-                endMessage={<InfiniteScrollLoader loading={false} />}
-              >
-                <Grid container>
-                  {couponList.map((item, index) => (
-                    <Grid item xs={6} key={item.id}>
-                      <Tile
-                        title={item.product.name}
-                        image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
-                        actions={[
-                          <IconButton
-                            onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
-                          >
-                            <DirectionsIcon/>
-                          </IconButton>,
-                          <IconButton>
-                            <CropFreeIcon
-                              onClick={() => router.push({
-                                pathname: '/coupons/use/',
-                                query: { id: item.id },
-                              })}
-                            />
-                          </IconButton>
-                        ]}
-                        onClick={item.user === selfUser.id
-                          ? (() => router.push(`/coupons/${item.id}/`))
-                          : null
-                        }
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              </InfiniteScroll>
-            ) : (
-              <AlertBox content={i18n.t('_isEmpty')} variant='information' />
-            )
-          )}
-        </Section>
-      </Layout>
-    );
-
+        {couponList && (
+          (couponList.length > 0) ? (
+            <InfiniteScroll
+              dataLength={couponList.length}
+              next={getMoreCouponList}
+              hasMore={hasMoreCouponList}
+              loader={<InfiniteScrollLoader loading />}
+              endMessage={<InfiniteScrollLoader loading={false} />}
+            >
+              <Grid container>
+                {couponList.map((item, index) => (
+                  <Grid item xs={6} key={item.id}>
+                    <Tile
+                      title={item.product.name}
+                      image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
+                      actions={[
+                        <IconButton
+                          onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
+                        >
+                          <DirectionsIcon/>
+                        </IconButton>,
+                        <IconButton>
+                          <CropFreeIcon
+                            onClick={() => router.push({
+                              pathname: '/coupons/use/',
+                              query: { id: item.id },
+                            })}
+                          />
+                        </IconButton>
+                      ]}
+                      onClick={item.user === selfUser.id
+                        ? (() => router.push(`/coupons/${item.id}/`))
+                        : null
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </InfiniteScroll>
+          ) : (
+            <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+          )
+        )}
+      </Section>
+    </Layout>
+  );
 
 }
 

@@ -12,8 +12,6 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const putCouponScan = async (qrData) => await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', qrData, null);
 
-const getCoupon = async (qrData) => await requestToBackend(null, `api/coupons/${qrData.coupon}`, 'get', 'json');
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
   }))

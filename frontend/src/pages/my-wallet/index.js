@@ -19,10 +19,10 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getSelfCouponList = async (context, selfUser) => {
-  const params = {
-    user: selfUser.id
-  };
-  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, params);
+  return await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
+    user: selfUser.id,
+    used: false
+  });
 };
 
 const getSelfFavoriteStoreList = async (context, selfUser) => {

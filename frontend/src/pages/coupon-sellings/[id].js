@@ -13,7 +13,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}`, 'get', 'json');
+const getCouponSelling = async (context) => {
+  return await requestToBackend(context, `api/coupon-sellings/${context.query.id}`, 'get', 'json', null, {
+    used: false
+  });
+}
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);

@@ -55,14 +55,6 @@ const postCoupon = async (amount, product) => {
   return await requestToBackend(null, `api/coupons/`, 'post', 'json', data, null);
 };
 
-const postCouponSelling = async (price, coupon) => {
-  const data = {
-    price,
-    coupon: coupon.id
-  }
-  return await requestToBackend(null, '/api/coupon-sellings/', 'post', 'json', data, null);
-};
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
   if (productResponse.status === 404) {

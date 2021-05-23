@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json', null, {
+  used: false
+});
 
 const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
     user_name: selfUser.id
