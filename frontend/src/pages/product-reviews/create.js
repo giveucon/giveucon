@@ -31,9 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 const postProductReview = async (productReview, imageList) => {
   const processedProductReview = {
@@ -80,7 +78,8 @@ function Create ({ lng, lngDict, selfUser, product }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addReview')} - ${i18n.t('_appName')}`}
     >
@@ -162,7 +161,7 @@ function Create ({ lng, lngDict, selfUser, product }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -210,7 +209,7 @@ function Create ({ lng, lngDict, selfUser, product }) {
             if (response.status === 201) {
               router.push(`/product-reviews/${response.data.id}/`);
               toast.success(i18n.t('_reviewSuccessfullyAdded'));
-            } 
+            }
             else if (response.status === 400) {
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, content: !!response.data.content}));

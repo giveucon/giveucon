@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import * as constants from '../constants';
 import destroyCookie from 'utils/destroyCookie'
 import getCookies from 'utils/getCookies'
 import setCookie from 'utils/setCookie'
+import * as constants from '../constants';
 
 const requestVerifyTokens = async (session) => {
   try {
@@ -29,18 +29,18 @@ const requestVerifyTokens = async (session) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
+
   }
 };
 
@@ -68,18 +68,18 @@ const requestRefreshTokens = async (session) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
+
   }
 };
 
@@ -89,7 +89,7 @@ export default async function getSession(context) {
     const session = JSON.parse(cookies.giveucon_session);
     const verifyTokensResponse = await requestVerifyTokens(session);
     if (verifyTokensResponse.status === 200) return session;
-    else {
+
       const refreshTokenResponse = await requestRefreshTokens(session);
       if (refreshTokenResponse.status === 200) {
         const refreshedSession = {
@@ -110,15 +110,15 @@ export default async function getSession(context) {
         console.info('refresh.js : Token refreshed');
         console.info(refreshedSession);
         return refreshedSession;
-      } else {
+      }
         destroyCookie(context, 'giveucon_session', {
           maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
           path: process.env.NEXT_PUBLIC_COOKIE_PATH,
         });
         return null;
-      }
-    }
-  } else {
-    return null;
+
+
   }
+    return null;
+
 }

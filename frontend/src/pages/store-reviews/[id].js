@@ -13,13 +13,9 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const getStoreReview = async (context) => {
-  return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
-};
+const getStoreReview = async (context) => await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
 
-const getUser = async (context, storeReview) => {
-  return await requestToBackend(context, `api/users/${storeReview.review.article.user}/`, 'get', 'json');
-};
+const getUser = async (context, storeReview) => await requestToBackend(context, `api/users/${storeReview.review.article.user}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeReviewResponse = await getStoreReview(context);
@@ -41,13 +37,14 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 })
 
 function Id({ lng, lngDict, selfUser, storeReview, user }) {
-  
+
   const i18n = useI18n();
   const router = useRouter();
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${storeReview.review.article.title} - ${i18n.t('_appName')}`}
     >

@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 export default function CouponListItem({ title=null, onClick=null, prefix=null, suffix=null, skeleton=false, subtitle=null }) {
   return (

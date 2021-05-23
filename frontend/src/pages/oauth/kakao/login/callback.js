@@ -12,7 +12,7 @@ const getTokens = async (code) => {
       params: {
         grant_type: 'authorization_code',
         client_id: process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY,
-        redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + 'oauth/kakao/login/callback/',
+        redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}oauth/kakao/login/callback/`,
         code,
         client_secret: process.env.NEXT_PUBLIC_KAKAO_APP_CLIENT_SECRET,
       }
@@ -31,29 +31,29 @@ const getTokens = async (code) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
+
   }
 };
 
-const socialLogin = async (access_token) => {
+const socialLogin = async (accessToken) => {
   try {
     const response = await axios({
       url: 'api/social/login/kakao/',
       method: 'post',
       baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
       data: {
-        access_token,
+        access_token: accessToken,
       }
     })
     return {
@@ -70,29 +70,29 @@ const socialLogin = async (access_token) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
+
   }
 };
 
-const socialLoginRefresh = async (refresh_token) => {
+const socialLoginRefresh = async (refreshToken) => {
   try {
     const response = await axios({
       url: 'api/rest-auth/token/refresh/',
       method: 'post',
       baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
       data: {
-        refresh: refresh_token,
+        refresh: refreshToken,
       }
     })
     return {
@@ -109,24 +109,26 @@ const socialLoginRefresh = async (refresh_token) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
+
   }
 };
 
 export async function getServerSideProps(context) {
   const tokenResponse = await getTokens(context.query.code);
+  console.log(tokenResponse);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
+  console.log(loginResponse);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
 
   const session = {
@@ -153,5 +155,5 @@ export async function getServerSideProps(context) {
 }
 
 export default function Callback() {
-  
+
 }

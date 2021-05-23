@@ -21,9 +21,7 @@ const getFavoriteProductList = async (context) => {
   return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, params);
 };
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialFavoriteProductListResponse = await getFavoriteProductList(context);
@@ -60,12 +58,13 @@ function List({ lng, lngDict, selfUser, initialFavoriteProductListResponse, user
     const favoriteProductListResponse = await requestToBackend(null, 'api/favorite-products/', 'get', 'json', null, params);
     setFavoriteProductList(prevFavoriteProductList => prevFavoriteProductList.concat(favoriteProductListResponse.data.results));
     setFavoriteProductListpage(prevFavoriteProductListpage => prevFavoriteProductListpage + 1);
-    if (productListResponse.data.next === null) setHasMoreFavoriteProductList(prevHasMoreFavoriteProductList => false);
+    if (favoriteProductListResponse.data.next === null) setHasMoreFavoriteProductList(prevHasMoreFavoriteProductList => false);
   }
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('favoriteProductList')} - ${i18n.t('_appName')}`}
     >
@@ -79,12 +78,12 @@ function List({ lng, lngDict, selfUser, initialFavoriteProductListResponse, user
             dataLength={favoriteProductList.length}
             next={getMoreFavoriteProductList}
             hasMore={hasMoreFavoriteProductList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
               {favoriteProductList && favoriteProductList.map((item, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.product.name}
                     image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}

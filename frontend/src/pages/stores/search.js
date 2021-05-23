@@ -31,32 +31,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getFavoriteStore = async (context, selfUser, store) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getFavoriteStore = async (context, selfUser, store) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: selfUser.id,
     store: store.id
   });
-};
 
-const postFavoriteStore = async (store) => {
-  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
   }, null);
-};
 
-const deleteFavoriteStore = async (favoriteStore) => {
-  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
-};
+const deleteFavoriteStore = async (favoriteStore) => await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: {
       lng,
       lngDict,
       selfUser
     }
-  }
-})
+  }))
 
 function Search({ lng, lngDict, selfUser }) {
 
@@ -110,7 +102,8 @@ function Search({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('searchStores')} - ${i18n.t('_appName')}`}
     >
@@ -175,12 +168,12 @@ function Search({ lng, lngDict, selfUser }) {
             dataLength={storeList.length}
             next={getMoreStoreList}
             hasMore={hasMoreStoreList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
               {storeList.map((item, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.name}
                     image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
@@ -191,20 +184,20 @@ function Search({ lng, lngDict, selfUser }) {
                             if (!item.favorite) {
                               const postFavoriteStoreResult = await postFavoriteStore(item);
                               if (postFavoriteStoreResult.status === 201) {
-                                setStoreList(storeList.map(store => 
-                                  store.id === item.id 
-                                  ? {...store, favorite: postFavoriteStoreResult.data} 
-                                  : store 
+                                setStoreList(storeList.map(store =>
+                                  store.id === item.id
+                                  ? {...store, favorite: postFavoriteStoreResult.data}
+                                  : store
                                 ));
                               }
                               else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                             } else {
                               const deleteFavoriteStoreResult = await deleteFavoriteStore(item.favorite);
                               if (deleteFavoriteStoreResult.status === 204) {
-                                setStoreList(storeList.map(store => 
-                                  store.id === item.id 
-                                  ? {...store, favorite: null} 
-                                  : store 
+                                setStoreList(storeList.map(store =>
+                                  store.id === item.id
+                                  ? {...store, favorite: null}
+                                  : store
                                 ));
                               }
                               else toast.error(i18n.t('_errorOccurredProcessingRequest'));

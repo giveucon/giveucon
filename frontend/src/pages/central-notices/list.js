@@ -12,9 +12,7 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const getCentralNoticeList = async (context) => {
-  return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
-};
+const getCentralNoticeList = async (context) => await requestToBackend(context, 'api/central-notices/', 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialCentralNoticeListResponse = await getCentralNoticeList(context);
@@ -42,7 +40,8 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('noticeList')} - ${i18n.t('_appName')}`}
     >
@@ -55,7 +54,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
             dataLength={centralNoticeList.length}
             next={getMoreCentralNoticeList}
             hasMore={hasMoreCentralNoticeList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {centralNoticeList.map((item, index) => (

@@ -15,12 +15,12 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import LanguageIcon from '@material-ui/icons/Language';
 
-import * as constants from '../../constants';
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import getCookies from 'utils/getCookies';
 import setCookie from 'utils/setCookie';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
+import * as constants from '../../constants';
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -43,8 +43,8 @@ export const getServerSideProps = withoutAuthServerSideProps (async (context, ln
   const cookies = getCookies(context)
   if (cookies.giveucon_session) {
     return {
-      redirect: { 
-        permanent: false, 
+      redirect: {
+        permanent: false,
         destination: '/home/'
       }
     }

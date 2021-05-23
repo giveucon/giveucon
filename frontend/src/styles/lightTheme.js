@@ -91,7 +91,7 @@ const theme = createMuiTheme({
       root: {
         paddingLeft: '0.5rem',
         paddingRight: '0.5rem',
-        ['@media (min-width:600px)']: {
+        '@media (min-width:600px)': {
           paddingLeft: '0.5rem',
           paddingRight: '0.5rem',
         },

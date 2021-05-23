@@ -39,9 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getTagList = async (context) => {
-  return await requestToBackend(context, 'api/tags/', 'get', 'json');
-};
+const getTagList = async (context) => await requestToBackend(context, 'api/tags/', 'get', 'json');
 
 const postStore = async (store, imageList) => {
   const processedStore = {
@@ -94,7 +92,8 @@ function Create({ lng, lngDict, selfUser, tagList }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addStore')} - ${i18n.t('_appName')}`}
     >
@@ -194,7 +193,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -269,7 +268,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
         </Box>
       </Section>
 
-      
+
       <Box marginY={1}>
         <Button
           color='primary'

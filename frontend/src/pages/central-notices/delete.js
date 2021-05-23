@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCentralNotice = async (context) => {
-  return await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
-};
+const getCentralNotice = async (context) => await requestToBackend(context, `api/central-notices/${context.query.id}/`, 'get', 'json');
 
-const deleteCentralNotice = async (centralNotice) => {
-  return await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
-};
+const deleteCentralNotice = async (centralNotice) => await requestToBackend(null, `api/central-notices/${centralNotice.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const centralNoticeResponse = await getCentralNotice(context);
@@ -59,8 +55,9 @@ function Delete({ lng, lngDict, selfUser, centralNotice }) {
   const classes = useStyles();
 
   return (
-    <Layout 
-      locale={lng}
+    <Layout
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteNotice')} - ${i18n.t('_appName')}`}
     >

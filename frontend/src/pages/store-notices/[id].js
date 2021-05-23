@@ -13,13 +13,9 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getStoreNotice = async (context) => {
-  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
-};
+const getStoreNotice = async (context) => await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 
-const getStore = async (context, storeNotice) => {
-  return await requestToBackend(context, `api/stores/${storeNotice.store}/`, 'get', 'json');
-};
+const getStore = async (context, storeNotice) => await requestToBackend(context, `api/stores/${storeNotice.store}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
@@ -41,13 +37,14 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 })
 
 function Id({ lng, lngDict, selfUser, storeNotice, store }) {
-  
+
 const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}
     >

@@ -34,9 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSeller = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.seller}/`, 'get', 'json');
-};
+const getSeller = async (context) => await requestToBackend(context, `api/users/${context.query.seller}/`, 'get', 'json');
 
 const postSellerReport = async (sellerReport, imageList) => {
   const processedSellerReport = {
@@ -91,7 +89,8 @@ function Index({ lng, lngDict, selfUser, seller }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('reportSeller')} - ${i18n.t('_appName')}`}
     >
@@ -189,7 +188,7 @@ function Index({ lng, lngDict, selfUser, seller }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={

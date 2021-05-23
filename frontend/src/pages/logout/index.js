@@ -20,21 +20,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('logout')} - ${i18n.t('_appName')}`}
     >

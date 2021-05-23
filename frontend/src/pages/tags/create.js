@@ -45,7 +45,8 @@ function Create({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addTag')} - ${i18n.t('_appName')}`}
     >
@@ -80,7 +81,7 @@ function Create({ lng, lngDict, selfUser }) {
             if (response.status === 201) {
               // router.push(`/tags/${response.id}/`);
               toast.success(i18n.t('_tagSuccessfullyAdded'));
-            } 
+            }
             else if (response.status === 400) {
               if (response.data.name) {
                 setTagError(prevTagError => ({...prevTagError, name: true}));

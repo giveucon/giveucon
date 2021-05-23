@@ -12,15 +12,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getNotificationList = async (context) => {
-  return await requestToBackend(context, 'api/notifications/', 'get', 'json', null, {
+const getNotificationList = async (context) => await requestToBackend(context, 'api/notifications/', 'get', 'json', null, {
     store: context.query.store,
   });
-};
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.to_user}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.to_user}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialNotificationListResponse = await getNotificationList(context);
@@ -50,7 +46,8 @@ function List({ lng, lngDict, selfUser, initialNotificationListResponse, user })
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('notificationList')} - ${i18n.t('_appName')}`}
     >
@@ -63,7 +60,7 @@ function List({ lng, lngDict, selfUser, initialNotificationListResponse, user })
             dataLength={notificationList.length}
             next={getMoreNotificationList}
             hasMore={hasMoreNotificationList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {notificationList.map((item, index) => (

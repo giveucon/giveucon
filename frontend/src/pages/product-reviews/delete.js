@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProductReview = async (context) => {
-  return await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
-};
+const getProductReview = async (context) => await requestToBackend(context, `api/product-reviews/${context.query.id}/`, 'get', 'json');
 
-const deleteProductReview = async (productReview) => {
-  return await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'delete', 'json');
-};
+const deleteProductReview = async (productReview) => await requestToBackend(null, `api/product-reviews/${productReview.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productReviewResponse = await getProductReview(context);
@@ -58,7 +54,8 @@ function Delete({ lng, lngDict, selfUser, productReview }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteReview')} - ${i18n.t('_appName')}`}
     >

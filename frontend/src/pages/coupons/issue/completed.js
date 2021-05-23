@@ -40,9 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
@@ -61,10 +59,11 @@ function Completed({ lng, lngDict, selfUser, product }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
@@ -90,7 +89,7 @@ function Completed({ lng, lngDict, selfUser, product }) {
             </Box>
             <Divider />
             <Box marginTop='0.5rem'>
-              <Typography variant='h6'>{product.price.toLocaleString('ko-KR') + '원'}</Typography>
+              <Typography variant='h6'>{`${product.price.toLocaleString('ko-KR')  }원`}</Typography>
             </Box>
           </Box>
         </Box>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -31,32 +32,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
 
-const getProductReviewList = async (context) => {
-  return await requestToBackend(context, `api/product-reviews/`, 'get', 'json', null, {
+const getProductReviewList = async (context) => await requestToBackend(context, `api/product-reviews/`, 'get', 'json', null, {
     product: context.query.id
   });
-};
 
-const getFavoriteProduct = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
+const getFavoriteProduct = async (context, selfUser) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
     user: selfUser.id,
     product: context.query.id
   });
-};
 
-const postFavoriteProduct = async (product) => {
-  return await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
+const postFavoriteProduct = async (product) => await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
     product: product.id
   }, null);
-};
 
-const deleteFavoriteProduct = async (favoriteProduct) => {
-  return await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
-};
+const deleteFavoriteProduct = async (favoriteProduct) => await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
@@ -88,7 +79,8 @@ function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavorit
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${product.name} - ${i18n.t('_appName')}`}
     >
@@ -97,15 +89,13 @@ function Id({ lng, lngDict, selfUser, product, productReviewList, initialFavorit
         title={product.name}
         padding={false}
       >
-        <SwipeableTileList autoplay={true}>
+        <SwipeableTileList autoplay>
           {product.images && (product.images.length > 0) ?
-            (product.images.map((item, index) => {
-              return <Tile
-                key={index}
+            (product.images.map((item, index) => <Tile
+                key={item.id}
                 image={item.image}
                 onClick={() => router.push(`/images/${item.id}/` )}
-              />
-            })
+              />)
           ) : (
             [<Tile image={constants.NO_IMAGE_PATH}/>]
           )}

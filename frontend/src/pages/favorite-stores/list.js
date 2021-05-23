@@ -21,9 +21,7 @@ const getFavoriteStoreList = async (context) => {
   return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, params);
 };
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialFavoriteStoreListResponse = await getFavoriteStoreList(context);
@@ -60,12 +58,13 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
     const favoriteStoreListResponse = await requestToBackend(null, 'api/favorite-stores/', 'get', 'json', null, params);
     setFavoriteStoreList(prevFavoriteStoreList => prevFavoriteStoreList.concat(favoriteStoreListResponse.data.results));
     setFavoriteStoreListpage(prevFavoriteStoreListpage => prevFavoriteStoreListpage + 1);
-    if (storeListResponse.data.next === null) setHasMoreFavoriteStoreList(prevHasMoreFavoriteStoreList => false);
+    if (favoriteStoreListResponse.data.next === null) setHasMoreFavoriteStoreList(prevHasMoreFavoriteStoreList => false);
   }
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('favoriteStoreList')} - ${i18n.t('_appName')}`}
     >
@@ -79,12 +78,12 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
             dataLength={favoriteStoreList.length}
             next={getMoreFavoriteStoreList}
             hasMore={hasMoreFavoriteStoreList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
               {favoriteStoreList && favoriteStoreList.map((item, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.store.name}
                     image={item.store.images.length > 0 ? item.store.images[0].image : constants.NO_IMAGE_PATH}

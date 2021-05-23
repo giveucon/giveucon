@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PhoneNumberUtil, PhoneNumberFormat as PNF } from 'google-libphonenumber';
+import { PhoneNumberFormat as PNF, PhoneNumberUtil } from 'google-libphonenumber';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
@@ -18,22 +18,18 @@ import Typography from '@material-ui/core/Typography';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import PhoneIcon from '@material-ui/icons/Phone';
 
-import * as constants from '../../constants';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps'
+import * as constants from '../../constants';
 
-const getSelfAccount = async (context) => {
-  return await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
-};
+const getSelfAccount = async (context) => await requestToBackend(context, 'api/accounts/self/', 'get', 'json');
 
-const postPhoneVerificationCode = async (selfUser, phoneUtil) => {
-  return await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
+const postPhoneVerificationCode = async (selfUser, phoneUtil) => await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
     phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164)
   }, null);
-};
 
 const postSelfUser = async (selfUser, phoneUtil) => {
   const processedSelfUser = {
@@ -101,15 +97,15 @@ function Create({ lng, lngDict, selfAccount }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={null}
       title={`${i18n.t('createAccount')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('createAccount')}
-      >
-      </Section>
+       />
       <Section
         title={i18n.t('basicInfo')}
         titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}

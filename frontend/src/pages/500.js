@@ -9,14 +9,12 @@ import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict) => {
-  return {
+export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict) => ({
     props: { lng, lngDict }
-  }
-})
+  }))
 
 function Error500({ lng, lngDict }) {
-  
+
   const i18n = useI18n();
   const router = useRouter();
 

@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCoupon = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.id}`, 'get', 'json');
-};
+const getCoupon = async (context) => await requestToBackend(context, `api/products/${context.query.id}`, 'get', 'json');
 
-const deleteCoupon = async (coupon) => {
-  return await requestToBackend(null, `api/coupons/${coupon.id}/`, 'delete', 'json');
-};
+const deleteCoupon = async (coupon) => await requestToBackend(null, `api/coupons/${coupon.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
@@ -58,7 +54,8 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteCoupon')} - ${i18n.t('_appName')}`}
     >

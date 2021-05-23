@@ -6,9 +6,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getImage = async (context) => {
-  return await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
-};
+const getImage = async (context) => await requestToBackend(context, `api/images/${context.query.id}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const imageResponse = await getImage(context);
@@ -26,7 +24,7 @@ function Id({ lng, lngDict, selfUser, image }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <>
       <Head>

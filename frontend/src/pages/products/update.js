@@ -34,20 +34,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
-};
+const getStore = async (context, product) => await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 
 const putProduct = async (product, imageList) => {
   const processedProduct = {
     name: product.name,
     description: product.description,
     price: product.price,
-    duration: product.duration + ' 00',
+    duration: `${product.duration  } 00`,
     images: imageList.map(image => image.file),
     store: product.store,
   };
@@ -97,14 +93,14 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
   const [imageList, setImageList] = useState(prevProduct.images);
 
   useEffect(() => {
-    let processedImageList = prevProduct.images;
+    const processedImageList = prevProduct.images;
     const injectDataUrl = async () => {
-      for (const image in processedImageList) {
-        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
-          processedImageList[image].dataURL = dataURL;
+      for (let i = 0; i < processedImageList.length; i++) {
+        await convertImageToBase64(processedImageList[i].image, (dataURL) => {
+          processedImageList[i].dataURL = dataURL;
         });
-        await convertImageToFile(processedImageList[image].image, processedImageList[image].image, (file) => {
-          processedImageList[image].file = file;
+        await convertImageToFile(processedImageList[i].image, processedImageList[i].image, (file) => {
+          processedImageList[i].file = file;
         });
       }
       setImageList(processedImageList);
@@ -114,7 +110,8 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('editProduct')} - ${i18n.t('_appName')}`}
     >
@@ -210,7 +207,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={

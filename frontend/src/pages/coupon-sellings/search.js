@@ -31,15 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: {
       lng,
       lngDict,
       selfUser
     }
-  }
-})
+  }))
 
 function Search({ lng, lngDict, selfUser }) {
 
@@ -75,7 +73,7 @@ function Search({ lng, lngDict, selfUser }) {
     const getCouponSellingListResponse = await requestToBackend(null, 'api/couponSellings/', 'get', 'json', null, params);
     if (getCouponSellingListResponse.status === 200) {
       for (const couponSelling of getCouponSellingListResponse.data.results) {
-        const favoriteCouponSellingResponse = await getFavoriteCouponSelling(null, selfUser, couponSelling);
+        const favoriteCouponSellingResponse = await getCouponSellingList(null, selfUser, couponSelling);
         couponSelling.favorite = (favoriteCouponSellingResponse.data.results.length === 1) ? favoriteCouponSellingResponse.data.results[0] : null
       }
       setCouponSellingList(prevCouponSellingList => prevCouponSellingList.concat(getCouponSellingListResponse.data.results));
@@ -87,7 +85,8 @@ function Search({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('searchCouponTrades')} - ${i18n.t('_appName')}`}
     >
@@ -139,12 +138,12 @@ function Search({ lng, lngDict, selfUser }) {
             dataLength={couponSellingList.length}
             next={getMoreCouponSellingList}
             hasMore={hasMoreCouponSellingList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
               {couponSellingList.map((item, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.coupon.product.name}
                     image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}

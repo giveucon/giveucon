@@ -17,9 +17,12 @@ const styles = {
 
 class SwipeableTileList extends React.Component {
 
-  state = {
-    index: 0,
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      index: 0,
+    };
+  }
 
   handleChangeIndex = index => {
     this.setState({
@@ -41,23 +44,23 @@ class SwipeableTileList extends React.Component {
       return (
         <div style={styles.root}>
           <SwipeableViews enableMouseEvents style={styles.root} containerStyle={styles.halfContainer}>
-            {React.Children.map(children, child => 
+            {React.Children.map(children, child =>
               child
             )}
           </SwipeableViews>
         </div>
       )
-    } else {
+    }
       return (
         <div style={styles.root}>
           <AutoPlaySwipeableViews
-            autoplay={autoplay ? autoplay : false}
+            autoplay={autoplay || false}
             enableMouseEvents
             index={index}
-            interval={interval ? interval : 5000}
+            interval={interval || 5000}
             onChangeIndex={this.handleChangeIndex}
           >
-            {React.Children.map(children, child => 
+            {React.Children.map(children, child =>
               child
             )}
           </AutoPlaySwipeableViews>
@@ -66,7 +69,7 @@ class SwipeableTileList extends React.Component {
           )}
         </div>
       );
-    }
+
   }
 }
 

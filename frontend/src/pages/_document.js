@@ -1,5 +1,5 @@
 import React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components'
 import { ServerStyleSheets } from '@material-ui/styles';
 import lightTheme from 'styles/lightTheme';
@@ -19,11 +19,11 @@ class MyDocument extends Document {
           ...initialProps,
           lang: ctx.query.lng,
           styles: (
-            <React.Fragment>
+            <>
               {initialProps.styles}
               {materialSheets.getStyleElement()}
               {styledComponentsSheet.getStyleElement()}
-            </React.Fragment>
+            </>
           )
         }
       } finally {
@@ -41,7 +41,7 @@ class MyDocument extends Document {
             name='theme-color'
             content={lightTheme.palette.primary.main}
           />
-          <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+          <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta name='description' content='Description' />
           <meta name='keywords' content='Keywords' />
           <link rel='apple-touch-icon' sizes='57x57' href='/images/icons/apple-icon-57x57.png' />
@@ -65,10 +65,11 @@ class MyDocument extends Document {
             rel='stylesheet'
             href='https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap'
           />
-          <script src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY}&autoload=false&libraries=services`}></script>
+          <script src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JAVASCRIPT_KEY}&autoload=false&libraries=services`} />
         </Head>
         <body>
-          <style global jsx>{`
+          <style global jsx>
+{`
             html,
             body,
             body > div:first-child,
@@ -76,7 +77,8 @@ class MyDocument extends Document {
             div#__next > div {
               minHeight: 100%;
             }
-          `}</style>
+          `}
+</style>
           <Main />
           <NextScript />
         </body>

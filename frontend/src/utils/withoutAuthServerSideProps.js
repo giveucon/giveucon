@@ -11,7 +11,7 @@ export default function withoutAuthServerSideProps(getServerSidePropsFunction) {
 
     if (getServerSidePropsFunction) {
       return await getServerSidePropsFunction(context, lng, lngDict);
-    } 
+    }
     return {
       props: { lng, lngDict }
     }

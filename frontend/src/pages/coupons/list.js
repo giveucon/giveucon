@@ -31,17 +31,11 @@ const getCouponList = async (context) => {
   return await requestToBackend(context, 'api/coupons', 'get', 'json', null, params);
 };
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialCouponListResponse = await getCouponList(context);
@@ -89,7 +83,8 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   if (product && group) {
     return (
       <Layout
-        locale={lng}
+        lng={lng}
+      lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
       >
@@ -134,7 +129,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                   dataLength={couponList.length}
                   next={getMoreCouponList}
                   hasMore={hasMoreCouponList}
-                  loader={<InfiniteScrollLoader loading={true} />}
+                  loader={<InfiniteScrollLoader loading />}
                   endMessage={<InfiniteScrollLoader loading={false} />}
                 >
                   {couponList.map((item, index) => (
@@ -167,10 +162,11 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
     )
   }
 
-  else {
+
     return (
       <Layout
-        locale={lng}
+        lng={lng}
+      lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
       >
@@ -185,12 +181,12 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                 dataLength={couponList.length}
                 next={getMoreCouponList}
                 hasMore={hasMoreCouponList}
-                loader={<InfiniteScrollLoader loading={true} />}
+                loader={<InfiniteScrollLoader loading />}
                 endMessage={<InfiniteScrollLoader loading={false} />}
               >
                 <Grid container>
                   {couponList.map((item, index) => (
-                    <Grid item xs={6} key={index}>
+                    <Grid item xs={6} key={item.id}>
                       <Tile
                         title={item.product.name}
                         image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
@@ -225,7 +221,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
         </Section>
       </Layout>
     );
-  }
+
 
 }
 

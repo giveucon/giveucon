@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Tile({ actions=null, image=null, imageType='http', margin=true, menuItems=null, onClick=null, skeleton=false, subtitle=null, title=null }) {
-  
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -102,7 +102,7 @@ export default function Tile({ actions=null, image=null, imageType='http', margi
               {menuItems && (<IconButton onClick={handleClick}><MoreVertIcon /></IconButton>)}
             </Card>
           </Box>
-  
+
           {/* Title and content area */}
           <Box className={classes.titleArea} display={(title || subtitle) ? 'block' : 'none'}>
             <Box display={(title && !subtitle) ? 'block' : 'none'}>
@@ -119,7 +119,7 @@ export default function Tile({ actions=null, image=null, imageType='http', margi
               </Box>
             </Box>
           </Box>
-  
+
           {/* Menu definition */}
           <Menu
             anchorEl={anchorEl}

@@ -40,13 +40,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
-const getTagList = async (context) => {
-  return await requestToBackend(context, 'api/tags/', 'get', 'json');
-};
+const getTagList = async (context) => await requestToBackend(context, 'api/tags/', 'get', 'json');
 
 const putStore = async (store, imageList) => {
   const processedStore = {
@@ -56,11 +52,9 @@ const putStore = async (store, imageList) => {
   return await requestToBackend(null, `api/stores/${store.id}/`, 'put', 'multipart', convertJsonToFormData(processedStore), null);
 };
 
-const getStoreLocation = async (store) => {
-  return await requestToBackend(null, 'api/store-locations/', 'get', 'json', null, {
+const getStoreLocation = async (store) => await requestToBackend(null, 'api/store-locations/', 'get', 'json', null, {
     store: store.id
   });
-};
 
 const putStoreLocation = async (store, storeLocation, location) => {
   console.log(storeLocation)
@@ -126,14 +120,14 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
   const [address, setAddress] = useState('');
 
   useEffect(() => {
-    let processedImageList = prevStore.images;
+    const processedImageList = prevStore.images;
     const injectDataUrl = async () => {
-      for (const image in processedImageList) {
-        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
-          processedImageList[image].dataURL = dataURL;
+      for (let i = 0; i < processedImageList.length; i++) {
+        await convertImageToBase64(processedImageList[i].image, (dataURL) => {
+          processedImageList[i].dataURL = dataURL;
         });
-        await convertImageToFile(processedImageList[image].image, processedImageList[image].image, (file) => {
-          processedImageList[image].file = file;
+        await convertImageToFile(processedImageList[i].image, processedImageList[i].image, (file) => {
+          processedImageList[i].file = file;
         });
       }
       setImageList(processedImageList);
@@ -143,7 +137,8 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('editStore')} - ${i18n.t('_appName')}`}
     >
@@ -191,14 +186,14 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
         <Box paddingY={1}>
           <Autocomplete
             multiple
-            options={tagList || dummyTagList}
+            options={tagList || []}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={(event, value) => {
               setStore(prevStore => ({ ...prevStore, tags: value.map(value => value.id) }));
             }}
             renderOption={(option, { selected }) => (
-              <React.Fragment>
+              <>
                 <Checkbox
                   icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
                   checkedIcon={<CheckBoxIcon fontSize='small' />}
@@ -206,7 +201,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                   checked={selected}
                 />
                 {option.name}
-              </React.Fragment>
+              </>
             )}
             style={{ minWidth: '2rem' }}
             renderInput={(params) => (
@@ -243,7 +238,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -337,9 +332,9 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
                 console.log(putStoreLocationResponse);
               }
-            } else if (response.status === 400) {
-              setStoreError(prevStoreError => ({...prevStoreError, name: !!response.data.name}));
-              setStoreError(prevStoreError => ({...prevStoreError, description: !!response.data.description}));
+            } else if (putStoreResponse.status === 400) {
+              setStoreError(prevStoreError => ({...prevStoreError, name: !!putStoreResponse.data.name}));
+              setStoreError(prevStoreError => ({...prevStoreError, description: !!putStoreResponse.data.description}));
               toast.error(i18n.t('_checkInputFields'));
             }
           }}

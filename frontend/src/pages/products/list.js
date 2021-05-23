@@ -36,30 +36,20 @@ const getProductList = async (context) => {
   return await requestToBackend(context, 'api/products', 'get', 'json', null, params);
 };
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
-const getFavoriteProduct = async (context, selfUser, product) => {
-  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
+const getFavoriteProduct = async (context, selfUser, product) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
     user: selfUser.id,
     product: product.id
   });
-};
 
-const postFavoriteProduct = async (product) => {
-  return await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
+const postFavoriteProduct = async (product) => await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
     product: product.id
   }, null);
-};
 
-const deleteFavoriteProduct = async (favoriteProduct) => {
-  return await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
-};
+const deleteFavoriteProduct = async (favoriteProduct) => await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialProductListResponse = await getProductList(context);
@@ -107,7 +97,8 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('productList')} - ${i18n.t('_appName')}`}
     >
@@ -121,12 +112,12 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
             dataLength={productList.length}
             next={getMoreProductList}
             hasMore={hasMoreProductList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
               {productList && productList.map((item, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.name}
                     subtitle={`${item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
@@ -139,20 +130,20 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
                             if (!item.favorite) {
                               const postFavoriteProductResult = await postFavoriteProduct(item);
                               if (postFavoriteProductResult.status === 201) {
-                                setProductList(productList.map(product => 
-                                  product.id === item.id 
-                                  ? {...product, favorite: postFavoriteProductResult.data} 
-                                  : product 
+                                setProductList(productList.map(product =>
+                                  product.id === item.id
+                                  ? {...product, favorite: postFavoriteProductResult.data}
+                                  : product
                                 ));
                               }
                               else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                             } else {
                               const deleteFavoriteProductResult = await deleteFavoriteProduct(item.favorite);
                               if (deleteFavoriteProductResult.status === 204) {
-                                setProductList(productList.map(product => 
-                                  product.id === item.id 
-                                  ? {...product, favorite: null} 
-                                  : product 
+                                setProductList(productList.map(product =>
+                                  product.id === item.id
+                                  ? {...product, favorite: null}
+                                  : product
                                 ));
                               }
                               else toast.error(i18n.t('_errorOccurredProcessingRequest'));

@@ -31,16 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSellerOnboardLink = async () => {
-  return await requestToBackend(null, '/api/seller-onboard-link/', 'get', 'json');
-};
+const getSellerOnboardLink = async () => await requestToBackend(null, '/api/seller-onboard-link/', 'get', 'json');
 
-const getSellerOnboardStatus = async () => {
-  return await requestToBackend(null, '/api/seller-onboard-status/', 'get', 'json');
-};
+const getSellerOnboardStatus = async () => await requestToBackend(null, '/api/seller-onboard-status/', 'get', 'json');
 
 const putSelfUser = async (selfUser) => {
-  console.log(data);
   const data = {
     ...selfUser,
     // menu_items: selfUser.menu_items
@@ -48,11 +43,9 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data, null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
 
@@ -73,7 +66,8 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={prevSelfUser.menu_items}
       title={`${i18n.t('seller')} - ${i18n.t('_appName')}`}
     >
@@ -110,7 +104,6 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
         </Box>
         <Box marginY={1}>
           <Button
-            variant='default'
             fullWidth
             variant='contained'
             onClick={async () => {

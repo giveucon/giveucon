@@ -9,13 +9,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-import * as constants from '../../../constants';
 import KakaoMapBox from 'components/KakaoMapBox';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from '../../../constants';
 
 const useStyles = makeStyles((theme) => ({
   errorButton: {
@@ -35,19 +35,13 @@ const postSelfUserLocation = async (selfUser, location) => {
   return await requestToBackend(null, '/api/user-locations/', 'post', 'json', data, null);
 };
 
-const putSelfUserLocation = async (location) => {
-  return await requestToBackend(null, '/api/user-locations/self/', 'put', 'json', {location}, null);
-};
+const putSelfUserLocation = async (location) => await requestToBackend(null, '/api/user-locations/self/', 'put', 'json', {location}, null);
 
-const deleteSelfUserLocation = async () => {
-  return await requestToBackend(null, '/api/user-locations/self/', 'delete', 'json');
-};
+const deleteSelfUserLocation = async () => await requestToBackend(null, '/api/user-locations/self/', 'delete', 'json');
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Location({ lng, lngDict, selfUser }) {
 
@@ -62,7 +56,8 @@ function Location({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('location')} - ${i18n.t('_appName')}`}
     >

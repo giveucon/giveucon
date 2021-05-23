@@ -41,7 +41,7 @@ const postCentralNotice = async (centralNotice, imageList) => {
   return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
 /*
   if (!selfUser.staff){
     return {
@@ -52,13 +52,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
 */
-  return {
+   ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  })
+)
 
 function Create({ lng, lngDict, selfUser }) {
-  
+
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
@@ -74,7 +74,8 @@ function Create({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}
     >
@@ -146,7 +147,7 @@ function Create({ lng, lngDict, selfUser }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -194,7 +195,7 @@ function Create({ lng, lngDict, selfUser }) {
             if (response.status === 201) {
               router.push(`/central-notices/${response.data.id}/`);
               toast.success(i18n.t('_noticeSuccessfullyAdded'));
-            } 
+            }
             else if (response.status === 400) {
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: !!response.data.title}));
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: !!response.data.content}));

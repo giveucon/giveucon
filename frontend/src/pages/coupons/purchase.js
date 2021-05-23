@@ -26,9 +26,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
@@ -55,18 +53,18 @@ function Purchase({ lng, lngDict, selfUser, product }) {
   const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
 
   const merchantId = 'AAAAAAAAAAAA';
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('purchaseCoupons')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('purchaseCoupons')}
-      >
-      </Section>
+       />
       <Section
         title={i18n.t('paymentInfo')}
         titlePrefix={<IconButton><PaymentIcon /></IconButton>}
@@ -94,17 +92,17 @@ function Purchase({ lng, lngDict, selfUser, product }) {
             addAmountList={constants.AMOUNT_LIST}
             onChangeAmount={(amount) => {
               setAmount(prevAmount => amount);
-              amount <=  0 && setAmountIcon(<FilterNoneIcon />)
-              amount === 1 && setAmountIcon(<Filter1Icon />)
-              amount === 2 && setAmountIcon(<Filter2Icon />)
-              amount === 3 && setAmountIcon(<Filter3Icon />)
-              amount === 4 && setAmountIcon(<Filter4Icon />)
-              amount === 5 && setAmountIcon(<Filter5Icon />)
-              amount === 6 && setAmountIcon(<Filter6Icon />)
-              amount === 7 && setAmountIcon(<Filter7Icon />)
-              amount === 8 && setAmountIcon(<Filter8Icon />)
-              amount === 9 && setAmountIcon(<Filter9Icon />)
-              amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
+              if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
+              if (amount === 1) setAmountIcon(<Filter1Icon />)
+              if (amount === 2) setAmountIcon(<Filter2Icon />)
+              if (amount === 3) setAmountIcon(<Filter3Icon />)
+              if (amount === 4) setAmountIcon(<Filter4Icon />)
+              if (amount === 5) setAmountIcon(<Filter5Icon />)
+              if (amount === 6) setAmountIcon(<Filter6Icon />)
+              if (amount === 7) setAmountIcon(<Filter7Icon />)
+              if (amount === 8) setAmountIcon(<Filter8Icon />)
+              if (amount === 9) setAmountIcon(<Filter9Icon />)
+              if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
             }}
           />
         </Box>

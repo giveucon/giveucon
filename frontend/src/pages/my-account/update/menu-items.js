@@ -17,12 +17,12 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 
-import * as constants from '../../../constants';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
+import * as constants from '../../../constants';
 
 const putSelfUser = async (selfUser) => {
   const data = {
@@ -37,11 +37,9 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
   const i18n = useI18n();
@@ -58,15 +56,13 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
   });
   const [unusedMenuItemList, setUnusedMenuItemKeyList] = useState(['scan', 'goBack']);
   const [menuItemList, setMenuItemKeyList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
-  
+
   function not(lhs, rhs) {
     return lhs.filter((value) => rhs.indexOf(value) === -1);
   }
 
   const DragHandle = sortableHandle(() => <DragHandleIcon />);
-  const SortableMenuItemContainer = SortableContainer(({children}) => {
-    return <List>{children}</List>;
-  });
+  const SortableMenuItemContainer = SortableContainer(({children}) => <List>{children}</List>);
 
   const SortableUnusedMenuItem = SortableElement(({value}) => (
     <ListItem>
@@ -124,15 +120,15 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={prevSelfUser.menu_items}
       title={`${i18n.t('menuItems')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('menuItems')}
-      >
-      </Section>
+       />
       <Section
         title={i18n.t('unusedMenuItems')}
         titlePrefix={<IconButton><CheckBoxOutlineBlankIcon /></IconButton>}

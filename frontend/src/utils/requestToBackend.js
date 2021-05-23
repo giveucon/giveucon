@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-import * as constants from '../constants';
 import getSession from 'utils/getSession';
+import * as constants from '../constants';
 
-const jsonRequest = async (session, url, method, data, params) => {
-  return await axios({
+const jsonRequest = async (session, url, method, data, params) => await axios({
     url,
     method,
     data,
@@ -15,13 +14,11 @@ const jsonRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(response => {
-    return {
+  }).then(response => ({
       responseType: constants.RESPONSE_TYPE_OK,
       status: response.status,
       data: response.data
-    };
-  }).catch(error => {
+    })).catch(error => {
     if (error.response) {
       return {
         responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
@@ -30,23 +27,21 @@ const jsonRequest = async (session, url, method, data, params) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
-  });
-}
 
-const multipartRequest = async (session, url, method, data, params) => {
-  return await axios({
+  })
+
+const multipartRequest = async (session, url, method, data, params) => await axios({
     url,
     method,
     data,
@@ -57,13 +52,11 @@ const multipartRequest = async (session, url, method, data, params) => {
       'Accept': 'application/json'
     },
     params,
-  }).then(response => {
-    return {
+  }).then(response => ({
       responseType: constants.RESPONSE_TYPE_OK,
       status: response.status,
       data: response.data
-    };
-  }).catch(error => {
+    })).catch(error => {
     if (error.response) {
       return {
         responseType: constants.RESPONSE_TYPE_RESPONSE_ERROR,
@@ -72,31 +65,31 @@ const multipartRequest = async (session, url, method, data, params) => {
         data: error.response.data
       }
     }
-    else if (error.request) {
+    if (error.request) {
       return {
         responseType: constants.RESPONSE_TYPE_REQUEST_ERROR,
         request: error.request
       }
     }
-    else {
+
       return {
         responseType: constants.RESPONSE_TYPE_UNKNOWN_ERROR,
         message: error.message
       }
-    }
-  });
-}
+
+  })
 
 export default async function requestToBackend(context, url, method, contentType, data=null, params=null, defaultOrigin=true) {
 
   const session = await getSession(context);
   if (!session) throw new Error();
 
-  if (!defaultOrigin) url = new URL(url).pathname;
-  
+  let processedUrl = url;
+  if (!defaultOrigin) processedUrl = new URL(url).pathname;
+
   let response = null;
-  if (contentType === 'json') response = await jsonRequest(session, url, method, data, params);
-  else if (contentType === 'multipart') response = await multipartRequest(session, url, method, data, params);
+  if (contentType === 'json') response = await jsonRequest(session, processedUrl, method, data, params);
+  else if (contentType === 'multipart') response = await multipartRequest(session, processedUrl, method, data, params);
   else {
     console.error(contentType);
     throw new Error()

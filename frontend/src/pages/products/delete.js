@@ -22,17 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.id}/`, 'get', 'json');
 
-const getStore = async (context, product) => {
-  return await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
-};
+const getStore = async (context, product) => await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
 
-const deleteProduct = async (product) => {
-  return await requestToBackend(null, `api/products/${product.id}/`, 'delete', 'json');
-};
+const deleteProduct = async (product) => await requestToBackend(null, `api/products/${product.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
@@ -60,10 +54,11 @@ function Delete({ lng, lngDict, selfUser, product }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteProduct')} - ${i18n.t('_appName')}`}
     >

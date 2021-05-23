@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
 
-const deleteStore = async (store) => {
-  return await requestToBackend(null, `api/stores/${store.id}/`, 'delete', 'json');
-};
+const deleteStore = async (store) => await requestToBackend(null, `api/stores/${store.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
@@ -58,7 +54,8 @@ function Delete({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteStore')} - ${i18n.t('_appName')}`}
     >

@@ -33,15 +33,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
-const getSelfFriendList = async (context, selfUser) => {
-  return await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
+const getSelfFriendList = async (context, selfUser) => await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
     from_user: selfUser.id
   });
-};
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const productResponse = await getProduct(context);
@@ -79,7 +75,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
     });
     setSelfFriendList(prevSelfFriendList => (prevSelfFriendList || []).concat(selfFriendListResponse.data.results));
     setSelfFriendListpage(prevSelfFriendListpage => prevSelfFriendListpage + 1);
-    if (selfFriendListpage.data.next === null) setHasMoreSelfFriendList(prevHasMoreSelfFriendList => false);
+    if (selfFriendListResponse.data.next === null) setHasMoreSelfFriendList(prevHasMoreSelfFriendList => false);
   }
   const [selectedFriendList, setSelectedFriendList] = useState([]);
 
@@ -88,15 +84,15 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
   return (
     <>
       <Layout
-        locale={lng}
+        lng={lng}
+      lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('giveCoupons')} - ${i18n.t('_appName')}`}
       >
         <Section
           backButton
           title={i18n.t('giveCoupons')}
-        >
-        </Section>
+         />
         <Section
           title={i18n.t('paymentInfo')}
           titlePrefix={<IconButton><PaymentIcon /></IconButton>}
@@ -121,12 +117,12 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
               next={getMoreSelfFriendList}
               hasMore={hasMoreSelfFriendList}
               height='10rem'
-              loader={<InfiniteScrollLoader loading={true} />}
+              loader={<InfiniteScrollLoader loading />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
               {selfFriendList && selfFriendList.map((item, index) => (
                 <ListItem
-                  key={index}
+                  key={item.id}
                   variant='user'
                   title={item.to_user.user_name}
                   image={gravatar.url(item.to_user.email, {default: 'identicon'})}
@@ -136,7 +132,7 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
                       onChange={(event) => {
                         if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
                         else setSelectedFriendList(selectedFriendList.concat(item.id));
-                        selectedFriendList.sort((lhs, rhs) => {return lhs - rhs;});
+                        selectedFriendList.sort((lhs, rhs) => lhs - rhs);
                       }}
                     />
                   }
@@ -163,17 +159,17 @@ function Give({ lng, lngDict, selfUser, product, initialSelfFriendListResponse }
               addAmountList={constants.AMOUNT_LIST}
               onChangeAmount={(amount) => {
                 setAmount(prevAmount => amount);
-                amount <=  0 && setAmountIcon(<FilterNoneIcon />)
-                amount === 1 && setAmountIcon(<Filter1Icon />)
-                amount === 2 && setAmountIcon(<Filter2Icon />)
-                amount === 3 && setAmountIcon(<Filter3Icon />)
-                amount === 4 && setAmountIcon(<Filter4Icon />)
-                amount === 5 && setAmountIcon(<Filter5Icon />)
-                amount === 6 && setAmountIcon(<Filter6Icon />)
-                amount === 7 && setAmountIcon(<Filter7Icon />)
-                amount === 8 && setAmountIcon(<Filter8Icon />)
-                amount === 9 && setAmountIcon(<Filter9Icon />)
-                amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
+                if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
+                if (amount === 1) setAmountIcon(<Filter1Icon />)
+                if (amount === 2) setAmountIcon(<Filter2Icon />)
+                if (amount === 3) setAmountIcon(<Filter3Icon />)
+                if (amount === 4) setAmountIcon(<Filter4Icon />)
+                if (amount === 5) setAmountIcon(<Filter5Icon />)
+                if (amount === 6) setAmountIcon(<Filter6Icon />)
+                if (amount === 7) setAmountIcon(<Filter7Icon />)
+                if (amount === 8) setAmountIcon(<Filter8Icon />)
+                if (amount === 9) setAmountIcon(<Filter9Icon />)
+                if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
               }}
             />
           </Box>

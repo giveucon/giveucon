@@ -1,10 +1,6 @@
-const withPWA = require('next-pwa')
+const withOffline = require('next-offline')
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    disable: process.env.NODE_ENV === 'development',
-  },
+const nextConfig = {
   images: {
     domains: ['user-images.githubusercontent.com'],
   },
@@ -23,4 +19,6 @@ module.exports = withPWA({
       },
     ]
   },
-})
+}
+
+module.exports = withOffline(nextConfig)

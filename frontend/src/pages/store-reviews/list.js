@@ -14,15 +14,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getStoreReviewList = async (context) => {
-  return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, {
+const getStoreReviewList = async (context) => await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, {
     store: context.query.store,
   });
-};
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialStoreReviewListResponse = await getStoreReviewList(context);
@@ -63,7 +59,8 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('reviewList')} - ${i18n.t('_appName')}`}
     >
@@ -76,7 +73,7 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
             dataLength={storeReviewList.length}
             next={getMoreStoreReviewList}
             hasMore={hasMoreStoreReviewList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {storeReviewList.map((item, index) => (

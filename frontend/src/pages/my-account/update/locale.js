@@ -16,10 +16,9 @@ import LanguageIcon from '@material-ui/icons/Language';
 import Layout from 'components/Layout'
 import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
-import EN from 'locales/en.json'
-import KO from 'locales/ko.json'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from '../../../constants';
 
 const useStyles = makeStyles((theme) => ({
   errorButton: {
@@ -32,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const putSelfUser = async (selfUser) => {
-  console.log(data);
   const data = {
     ...selfUser,
     // menu_items: selfUser.menu_items
@@ -40,11 +38,9 @@ const putSelfUser = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
 
@@ -65,7 +61,8 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={prevSelfUser.menu_items}
       title={`${i18n.t('locale')} - ${i18n.t('_appName')}`}
     >
@@ -84,18 +81,16 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
               name='locale'
               value={selfUser.locale}
               onChange={(event) => {
-                event.target.value === 'en' && i18n.locale('en', EN);
-                event.target.value === 'ko' && i18n.locale('ko', KO);
+                i18n.locale(event.target.value, constants.LANGUAGE_LIST.find(element => element.lng === event.target.value).lngDict);
                 setSelfUser(prevSelfUser => ({ ...prevSelfUser, locale: event.target.value }));
               }}
             >
               <Grid container>
-                <Grid item xs={6}>
-                  <FormControlLabel value='ko' control={<Radio />} label={i18n.t('_localeNameKorean')} />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControlLabel value='en' control={<Radio />} label={i18n.t('_localeNameEnglish')} />
-                </Grid>
+                {constants.LANGUAGE_LIST.map((item, index) => (
+                  <Grid item xs={6} key={item.lng}>
+                    <FormControlLabel value={item.lng} control={<Radio />} label={item.name} />
+                  </Grid>
+                ))}
               </Grid>
             </RadioGroup>
           </FormControl>
@@ -110,7 +105,7 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
               if (response.status === 200) {
                 router.push('/my-account/update/');
                 toast.success(i18n.t('_myAccountSuccessfullyEdited'));
-              } 
+              }
               else if (response.status === 400) {
                 toast.error(i18n.t('_checkInputFields'));
               }

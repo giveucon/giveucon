@@ -22,8 +22,7 @@ export default function PayPalButton ({merchantId, price, description}) {
               layout: 'vertical',
               shape: 'pill'
             },
-            createOrder: (data, actions) => {
-              return actions.order.create({
+            createOrder: (data, actions) => actions.order.create({
                 intent: 'CAPTURE',
                 purchase_units: [
                   {
@@ -34,15 +33,14 @@ export default function PayPalButton ({merchantId, price, description}) {
                     },
                   },
                 ],
-              });
-            },
+              }),
             onApprove: async (data, actions) => {
               const order = await actions.order.capture();
               setPaid(true);
               console.info(order);
             },
             onError: (err) => {
-              setError(err),
+              setError(err);
               console.error(err);
             },
           })

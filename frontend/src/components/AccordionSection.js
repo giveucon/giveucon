@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -10,8 +11,9 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 export default function AccordionSection({ backButton=false, children=null, defaultExpanded=false, padding=true, title=null, titlePrefix=null }) {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
 
+  const router = useRouter();
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const handleAccordionChange = () => (event) => {
     setExpanded(!expanded);
   };

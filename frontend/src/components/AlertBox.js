@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle , faExclamationCircle , faInfoCircle , faQuestionCircle , faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+
+
+
+
 import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';

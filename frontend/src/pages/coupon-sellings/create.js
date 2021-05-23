@@ -11,6 +11,7 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import Radio from '@material-ui/core/Radio';
 
 import * as constants from 'constants';
+import AlertBox from 'components/AlertBox'
 import AmountInputBox from 'components/AmountInputBox'
 import CouponBox from 'components/CouponBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
@@ -31,19 +32,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCoupon = async (context) => {
-  return await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
-};
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
 
-const getSelfCouponList = async (context, selfUser) => {
-  return await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
+const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
     user_name: selfUser.id
   });
-};
 
-const postCouponSelling = async (couponSelling) => {
-  return await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
-};
+const postCouponSelling = async (couponSelling) => await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = context.query.coupon ? await getCoupon(context) : null;
@@ -85,19 +80,19 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
     setSelfCouponListpage(prevSelfCouponListpage => prevSelfCouponListpage + 1);
     if (selfCouponListpage.data.next === null) setHasMoreSelfCouponList(prevHasMoreSelfCouponList => false);
   }
-  
+
   if (coupon) {
     return (
       <Layout
-        locale={lng}
+        lng={lng}
+      lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('addCouponTrade')} - ${i18n.t('_appName')}`}
       >
         <Section
           backButton
           title={i18n.t('addCouponTrade')}
-        >
-        </Section>
+         />
         <Section
           title={i18n.t('coupon')}
           titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
@@ -140,7 +135,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               if (postCouponSellingResponse.status === 201) {
                 router.push(`/coupon-sellings/${postCouponSellingResponse.data.id}/`);
                 toast.success(i18n.t('_couponTradeSuccessfullyAdded'));
-              } 
+              }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
                 console.log(postCouponSellingResponse)
@@ -152,10 +147,11 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
         </Box>
       </Layout>
     );
-  } else {
+  }
     return (
       <Layout
-        locale={lng}
+        lng={lng}
+      lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('addCouponTrade')} - ${i18n.t('_appName')}`}
       >
@@ -173,12 +169,12 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               next={getMoreSelfCouponList}
               hasMore={hasMoreSelfCouponList}
               height='10rem'
-              loader={<InfiniteScrollLoader loading={true} />}
+              loader={<InfiniteScrollLoader loading />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
               {selfCouponList && selfCouponList.map((item, index) => (
                 <ListItem
-                  key={index}
+                  key={item.id}
                   variant='coupon'
                   title={item.product.name}
                   price={item.product.price}
@@ -233,7 +229,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               if (postCouponSellingResponse.status === 201) {
                 router.push(`/coupon-sellings/${postCouponSellingResponse.data.id}/`);
                 toast.success(i18n.t('_couponTradeSuccessfullyAdded'));
-              } 
+              }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
                 console.log(postCouponSellingResponse)
@@ -245,7 +241,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
         </Box>
       </Layout>
     );
-  }
+
 }
 
 export default Create;

@@ -20,9 +20,7 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const getCentralNoticeList = async (context) => {
-  return await requestToBackend(context, 'api/central-notices/', 'get', 'json');
-};
+const getCentralNoticeList = async (context) => await requestToBackend(context, 'api/central-notices/', 'get', 'json');
 
 const getNearbyCouponList = async (context, selfUser) => {
   const params = {
@@ -35,7 +33,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   const centralNoticeListResponse = await getCentralNoticeList(context);
   const nearbyCouponListResponse = await getNearbyCouponList(context, selfUser);
   return {
-    props: { 
+    props: {
       lng,
       lngDict,
       selfUser,
@@ -52,7 +50,8 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
     >
@@ -89,10 +88,10 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
         padding={false}
       >
         {centralNoticeList.length > 0 && (
-          <SwipeableTileList autoplay={true}>
+          <SwipeableTileList autoplay>
             {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.article.title}
                 image={
                   item.article.images && (item.article.images.length > 0)
@@ -105,7 +104,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
           </SwipeableTileList>
         )}
       </Section>
-      
+
       <Section
         title={i18n.t('nearby')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
@@ -115,7 +114,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
           <SwipeableTileList half>
             {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.product.name}
                 image={
                   item.product.images && (item.product.images.length > 0)

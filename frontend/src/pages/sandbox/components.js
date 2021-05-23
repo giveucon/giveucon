@@ -47,17 +47,16 @@ const swipeableTileList = [
   />
 ]
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  };
-})
+  }))
 
 export default function Components({ lng, lngDict, selfUser }) {
   const i18n = useI18n();
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('components')} - ${i18n.t('_appName')}`}
     >
@@ -88,7 +87,7 @@ export default function Components({ lng, lngDict, selfUser }) {
       <AccordionSection
         title='AccordionSection'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        defaultExpanded={true}
+        defaultExpanded
       >
         <Typography variant='h5'>AccordionBox children</Typography>
       </AccordionSection>
@@ -96,14 +95,14 @@ export default function Components({ lng, lngDict, selfUser }) {
       <AccordionSection
         title='AccordionSection - without padding'
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
-        defaultExpanded={true}
+        defaultExpanded
         padding={false}
       >
         <Typography variant='h5'>I have no padding!</Typography>
       </AccordionSection>
-      
+
       <Section
-        skeleton={true}
+        skeleton
       />
 
       <Section title='Buttons'>
@@ -123,7 +122,7 @@ export default function Components({ lng, lngDict, selfUser }) {
         <Button variant='outlined' disabled>Disabled</Button>
         <Button variant='outlined' color='primary' href='#outlined-buttons'>Link</Button>
       </Section>
-      
+
       <Section title='Typography'>
         <Typography variant='h1'>Res. H1</Typography>
         <Typography variant='h2'>Responsive H2</Typography>
@@ -242,7 +241,7 @@ export default function Components({ lng, lngDict, selfUser }) {
         titleSuffix={<Button>Edit</Button>}
         padding={false}
       >
-        <SwipeableTileList autoplay={true} interval={5000}>
+        <SwipeableTileList autoplay interval={5000}>
           {swipeableTileList}
         </SwipeableTileList>
       </Section>

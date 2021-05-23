@@ -9,5 +9,5 @@ export async function getServerSideProps(context) {
 }
 
 export default function Callback() {
-  
+
 }

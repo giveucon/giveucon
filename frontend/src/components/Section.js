@@ -36,7 +36,7 @@ export default function Section({
               </Box>
               <Box margin={0.5} flexGrow={1}>
                 <Skeleton animation='wave' height={10} style={{ marginBottom: '0.25rem' }} />
-                <Skeleton animation='wave' height={10} width='80%' />  
+                <Skeleton animation='wave' height={10} width='80%' />
               </Box>
             </Box>
             <Box marginX={0.5} marginY={1}>

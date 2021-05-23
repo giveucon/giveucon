@@ -9,40 +9,24 @@ const KakaoMaps = styled.div`
 `;
 
 class KakaoMapBox extends React.Component {
-  moveMarker(location) {
-    const { latitude, longitude } = location;
-    const { map, marker, geocoder } = this;
-    const { setLevel, setLocation, setAddress } = this.props;
-    geocoder.coord2Address(longitude, latitude, function(result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        const detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-        marker.setPosition(new kakao.maps.LatLng(latitude, longitude));
-        marker.setMap(map);
-        map.panTo(new kakao.maps.LatLng(latitude, longitude));
-        setLevel && setLevel(map.getLevel());
-        setLocation && setLocation({latitude, longitude});
-        setAddress && setAddress(detailAddr);
-      }
-    })
-  }
 
   componentDidMount() {
     const {location, enablePinMove} = this.props;
-    kakao.maps.load(() => {
+    window.kakao.maps.load(() => {
       const container = document.getElementById('kakaoMap');
       const options = {
-        center: new kakao.maps.LatLng(location.latitude, location.longitude),
+        center: new window.kakao.maps.LatLng(location.latitude, location.longitude),
         level: 7
       };
-      const map = this.map = new kakao.maps.Map(container, options);
-      this.geocoder = new kakao.maps.services.Geocoder();
-      this.marker = new kakao.maps.Marker({  
+      const map = this.map = new window.kakao.maps.Map(container, options);
+      this.geocoder = new window.kakao.maps.services.Geocoder();
+      this.marker = new window.kakao.maps.Marker({
         map,
-        location: new kakao.maps.LatLng(location.latitude, location.longitude)
+        location: new window.kakao.maps.LatLng(location.latitude, location.longitude)
       });
       this.moveMarker(location);
       const that = this;
-      kakao.maps.event.addListener(map, 'click', (mouseEvent) => {
+      window.kakao.maps.event.addListener(map, 'click', (mouseEvent) => {
         if (enablePinMove) {
           that.moveMarker({
             latitude: mouseEvent.latLng.getLat(),
@@ -64,6 +48,23 @@ class KakaoMapBox extends React.Component {
     if (prevProps === null)
       return;
     this.moveMarker(this.props.location);
+  }
+
+  moveMarker(location) {
+    const { latitude, longitude } = location;
+    const { map, marker, geocoder } = this;
+    const { setLevel, setLocation, setAddress } = this.props;
+    geocoder.coord2Address(longitude, latitude, (result, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+        marker.setPosition(new window.kakao.maps.LatLng(latitude, longitude));
+        marker.setMap(map);
+        map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+        if (setLevel) setLevel(map.getLevel());
+        if (setLocation) setLocation({latitude, longitude});
+        if (setAddress) setAddress(detailAddr);
+      }
+    })
   }
 
   render() {

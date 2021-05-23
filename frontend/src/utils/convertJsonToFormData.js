@@ -9,18 +9,18 @@ function isJsonObject(val) {
 }
 
 function convertJsonToFormDataRecursive(jsonObject, formData, parentKey) {
-  
+
   for (const key in jsonObject) {
 
-    if (jsonObject.hasOwnProperty(key)) {
-      var propName = parentKey || key;
-      var value = jsonObject[key];
+    if (Object.prototype.hasOwnProperty.call(jsonObject, key)) {
+      let propName = parentKey || key;
+      const value = jsonObject[key];
       if (parentKey && isJsonObject(jsonObject)) {
-        propName = parentKey + '.' + key;
+        propName = `${parentKey  }.${  key}`;
       }
 
       if (value instanceof FileList) {
-          for (var j = 0; j < value.length; j++) {
+          for (let j = 0; j < value.length; j++) {
               formData.append(propName, value.item(j));
           }
       } else if (isArray(value) || isJsonObject(value)) {
@@ -35,16 +35,16 @@ function convertJsonToFormDataRecursive(jsonObject, formData, parentKey) {
 
     }
   }
-  
+
   return formData;
 }
 
 export default function convertJsonToFormData(jsonObject) {
-  let formData = new FormData();
+  const formData = new FormData();
   convertJsonToFormDataRecursive(jsonObject, formData);
   /*
   for (var pair of formData.entries()) {
-    console.log(pair[0]+ ', ' + pair[1]); 
+    console.log(pair[0]+ ', ' + pair[1]);
   }
   */
   return formData;

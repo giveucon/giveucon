@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 
-import * as constants from '../constants';
 import useI18n from 'hooks/useI18n'
+import * as constants from '../constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,11 +55,11 @@ export default function AmountInputBox({
             setAmount(prevAmount => (event.target.value || 0));
           }}
           InputProps={{
-            startAdornment: 
+            startAdornment:
               (variant==='money')
               ? <InputAdornment position="start">{i18n.t('_localeCurrencyKRW')}</InputAdornment>
               : null,
-            endAdornment: 
+            endAdornment:
               (variant==='date')
               ? <InputAdornment position="end">{i18n.t('days')}</InputAdornment>
               : null,
@@ -75,7 +75,7 @@ export default function AmountInputBox({
         />
       </Box>
       <Box display='flex' flexWrap="wrap" paddingY={1}>
-        {addAmountList.map((addAmount) => 
+        {addAmountList.map((addAmount) =>
           <Box padding={0.5}>
             <Button
               color='default'
@@ -87,9 +87,9 @@ export default function AmountInputBox({
                 setInfinite(prevInfinite => false);
               }}
             >
-              {variant==='default' && `+ ${new Number(addAmount)}`}
-              {variant==='date' && `+ ${new Number(addAmount)}${i18n.t('days')}`}
-              {variant==='money' && `${addAmount >= 0 ? '+' : '-'} ${new Number(Math.abs(addAmount)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+              {variant==='default' && `+ ${addAmount}`}
+              {variant==='date' && `+ ${addAmount}${i18n.t('days')}`}
+              {variant==='money' && `${addAmount >= 0 ? '+' : '-'} ${Math.abs(addAmount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
             </Button>
           </Box>
         )}

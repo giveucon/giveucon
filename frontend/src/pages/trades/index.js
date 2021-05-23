@@ -16,9 +16,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCouponSellingList = async (context) => {
-  return await requestToBackend(context, 'api/coupon-sellings', 'get', 'json');
-};
+const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json');
 
 const getSelfCouponSellingList = async (context, selfUser) => {
   const params = {
@@ -51,22 +49,22 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 })
 
 function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingList }) {
-  
+
   const i18n = useI18n();
   const router = useRouter();
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('trades')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('trades')}
-      >
-      </Section>
-      
+       />
+
 
       <Section
         title={i18n.t('myCouponTrades')}
@@ -87,7 +85,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
           <SwipeableTileList half>
             {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.coupon.product.name}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
@@ -102,7 +100,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-      
+
 
       <Section
         title={i18n.t('couponTrades')}
@@ -120,7 +118,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
           <SwipeableTileList half>
             {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.coupon.product.name}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
@@ -136,7 +134,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         )}
       </Section>
 
-      
+
       <Box marginY={1}>
         <Button
           color='default'

@@ -49,18 +49,18 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
 
   const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('myBusiness')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('myBusiness')}
-      >
-      </Section>
+       />
 
 
       <Section
@@ -82,7 +82,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
           <SwipeableTileList half>
             {selfStoreList.map((item, index) => (
                 <Tile
-                  key={index}
+                  key={item.id}
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/stores/${item.id}/`)}
@@ -94,7 +94,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
         )}
       </Section>
 
-      
+
       <Section
         title={i18n.t('myProducts')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
@@ -114,7 +114,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
           <SwipeableTileList half>
             {selfProductList.map((item, index) => (
                 <Tile
-                  key={index}
+                  key={item.id}
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/products/${item.id}/`)}

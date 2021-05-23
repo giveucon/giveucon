@@ -45,9 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
 
 const getStoreNoticeList = async (context, store) => {
   const params = {
@@ -70,39 +68,27 @@ const getStoreReviewList = async (context, store) => {
   return await requestToBackend(context, 'api/store-reviews/', 'get', 'json', null, params);
 };
 
-const getFavoriteStore = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getFavoriteStore = async (context, selfUser) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: selfUser.id,
     store: context.query.id
   });
-};
 
-const postFavoriteStore = async (store) => {
-  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
   }, null);
-};
 
-const deleteFavoriteStore = async (favoriteStore) => {
-  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
-};
+const deleteFavoriteStore = async (favoriteStore) => await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
 
-const getFavoriteProduct = async (context, selfUser, product) => {
-  return await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
+const getFavoriteProduct = async (context, selfUser, product) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
     user: selfUser.id,
     product: product.id
   });
-};
 
-const postFavoriteProduct = async (product) => {
-  return await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
+const postFavoriteProduct = async (product) => await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
     product: product.id
   }, null);
-};
 
-const deleteFavoriteProduct = async (favoriteProduct) => {
-  return await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
-};
+const deleteFavoriteProduct = async (favoriteProduct) => await requestToBackend(null, `api/favorite-products/${favoriteProduct.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeResponse = await getStore(context);
@@ -152,7 +138,8 @@ function Id({
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${store.name} - ${i18n.t('_appName')}`}
     >
@@ -161,14 +148,13 @@ function Id({
         title={store.name}
         padding={false}
       >
-        <SwipeableTileList autoplay={true}>
+        <SwipeableTileList autoplay>
           {store.images && (store.images.length > 0) ? (
-            store.images.map((item, index) => {
-              return <Tile
-                key={index}
+            store.images.map((item, index) => <Tile
+                key={item.id}
                 image={item.image}
                 onClick={() => router.push(`/images/${item.id}/`)}
-              />})
+              />)
             ) : (
               <Tile image={constants.NO_IMAGE_PATH} />
             )
@@ -179,7 +165,7 @@ function Id({
             {
               store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
                 <Box
-                  key={index}
+                  key={item.id}
                   marginLeft={index > 0 ? '0.25rem' : '0rem'}
                   marginRight={index < store.tags.length ? '0.25rem' : '0rem'}
                 >
@@ -302,7 +288,7 @@ function Id({
           <SwipeableTileList half>
             {productList && productList.map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.name}
                 subtitle={item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                 image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
@@ -314,20 +300,20 @@ function Id({
                         if (!item.favorite) {
                           const postFavoriteProductResult = await postFavoriteProduct(item);
                           if (postFavoriteProductResult.status === 201) {
-                            setProductList(productList.map(product => 
-                              product.id === item.id 
-                              ? {...product, favorite: postFavoriteProductResult.data} 
-                              : product 
+                            setProductList(productList.map(product =>
+                              product.id === item.id
+                              ? {...product, favorite: postFavoriteProductResult.data}
+                              : product
                             ));
                           }
                           else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                         } else {
                           const deleteFavoriteProductResult = await deleteFavoriteProduct(item.favorite);
                           if (deleteFavoriteProductResult.status === 204) {
-                            setProductList(productList.map(product => 
-                              product.id === item.id 
+                            setProductList(productList.map(product =>
+                              product.id === item.id
                               ? {...product, favorite: null}
-                              : product 
+                              : product
                             ));
                           }
                           else toast.error(i18n.t('_errorOccurredProcessingRequest'));
@@ -363,7 +349,7 @@ function Id({
             storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <>
                 <ListItem
-                  key={index}
+                  key={item.id}
                   variant='review'
                   title={item.review.article.title}
                   date={new Date(item.review.article.created_at)}

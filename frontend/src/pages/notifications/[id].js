@@ -9,13 +9,9 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getNotification = async (context) => {
-  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
-};
+const getNotification = async (context) => await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 
-const getStore = async (context, notification) => {
-  return await requestToBackend(context, `api/stores/${notification.store}/`, 'get', 'json');
-};
+const getStore = async (context, notification) => await requestToBackend(context, `api/stores/${notification.store}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const notificationResponse = await getNotification(context);
@@ -36,13 +32,14 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 })
 
 function Id({ lng, lngDict, selfUser, notification }) {
-  
+
 const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${notification.article.title} - ${i18n.t('_appName')}`}
     >

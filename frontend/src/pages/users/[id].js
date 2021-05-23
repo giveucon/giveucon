@@ -37,49 +37,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getUser = async (context) => {
-  return await requestToBackend(context, `api/users/${context.query.id}/`, 'get', 'json');
-};
+const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.id}/`, 'get', 'json');
 
-const getStoreList = async (context, user) => {
-  return await requestToBackend(context, `api/stores/`, 'get', 'json', null, {
+const getStoreList = async (context, user) => await requestToBackend(context, `api/stores/`, 'get', 'json', null, {
     user: user.id
   });
-};
 
-const getFriend = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/friends/', 'get', 'json', null, {
+const getFriend = async (context, selfUser) => await requestToBackend(context, 'api/friends/', 'get', 'json', null, {
     from_user: selfUser.id,
     to_user: context.query.id
   });
-};
 
-const postFriend = async (user) => {
-  return await requestToBackend(null, 'api/friends/', 'post', 'json', {
+const postFriend = async (user) => await requestToBackend(null, 'api/friends/', 'post', 'json', {
     to_user: user.id
   }, null);
-};
 
-const deleteFriend = async (friend) => {
-  return await requestToBackend(null, `api/friends/${friend.id}/`, 'delete', 'json');
-};
+const deleteFriend = async (friend) => await requestToBackend(null, `api/friends/${friend.id}/`, 'delete', 'json');
 
-const getFavoriteStore = async (context, selfUser, store) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getFavoriteStore = async (context, selfUser, store) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: selfUser.id,
     store: store.id
   });
-};
 
-const postFavoriteStore = async (store) => {
-  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
   }, null);
-};
 
-const deleteFavoriteStore = async (favoriteStore) => {
-  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
-};
+const deleteFavoriteStore = async (favoriteStore) => await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const userResponse = await getUser(context);
@@ -113,10 +97,11 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
   const classes = useStyles();
   const [storeList, setStoreList] = useState(_storeList);
   const [friend, setFriend] = useState(_friend)
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${user.user_name} - ${i18n.t('_appName')}`}
     >
@@ -168,7 +153,7 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
         title={i18n.t('ownedStores')}
         titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
-          <IconButton 
+          <IconButton
             onClick={() => router.push({
               pathname: '/stores/list/',
               query: { user: selfUser.id },
@@ -180,7 +165,7 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
         {storeList.length > 0 ? (
           <Grid container>
             {storeList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
-              <Grid item xs={6} key={index}>
+              <Grid item xs={6} key={item.id}>
                 <Tile
                   title={item.name}
                   image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
@@ -192,20 +177,20 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, friend: _frie
                           if (!item.favorite) {
                             const postFavoriteStoreResult = await postFavoriteStore(item);
                             if (postFavoriteStoreResult.status === 201) {
-                              setStoreList(storeList.map(store => 
-                                store.id === item.id 
-                                ? {...store, favorite: postFavoriteStoreResult.data} 
-                                : store 
+                              setStoreList(storeList.map(store =>
+                                store.id === item.id
+                                ? {...store, favorite: postFavoriteStoreResult.data}
+                                : store
                               ));
                             }
                             else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                           } else {
                             const deleteFavoriteStoreResult = await deleteFavoriteStore(item.favorite);
                             if (deleteFavoriteStoreResult.status === 204) {
-                              setStoreList(storeList.map(store => 
-                                store.id === item.id 
-                                ? {...store, favorite: null} 
-                                : store 
+                              setStoreList(storeList.map(store =>
+                                store.id === item.id
+                                ? {...store, favorite: null}
+                                : store
                               ));
                             }
                             else toast.error(i18n.t('_errorOccurredProcessingRequest'));

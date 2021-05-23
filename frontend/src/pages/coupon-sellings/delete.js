@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCouponSelling = async (context) => {
-  return await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
-};
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
 
-const deleteCouponSelling = async (couponSelling) => {
-  return await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'delete', 'json');
-};
+const deleteCouponSelling = async (couponSelling) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);
@@ -47,10 +43,11 @@ function Delete({ lng, lngDict, selfUser, couponSelling }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteCouponTrade')} - ${i18n.t('_appName')}`}
     >
@@ -65,7 +62,7 @@ function Delete({ lng, lngDict, selfUser, couponSelling }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteProduct(product);
+              const response = await deleteCouponSelling(couponSelling);
               if (response.status === 204) {
                 router.push(`/coupons/${couponSelling.coupon.id}/`);
                 toast.success(i18n.t('_couponTradeSuccessfullyDeleted'));

@@ -19,7 +19,6 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const toggleSelfUserDarkMode = async (selfUser) => {
-  console.log(data);
   const data = {
     ...selfUser,
     dark_mode: !selfUser.dark_mode
@@ -27,20 +26,19 @@ const toggleSelfUserDarkMode = async (selfUser) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('settings')} - ${i18n.t('_appName')}`}
     >

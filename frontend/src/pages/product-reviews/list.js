@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
@@ -13,15 +14,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getProductReviewList = async (context) => {
-  return await requestToBackend(context, 'api/product-reviews/', 'get', 'json', null, {
+const getProductReviewList = async (context) => await requestToBackend(context, 'api/product-reviews/', 'get', 'json', null, {
     product: context.query.product,
   });
-};
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialProductReviewListResponse = await getProductReviewList(context);
@@ -57,7 +54,8 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('reviewList')} - ${i18n.t('_appName')}`}
     >
@@ -70,7 +68,7 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
             dataLength={productReviewList.length}
             next={getMoreProductReviewList}
             hasMore={hasMoreProductReviewList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {productReviewList.map((item, index) => (

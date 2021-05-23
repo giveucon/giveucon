@@ -33,9 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreReview = async (context) => {
-  return await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
-};
+const getStoreReview = async (context) => await requestToBackend(context, `api/store-reviews/${context.query.id}/`, 'get', 'json');
 
 const putStoreReview = async (storeReview, imageList) => {
   const processedStoreReview = {
@@ -90,14 +88,14 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
   const [imageList, setImageList] = useState(prevStoreReview.review.article.images);
 
   useEffect(() => {
-    let processedImageList = prevStoreReview.review.article.images;
+    const processedImageList = prevStoreReview.review.article.images;
     const injectDataUrl = async () => {
-      for (const image in processedImageList) {
-        await convertImageToBase64(processedImageList[image].image, (dataURL) => {
-          processedImageList[image].dataURL = dataURL;
+      for (let i = 0; i < processedImageList.length; i++) {
+        await convertImageToBase64(processedImageList[i].image, (dataURL) => {
+          processedImageList[i].dataURL = dataURL;
         });
-        await convertImageToFile(processedImageList[image].image, processedImageList[image].image, (file) => {
-          processedImageList[image].file = file;
+        await convertImageToFile(processedImageList[i].image, processedImageList[i].image, (file) => {
+          processedImageList[i].file = file;
         });
       }
       setImageList(processedImageList);
@@ -107,7 +105,8 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('editReview')} - ${i18n.t('_appName')}`}
     >
@@ -189,7 +188,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={

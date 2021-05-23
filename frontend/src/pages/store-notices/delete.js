@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreNotice = async (context) => {
-  return await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
-};
+const getStoreNotice = async (context) => await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 
-const deleteStoreNotice = async (storeNotice) => {
-  return await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
-};
+const deleteStoreNotice = async (storeNotice) => await requestToBackend(null, `api/store-notices/${storeNotice.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
@@ -58,7 +54,8 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteNotice')} - ${i18n.t('_appName')}`}
     >

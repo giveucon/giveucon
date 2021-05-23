@@ -22,15 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const deleteSelfUser = async (selfUser) => {
-  return await requestToBackend(null, `api/users/${selfUser.id}/`, 'delete', 'json');
-};
+const deleteSelfUser = async (selfUser) => await requestToBackend(null, `api/users/${selfUser.id}/`, 'delete', 'json');
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Delete({ lng, lngDict, selfUser }) {
 
@@ -40,7 +36,8 @@ function Delete({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('deleteMyAccount')} - ${i18n.t('_appName')}`}
     >

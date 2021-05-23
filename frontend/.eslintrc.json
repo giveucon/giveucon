@@ -32,10 +32,13 @@
         "react"
     ],
     "rules": {
+        "import/no-unresolved": "warn",
         "jsx-a11y/img-redundant-alt": "off",
         "no-await-in-loop": "off",
+        "no-multi-assign": "warn",
         "no-plusplus": "off",
         "no-restricted-syntax": "off",
+        "no-return-await": "off",
         "no-shadow": "off",
         "no-trailing-spaces": "error",
         "no-unused-vars": "warn",

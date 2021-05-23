@@ -9,11 +9,9 @@ import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import withoutAuthServerSideProps from 'utils/withoutAuthServerSideProps';
 
-export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict) => {
-  return {
+export const getStaticProps = withoutAuthServerSideProps (async (context, lng, lngDict) => ({
     props: { lng, lngDict }
-  }
-})
+  }))
 
 function Error({ lng, lngDict, statusCode }) {
 
@@ -53,7 +51,10 @@ function Error({ lng, lngDict, statusCode }) {
 }
 
 Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+  let statusCode = null;
+  if (res) statusCode = res.statusCode;
+  else if (err) statusCode = err.statusCode;
+    else statusCode = 404;
   return { statusCode }
 }
 

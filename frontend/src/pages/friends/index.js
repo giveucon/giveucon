@@ -48,22 +48,22 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('friends')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('friends')}
-      >
-      </Section>
+       />
 
 
       <Section
         title={i18n.t('myFriends')}
         titlePrefix={<IconButton><ContactsIcon /></IconButton>}
         titleSuffix={
-          <IconButton 
+          <IconButton
             onClick={() => router.push({
               pathname: '/friends/list/',
               query: { from_user: selfUser.id },
@@ -76,7 +76,7 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
           selfFriendList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
               <ListItem
-                key={index}
+                key={item.id}
                 variant='user'
                 name={item.to_user.user_name}
                 onClick={() => router.push(`/users/${item.to_user.id}/` )}

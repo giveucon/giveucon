@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { makeStyles } from '@material-ui/styles';
 import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,10 +6,8 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Container from '@material-ui/core/Container';
 
-import * as constants from '../constants';
 import useI18n from 'hooks/useI18n'
-import EN from 'locales/en.json'
-import KO from 'locales/ko.json'
+import * as constants from '../constants';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -24,22 +21,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BottomNavBar({ menuItemList, locale }) {
+export default function BottomNavBar({ menuItemList, lng, lngDict }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
 
   useEffect(() => {
-    locale === 'ko' && i18n.locale('ko', KO);
-    locale === 'en' && i18n.locale('en', EN);
+    i18n.locale(lng, lngDict);
   }, [])
 
   let key = 0;
-  let menuItemListAdapter = [];
-  for (const value in menuItemList) {
-    const menuItem = constants.MENU_ITEM_LIST.find(item => item.value === menuItemList[value]);
-    menuItem && menuItemListAdapter.push(
+  const menuItemListAdapter = [];
+  for (let i = 0; i < menuItemList.length; i++) {
+    const menuItem = constants.MENU_ITEM_LIST.find(item => item.value === menuItemList[i]);
+    if (menuItem) menuItemListAdapter.push(
       {
         key: ++key,
         icon: menuItem.icon,
@@ -58,15 +54,13 @@ export default function BottomNavBar({ menuItemList, locale }) {
           value={router.pathname}
           showLabels
         >
-          {menuItemListAdapter.map(item => {
-            return <BottomNavigationAction 
+          {menuItemListAdapter.map(item => <BottomNavigationAction
               key={item.key}
               icon={item.icon}
               label={item.label}
               onClick={item.onClick}
               value={item.value}
-            />
-          })}
+            />)}
         </BottomNavigation>
       </Container>
     </AppBar>

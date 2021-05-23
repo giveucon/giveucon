@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CodeIcon from '@material-ui/icons/Code';
@@ -39,21 +40,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('myAccount')} - ${i18n.t('_appName')}`}
     >
@@ -191,7 +191,7 @@ function Index({ lng, lngDict, selfUser }) {
               }}
               color='error'
               badgeContent=''
-              variant="dot"
+              variant='dot'
             >
               <NotificationsIcon />
             </Badge>

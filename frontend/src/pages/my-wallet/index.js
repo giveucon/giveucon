@@ -59,18 +59,18 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
 
   const i18n = useI18n();
   const router = useRouter();
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('myWallet')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('myWallet')}
-      >
-      </Section>
+       />
 
 
       <Section
@@ -92,7 +92,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
           <SwipeableTileList half>
             {selfCouponList.map((item, index) => (
                 <Tile
-                  key={index}
+                  key={item.id}
                   title={item.product.name}
                   image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
@@ -115,7 +115,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
         )}
       </Section>
 
-      
+
       <Section
         title={i18n.t('myFavoriteStores')}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
@@ -135,7 +135,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
           <SwipeableTileList half>
             {selfFavoriteStoreList.map((item, index) => (
                 <Tile
-                  key={index}
+                  key={item.id}
                   title={item.store.name}
                   image={item.store.images.length > 0 ? item.store.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/stores/${item.store.id}/`)}
@@ -147,7 +147,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
         )}
       </Section>
 
-      
+
       <Section
         title={i18n.t('myFavoriteProducts')}
         titlePrefix={<IconButton><ShoppingBasketIcon /></IconButton>}
@@ -167,7 +167,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
           <SwipeableTileList half>
             {selfFavoriteProductList.map((item, index) => (
                 <Tile
-                  key={index}
+                  key={item.id}
                   title={item.product.name}
                   image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   onClick={() => router.push(`/products/${item.product.id}/`)}

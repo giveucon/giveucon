@@ -17,7 +17,7 @@ import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
 /*
   if (!selfUser.staff){
     return {
@@ -28,13 +28,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
 */
-  return {
+   ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  })
+)
 
 function Create({ lng, lngDict, selfUser }) {
-  
+
   const i18n = useI18n();
   const router = useRouter();
   const [initializing, setInitializing] = useState(false);
@@ -81,7 +81,7 @@ function Create({ lng, lngDict, selfUser }) {
   }
 
   const getImageListFromUnsplash = async (keyword) => {
-    let imageList = [];
+    const imageList = [];
     for (const i of Array(faker.datatype.number() % imageMaxAmount).keys()) {
       await convertImageToFile(
         `/unsplash/1600x900/?${keyword}`,
@@ -98,15 +98,11 @@ function Create({ lng, lngDict, selfUser }) {
   const postTimeout = async () => {
     await new Promise(r => setTimeout(r, 10));
   };
-  
-  const postTag = async (user) => {
-    return await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
-  };
-  
-  const postUser = async (user) => {
-    return await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
-  };
-  
+
+  const postTag = async (user) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
+
+  const postUser = async (user) => await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
+
   const postStore = async (store, imageList) => {
     const processedStore = {
       ...store,
@@ -122,16 +118,16 @@ function Create({ lng, lngDict, selfUser }) {
     };
     return await requestToBackend(null, '/api/store-locations/', 'post', 'json', data, null);
   };
-  
+
   const postProduct = async (product, imageList) => {
     const processedProduct = {
       ...product,
-      duration: product.duration + ' 00',
+      duration: `${product.duration  } 00`,
       images: imageList.map(image => image.file),
     }
     return await requestToBackend(null, 'api/dummy-products/', 'post', 'multipart', convertJsonToFormData(processedProduct), null);
   };
-  
+
   const postCentralNotice = async (centralNotice, imageList) => {
     const processedCentralNotice = {
       article: {
@@ -142,7 +138,7 @@ function Create({ lng, lngDict, selfUser }) {
     return await requestToBackend(null, 'api/central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
     // return await requestToBackend(null, 'api/dummy-central-notices/', 'post', 'multipart', convertJsonToFormData(processedCentralNotice), null);
   };
-  
+
   const postStoreNotice = async (storeNotice, imageList) => {
     const processedStoreNotice = {
       article: {
@@ -153,7 +149,7 @@ function Create({ lng, lngDict, selfUser }) {
     }
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
   };
-  
+
   const postStoreReview = async (storeReview, imageList) => {
     const processedStoreReview = {
       review: {
@@ -167,7 +163,7 @@ function Create({ lng, lngDict, selfUser }) {
     }
     return await requestToBackend(null, 'api/dummy-store-reviews/', 'post', 'multipart', convertJsonToFormData(processedStoreReview), null);
   };
-  
+
   const postProductReview = async (productReview, imageList) => {
     const processedProductReview = {
       review: {
@@ -221,12 +217,14 @@ function Create({ lng, lngDict, selfUser }) {
   };
 
   const createStore = async () => {
-    let pickedTagIdSet = new Set();
+    const pickedTagIdSet = new Set();
     for (const i of Array(Math.floor(Math.random() * tagMaxAmount)).keys()) {
       while (true) {
         const pickedTagId = tagIdList[Math.floor(Math.random() * tagIdList.length)];
-        if (pickedTagIdSet.has(pickedTagId)) continue;
-        else { pickedTagIdSet.add(pickedTagId); break; };
+        if (!pickedTagIdSet.has(pickedTagId)) {
+          pickedTagIdSet.add(pickedTagId);
+          break;
+        };
       }
     }
     const store = {
@@ -408,7 +406,8 @@ function Create({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('createDatabase')} - ${i18n.t('_appName')}`}
     >

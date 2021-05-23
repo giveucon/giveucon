@@ -35,10 +35,10 @@ export default function NoticeBox({ children=null, content=null, imageList=null,
         ) : (
           <>
             <Box display={imageList && (imageList.length > 0) ? 'block' : 'none'} paddingY={1}>
-              <SwipeableTileList autoplay={true}>
+              <SwipeableTileList autoplay>
                 {imageList && (imageList.length > 0) && imageList.map((item, index) => (
                   <Tile
-                    key={index}
+                    key={item.id}
                     image={item}
                   />
                 ))}

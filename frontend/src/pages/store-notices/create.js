@@ -30,9 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
 const postStoreNotice = async (storeNotice, imageList) => {
   const processedStoreNotice = {
@@ -84,7 +82,8 @@ function Create({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addNotice')} - ${i18n.t('_appName')}`}
     >
@@ -156,7 +155,7 @@ function Create({ lng, lngDict, selfUser, store }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -204,7 +203,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             if (response.status === 201) {
               router.push(`/store-notices/${response.data.id}/`);
               toast.success(i18n.t('_noticeSuccessfullyAdded'));
-            } 
+            }
             else if (response.status === 400) {
               setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: !!response.data.title}));
               setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: !!response.data.content}));

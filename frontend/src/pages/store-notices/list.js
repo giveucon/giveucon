@@ -14,15 +14,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getStoreNoticeList = async (context) => {
-  return await requestToBackend(context, 'api/store-notices/', 'get', 'json', null, {
+const getStoreNoticeList = async (context) => await requestToBackend(context, 'api/store-notices/', 'get', 'json', null, {
     store: context.query.store,
   });
-};
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const initialStoreNoticeListResponse = await getStoreNoticeList(context);
@@ -52,7 +48,8 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('noticeList')} - ${i18n.t('_appName')}`}
     >
@@ -65,7 +62,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
             dataLength={storeNoticeList.length}
             next={getMoreStoreNoticeList}
             hasMore={hasMoreStoreNoticeList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {storeNoticeList.map((item, index) => (

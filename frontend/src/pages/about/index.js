@@ -5,17 +5,15 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import * as constants from '../../constants';
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
+import * as constants from '../../constants';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser },
-  };
-})
+  }))
 
 function Index({ lng, lngDict, selfUser }) {
 
@@ -25,7 +23,8 @@ function Index({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('about')} - ${i18n.t('_appName')}`}
     >
@@ -52,7 +51,7 @@ function Index({ lng, lngDict, selfUser }) {
           <>
             <Box style={{ position: 'relative', width: '100%', paddingTop: '50%' }} >
               <Image
-                src={'https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif'}
+                src="https://user-images.githubusercontent.com/48160211/114258807-29658d80-9a04-11eb-9d16-e69499a351a7.gif"
                 alt={i18n.t('_appName')}
                 layout='fill'
                 objectFit='contain'

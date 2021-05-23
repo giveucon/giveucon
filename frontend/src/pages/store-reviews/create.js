@@ -31,9 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
 
 const postStoreReview = async (storeReview, imageList) => {
   const processedStoreReview = {
@@ -81,7 +79,8 @@ function Create({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addReview')} - ${i18n.t('_appName')}`}
     >
@@ -163,7 +162,7 @@ function Create({ lng, lngDict, selfUser, store }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={
@@ -211,7 +210,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             if (response.status === 201) {
               router.push(`/store-reviews/${response.data.id}/`);
               toast.success(i18n.t('_reviewSuccessfullyAdded'));
-            } 
+            }
             else if (response.status === 400) {
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));

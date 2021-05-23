@@ -32,16 +32,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStore = async (context) => {
-  return await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
-};
+const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.id}/`, 'get', 'json');
 
 const postProduct = async (product, imageList) => {
   const processedProduct = {
     name: product.name,
     description: product.description,
     price: product.price,
-    duration: product.duration + ' 00',
+    duration: `${product.duration  } 00`,
     images: imageList.map(image => image.file),
     store: product.store,
   };
@@ -90,7 +88,8 @@ function Create({ lng, lngDict, selfUser, store }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('addProduct')} - ${i18n.t('_appName')}`}
     >
@@ -186,7 +185,7 @@ function Create({ lng, lngDict, selfUser, store }) {
                 <SwipeableTileList half>
                   {imageList.map((item, index) => (
                     <Tile
-                      key={index}
+                      key={item.id}
                       image={item.dataURL}
                       imageType='base64'
                       actions={

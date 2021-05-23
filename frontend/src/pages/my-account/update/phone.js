@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PhoneNumberUtil, PhoneNumberFormat as PNF } from 'google-libphonenumber';
+import { PhoneNumberFormat as PNF, PhoneNumberUtil } from 'google-libphonenumber';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
@@ -16,14 +16,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const postPhoneVerificationCode = async (selfUser, phoneUtil) => {
-  return await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
+const postPhoneVerificationCode = async (selfUser, phoneUtil) => await requestToBackend(null, 'api/phone-verification-codes/', 'post', 'json', {
     phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164)
   }, null);
-};
 
 const putSelfUser = async (selfUser, phoneUtil) => {
-  console.log(data);
   const data = {
     ...selfUser,
     phone_number: phoneUtil.format(phoneUtil.parse(`${selfUser.phone_number}`, 'KR'), PNF.E164)
@@ -31,11 +28,9 @@ const putSelfUser = async (selfUser, phoneUtil) => {
   return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data);
 };
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
 
@@ -68,7 +63,8 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={prevSelfUser.menu_items}
       title={`${i18n.t('phoneNumber')} - ${i18n.t('_appName')}`}
     >
@@ -143,7 +139,7 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
         </Box>
       </Section>
 
-        
+
       <Box marginY={1}>
         <Button
           color='primary'
@@ -151,14 +147,13 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
           variant='contained'
           onClick={async () => {
             const putSelfUserResponse = await putSelfUser(selfUser, phoneUtil);
-            if (postSelfUserResponse.status === 200) {
+            if (putSelfUserResponse.status === 200) {
               router.push('/my-account/');
               toast.success(i18n.t('_myAccountSuccessfullyCreated'));
             }
-            else if (postSelfUserResponse.status === 400) {
-              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!postSelfUserResponse.data.phone_number}));
+            else if (putSelfUserResponse.status === 400) {
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!putSelfUserResponse.data.phone_number}));
               toast.error(i18n.t('_checkInputFields'));
-              console.log(postSelfUserResponse);
             }
           }}
         >

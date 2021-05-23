@@ -10,19 +10,13 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const putCouponScan = async (qrData) => {
-  return await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', qrData, null);
-};
+const putCouponScan = async (qrData) => await requestToBackend(null, 'api/coupons/scan/', 'put', 'json', qrData, null);
 
-const getCoupon = async (qrData) => {
-  return await requestToBackend(null, `api/coupons/${qrData.coupon}`, 'get', 'json');
-};
+const getCoupon = async (qrData) => await requestToBackend(null, `api/coupons/${qrData.coupon}`, 'get', 'json');
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Scan({ lng, lngDict, selfUser }) {
 
@@ -96,14 +90,15 @@ function Scan({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('scanCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section backButton title={i18n.t('scanCoupon')}>
         <Card>
-          <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
-            <canvas id='canvas' width='480' height='360' hidden></canvas>
+          <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}>
+            <canvas id='canvas' width='480' height='360' hidden />
           </Box>
         </Card>
       </Section>

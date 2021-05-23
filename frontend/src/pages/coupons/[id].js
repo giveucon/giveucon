@@ -13,9 +13,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCoupon = async (context) => {
-  return await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
-};
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
@@ -44,15 +42,15 @@ function Id({ lng, lngDict, selfUser, coupon }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('coupons')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('coupons')}
-      >
-      </Section>
+       />
       <Section
         title={coupon.product.name}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}

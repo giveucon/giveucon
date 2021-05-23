@@ -12,9 +12,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCoupon = async (context) => {
-  return await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json');
-};
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.id}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponResponse = await getCoupon(context);
@@ -73,7 +71,8 @@ function Use({ lng, lngDict, selfUser, coupon }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('useCoupon')}- ${i18n.t('_appName')}`}
     >
@@ -81,11 +80,11 @@ function Use({ lng, lngDict, selfUser, coupon }) {
         backButton
         title={coupon.product.name}
       >
-        <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}> 
+        <Box display='flex' justifyContent='center' style={{positions: 'responsive'}}>
           <QRCode
             value={JSON.stringify(couponQr)}
             size={400}
-            includeMargin={true}
+            includeMargin
           />
         </Box>
         <Box marginBottom='1rem'>

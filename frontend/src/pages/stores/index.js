@@ -28,9 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getStoreList = async (context) => {
-  return await requestToBackend(context, 'api/stores/', 'get', 'json');
-};
+const getStoreList = async (context) => await requestToBackend(context, 'api/stores/', 'get', 'json');
 
 const getSelfStoreList = async (context, selfUser) => {
   const params = {
@@ -39,22 +37,16 @@ const getSelfStoreList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
 };
 
-const getFavoriteStore = async (context, selfUser, store) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getFavoriteStore = async (context, selfUser, store) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: selfUser.id,
     store: store.id
   });
-};
 
-const postFavoriteStore = async (store) => {
-  return await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
+const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
   }, null);
-};
 
-const deleteFavoriteStore = async (favoriteStore) => {
-  return await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
-};
+const deleteFavoriteStore = async (favoriteStore) => await requestToBackend(null, `api/favorite-stores/${favoriteStore.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeListResponse = await getStoreList(context);
@@ -93,22 +85,22 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('stores')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('stores')}
-      >
-      </Section>
+       />
 
 
       <Section
         title={i18n.t('myStores')}
         titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
-          <IconButton 
+          <IconButton
             onClick={() => router.push({
               pathname: '/stores/list/',
               query: { user: selfUser.id },
@@ -147,7 +139,7 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
           <SwipeableTileList half>
             {storeList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
               <Tile
-                key={index}
+                key={item.id}
                 title={item.name}
                 image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                 actions={[
@@ -157,20 +149,20 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
                         if (!item.favorite) {
                           const postFavoriteStoreResult = await postFavoriteStore(item);
                           if (postFavoriteStoreResult.status === 201) {
-                            setStoreList(storeList.map(store => 
-                              store.id === item.id 
-                              ? {...store, favorite: postFavoriteStoreResult.data} 
-                              : store 
+                            setStoreList(storeList.map(store =>
+                              store.id === item.id
+                              ? {...store, favorite: postFavoriteStoreResult.data}
+                              : store
                             ));
                           }
                           else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                         } else {
                           const deleteFavoriteStoreResult = await deleteFavoriteStore(item.favorite);
                           if (deleteFavoriteStoreResult.status === 204) {
-                            setStoreList(storeList.map(store => 
-                              store.id === item.id 
-                              ? {...store, favorite: null} 
-                              : store 
+                            setStoreList(storeList.map(store =>
+                              store.id === item.id
+                              ? {...store, favorite: null}
+                              : store
                             ));
                           }
                           else toast.error(i18n.t('_errorOccurredProcessingRequest'));

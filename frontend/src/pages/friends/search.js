@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import gravatar from 'gravatar';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
@@ -20,15 +21,13 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: {
       lng,
       lngDict,
       selfUser
     }
-  }
-})
+  }))
 
 function Search({ lng, lngDict, selfUser }) {
 
@@ -73,7 +72,8 @@ function Search({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('searchFriends')} - ${i18n.t('_appName')}`}
     >
@@ -138,13 +138,13 @@ function Search({ lng, lngDict, selfUser }) {
             dataLength={userList.length}
             next={getMoreUserList}
             hasMore={hasMoreUserList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
           {userList.map((item, index) => (
             <>
               <ListItem
-                key={index}
+                key={item.id}
                 variant='user'
                 title={item.user_name}
                 image={gravatar.url(item.email, {default: 'identicon'})}

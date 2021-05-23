@@ -43,7 +43,7 @@ export default function withAuthServerSideProps (getServerSidePropsFunction) {
       }
     }
 
-    let selfUser = selfUserResponse.data;
+    const selfUser = selfUserResponse.data;
     selfUser.menu_items = [ 'home', 'myWallet', 'stores', 'trades', 'myAccount' ];
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);
     const settings = {
@@ -61,7 +61,7 @@ export default function withAuthServerSideProps (getServerSidePropsFunction) {
     // Return props after execute server side functions
     if (getServerSidePropsFunction) {
       return await getServerSidePropsFunction(context, selfUser.locale, lngDict, selfUser);
-    } else return {
+    } return {
       props: {
         lng: selfUser.locale,
         lngDict,

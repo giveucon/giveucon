@@ -42,9 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProduct = async (context) => {
-  return await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
-};
+const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
 const postCoupon = async (amount, product) => {
   const data = {
@@ -84,18 +82,18 @@ function Index({ lng, lngDict, selfUser, product }) {
   const classes = useStyles();
   const [amount, setAmount] = useState(0);
   const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('issueCoupon')}
-      >
-      </Section>
+       />
       <Section
         title={i18n.t('paymentInfo')}
         titlePrefix={<IconButton><PaymentIcon /></IconButton>}
@@ -121,17 +119,17 @@ function Index({ lng, lngDict, selfUser, product }) {
             addAmountList={constants.AMOUNT_LIST}
             onChangeAmount={(amount) => {
               setAmount(prevAmount => amount);
-              amount <=  0 && setAmountIcon(<FilterNoneIcon />)
-              amount === 1 && setAmountIcon(<Filter1Icon />)
-              amount === 2 && setAmountIcon(<Filter2Icon />)
-              amount === 3 && setAmountIcon(<Filter3Icon />)
-              amount === 4 && setAmountIcon(<Filter4Icon />)
-              amount === 5 && setAmountIcon(<Filter5Icon />)
-              amount === 6 && setAmountIcon(<Filter6Icon />)
-              amount === 7 && setAmountIcon(<Filter7Icon />)
-              amount === 8 && setAmountIcon(<Filter8Icon />)
-              amount === 9 && setAmountIcon(<Filter9Icon />)
-              amount >= 10 && setAmountIcon(<Filter9PlusIcon />)
+              if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
+              if (amount === 1) setAmountIcon(<Filter1Icon />)
+              if (amount === 2) setAmountIcon(<Filter2Icon />)
+              if (amount === 3) setAmountIcon(<Filter3Icon />)
+              if (amount === 4) setAmountIcon(<Filter4Icon />)
+              if (amount === 5) setAmountIcon(<Filter5Icon />)
+              if (amount === 6) setAmountIcon(<Filter6Icon />)
+              if (amount === 7) setAmountIcon(<Filter7Icon />)
+              if (amount === 8) setAmountIcon(<Filter8Icon />)
+              if (amount === 9) setAmountIcon(<Filter9Icon />)
+              if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
             }}
           />
         </Box>

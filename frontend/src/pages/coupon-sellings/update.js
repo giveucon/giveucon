@@ -27,13 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCouponSelling = async (context) => {
-  return await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
-};
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
 
-const putCouponSelling = async (couponSelling) => {
-  return await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
-};
+const putCouponSelling = async (couponSelling) => await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);
@@ -56,18 +52,18 @@ function Update ({ lng, lngDict, selfUser, couponSelling: prevCouponSelling }) {
   const [couponSelling, setCouponSelling] = useState({
     ...prevCouponSelling
   });
-  
+
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('editCouponTrade')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
         title={i18n.t('editCouponTrade')}
-      >
-      </Section>
+       />
       <Section
         title={i18n.t('couponTrade')}
         titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
@@ -111,10 +107,9 @@ function Update ({ lng, lngDict, selfUser, couponSelling: prevCouponSelling }) {
             if (putCouponSellingResponse.status === 201) {
               router.push(`/coupon-sellings/${putCouponSellingResponse.data.id}/`);
               toast.success(i18n.t('_couponTradeSuccessfullyEdited'));
-            } 
+            }
             else {
               toast.error(i18n.t('_errorOccurredProcessingRequest'));
-              console.log(postCouponSellingResponse)
             }
           }}
         >

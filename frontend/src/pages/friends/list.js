@@ -62,7 +62,8 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('friendList')} - ${i18n.t('_appName')}`}
     >
@@ -75,12 +76,12 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
             dataLength={friendList.length}
             next={getMoreFriendList}
             hasMore={hasMoreFriendList}
-            loader={<InfiniteScrollLoader loading={true} />}
+            loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             {friendList && friendList.map((item, index) => (
               <ListItem
-                key={index}
+                key={item.id}
                 variant='user'
                 name={item.to_user.user_name}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}

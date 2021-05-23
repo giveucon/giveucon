@@ -22,6 +22,17 @@ function RootApp({ Component, pageProps }) {
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
+
+    if ('serviceWorker' in window.navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then((registration) => {
+          console.log('SW registered: ', registration)
+        }).catch((registrationError) => {
+          console.log('SW registration failed: ', registrationError)
+        })
+      })
+    }
+
     const handleStart = () => {
       setPageLoading(true);
     };
@@ -57,7 +68,7 @@ function RootApp({ Component, pageProps }) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Toaster 
+          <Toaster
             toastOptions={{
               className: null,
               style: {

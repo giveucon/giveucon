@@ -20,11 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  }))
 
 function Completed({ lng, lngDict, selfUser }) {
 
@@ -34,7 +32,8 @@ function Completed({ lng, lngDict, selfUser }) {
 
   return (
     <Layout
-      locale={lng}
+      lng={lng}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('reportSubmitted')} - ${i18n.t('_appName')}`}
     >
