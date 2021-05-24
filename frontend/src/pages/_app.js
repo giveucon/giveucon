@@ -8,6 +8,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import * as constants from '../constants';
 import I18n from 'lib/i18n'
 import lightTheme from 'styles/lightTheme';
 import darkTheme from 'styles/darkTheme';
@@ -50,7 +51,7 @@ function RootApp({ Component, pageProps }) {
     <>
       <Head>
         <title>_app.js is loading...</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href={constants.FAVICON_PATH} />
         <meta
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'

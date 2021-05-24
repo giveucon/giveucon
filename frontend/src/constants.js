@@ -10,17 +10,35 @@ import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirector
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 
-export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
 export const APP_VERSION = '0.2.0-alpha';
-export const COUPON_OTP_REFRESH_INTERVAL = 30000;
-export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
-export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LANGUAGE_LIST = [
   { name: 'English', lng: 'en', lngDict: EN },
   { name: '한국어', lng: 'ko', lngDict: KO }
 ];
+export const DEFAULT_LATITUDE = 37.56682420267543;
+export const DEFAULT_LONGITUDE = 126.978652258823;
+export const COUPON_OTP_REFRESH_INTERVAL = 30000;
+export const SIGNUP_PHONE_VERIFICATION_TIME_LIMIT = 180000;
+
+export const RESPONSE_TYPE_OK = 'ok';
+export const RESPONSE_TYPE_REQUEST_ERROR = 'request_error';
+export const RESPONSE_TYPE_RESPONSE_ERROR = 'response_error';
+export const RESPONSE_TYPE_UNKNOWN_ERROR = 'unknown_error';
+
+export const FAVICON_PATH = '/images/icons/favicon.ico';
+export const LOGO_PATH = '/images/logo.png';
+export const NO_IMAGE_PATH = '/images/no_image.png';
+
+export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
+export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
+export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
+export const MONEY_DISCOUNT_LIST = [-100, -500, -1000, -5000, -10000, -50000];
+
+export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LIST_SLICE_NUMBER = 3;
-export const LOGO_PATH = '/logo.png';
+export const TILE_LIST_SLICE_NUMBER = 3;
+export const TIMESTAMP_REFRESH_INTERVAL = 100;
+
 export const MENU_ITEM_LIST = [
   {
     value: 'goBack',
@@ -65,16 +83,3 @@ export const MENU_ITEM_LIST = [
     link: () => {Router.push('/trades/')}
   }
 ];
-export const DEFAULT_LATITUDE = 37.56682420267543;
-export const DEFAULT_LONGITUDE = 126.978652258823;
-export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
-export const MONEY_DISCOUNT_LIST = [-100, -500, -1000, -5000, -10000, -50000];
-export const NO_IMAGE_PATH = '/no_image.png';
-export const SIGNUP_PHONE_VERIFICATION_TIME_LIMIT = 180000;
-export const TILE_LIST_SLICE_NUMBER = 3;
-export const TIMESTAMP_REFRESH_INTERVAL = 100;
-
-export const RESPONSE_TYPE_OK = 'ok';
-export const RESPONSE_TYPE_REQUEST_ERROR = 'request_error';
-export const RESPONSE_TYPE_RESPONSE_ERROR = 'response_error';
-export const RESPONSE_TYPE_UNKNOWN_ERROR = 'unknown_error';

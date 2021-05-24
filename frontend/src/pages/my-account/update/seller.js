@@ -12,7 +12,7 @@ import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
-import PayPalSVGIcon from '../../../../public/paypal.svg';
+import PayPalSVGIcon from '../../../../public/images/paypal.svg';
 
 const useStyles = makeStyles((theme) => ({
   errorButton: {
