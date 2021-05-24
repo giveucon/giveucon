@@ -218,7 +218,7 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
         }
       >
         {productReviewList.length > 0 ? (
-          productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
+          productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
               <ListItem
                 variant='review'

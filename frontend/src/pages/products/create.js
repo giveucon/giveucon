@@ -183,7 +183,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>
-                  {imageList.map((item) => (
+                  {imageList.map((item, index) => (
                     <Tile
                       key={item.id}
                       image={item.dataURL}

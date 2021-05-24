@@ -163,7 +163,7 @@ function Id({
         <Box padding={1}>
           <Box display='flex' flexWrap='wrap' marginBottom={store.tags && (store.tags.length > 0) ? 1 : 0}>
             {
-              store.tags && (store.tags.length > 0) && store.tags.map((item) => (
+              store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
                 <Box
                   key={item.id}
                   marginLeft={index > 0 ? '0.25rem' : '0rem'}
@@ -252,7 +252,7 @@ function Id({
         }
       >
         {storeNoticeList.length > 0 ? (
-          storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item) => (
+          storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
             <>
               <ListItem
                 variant='notice'
@@ -346,7 +346,7 @@ function Id({
         }
       >
         {storeReviewList.length > 0 ? (
-            storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
+            storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
               <>
                 <ListItem
                   key={item.id}

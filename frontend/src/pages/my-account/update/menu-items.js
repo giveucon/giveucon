@@ -134,8 +134,8 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
         titlePrefix={<IconButton><CheckBoxOutlineBlankIcon /></IconButton>}
       >
         <SortableMenuItemContainer onSortEnd={onSortUnusedMenuItemEnd} useDragHandle>
-          {unusedMenuItemList.map((value) => (
-            <SortableUnusedMenuItem key={value} index={index} value={value} />
+          {unusedMenuItemList.map((item, index) => (
+            <SortableUnusedMenuItem key={item} index={index} value={item} />
           ))}
         </SortableMenuItemContainer>
       </Section>
@@ -144,8 +144,8 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
         titlePrefix={<IconButton><CheckBoxIcon /></IconButton>}
       >
         <SortableMenuItemContainer onSortEnd={onSortMenuItemEnd} useDragHandle>
-          {menuItemList.map((value) => (
-            <SortableMenuItem key={value} index={index} value={value} />
+          {menuItemList.map((item, index) => (
+            <SortableMenuItem key={item} index={index} value={item} />
           ))}
         </SortableMenuItemContainer>
       </Section>

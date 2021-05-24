@@ -79,7 +79,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
         }
       >
         {(centralNoticeList.length > 0) ? (
-          centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
+          centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
               <ListItem
                 variant='notice'

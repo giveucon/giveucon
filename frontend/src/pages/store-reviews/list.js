@@ -76,7 +76,7 @@ function List({ lng, lngDict, selfUser, initialStoreReviewListResponse, store })
             loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            {storeReviewList.map((item) => (
+            {storeReviewList.map((item, index) => (
               <>
                 <ListItem
                   variant='review'

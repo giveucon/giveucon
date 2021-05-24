@@ -57,7 +57,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
             loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            {centralNoticeList.map((item) => (
+            {centralNoticeList.map((item, index) => (
               <>
                 <ListItem
                   variant='notice'

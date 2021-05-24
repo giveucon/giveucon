@@ -128,7 +128,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                   loader={<InfiniteScrollLoader loading />}
                   endMessage={<InfiniteScrollLoader loading={false} />}
                 >
-                  {couponList.map((item) => (
+                  {couponList.map((item, index) => (
                     <>
                       <CouponListItem
                         title={item.product.name}

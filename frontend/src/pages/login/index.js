@@ -103,7 +103,7 @@ function Index( lng, lngDict ) {
                       <ListItem
                         key={item.lng}
                         button
-                        selected={item.lng === language}
+                        selected={item.lng === locale}
                         onClick={() => {
                           i18n.locale(item.lng, item.lngDict);
                           setLocale(item.lng);

@@ -73,7 +73,7 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
         }
       >
         {selfFriendList.length > 0 ? (
-          selfFriendList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
+          selfFriendList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
             <>
               <ListItem
                 key={item.id}

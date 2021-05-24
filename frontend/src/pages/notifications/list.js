@@ -63,7 +63,7 @@ function List({ lng, lngDict, selfUser, initialNotificationListResponse, user })
             loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            {notificationList.map((item) => (
+            {notificationList.map((item, index) => (
               <>
                 <ListItem
                   variant='notification'
