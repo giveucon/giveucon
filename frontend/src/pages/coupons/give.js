@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
@@ -8,25 +8,12 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import ContactsIcon from '@material-ui/icons/Contacts';
-import FilterNoneIcon from '@material-ui/icons/FilterNone';
-import Filter1Icon from '@material-ui/icons/Filter1';
-import Filter2Icon from '@material-ui/icons/Filter2';
-import Filter3Icon from '@material-ui/icons/Filter3';
-import Filter4Icon from '@material-ui/icons/Filter4';
-import Filter5Icon from '@material-ui/icons/Filter5';
-import Filter6Icon from '@material-ui/icons/Filter6';
-import Filter7Icon from '@material-ui/icons/Filter7';
-import Filter8Icon from '@material-ui/icons/Filter8';
-import Filter9Icon from '@material-ui/icons/Filter9';
-import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
 import PaymentIcon from '@material-ui/icons/Payment';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
-import AmountInputBox from 'components/AmountInputBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
-import PayPalButton from 'components/PayPalButton'
 import CouponBox from 'components/CouponBox'
 import Section from 'components/Section'
 import ListItem from 'components/ListItem'
@@ -64,8 +51,6 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
 
   const i18n = useI18n();
   const router = useRouter();
-  const [amount, setAmount] = useState(0);
-  const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
 
   const [selfFriendList, setSelfFriendList] = useState(initialSelfFriendListResponse.data.results);
   const [selfFriendnListpage, setSelfFriendListpage] = useState(1);
@@ -77,11 +62,9 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
     });
     setSelfFriendList(prevSelfFriendList => (prevSelfFriendList || []).concat(selfFriendListResponse.data.results));
     setSelfFriendListpage(prevSelfFriendListpage => prevSelfFriendListpage + 1);
-    if (selfFriendListResponse.data.next === null) setHasMoreSelfFriendList(prevHasMoreSelfFriendList => false);
+    if (selfFriendListResponse.data.next === null) setHasMoreSelfFriendList(false);
   }
   const [selectedFriendList, setSelectedFriendList] = useState([]);
-
-  const merchantId = 'AAAAAAAAAAAA';
 
   return (
     <>
@@ -131,7 +114,7 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
                   prefix={
                     <Checkbox
                       checked={selectedFriendList.includes(item.id)}
-                      onChange={(event) => {
+                      onChange={() => {
                         if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
                         else setSelectedFriendList(selectedFriendList.concat(item.id));
                         selectedFriendList.sort((lhs, rhs) => lhs - rhs);
@@ -146,41 +129,6 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
             <AlertBox content={i18n.t('_isEmpty')} variant='information' />
           )}
         </Section>
-
-        {/*
-          <Section
-            title={i18n.t('amount')}
-            titlePrefix={<IconButton>{amountIcon}</IconButton>}
-          >
-            <Box paddingY={1}>
-              <AmountInputBox
-                label={i18n.t('amount')}
-                lng={lng}
-                lngDict={lngDict}
-                defaultAmount={0}
-                addAmountList={constants.AMOUNT_LIST}
-                onChangeAmount={(amount) => {
-                  setAmount(prevAmount => amount);
-                  if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
-                  if (amount === 1) setAmountIcon(<Filter1Icon />)
-                  if (amount === 2) setAmountIcon(<Filter2Icon />)
-                  if (amount === 3) setAmountIcon(<Filter3Icon />)
-                  if (amount === 4) setAmountIcon(<Filter4Icon />)
-                  if (amount === 5) setAmountIcon(<Filter5Icon />)
-                  if (amount === 6) setAmountIcon(<Filter6Icon />)
-                  if (amount === 7) setAmountIcon(<Filter7Icon />)
-                  if (amount === 8) setAmountIcon(<Filter8Icon />)
-                  if (amount === 9) setAmountIcon(<Filter9Icon />)
-                  if (amount >= 10) setAmountIcon(<Filter9PlusIcon />)
-                }}
-              />
-            </Box>
-          </Section>
-        */}
-
-        {/*
-          <PayPalButton merchantId={merchantId} price='0.01' description='test' />
-        */}
 
         <Box marginY={1}>
           <Button

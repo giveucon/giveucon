@@ -114,9 +114,9 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         }
         padding={false}
       >
-        {selfCouponSellingList.length > 0 ? (
+        {couponSellingList.length > 0 ? (
           <SwipeableTileList half>
-            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
+            {couponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}

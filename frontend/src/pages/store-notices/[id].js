@@ -15,8 +15,6 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getStoreNotice = async (context) => await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 
-const getStore = async (context, storeNotice) => await requestToBackend(context, `api/stores/${storeNotice.store}/`, 'get', 'json');
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeNoticeResponse = await getStoreNotice(context);
   if (storeNoticeResponse.status === 404) {
@@ -24,19 +22,17 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, storeNoticeResponse.data);
   return {
     props: {
       lng,
       lngDict,
       selfUser,
       storeNotice: storeNoticeResponse.data,
-      store: storeResponse.data
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, storeNotice, store }) {
+function Id({ lng, lngDict, selfUser, storeNotice }) {
 
 const i18n = useI18n();
   const router = useRouter();
@@ -48,8 +44,6 @@ const i18n = useI18n();
       menuItemList={selfUser.menu_items}
       title={`${storeNotice.article.title} - ${i18n.t('_appName')}`}
     >
-
-
       <Section
         backButton
         title={storeNotice.article.title}

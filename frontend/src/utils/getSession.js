@@ -107,8 +107,6 @@ export default async function getSession(context) {
           maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
           path: process.env.NEXT_PUBLIC_COOKIE_PATH,
         })
-        console.info('refresh.js : Token refreshed');
-        console.info(refreshedSession);
         return refreshedSession;
       }
         destroyCookie(context, 'giveucon_session', {

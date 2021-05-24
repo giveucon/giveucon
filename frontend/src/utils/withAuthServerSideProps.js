@@ -1,7 +1,7 @@
+import destroyCookie from 'utils/destroyCookie';
 import getSession from 'utils/getSession';
 import requestToBackend from 'utils/requestToBackend';
 import setCookie from 'utils/setCookie';
-import destroyCookie from 'utils/destroyCookie';
 
 export default function withAuthServerSideProps (getServerSidePropsFunction) {
   return async (context) => {

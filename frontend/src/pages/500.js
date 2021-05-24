@@ -13,7 +13,7 @@ export const getStaticProps = withoutAuthServerSideProps (async (context, lng, l
     props: { lng, lngDict }
   }))
 
-function Error500({ lng, lngDict }) {
+function Error500() {
 
   const i18n = useI18n();
   const router = useRouter();

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router'
 
 import * as constants from 'constants';
 import Layout from 'components/Layout'
@@ -11,8 +10,6 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getNotification = async (context) => await requestToBackend(context, `api/store-notices/${context.query.id}/`, 'get', 'json');
 
-const getStore = async (context, notification) => await requestToBackend(context, `api/stores/${notification.store}/`, 'get', 'json');
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const notificationResponse = await getNotification(context);
   if (notificationResponse.status === 404) {
@@ -20,7 +17,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, notificationResponse.data);
   return {
     props: {
       lng,
@@ -32,10 +28,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 })
 
 function Id({ lng, lngDict, selfUser, notification }) {
-
-const i18n = useI18n();
-  const router = useRouter();
-
+  const i18n = useI18n();
   return (
     <Layout
       lng={lng}

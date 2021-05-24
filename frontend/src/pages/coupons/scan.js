@@ -53,21 +53,16 @@ function Scan({ lng, lngDict, selfUser }) {
           drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
           drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
-          try {
-            const qrData = JSON.parse(code.data)
-            if (verifyQRData(qrData)) {
-              // console.log(video.srcObject.getTracks())
-              video.srcObject.getTracks().forEach(
-                track => {
-                  track.stop();
-                  video.srcObject.removeTrack(track);
-                }
-              )
-              video.srcObject = null;
-              router.push(`/coupons/${qrData.coupon}/`)
-            }
-          } catch (exception) {
-            console.error(exception);
+          const qrData = JSON.parse(code.data)
+          if (verifyQRData(qrData)) {
+            video.srcObject.getTracks().forEach(
+              track => {
+                track.stop();
+                video.srcObject.removeTrack(track);
+              }
+            )
+            video.srcObject = null;
+            router.push(`/coupons/${qrData.coupon}/`)
           }
         }
       }
@@ -84,7 +79,7 @@ function Scan({ lng, lngDict, selfUser }) {
         requestAnimationFrame(tick);
 
       });
-  }, []);
+  }, [router]);
 
   return (
     <Layout

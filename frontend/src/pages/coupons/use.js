@@ -52,7 +52,7 @@ function Use({ lng, lngDict, selfUser, coupon }) {
       setCouponQr(newCouponQr);
     };
     getCouponQR(coupon);
-  }, [])
+  }, [coupon])
 
   useEffect(() => {
     const getCouponQR = async (coupon) => {

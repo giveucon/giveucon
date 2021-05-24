@@ -41,19 +41,9 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     props: { lng, lngDict, selfUser }
   }))
 
-function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
+function MenuItems({ lng, lngDict, selfUser }) {
   const i18n = useI18n();
   const router = useRouter();
-  const [selfUser, setSelfUser] = useState({
-    id: prevSelfUser.id,
-    email: prevSelfUser.email,
-    user_name: prevSelfUser.user_name,
-    first_name: prevSelfUser.first_name,
-    last_name: prevSelfUser.last_name,
-    locale: prevSelfUser.locale,
-    dark_mode: prevSelfUser.dark_mode,
-    menu_items: prevSelfUser.menu_items,
-  });
   const [unusedMenuItemList, setUnusedMenuItemKeyList] = useState(['scan', 'goBack']);
   const [menuItemList, setMenuItemKeyList] = useState(['home', 'myWallet', 'stores', 'trades', 'myAccount']);
 
@@ -122,7 +112,7 @@ function MenuItems({ lng, lngDict, selfUser: prevSelfUser }) {
     <Layout
       lng={lng}
       lngDict={lngDict}
-      menuItemList={prevSelfUser.menu_items}
+      menuItemList={selfUser.menu_items}
       title={`${i18n.t('menuItems')} - ${i18n.t('_appName')}`}
     >
       <Section

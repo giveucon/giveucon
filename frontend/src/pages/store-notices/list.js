@@ -43,7 +43,7 @@ function List({ lng, lngDict, selfUser, initialStoreNoticeListResponse, store })
     });
     setStoreNoticeList(prevStoreNoticeList => (prevStoreNoticeList || []).concat(storeNoticeListResponse.data.results));
     setStoreNoticeListpage(prevStoreNoticeListpage => prevStoreNoticeListpage + 1);
-    if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(prevHasMoreStoreNoticeList => false);
+    if (storeNoticeListResponse.data.next === null) setHasMoreStoreNoticeList(false);
   }
 
   return (

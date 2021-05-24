@@ -29,8 +29,6 @@ export default function AmountInputBox({
   defaultAmount=0,
   enableInfinite=false,
   label,
-  lng,
-  lngDict,
   onChangeAmount,
   onChangeInfinite=()=>{},
   variant='default'
@@ -50,9 +48,8 @@ export default function AmountInputBox({
           fullWidth
           type='number'
           onChange={(event) => {
-            console.log(event.target);
             onChangeAmount(event.target.value || 0);
-            setAmount(prevAmount => (event.target.value || 0));
+            setAmount(event.target.value || 0);
           }}
           InputProps={{
             startAdornment:
@@ -84,7 +81,7 @@ export default function AmountInputBox({
                 onChangeAmount(amount + addAmount);
                 onChangeInfinite(false);
                 setAmount(prevAmount => prevAmount + addAmount);
-                setInfinite(prevInfinite => false);
+                setInfinite(false);
               }}
             >
               {variant==='default' && `+ ${addAmount}`}
@@ -101,8 +98,8 @@ export default function AmountInputBox({
               onClick={() => {
                 onChangeAmount(0);
                 onChangeInfinite(true);
-                setAmount(prevAmount => 0);
-                setInfinite(prevInfinite => true);
+                setAmount(0);
+                setInfinite(true);
               }}
             >
               {i18n.t('infinite')}
@@ -116,8 +113,8 @@ export default function AmountInputBox({
             onClick={() => {
               onChangeAmount(defaultAmount);
               onChangeInfinite(false);
-              setAmount(prevAmount => defaultAmount);
-              setInfinite(prevInfinite => false);
+              setAmount(defaultAmount);
+              setInfinite(false);
             }}
           >
             {i18n.t('reset')}

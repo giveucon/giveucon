@@ -24,7 +24,6 @@ const swipeableTileList = [
   <Tile
     title='Swipeable Tile 1'
     image='https://cdn.pixabay.com/photo/2016/02/19/11/40/woman-1209862_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
     actions={
       <Button>Edit</Button>
     }
@@ -32,7 +31,6 @@ const swipeableTileList = [
   <Tile
     title='Swipeable Tile 2'
     image='https://cdn.pixabay.com/photo/2018/04/04/01/51/girl-3288623_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
     actions={
       <Button>Edit</Button>
     }
@@ -40,7 +38,6 @@ const swipeableTileList = [
   <Tile
     title='Swipeable Tile 3'
     image='https://cdn.pixabay.com/photo/2018/08/13/03/21/woman-3602245_960_720.jpg'
-    onClick={() => alert( 'Tapped' )}
     actions={
       <Button>Edit</Button>
     }
@@ -161,8 +158,8 @@ export default function Components({ lng, lngDict, selfUser }) {
       >
         <AmountInputBox
           label='Amount'
-          onChangeAmount={(amount) => {}}
-          onChangeInfinite={(infinite) => {}}
+          onChangeAmount={() => {}}
+          onChangeInfinite={() => {}}
         />
       </Section>
 
@@ -176,8 +173,8 @@ export default function Components({ lng, lngDict, selfUser }) {
         <AmountInputBox
           enableInfinite
           label='Amount'
-          onChangeAmount={(amount) => {}}
-          onChangeInfinite={(infinite) => {}}
+          onChangeAmount={() => {}}
+          onChangeInfinite={() => {}}
         />
       </Section>
 
@@ -200,8 +197,7 @@ export default function Components({ lng, lngDict, selfUser }) {
           title='NoticeBox Title NoticeBox Title NoticeBox Title NoticeBox Title'
           subtitle='NoticeBox Subtitle NoticeBox Subtitle NoticeBox Subtitle NoticeBox Subtitle'
           imageList={['https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg']}
-          content='NoticeBox Content NoticeBox Content NoticeBox Content '
-          onClick={() => alert( 'Tapped' )}
+          content='NoticeBox Content NoticeBox Content NoticeBox Content'
         >
           <Button>Edit</Button>
         </NoticeBox>
@@ -220,7 +216,6 @@ export default function Components({ lng, lngDict, selfUser }) {
           content='Excellent'
           score={4}
           actions={<Button>Edit</Button>}
-          onClick={() => alert( 'Tapped' )}
         />
       </Section>
 
@@ -270,14 +265,12 @@ export default function Components({ lng, lngDict, selfUser }) {
             <Tile
               title='Tile'
               image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
             />
           </Grid>
           <Grid item xs={6}>
             <Tile
               title='Tile'
               image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
               menuItems={
                 [<MenuItem>Menu Item</MenuItem>,<MenuItem>Menu Item</MenuItem>]
               }
@@ -287,7 +280,6 @@ export default function Components({ lng, lngDict, selfUser }) {
             <Tile
               title='한글한글아름답게한글한글아름답게한글한글아름답게'
               image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
               actions={
                 <Button>Edit</Button>
               }
@@ -301,7 +293,6 @@ export default function Components({ lng, lngDict, selfUser }) {
               title='한글한글아름답게한글한글아름답게한글한글아름답게'
               subtitle='조금조금아름답게조금조금아름답게조금조금아름답게'
               image='https://cdn.pixabay.com/photo/2019/08/27/22/23/nature-4435423_960_720.jpg'
-              onClick={() => alert( 'Tapped' )}
               actions={
                 <Button>Edit</Button>
               }

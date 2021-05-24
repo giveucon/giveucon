@@ -73,7 +73,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
     });
     setCouponList(prevCouponList => (prevCouponList || []).concat(couponListResponse.data.results));
     setCouponListpage(prevCouponListpage => prevCouponListpage + 1);
-    if (couponListpage.data.next === null) setHasMoreCouponList(prevHasMoreCouponList => false);
+    if (couponListpage.data.next === null) setHasMoreCouponList(false);
   }
 
   if (product && group) {

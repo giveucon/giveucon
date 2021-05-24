@@ -13,7 +13,7 @@ export const getStaticProps = withoutAuthServerSideProps (async (context, lng, l
     props: { lng, lngDict }
   }))
 
-function Offline({ lng, lngDict }) {
+function Offline() {
 
   const i18n = useI18n();
   const router = useRouter();

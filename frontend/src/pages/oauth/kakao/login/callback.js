@@ -126,9 +126,7 @@ const socialLoginRefresh = async (refreshToken) => {
 
 export async function getServerSideProps(context) {
   const tokenResponse = await getTokens(context.query.code);
-  console.log(tokenResponse);
   const loginResponse = await socialLogin(tokenResponse.data.access_token);
-  console.log(loginResponse);
   const loginRefreshResponse = await socialLoginRefresh(loginResponse.data.refresh_token);
 
   const session = {

@@ -35,7 +35,7 @@ function List({ lng, lngDict, selfUser, initialCentralNoticeListResponse }) {
     });
     setCentralNoticeList(prevCentralNoticeList => (prevCentralNoticeList || []).concat(centralNoticeListResponse.data.results));
     setCentralNoticeListpage(prevCentralNoticeListpage => prevCentralNoticeListpage + 1);
-    if (centralNoticeListResponse.data.next === null) setHasMoreCentralNoticeList(prevHasMoreCentralNoticeList => false);
+    if (centralNoticeListResponse.data.next === null) setHasMoreCentralNoticeList(false);
   }
 
   return (

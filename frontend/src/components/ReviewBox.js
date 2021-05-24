@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -9,18 +8,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import SwipeableTileList from 'components/SwipeableTileList'
 import Tile from 'components//Tile'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      maxWidth: '100%',
-    },
-    media: {
-      paddingTop: '42.86%', // 21:9,
-      // paddingTop: '56.25%', // 16:9,
-    },
-  }));
-
-export default function ReviewBox({ actions=null, author=null, content=null, date=null, imageList=null, onClick=null, score=null, skeleton=false, title=null }) {
-  const classes = useStyles();
+export default function ReviewBox({ actions=null, author=null, content=null, date=null, imageList=null, score=null, skeleton=false, title=null }) {
   return (
     skeleton ? (
       <>

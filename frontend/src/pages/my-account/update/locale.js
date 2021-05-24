@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -20,16 +19,6 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 import * as constants from '../../../constants';
 
-const useStyles = makeStyles((theme) => ({
-  errorButton: {
-    background: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
-
 const putSelfUser = async (selfUser) => {
   const data = {
     ...selfUser,
@@ -46,7 +35,6 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [selfUser, setSelfUser] = useState({
     ...prevSelfUser,
     // menu_items: prevSelfUser.menu_items,

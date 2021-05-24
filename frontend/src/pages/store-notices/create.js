@@ -141,15 +141,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             setImageList(imageList);
           }}
         >
-          {({
-            imageList,
-            onImageUpload,
-            onImageRemoveAll,
-            onImageUpdate,
-            onImageRemove,
-            isDragging,
-            dragProps
-          }) => (
+          {({ imageList, onImageUpload, onImageRemoveAll, onImageRemove }) => (
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>

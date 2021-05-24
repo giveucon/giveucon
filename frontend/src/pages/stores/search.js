@@ -74,9 +74,9 @@ function Search({ lng, lngDict, selfUser }) {
         const favoriteStoreResponse = await getFavoriteStore(null, selfUser, store);
         store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
       }
-      setStoreList(prevStoreList => getStoreListResponse.data.results);
-      setStoreListpage(prevStoreListpage => 1);
-      if (getStoreListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
+      setStoreList(getStoreListResponse.data.results);
+      setStoreListpage(1);
+      if (getStoreListResponse.data.next === null) setHasMoreStoreList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   };
@@ -95,7 +95,7 @@ function Search({ lng, lngDict, selfUser }) {
       }
       setStoreList(prevStoreList => prevStoreList.concat(getStoreListResponse.data.results));
       setStoreListpage(prevStoreListpage => prevStoreListpage + 1);
-      if (getStoreListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
+      if (getStoreListResponse.data.next === null) setHasMoreStoreList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   }
@@ -150,9 +150,7 @@ function Search({ lng, lngDict, selfUser }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const getStoreListResult = await getStoreList(keywords);
-            }}
+            onClick={async () => await getStoreList(keywords)}
           >
             {i18n.t('searchStores')}
           </Button>

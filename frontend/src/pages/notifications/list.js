@@ -41,7 +41,7 @@ function List({ lng, lngDict, selfUser, initialNotificationListResponse, user })
     });
     setNotificationList(prevNotificationList => (prevNotificationList || []).concat(notificationListResponse.data.results));
     setNotificationListpage(prevNotificationListpage => prevNotificationListpage + 1);
-    if (notificationListResponse.data.next === null) setHasMoreNotificationList(prevHasMoreNotificationList => false);
+    if (notificationListResponse.data.next === null) setHasMoreNotificationList(false);
   }
 
   return (

@@ -75,14 +75,13 @@ function Create({ lng, lngDict, selfUser }) {
     productReviewNumber
   ].reduce((lhs, rhs) => lhs + rhs, 0);
 
-
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
   }
 
   const getImageListFromUnsplash = async (keyword) => {
     const imageList = [];
-    for (const i of Array(faker.datatype.number() % imageMaxAmount).keys()) {
+    for (let i = 0; i < faker.datatype.number() % imageMaxAmount; i++) {
       await convertImageToFile(
         `/unsplash/1600x900/?${keyword}`,
         faker.datatype.uuid(),
@@ -93,10 +92,6 @@ function Create({ lng, lngDict, selfUser }) {
       );
     }
     return imageList;
-  };
-
-  const postTimeout = async () => {
-    await new Promise(r => setTimeout(r, 10));
   };
 
   const postTag = async (user) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
@@ -188,8 +183,6 @@ function Create({ lng, lngDict, selfUser }) {
       tagIdList.push(tagResult.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(tagResult);
     }
   };
 
@@ -211,14 +204,12 @@ function Create({ lng, lngDict, selfUser }) {
       userIdList.push(userResult.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(userResult);
     }
   };
 
   const createStore = async () => {
     const pickedTagIdSet = new Set();
-    for (const i of Array(Math.floor(Math.random() * tagMaxAmount)).keys()) {
+    for (let i = 0; i < Math.floor(Math.random() * tagMaxAmount); i++) {
       while (true) {
         const pickedTagId = tagIdList[Math.floor(Math.random() * tagIdList.length)];
         if (!pickedTagIdSet.has(pickedTagId)) {
@@ -246,11 +237,7 @@ function Create({ lng, lngDict, selfUser }) {
       storeIdList.push(storeResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-      } else {
-        console.error(storeLocationResponse);
       }
-    } else {
-      console.error(storeResponse);
     }
   };
 
@@ -269,8 +256,6 @@ function Create({ lng, lngDict, selfUser }) {
       productIdList.push(productResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(productResponse);
     }
   };
 
@@ -290,8 +275,6 @@ function Create({ lng, lngDict, selfUser }) {
       centralNoticeIdList.push(centralNoticeResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(centralNoticeResponse);
     }
   };
 
@@ -311,8 +294,6 @@ function Create({ lng, lngDict, selfUser }) {
       storeNoticeIdList.push(storeNoticeResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(storeNoticeResponse);
     }
   };
 
@@ -335,8 +316,6 @@ function Create({ lng, lngDict, selfUser }) {
       storeReviewIdList.push(storeReviewResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(storeReviewResponse);
     }
   };
 
@@ -359,44 +338,42 @@ function Create({ lng, lngDict, selfUser }) {
       productReviewIdList.push(productReviewResponse.data.id);
       increaseRequestedCount();
       // await postTimeout();
-    } else {
-      console.error(productReviewResponse);
     }
   };
 
   async function initializeDatabase() {
     setInitializing(true);
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('tag')}`);
-    for (const i of Array(tagNumber).keys()) {
+    for (let i = 0; i < tagNumber; i++) {
       await createTag();
     }
     if (tagMaxAmount > tagIdList.length) throw new Error();
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
-    for (const i of Array(userNumber).keys()) {
+    for (let i = 0; i < userNumber; i++) {
       await createUser();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('store')}`);
-    for (const i of Array(storeNumber).keys()) {
+    for (let i = 0; i < storeNumber; i++) {
       await createStore();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('product')}`);
-    for (const i of Array(productNumber).keys()) {
+    for (let i = 0; i < productNumber; i++) {
       await createProduct();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
-    for (const i of Array(centralNoticeNumber).keys()) {
+    for (let i = 0; i < centralNoticeNumber; i++) {
       await createCentralNotice();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
-    for (const i of Array(storeNoticeNumber).keys()) {
+    for (let i = 0; i < storeNoticeNumber; i++) {
       await createStoreNotice();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
-    for (const i of Array(storeReviewNumber).keys()) {
+    for (let i = 0; i < storeReviewNumber; i++) {
       await createStoreReview();
     }
     setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
-    for (const i of Array(productReviewNumber).keys()) {
+    for (let i = 0; i < productReviewNumber; i++) {
       await createProductReview();
     }
     setRequestedCount(allRequestCount);

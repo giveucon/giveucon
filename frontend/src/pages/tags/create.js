@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -35,7 +34,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 function Create({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
-  const router = useRouter();
   const [tag, setTag] = useState({
     name: null,
   });

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/styles';
 import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -26,21 +25,6 @@ import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: '100%',
-  },
-  imageArea: {
-    height: '10rem',
-    width: '10rem',
-    position: 'relative',
-  },
-  media: {
-    height: '10rem',
-    width: '10rem',
-  },
-}));
 
 const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
@@ -71,7 +55,6 @@ function Index({ lng, lngDict, selfUser, product }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [amount, setAmount] = useState(0);
   const [amountIcon, setAmountIcon] = useState(<FilterNoneIcon />);
 
@@ -110,7 +93,7 @@ function Index({ lng, lngDict, selfUser, product }) {
             defaultAmount={0}
             addAmountList={constants.AMOUNT_LIST}
             onChangeAmount={(amount) => {
-              setAmount(prevAmount => amount);
+              setAmount(amount);
               if (amount <= 0)  setAmountIcon(<FilterNoneIcon />)
               if (amount === 1) setAmountIcon(<Filter1Icon />)
               if (amount === 2) setAmountIcon(<Filter2Icon />)

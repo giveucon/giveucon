@@ -45,7 +45,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProductList }) {
+function Index({ lng, lngDict, selfUser, selfStoreList, selfProductList }) {
 
   const i18n = useI18n();
   const router = useRouter();

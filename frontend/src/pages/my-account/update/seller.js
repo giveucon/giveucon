@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import toast from 'react-hot-toast';
@@ -35,14 +35,6 @@ const getSellerOnboardLink = async () => await requestToBackend(null, '/api/sell
 
 const getSellerOnboardStatus = async () => await requestToBackend(null, '/api/seller-onboard-status/', 'get', 'json');
 
-const putSelfUser = async (selfUser) => {
-  const data = {
-    ...selfUser,
-    // menu_items: selfUser.menu_items
-  };
-  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', data, null);
-};
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: { lng, lngDict, selfUser }
   }))
@@ -52,17 +44,6 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [selfUser, setSelfUser] = useState({
-    ...prevSelfUser,
-    // menu_items: prevSelfUser.menu_items,
-  });
-  const [selfUserError, setSelfUserError] = useState({
-    email: false,
-    user_name: false,
-    first_name: false,
-    last_name: false,
-    phone_number: false,
-  });
 
   return (
     <Layout
@@ -106,10 +87,7 @@ function Seller({ lng, lngDict, selfUser: prevSelfUser }) {
           <Button
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const GetOnboardSellerResponse = await getSellerOnboardStatus();
-              console.log(GetOnboardSellerResponse);
-            }}
+            onClick={async () => await getSellerOnboardStatus()}
           >
             Get Seller Onboard Status
           </Button>

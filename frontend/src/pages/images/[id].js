@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router'
 
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
@@ -20,10 +19,9 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
 })
 
-function Id({ lng, lngDict, selfUser, image }) {
+function Id({ image }) {
 
   const i18n = useI18n();
-  const router = useRouter();
 
   return (
     <>

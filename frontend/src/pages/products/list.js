@@ -92,7 +92,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
     }
     setProductList(prevProductList => (prevProductList || []).concat(productListResponse.data.results));
     setProductListpage(prevProductListpage => prevProductListpage + 1);
-    if (productListResponse.data.next === null) setHasMoreProductList(prevHasMoreProductList => false);
+    if (productListResponse.data.next === null) setHasMoreProductList(false);
   }
 
   return (

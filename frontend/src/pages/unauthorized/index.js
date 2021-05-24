@@ -19,7 +19,11 @@ function Index({ lng, lngDict }) {
   const router = useRouter();
 
   return (
-    <Layout title={`${i18n.t('accessDenied')} - ${i18n.t('_appName')}`}>
+    <Layout
+      lng={lng}
+      lngDict={lngDict}
+      title={`${i18n.t('accessDenied')} - ${i18n.t('_appName')}`}
+    >
       <Section
         backButton
         title={i18n.t('accessDenied')}

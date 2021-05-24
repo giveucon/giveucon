@@ -57,7 +57,7 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
     const friendListResponse = await requestToBackend(null, 'api/friends/', 'get', 'json', null, params);
     setFriendList(prevFriendList => prevFriendList.concat(friendListResponse.data.results));
     setFriendListpage(prevFriendListpage => prevFriendListpage + 1);
-    if (friendListResponse.data.next === null) setHasMoreFriendList(prevHasMoreFriendList => false);
+    if (friendListResponse.data.next === null) setHasMoreFriendList(false);
   }
 
   return (

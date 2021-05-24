@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +38,6 @@ export default function UserProfileSection({
   children,
   image=null,
   name=null,
-  onClick=null,
   padding=true,
   subtitle=null
 }) {

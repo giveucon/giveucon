@@ -8,7 +8,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import SwipeableTileList from 'components/SwipeableTileList'
 import Tile from 'components/Tile'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
       maxWidth: '100%',
     },
@@ -17,9 +17,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function NoticeBox({ children=null, content=null, imageList=null, onClick=null, skeleton=false, title=null, subtitle=null }) {
+export default function NoticeBox({ children=null, content=null, imageList=null, skeleton=false, title=null, subtitle=null }) {
   const classes = useStyles();
-
   return (
     <Box className={classes.root}>
       {

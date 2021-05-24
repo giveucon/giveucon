@@ -91,7 +91,6 @@ export default async function requestToBackend(context, url, method, contentType
   if (contentType === 'json') response = await jsonRequest(session, processedUrl, method, data, params);
   else if (contentType === 'multipart') response = await multipartRequest(session, processedUrl, method, data, params);
   else {
-    console.error(contentType);
     throw new Error()
   };
   return response;

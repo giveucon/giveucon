@@ -8,9 +8,8 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
 import * as constants from 'constants';
-import useI18n from 'hooks/useI18n'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     maxWidth: '100%',
   },
@@ -25,11 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CouponBox({ image, lng, lngDict, name, onClick, price }) {
-
-  const i18n = useI18n();
+export default function CouponBox({ image, name, onClick, price }) {
   const classes = useStyles();
-
   return (
     <Box display='flex' alignItems='center' justifyContent='flex-start'>
       <Box className={classes.imageArea}>

@@ -49,7 +49,7 @@ function List({ lng, lngDict, selfUser, initialProductReviewListResponse, produc
     });
     setProductReviewList(prevProductReviewList => (prevProductReviewList || []).concat(productReviewListResponse.data.results));
     setProductReviewListpage(prevProductReviewListpage => prevProductReviewListpage + 1);
-    if (productReviewListResponse.data.next === null) setHasMoreProductReviewList(prevHasMoreProductReviewList => false);
+    if (productReviewListResponse.data.next === null) setHasMoreProductReviewList(false);
   }
 
   return (

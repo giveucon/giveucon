@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { makeStyles } from '@material-ui/core/styles';
 import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
@@ -8,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import SearchIcon from '@material-ui/icons/Search';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
@@ -22,15 +20,6 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const useStyles = makeStyles((theme) => ({
-  favoriteButton: {
-    color: theme.palette.favorite.main,
-    '&:hover': {
-      color: theme.palette.favorite.dark,
-    },
-  },
-}));
-
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: {
       lng,
@@ -43,7 +32,6 @@ function Search({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [keywords, setKeywords] = useState({
     name: null,
     tagName: null
@@ -58,9 +46,9 @@ function Search({ lng, lngDict, selfUser }) {
     };
     const getCouponSellingListResponse = await requestToBackend(null, 'api/coupon-sellings/', 'get', 'json', null, params);
     if (getCouponSellingListResponse.status === 200) {
-      setCouponSellingList(prevCouponSellingList => getCouponSellingListResponse.data.results);
-      setCouponSellingListpage(prevCouponSellingListpage => 1);
-      if (getCouponSellingListResponse.data.next === null) setHasMoreCouponSellingList(prevHasMoreCouponSellingList => false);
+      setCouponSellingList(getCouponSellingListResponse.data.results);
+      setCouponSellingListpage(1);
+      if (getCouponSellingListResponse.data.next === null) setHasMoreCouponSellingList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   };
@@ -78,7 +66,7 @@ function Search({ lng, lngDict, selfUser }) {
       }
       setCouponSellingList(prevCouponSellingList => prevCouponSellingList.concat(getCouponSellingListResponse.data.results));
       setCouponSellingListpage(prevCouponSellingListpage => prevCouponSellingListpage + 1);
-      if (getCouponSellingListResponse.data.next === null) setHasMoreCouponSellingList(prevHasMoreCouponSellingList => false);
+      if (getCouponSellingListResponse.data.next === null) setHasMoreCouponSellingList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   }
@@ -119,9 +107,7 @@ function Search({ lng, lngDict, selfUser }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const getCouponSellingListResult = await getCouponSellingList(keywords);
-            }}
+            onClick={async () => await getCouponSellingList(keywords)}
           >
             {i18n.t('searchCouponTrades')}
           </Button>

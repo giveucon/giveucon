@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
@@ -58,7 +57,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteProductListResponse, user
     const favoriteProductListResponse = await requestToBackend(null, 'api/favorite-products/', 'get', 'json', null, params);
     setFavoriteProductList(prevFavoriteProductList => prevFavoriteProductList.concat(favoriteProductListResponse.data.results));
     setFavoriteProductListpage(prevFavoriteProductListpage => prevFavoriteProductListpage + 1);
-    if (favoriteProductListResponse.data.next === null) setHasMoreFavoriteProductList(prevHasMoreFavoriteProductList => false);
+    if (favoriteProductListResponse.data.next === null) setHasMoreFavoriteProductList(false);
   }
 
   return (

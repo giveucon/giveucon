@@ -53,11 +53,10 @@ const putStore = async (store, imageList) => {
 };
 
 const getStoreLocation = async (store) => await requestToBackend(null, 'api/store-locations/', 'get', 'json', null, {
-    store: store.id
-  });
+  store: store.id
+});
 
 const putStoreLocation = async (store, storeLocation, location) => {
-  console.log(storeLocation)
   const data = {
     store: store.id,
     location
@@ -133,7 +132,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
       setImageList(processedImageList);
     }
     injectDataUrl();
-  }, []);
+  }, [prevStore]);
 
   return (
     <Layout
@@ -224,15 +223,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             setImageList(imageList);
           }}
         >
-          {({
-            imageList,
-            onImageUpload,
-            onImageRemoveAll,
-            onImageUpdate,
-            onImageRemove,
-            isDragging,
-            dragProps
-          }) => (
+          {({ imageList, onImageUpload, onImageRemoveAll, onImageRemove }) => (
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>
@@ -323,14 +314,12 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             const putStoreResponse = await putStore(store, imageList);
             if (putStoreResponse.status === 200) {
               const getStoreLocationResponse = await getStoreLocation(store);
-              console.log(getStoreLocationResponse.data[0])
               const putStoreLocationResponse = await putStoreLocation(store, getStoreLocationResponse.data[0], location);
               if (putStoreLocationResponse.status === 200) {
                 router.push(`/stores/${putStoreResponse.data.id}/`);
                 toast.success(i18n.t('_storeSuccessfullyEdited'));
               } else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                console.log(putStoreLocationResponse);
               }
             } else if (putStoreResponse.status === 400) {
               setStoreError(prevStoreError => ({...prevStoreError, name: !!putStoreResponse.data.name}));

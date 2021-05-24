@@ -7,7 +7,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import I18n from 'lib/i18n'
 import lightTheme from 'styles/lightTheme';
@@ -15,7 +14,6 @@ import darkTheme from 'styles/darkTheme';
 
 function RootApp({ Component, pageProps }) {
   const router = useRouter();
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [theme, setTheme] = useState(
     (pageProps.selfUser && pageProps.selfUser.dark_mode) ? darkTheme : lightTheme
   );
@@ -24,14 +22,7 @@ function RootApp({ Component, pageProps }) {
   useEffect(() => {
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/service-worker.js')
-        .then(registration => {
-          console.log('service worker registration successful')
-        })
-        .catch(err => {
-          console.warn('service worker registration failed', err.message)
-        })
+      navigator.serviceWorker.register('/service-worker.js')
     }
 
     const handleStart = () => {
@@ -49,11 +40,11 @@ function RootApp({ Component, pageProps }) {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-  }, []);
+  }, [router.events]);
 
   useEffect(() => {
     setTheme((pageProps.selfUser && pageProps.selfUser.dark_mode) ? darkTheme : lightTheme)
-  });
+  }, [pageProps.selfUser]);
 
   return (
     <>

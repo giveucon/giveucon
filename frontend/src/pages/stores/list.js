@@ -92,7 +92,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
     }
     setStoreList(prevStoreList => prevStoreList.concat(storeListResponse.data.results));
     setStoreListpage(prevStoreListpage => prevStoreListpage + 1);
-    if (storeListResponse.data.next === null) setHasMoreStoreList(prevHasMoreStoreList => false);
+    if (storeListResponse.data.next === null) setHasMoreStoreList(false);
   }
 
   return (

@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import BottomNavBar from 'components/BottomNavBar'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100vh',
     maxWidth: '100%',

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import toast from 'react-hot-toast';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,16 +20,6 @@ import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
-
-const useStyles = makeStyles((theme) => ({
-  errorButton: {
-    background: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
 
 const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json', null, {
   used: false
@@ -64,7 +53,6 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
 function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse }) {
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
   const [couponSelling, setCouponSelling] = useState({
     coupon: coupon ? coupon.id : null,
     price: coupon ? coupon.product.price : 0,
@@ -80,7 +68,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
     });
     setSelfCouponList(prevSelfCouponList => (prevSelfCouponList || []).concat(selfCouponListResponse.data.results));
     setSelfCouponListpage(prevSelfCouponListpage => prevSelfCouponListpage + 1);
-    if (selfCouponListpage.data.next === null) setHasMoreSelfCouponList(prevHasMoreSelfCouponList => false);
+    if (selfCouponListpage.data.next === null) setHasMoreSelfCouponList(false);
   }
 
   if (coupon) {
@@ -140,7 +128,6 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                console.log(postCouponSellingResponse)
               }
             }}
           >
@@ -186,7 +173,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
                     <Radio
                       value={item.id}
                       checked={couponSelling.coupon === item.id}
-                      onChange={(event) => {
+                      onChange={() => {
                         setCouponSelling(prevCouponSelling => ({...prevCouponSelling, coupon: item.id}))
                       }}
                     />
@@ -234,7 +221,6 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
-                console.log(postCouponSellingResponse)
               }
             }}
           >

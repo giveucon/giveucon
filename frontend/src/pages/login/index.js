@@ -54,7 +54,7 @@ export const getServerSideProps = withoutAuthServerSideProps (async (context, ln
   };
 })
 
-function Index( lng, lngDict ) {
+function Index() {
 
   const i18n = useI18n();
   const router = useRouter();

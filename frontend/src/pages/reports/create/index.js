@@ -102,34 +102,32 @@ function Index({ lng, lngDict, selfUser, user }) {
         title={i18n.t('reportForm')}
         titlePrefix={<IconButton><ReportIcon /></IconButton>}
       >
-        {/*
-          <Box paddingY={1}>
-            <Autocomplete
-              // multiple
-              options={dummyCategoryList}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              onChange={(event, value) => {
-                setReport(prevReport => ({...prevReport, category: value}));
-              }}
-              renderOption={(option, { selected }) => (
-                <>
-                  <Checkbox
-                    icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
-                    checkedIcon={<CheckBoxIcon fontSize='small' />}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.name}
-                </>
-              )}
-              style={{ minWidth: '2rem' }}
-              renderInput={(params) => (
-                <TextField {...params} label={i18n.t('categories')} placeholder={i18n.t('categories')} />
-              )}
-            />
-          </Box>
-        */}
+        <Box paddingY={1}>
+          <Autocomplete
+            // multiple
+            options={dummyCategoryList}
+            disableCloseOnSelect
+            getOptionLabel={(option) => option.name}
+            onChange={(event, value) => {
+              setReport(prevReport => ({...prevReport, category: value}));
+            }}
+            renderOption={(option, { selected }) => (
+              <>
+                <Checkbox
+                  icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
+                  checkedIcon={<CheckBoxIcon fontSize='small' />}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.name}
+              </>
+            )}
+            style={{ minWidth: '2rem' }}
+            renderInput={(params) => (
+              <TextField {...params} label={i18n.t('categories')} placeholder={i18n.t('categories')} />
+            )}
+          />
+        </Box>
         <Box paddingY={1}>
           <TextField
             name='title'
@@ -176,15 +174,7 @@ function Index({ lng, lngDict, selfUser, user }) {
             setImageList(imageList);
           }}
         >
-          {({
-            imageList,
-            onImageUpload,
-            onImageRemoveAll,
-            onImageUpdate,
-            onImageRemove,
-            isDragging,
-            dragProps
-          }) => (
+          {({ imageList, onImageUpload, onImageRemoveAll, onImageRemove }) => (
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>
@@ -243,7 +233,6 @@ function Index({ lng, lngDict, selfUser, user }) {
               setReportError(prevReportError => ({...prevReportError, title: !!postReportResponse.data.title}));
               setReportError(prevReportError => ({...prevReportError, content: !!postReportResponse.data.content}));
               toast.error(i18n.t('_checkInputFields'));
-              console.log(postReportResponse)
             }
           }}
         >

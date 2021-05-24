@@ -1,4 +1,4 @@
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps() {
   const clientId = process.env.NEXT_PUBLIC_KAKAO_APP_REST_API_KEY;
   const logoutRedirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}oauth/kakao/logout/callback/`;
   const state = process.env.NEXT_PUBLIC_KAKAO_APP_URL_PARAMETER_STATE;
@@ -11,6 +11,4 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default function Index() {
-
-}
+export default function Index() {}

@@ -101,7 +101,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
       setImageList(processedImageList);
     }
     injectDataUrl();
-  }, []);
+  }, [prevStoreReview]);
 
   return (
     <Layout
@@ -174,15 +174,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
             setImageList(imageList);
           }}
         >
-          {({
-            imageList,
-            onImageUpload,
-            onImageRemoveAll,
-            onImageUpdate,
-            onImageRemove,
-            isDragging,
-            dragProps
-          }) => (
+          {({ imageList, onImageUpload, onImageRemoveAll, onImageRemove }) => (
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>

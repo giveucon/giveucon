@@ -35,19 +35,17 @@ export default function PayPalButton ({merchantId, price, description}) {
                 ],
               }),
             onApprove: async (data, actions) => {
-              const order = await actions.order.capture();
+              await actions.order.capture();
               setPaid(true);
-              console.info(order);
             },
             onError: (err) => {
               setError(err);
-              console.error(err);
             },
           })
         .render(paypalRef.current);
       }
     };
-  }, []);
+  }, [description, merchantId, price]);
 
   if (paid) {
     return <div>Payment successful!</div>;

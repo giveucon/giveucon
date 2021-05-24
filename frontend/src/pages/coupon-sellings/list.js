@@ -66,10 +66,8 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
     });
     setCouponSellingList(prevCouponSellingList => (prevCouponSellingList || []).concat(couponSellingListResponse.data.results));
     setCouponSellingListpage(prevCouponSellingListpage => prevCouponSellingListpage + 1);
-    if (couponSellingListpage.data.next === null) setHasMoreCouponSellingList(prevHasMoreCouponSellingList => false);
+    if (couponSellingListpage.data.next === null) setHasMoreCouponSellingList(false);
   }
-
-  console.log(initialCouponSellingListResponse);
 
   return (
     <Layout

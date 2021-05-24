@@ -1,4 +1,4 @@
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   return {
     redirect: {
       permanent: false,
@@ -8,6 +8,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Callback() {
-
-}
+export default function Callback() {}

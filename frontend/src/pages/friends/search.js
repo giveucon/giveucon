@@ -11,12 +11,11 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
-import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout';
-import Section from 'components/Section';
 import ListItem from 'components/ListItem';
+import Section from 'components/Section';
 import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
@@ -48,9 +47,9 @@ function Search({ lng, lngDict, selfUser }) {
     };
     const getUserListResponse = await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
     if (getUserListResponse.status === 200) {
-      setUserList(prevUserList => getUserListResponse.data.results);
-      setUserListpage(prevUserListpage => 1);
-      if (getUserListResponse.data.next === null) setHasMoreUserList(prevHasMoreUserList => false);
+      setUserList(getUserListResponse.data.results);
+      setUserListpage(1);
+      if (getUserListResponse.data.next === null) setHasMoreUserList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   };
@@ -65,7 +64,7 @@ function Search({ lng, lngDict, selfUser }) {
     if (getUserListResponse.status === 200) {
       setUserList(prevUserList => prevUserList.concat(getUserListResponse.data.results));
       setUserListpage(prevUserListpage => prevUserListpage + 1);
-      if (getUserListResponse.data.next === null) setHasMoreUserList(prevHasMoreUserList => false);
+      if (getUserListResponse.data.next === null) setHasMoreUserList(false);
     }
     else toast.error(i18n.t('_errorOccurredProcessingRequest'));
   }
@@ -120,9 +119,7 @@ function Search({ lng, lngDict, selfUser }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const getUserListResult = await getUserList(keywords);
-            }}
+            onClick={async () => await getUserList(keywords)}
           >
             {i18n.t('searchUser')}
           </Button>
