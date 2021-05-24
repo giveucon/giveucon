@@ -86,7 +86,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
       >
         {centralNoticeList.length > 0 && (
           <SwipeableTileList autoplay>
-            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.article.title}
@@ -109,7 +109,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
       >
         {nearbyCouponList.length > 0 ? (
           <SwipeableTileList half>
-            {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.product.name}

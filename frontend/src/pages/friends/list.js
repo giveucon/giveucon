@@ -79,7 +79,7 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
             loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-            {friendList && friendList.map((item, index) => (
+            {friendList && friendList.map((item) => (
               <ListItem
                 key={item.id}
                 variant='user'

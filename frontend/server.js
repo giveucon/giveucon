@@ -1,8 +1,8 @@
-const express = require("express");
-const path = require("path");
-const next = require("next");
+const express = require('express');
+const path = require('path');
+const next = require('next');
 
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -13,15 +13,15 @@ app
 
     // requests to /service-worker.js
     server.get(
-      "/service-worker.js",
-      express.static(path.join(__dirname, ".next"))
+      '/service-worker.js',
+      express.static(path.join(__dirname, '.next'))
     );
 
     // all other requests
-    server.get("*", (req, res) => handle(req, res));
+    server.get('*', (req, res) => handle(req, res));
     server.listen(3000, (err) => {
       if (err) throw err;
-      console.log("> Ready on http://localhost:3000");
+      console.log('> Ready on http://localhost:3000');
     });
   })
   .catch((ex) => {

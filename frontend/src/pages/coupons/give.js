@@ -122,7 +122,7 @@ function Give({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse })
               loader={<InfiniteScrollLoader loading />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
-              {selfFriendList && selfFriendList.map((item, index) => (
+              {selfFriendList && selfFriendList.map((item) => (
                 <ListItem
                   key={item.id}
                   variant='user'

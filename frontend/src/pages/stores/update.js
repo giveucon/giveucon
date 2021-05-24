@@ -236,7 +236,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
             <>
               {imageList.length > 0 && (
                 <SwipeableTileList half>
-                  {imageList.map((item, index) => (
+                  {imageList.map((item) => (
                     <Tile
                       key={item.id}
                       image={item.dataURL}

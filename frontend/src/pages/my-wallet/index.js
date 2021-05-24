@@ -88,7 +88,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
       >
         {(selfCouponList.length > 0) ? (
           <SwipeableTileList half>
-            {selfCouponList.map((item, index) => (
+            {selfCouponList.map((item) => (
                 <Tile
                   key={item.id}
                   title={item.product.name}
@@ -131,7 +131,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
       >
         {(selfFavoriteStoreList.length > 0) ? (
           <SwipeableTileList half>
-            {selfFavoriteStoreList.map((item, index) => (
+            {selfFavoriteStoreList.map((item) => (
                 <Tile
                   key={item.id}
                   title={item.store.name}
@@ -163,7 +163,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfFavoriteStoreList, 
       >
         {(selfFavoriteProductList.length > 0) ? (
           <SwipeableTileList half>
-            {selfFavoriteProductList.map((item, index) => (
+            {selfFavoriteProductList.map((item) => (
                 <Tile
                   key={item.id}
                   title={item.product.name}

@@ -59,8 +59,8 @@ function Index( lng, lngDict ) {
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-  const [language, setLanguage] = useState('ko');
-  const [openLanguageMenu, setOpenLanguageMenu] = useState(false);
+  const [locale, setLocale] = useState('ko');
+  const [openLocaleMenu, setOpenLocaleMenu] = useState(false);
 
   return (
     <>
@@ -91,14 +91,14 @@ function Index( lng, lngDict ) {
             </Box>
 
             <List disablePadding>
-              <ListItem button onClick={() => setOpenLanguageMenu(!openLanguageMenu)}>
+              <ListItem button onClick={() => setOpenLocaleMenu(!openLocaleMenu)}>
                 <ListItemIcon><LanguageIcon /></ListItemIcon>
-                <ListItemText primary={i18n.t('language')} />
-                {openLanguageMenu ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText primary={i18n.t('locale')} />
+                {openLocaleMenu ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              <Collapse in={openLanguageMenu}>
+              <Collapse in={openLocaleMenu}>
                 <List disablePadding>
-                  {constants.LANGUAGE_LIST.map((item, index) => (
+                  {constants.LANGUAGE_LIST.map((item) => (
                     <>
                       <ListItem
                         key={item.lng}
@@ -106,7 +106,7 @@ function Index( lng, lngDict ) {
                         selected={item.lng === language}
                         onClick={() => {
                           i18n.locale(item.lng, item.lngDict);
-                          setLanguage(item.lng);
+                          setLocale(item.lng);
                         }}
                       >
                         <ListItemText primary={item.name} />
@@ -123,7 +123,7 @@ function Index( lng, lngDict ) {
                 fullWidth
                 variant='contained'
                 onClick={() =>{
-                  setCookie(null, 'giveucon_temp', JSON.stringify({lng: language}), {
+                  setCookie(null, 'giveucon_temp', JSON.stringify({lng: locale}), {
                     maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
                     path: process.env.NEXT_PUBLIC_COOKIE_PATH,
                   })

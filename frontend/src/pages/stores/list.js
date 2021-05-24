@@ -116,7 +116,7 @@ function List({ lng, lngDict, selfUser, initialStoreListResponse, user }) {
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
-              {storeList && storeList.map((item, index) => (
+              {storeList && storeList.map((item) => (
                 <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.name}

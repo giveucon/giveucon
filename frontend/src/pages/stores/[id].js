@@ -150,7 +150,7 @@ function Id({
       >
         <SwipeableTileList autoplay>
           {store.images && (store.images.length > 0) ? (
-            store.images.map((item, index) => <Tile
+            store.images.map((item) => <Tile
                 key={item.id}
                 image={item.image}
                 onClick={() => router.push(`/images/${item.id}/`)}
@@ -163,7 +163,7 @@ function Id({
         <Box padding={1}>
           <Box display='flex' flexWrap='wrap' marginBottom={store.tags && (store.tags.length > 0) ? 1 : 0}>
             {
-              store.tags && (store.tags.length > 0) && store.tags.map((item, index) => (
+              store.tags && (store.tags.length > 0) && store.tags.map((item) => (
                 <Box
                   key={item.id}
                   marginLeft={index > 0 ? '0.25rem' : '0rem'}
@@ -252,7 +252,7 @@ function Id({
         }
       >
         {storeNoticeList.length > 0 ? (
-          storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => (
+          storeNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item) => (
             <>
               <ListItem
                 variant='notice'
@@ -286,7 +286,7 @@ function Id({
       >
         {productList.length > 0 ? (
           <SwipeableTileList half>
-            {productList && productList.map((item, index) => (
+            {productList && productList.map((item) => (
               <Tile
                 key={item.id}
                 title={item.name}
@@ -346,7 +346,7 @@ function Id({
         }
       >
         {storeReviewList.length > 0 ? (
-            storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+            storeReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
               <>
                 <ListItem
                   key={item.id}

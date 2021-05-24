@@ -141,7 +141,7 @@ function Search({ lng, lngDict, selfUser }) {
             loader={<InfiniteScrollLoader loading />}
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
-          {userList.map((item, index) => (
+          {userList.map((item) => (
             <>
               <ListItem
                 key={item.id}

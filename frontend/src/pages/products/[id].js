@@ -97,7 +97,7 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
       >
         <SwipeableTileList autoplay>
           {product.images && (product.images.length > 0) ?
-            (product.images.map((item, index) => <Tile
+            (product.images.map((item) => <Tile
                 key={item.id}
                 image={item.image}
                 onClick={() => router.push(`/images/${item.id}/` )}
@@ -218,7 +218,7 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
         }
       >
         {productReviewList.length > 0 ? (
-          productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+          productReviewList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
             <>
               <ListItem
                 variant='review'

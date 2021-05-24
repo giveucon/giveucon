@@ -56,7 +56,7 @@ export default function ReviewBox({ actions=null, author=null, content=null, dat
           </Box>
           <Box display={imageList && (imageList.length > 0) ? 'block' : 'none'} paddingY={1}>
             <SwipeableTileList autoplay>
-              {imageList && (imageList.length > 0) && imageList.map((item, index) => (
+              {imageList && (imageList.length > 0) && imageList.map((item) => (
                 <Tile
                   key={item.id}
                   image={item}

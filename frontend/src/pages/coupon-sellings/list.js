@@ -93,7 +93,7 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
               <Grid container>
-                {couponSellingList.map((item, index) => (
+                {couponSellingList.map((item) => (
                   <Grid item xs={6} key={item.id}>
                     <Tile
                       title={item.coupon.product.name}

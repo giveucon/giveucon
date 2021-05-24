@@ -186,7 +186,7 @@ function Create({ lng, lngDict, selfAccount }) {
               }}
             >
               <Grid container>
-                {constants.LANGUAGE_LIST.map((item, index) => (
+                {constants.LANGUAGE_LIST.map((item) => (
                   <Grid item xs={6}>
                     <FormControlLabel value={item.lng} control={<Radio />} label={item.name} />
                   </Grid>

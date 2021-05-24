@@ -52,7 +52,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
       >
         {(centralNoticeList.length > 0) ? (
           <SwipeableTileList autoplay>
-            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item, index) => <Tile
+            {centralNoticeList.slice(0, constants.TILE_LIST_SLICE_NUMBER).map((item) => <Tile
                 key={item.id}
                 title={item.article.title}
                 image={
@@ -79,7 +79,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList }) {
         }
       >
         {(centralNoticeList.length > 0) ? (
-          centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item, index) => (
+          centralNoticeList.slice(0, constants.LIST_SLICE_NUMBER).map((item) => (
             <>
               <ListItem
                 variant='notice'

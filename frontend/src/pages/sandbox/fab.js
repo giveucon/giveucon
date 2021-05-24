@@ -27,7 +27,7 @@ function FabTest({ lng, lngDict, selfUser }) {
           title='플로팅 액션 버튼 테스트'
         >
         <Grid container>
-          {[...Array(10).keys()].map((item, index) => (
+          {[...Array(10).keys()].map((item) => (
             <Grid item xs={6} key={item.id}>
               <Tile
                 title='Tile'

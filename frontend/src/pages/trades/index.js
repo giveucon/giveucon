@@ -83,7 +83,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
       >
         {selfCouponSellingList.length > 0 ? (
           <SwipeableTileList half>
-            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
@@ -116,7 +116,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
       >
         {selfCouponSellingList.length > 0 ? (
           <SwipeableTileList half>
-            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}

@@ -13,7 +13,7 @@ const styles = {
 };
 
 class Pagination extends React.Component {
-  handleClick = (event, index) => {
+  handleClick = (event) => {
     this.props.onChangeIndex(index);
   };
 

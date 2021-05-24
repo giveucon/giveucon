@@ -51,13 +51,6 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
     ...prevSelfUser,
     // menu_items: prevSelfUser.menu_items,
   });
-  const [selfUserError, setSelfUserError] = useState({
-    email: false,
-    user_name: false,
-    first_name: false,
-    last_name: false,
-    phone_number: false,
-  });
 
   return (
     <Layout
@@ -86,7 +79,7 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
               }}
             >
               <Grid container>
-                {constants.LANGUAGE_LIST.map((item, index) => (
+                {constants.LANGUAGE_LIST.map((item) => (
                   <Grid item xs={6} key={item.lng}>
                     <FormControlLabel value={item.lng} control={<Radio />} label={item.name} />
                   </Grid>

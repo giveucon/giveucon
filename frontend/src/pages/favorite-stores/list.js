@@ -82,7 +82,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
             endMessage={<InfiniteScrollLoader loading={false} />}
           >
             <Grid container>
-              {favoriteStoreList && favoriteStoreList.map((item, index) => (
+              {favoriteStoreList && favoriteStoreList.map((item) => (
                 <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.store.name}

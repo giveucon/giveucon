@@ -174,7 +174,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               loader={<InfiniteScrollLoader loading />}
               endMessage={<InfiniteScrollLoader loading={false} />}
             >
-              {selfCouponList && selfCouponList.map((item, index) => (
+              {selfCouponList && selfCouponList.map((item) => (
                 <ListItem
                   key={item.id}
                   variant='coupon'

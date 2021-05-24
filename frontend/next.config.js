@@ -1,6 +1,9 @@
 const withOffline = require("next-offline");
 
 const nextConfig = {
+  future: {
+      webpack5: true
+  },
   images: {
     domains: ['user-images.githubusercontent.com'],
   },

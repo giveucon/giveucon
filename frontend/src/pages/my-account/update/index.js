@@ -91,7 +91,7 @@ function Index({ lng, lngDict, selfUser }) {
         <Divider />
         <ListItem
           variant='default'
-          title={i18n.t('locales')}
+          title={i18n.t('locale')}
           icon={<LanguageIcon />}
           onClick={() => router.push('/my-account/update/locale/')}
         />

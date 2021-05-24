@@ -80,7 +80,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
       >
         {(selfStoreList.length > 0) ? (
           <SwipeableTileList half>
-            {selfStoreList.map((item, index) => (
+            {selfStoreList.map((item) => (
                 <Tile
                   key={item.id}
                   title={item.name}
@@ -112,7 +112,7 @@ function Index({ lng, lngDict, selfUser, selfCouponList, selfStoreList, selfProd
       >
         {(selfProductList.length > 0) ? (
           <SwipeableTileList half>
-            {selfProductList.map((item, index) => (
+            {selfProductList.map((item) => (
                 <Tile
                   key={item.id}
                   title={item.name}

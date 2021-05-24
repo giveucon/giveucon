@@ -112,7 +112,7 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
       >
         {selfStoreList.length > 0 ? (
           <SwipeableTileList half>
-            {selfStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {selfStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 title={item.name}
                 image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
@@ -137,7 +137,7 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
       >
         {(storeList.length > 0) ? (
           <SwipeableTileList half>
-            {storeList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item, index) => (
+            {storeList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.name}
