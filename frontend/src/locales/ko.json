@@ -67,6 +67,7 @@
   "addTag": "태그 추가하기",
   "allNotices": "모든 공지사항",
   "allStores": "모든 가게",
+  "balance": "잔액",
   "basicInfo": "기본 정보",
   "categories": "카테고리",
   "createAccount": "계정 생성하기",
@@ -96,6 +97,7 @@
   "deleteReview": "리뷰 삭제하기",
   "deleteStore": "가게 삭제하기",
   "deleteTag": "태그 삭제하기",
+  "deposit": "입금",
   "description": "설명",
   "developerTools": "개발자 도구",
   "duration": "기간",
@@ -117,6 +119,7 @@
   "favorites": "즐겨찾기",
   "favoriteStoreList": "즐겨찾는 가게 목록",
   "favoriteStores": "즐겨찾는 가게",
+  "fee": "수수료",
   "findCurrentLocation": "현재 위치 찾기",
   "findPath": "경로 찾기",
   "firstName": "성을 제외한 이름",
@@ -159,8 +162,9 @@
   "myFavoriteStores": "내가 즐겨찾는 가게",
   "myFriends": "내 친구",
   "myInfo": "내 정보",
-  "myStores": "내 가게",
   "myProducts": "내 상품",
+  "myStores": "내 가게",
+  "myTransactions": "내 트랜잭션",
   "myWallet": "내 지갑",
   "name": "이름",
   "nearby": "근처",
@@ -225,5 +229,6 @@
   "verificationCode": "인증 코드",
   "version": "버전",
   "wallet": "지갑",
-  "welcome": "환영합니다"
+  "welcome": "환영합니다",
+  "withdraw": "출금"
 }

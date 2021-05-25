@@ -16,9 +16,9 @@ import convertImageToFile from 'utils/convertImageToFile';
 import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
-import usersJson from '../../../public/jsons/init/users';
-import storesJson from '../../../public/jsons/init/stores';
-import centralNoticesJson from '../../../public/jsons/init/central_notices';
+import usersJson from '../../../public/jsons/init/users.json';
+import storesJson from '../../../public/jsons/init/stores.json';
+import centralNoticesJson from '../../../public/jsons/init/central_notices.json';
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
 /*
@@ -52,16 +52,16 @@ function Create({ lng, lngDict, selfUser }) {
   const storeNoticeIdList = [];
 
   const imageMaxAmount = 3;
-  
+
   let allRequestCount = 0;
 
-  allRequestCount = allRequestCount + usersJson.length;
-  allRequestCount = allRequestCount + storesJson.length;
-  storesJson.map((item) => {
-    allRequestCount = allRequestCount + item.products.length;
-    allRequestCount = allRequestCount + item.notices.length;
-  })
-  allRequestCount = allRequestCount + centralNoticesJson.length;
+  allRequestCount += usersJson.length;
+  allRequestCount += storesJson.length;
+  for (let i = 0; i < storesJson.length; i++) {
+    allRequestCount += storesJson[i].products.length;
+    allRequestCount += storesJson[i].notices.length;
+  }
+  allRequestCount += centralNoticesJson.length;
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
