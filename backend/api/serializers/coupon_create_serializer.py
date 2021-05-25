@@ -2,6 +2,7 @@ import pyotp
 from django.db import transaction
 from rest_framework import serializers
 from ..models import Coupon
+from ..models import CouponSellingStatus
 from ..services import CouponService
 from .coupon_selling_write_serializer import CouponSellingWriteSerializer
 
@@ -10,7 +11,7 @@ class CouponCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         exclude = ('otp_key',)
-        read_only_fields = ('signature', 'used', 'user')
+        read_only_fields = ('signature', 'status', 'used', 'user')
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -20,7 +21,10 @@ class CouponCreateSerializer(serializers.ModelSerializer):
             coupon.save()
             coupon = CouponService.sign_coupon(coupon)
             coupon.save()
-            coupon_selling = CouponSellingWriteSerializer(data={'price': price, 'coupon':coupon.pk})
+            status = CouponSellingStatus.objects.get(status='open')
+            coupon_selling = CouponSellingWriteSerializer(data={
+                'price': price, 'coupon':coupon.pk, 'status': status.pk
+            })
             coupon_selling.is_valid(raise_exception=True)
             coupon_selling.save()
         return coupon

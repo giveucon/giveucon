@@ -4,6 +4,7 @@ from .article import Article
 from .central_notice import CentralNotice
 from .coupon import Coupon
 from .coupon_selling import CouponSelling
+from .coupon_selling_status import CouponSellingStatus
 from .favorite_product import FavoriteProduct
 from .favorite_store import FavoriteStore
 from .friend import Friend

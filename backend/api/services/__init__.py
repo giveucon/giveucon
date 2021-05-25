@@ -3,3 +3,4 @@ from .image_service import ImageService
 from .coupon_service import CouponService
 from .phone_service import PhoneService
 from .paypal_service import PaypalService
+from .wallet_service import WalletService
