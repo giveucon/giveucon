@@ -16,7 +16,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     props: { lng, lngDict, selfUser }
   }))
 
-function Scan({ lng, lngDict, selfUser }) {
+function Index({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -62,7 +62,10 @@ function Scan({ lng, lngDict, selfUser }) {
               }
             )
             video.srcObject = null;
-            router.push(`/coupons/${qrData.coupon}/`)
+            router.push({
+              pathname: '/coupons/scan/complete/',
+              query: { coupon: qrData.coupon }
+            });
           }
         }
       }
@@ -99,4 +102,4 @@ function Scan({ lng, lngDict, selfUser }) {
   );
 }
 
-export default Scan;
+export default Index;
