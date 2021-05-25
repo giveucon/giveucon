@@ -29,7 +29,7 @@ export default function BottomNavBar({ menuItemList, lng, lngDict }) {
 
   useEffect(() => {
     i18n.locale(lng, lngDict);
-  }, [i18n, lng, lngDict])
+  }, [])
 
   let key = 0;
   const menuItemListAdapter = [];

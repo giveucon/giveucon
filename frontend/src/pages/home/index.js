@@ -52,7 +52,6 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('home')} - ${i18n.t('_appName')}`}
     >
-
       <Section
         title={i18n.t('home')}
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
