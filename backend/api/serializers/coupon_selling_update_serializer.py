@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import CouponSelling
+from ..models import CouponSellingStatus
 from .coupon_selling_status_serializer import CouponSellingStatusSerializer
 
 class CouponSellingUpdateSerializer(serializers.ModelSerializer):
@@ -9,21 +10,25 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields=('price', 'coupon')
 
+    def validate_status(self, value):
+        print('validate status', value)
+        return CouponSellingStatus.objects.get(status=value).status
+
+    def validate(self, data):
+        print('validate')
+        return data
+
     def update(self, instance, validated_data):
-        '''
-        with transaction.atomic():
-            price = validated_data.pop('price')
-            coupon = Coupon(**validated_data)
-            coupon.otp_key = pyotp.random_base32()
-            coupon.save()
-            coupon = CouponService.sign_coupon(coupon)
-            coupon.save()
-            status = CouponSellingStatus.objects.get(status='open')
-            coupon_selling = CouponSellingWriteSerializer(data={
-                'price': price, 'coupon':coupon.pk, 'status': status.pk
+        print('here is update serializer')
+        prev_status = instance.status.status
+        next_status = validated_data.pop('status')
+        if ((prev_status == 'open' and next_status == 'pre_pending')
+             or (prev_status == 'pre_pending' and next_status == 'open')
+             or (prev_status == 'pre_pending' and next_status == 'pending')
+             or (prev_status == 'pending' and next_status == 'closed')):
+            instance.status.status = next_status
+            instance.save()
+        else:
+            raise serializers.ValidationError({
+                'verification_code': 'Invalid verification code'
             })
-            coupon_selling.is_valid(raise_exception=True)
-            coupon_selling.save()
-        return coupon
-        '''
-        return super().update(instance, validated_data)
