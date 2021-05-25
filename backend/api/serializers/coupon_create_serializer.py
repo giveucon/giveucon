@@ -4,7 +4,7 @@ from rest_framework import serializers
 from ..models import Coupon
 from ..models import CouponSellingStatus
 from ..services import CouponService
-from .coupon_selling_write_serializer import CouponSellingWriteSerializer
+from .coupon_selling_create_serializer import CouponSellingCreateSerializer
 
 class CouponCreateSerializer(serializers.ModelSerializer):
     price = serializers.FloatField()
@@ -22,8 +22,8 @@ class CouponCreateSerializer(serializers.ModelSerializer):
             coupon = CouponService.sign_coupon(coupon)
             coupon.save()
             status = CouponSellingStatus.objects.get(status='open')
-            coupon_selling = CouponSellingWriteSerializer(data={
-                'price': price, 'coupon':coupon.pk, 'status': status.pk
+            coupon_selling = CouponSellingCreateSerializer(data={
+                'price': price, 'coupon':coupon.pk
             })
             coupon_selling.is_valid(raise_exception=True)
             coupon_selling.save()
