@@ -16,4 +16,4 @@ class SelfUserLocationDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         user = UserService.get_current_user(self.request)
-        instance = serializer.save()
+        instance = serializer.save(user=user)
