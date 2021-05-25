@@ -63,7 +63,7 @@ function Completed({ lng, lngDict, selfUser, couponSelling, buyer }) {
         <AlertBox content={i18n.t('_couponTradeRequested')} variant='success' />
       </Section>
 
-      
+
       <Section
         title={i18n.t('remittance')}
         titlePrefix={<IconButton><LocalAtmIcon /></IconButton>}

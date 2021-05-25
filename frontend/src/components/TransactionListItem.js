@@ -62,7 +62,10 @@ export default function TransactionListItem({
                 )}
                 <Box marginLeft='1rem'>
                   <Box display='flex' alignItems='flex-end'>
-                    <Typography variant='h5'>{variant === 'deposit' && '+'}{variant === 'withdraw' && '-'}</Typography>
+                    <Typography variant='h5'>
+{variant === 'deposit' && '+'}
+{variant === 'withdraw' && '-'}
+</Typography>
                     <Typography variant='h5'>{amount / 100000000}</Typography>
                     <Typography variant='h5'>{unit}</Typography>
                   </Box>

@@ -18,11 +18,15 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}`, 'get', 'json', null, {
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json', null, {
   used: false
 })
 
-const getBuyer = async (context, couponSelling) => await requestToBackend(context, `api/users/${couponSelling.buyer.id}`, 'get', 'json', null)
+const getBuyer = async (context, couponSelling) => await requestToBackend(context, `api/users/${couponSelling.buyer.id}/`, 'get', 'json', null)
+
+const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'put', 'json', {
+  status: {"status": status}
+}, null)
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);
@@ -72,7 +76,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
           productPrice={couponSelling.coupon.product.price}
         />
       </Section>
-      
+
 
       {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer.id) && (
         <Section
