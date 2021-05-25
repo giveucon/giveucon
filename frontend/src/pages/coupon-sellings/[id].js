@@ -1,9 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import toast from 'react-hot-toast';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import * as constants from 'constants';
@@ -70,14 +74,39 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
       </Section>
       
 
-      {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer) && (
+      {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer.id) && (
         <Section
-          title={i18n.t('cryptocurrencyWalletAddress')}
-          titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
+          title={i18n.t('remittance')}
+          titlePrefix={<IconButton><LocalAtmIcon /></IconButton>}
         >
-          <Typography variant='h6'>{i18n.t('_sendCryptocurrencyToWallet')}</Typography>
-          <Typography variant='h6'>{`${i18n.t('bitcoin')}, ${buyer.wallet}`}</Typography>
-          <Typography variant='h6'>{`${couponSelling.price / 100000000}${i18n.t('_currencyBTC')}`}</Typography>
+          <Box padding='1rem'>
+            <Typography align='center' variant='body2'>{i18n.t('bitcoin')}</Typography>
+            <Typography align='center' variant='h6'>{`${couponSelling.price / 100000000}${i18n.t('_currencyBTC')}`}</Typography>
+            <Box display='flex' alignItems='center' justifyContent='center'>
+              <Typography align='center' variant='body2'>{buyer.wallet}</Typography>
+              <CopyToClipboard
+                text={buyer.wallet}
+                onCopy={() => toast.success(i18n.t('_copiedToClipboard'))}
+              >
+                <IconButton><AssignmentIcon /></IconButton>
+              </CopyToClipboard>
+            </Box>
+          </Box>
+          <Typography variant='body1'>{i18n.t('_sendCryptocurrencyToWallet')}</Typography>
+          <Typography variant='body1'>{i18n.t('_pressButtonAfterSendingCryptocurrency')}</Typography>
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/coupon-sellings/remit/',
+                query: { coupon_selling: couponSelling.id },
+              })}
+            >
+              {i18n.t('remittanceCompleted')}
+            </Button>
+          </Box>
         </Section>
       )}
 
@@ -138,7 +167,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
           </Button>
         </Box>
       )}
-      {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer) && (
+      {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer.id) && (
         <Box marginY={1}>
           <Button
             color='primary'

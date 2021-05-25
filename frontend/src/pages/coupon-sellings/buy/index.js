@@ -82,7 +82,6 @@ function Index({ lng, lngDict, selfUser, couponSelling }) {
             }
             else {
               toast.error(i18n.t('_errorOccurredProcessingRequest'));
-              console.log(putCouponSellingResponse)
             }
           }}
         >
