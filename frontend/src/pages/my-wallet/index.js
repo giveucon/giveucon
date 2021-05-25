@@ -84,7 +84,7 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
       >
         <WalletBox
           amount={selfBlockchainAccount.chain_stats.funded_txo_sum - selfBlockchainAccount.chain_stats.spent_txo_sum}
-          unit='BTC'
+          unit={i18n.t('_currencyBTC')}
         />
         <Box marginY={1}>
           <Button

@@ -194,7 +194,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             const response = await postStoreNotice(storeNotice, imageList);
             if (response.status === 201) {
               router.push(`/store-notices/${response.data.id}/`);
-              toast.success(i18n.t('_noticeSuccessfullyAdded'));
+              toast.success(i18n.t('_noticeAdded'));
             }
             else if (response.status === 400) {
               setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: !!response.data.title}));

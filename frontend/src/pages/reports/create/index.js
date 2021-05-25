@@ -227,7 +227,7 @@ function Index({ lng, lngDict, selfUser, user }) {
             const postReportResponse = await postReport(report, imageList);
             if (postReportResponse.status === 201) {
               router.push('/reports/create/completed/');
-              toast.success(i18n.t('_sellerSuccessfullyReported'));
+              toast.success(i18n.t('_sellerReported'));
             }
             else if (postReportResponse.status === 400) {
               setReportError(prevReportError => ({...prevReportError, title: !!postReportResponse.data.title}));

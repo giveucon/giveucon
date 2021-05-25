@@ -106,7 +106,7 @@ function Update ({ lng, lngDict, selfUser, couponSelling: prevCouponSelling }) {
             const putCouponSellingResponse = await putCouponSelling(couponSelling);
             if (putCouponSellingResponse.status === 201) {
               router.push(`/coupon-sellings/${putCouponSellingResponse.data.id}/`);
-              toast.success(i18n.t('_couponTradeSuccessfullyEdited'));
+              toast.success(i18n.t('_couponTradeEdited'));
             }
             else {
               toast.error(i18n.t('_errorOccurredProcessingRequest'));

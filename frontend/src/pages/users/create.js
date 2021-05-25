@@ -303,7 +303,7 @@ function Create({ lng, lngDict, selfAccount }) {
             />
           </Box>
           <Typography align='center' variant='subtitle1'>
-            {`${i18n.t('_verificationCodeWillBeExpiredIn')}${Math.floor((constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT - (currentTimestamp - timestamp)) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
+            {`${i18n.t('_verificationCodeWillBeExpiredIn')}: ${Math.floor((constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT - (currentTimestamp - timestamp)) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
           </Typography>
         </Box>
       </Section>
@@ -317,7 +317,7 @@ function Create({ lng, lngDict, selfAccount }) {
             const postSelfUserResponse = await postSelfUser(selfUser, phoneUtil);
             if (postSelfUserResponse.status === 201) {
               router.push('/my-account/');
-              toast.success(i18n.t('_myAccountSuccessfullyCreated'));
+              toast.success(i18n.t('_myAccountCreated'));
             }
             else if (postSelfUserResponse.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, email: !!postSelfUserResponse.data.email}));

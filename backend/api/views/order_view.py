@@ -26,6 +26,6 @@ class OrderView(APIView):
             access_token,
             'USD',
             coupon_selling.price,
-            coupon_selling.coupon.user.email
+            coupon_selling.coupon.user.id.email
         )
         return Response(res)

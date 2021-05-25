@@ -12,6 +12,6 @@ class Command(BaseCommand):
             CouponSellingStatus.objects.create(status='pre_pending')
             CouponSellingStatus.objects.create(status='pending')
             CouponSellingStatus.objects.create(status='closed')
-            self.stdout.write('Categorical objects have been successfully initialized.')
+            self.stdout.write('Categorical objects have been initialized.')
         else:
             self.stdout.write('Categorical objects are already initialized.')

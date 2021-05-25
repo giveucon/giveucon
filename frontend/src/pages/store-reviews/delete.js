@@ -73,7 +73,7 @@ function Delete({ lng, lngDict, selfUser, storeReview }) {
               const response = await deleteStoreReview(storeReview);
               if (response.status === 204) {
                 router.push(`/stores/${storeReview.store.id}/`);
-                toast.success(i18n.t('_reviewSuccessfullyDeleted'));
+                toast.success(i18n.t('_reviewDeleted'));
               }
             }}
           >

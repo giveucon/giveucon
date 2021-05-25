@@ -76,7 +76,7 @@ function Delete({ lng, lngDict, selfUser, product }) {
               const response = await deleteProduct(product);
               if (response.status === 204) {
                 router.push(`/stores/${product.store}/`);
-                toast.success(i18n.t('_productSuccessfullyDeleted'));
+                toast.success(i18n.t('_productDeleted'));
               }
             }}
           >

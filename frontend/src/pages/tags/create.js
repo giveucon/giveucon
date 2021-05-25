@@ -78,7 +78,7 @@ function Create({ lng, lngDict, selfUser }) {
             const response = await postTag(tag);
             if (response.status === 201) {
               // router.push(`/tags/${response.id}/`);
-              toast.success(i18n.t('_tagSuccessfullyAdded'));
+              toast.success(i18n.t('_tagAdded'));
             }
             else if (response.status === 400) {
               if (response.data.name) {

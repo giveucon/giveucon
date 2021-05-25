@@ -75,7 +75,7 @@ function Delete({ lng, lngDict, selfUser, centralNotice }) {
               const response = await deleteCentralNotice(centralNotice);
               if (response.status === 204) {
                 router.push(`/central-notices/`);
-                toast.success(i18n.t('_noticeSuccessfullyDeleted'));
+                toast.success(i18n.t('_noticeDeleted'));
               }
             }}
           >

@@ -134,7 +134,7 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
             />
           </Box>
           <Typography align='center' variant='subtitle1'>
-            {`${i18n.t('_verificationCodeWillBeExpiredIn')}${Math.floor((constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT - (currentTimestamp - timestamp)) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
+            {`${i18n.t('_verificationCodeWillBeExpiredIn')}: ${Math.floor((constants.SIGNUP_PHONE_VERIFICATION_TIME_LIMIT - (currentTimestamp - timestamp)) / 1000)}${i18n.t('_localeDateTimeSecond')}`}
           </Typography>
         </Box>
       </Section>
@@ -149,7 +149,7 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
             const putSelfUserResponse = await putSelfUser(selfUser, phoneUtil);
             if (putSelfUserResponse.status === 200) {
               router.push('/my-account/');
-              toast.success(i18n.t('_myAccountSuccessfullyCreated'));
+              toast.success(i18n.t('_myAccountCreated'));
             }
             else if (putSelfUserResponse.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!putSelfUserResponse.data.phone_number}));

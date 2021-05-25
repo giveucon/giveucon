@@ -186,7 +186,7 @@ function Create({ lng, lngDict, selfUser }) {
             const response = await postCentralNotice(centralNotice, imageList);
             if (response.status === 201) {
               router.push(`/central-notices/${response.data.id}/`);
-              toast.success(i18n.t('_noticeSuccessfullyAdded'));
+              toast.success(i18n.t('_noticeAdded'));
             }
             else if (response.status === 400) {
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: !!response.data.title}));

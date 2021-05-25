@@ -85,7 +85,7 @@ function Locale({ lng, lngDict, selfUser: prevSelfUser }) {
               const response = await putSelfUser(selfUser);
               if (response.status === 200) {
                 router.push('/my-account/update/');
-                toast.success(i18n.t('_myAccountSuccessfullyEdited'));
+                toast.success(i18n.t('_myAccountEdited'));
               }
               else if (response.status === 400) {
                 toast.error(i18n.t('_checkInputFields'));

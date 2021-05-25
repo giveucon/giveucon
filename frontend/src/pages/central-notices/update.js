@@ -213,7 +213,7 @@ function Update({ lng, lngDict, selfUser, prevCentralNotice }) {
             const response = await putCentralNotice(centralNotice, imageList);
             if (response.status === 200) {
               router.push(`/central-notices/${response.data.id}/`);
-              toast.success(i18n.t('_noticeSuccessfullyEdited'));
+              toast.success(i18n.t('_noticeEdited'));
             } else if (response.status === 400) {
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, title: !!response.data.title}));
               setCentralNoticeError(prevCentralNoticeError => ({...prevCentralNoticeError, content: !!response.data.content}));

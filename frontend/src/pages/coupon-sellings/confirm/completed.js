@@ -10,21 +10,26 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.id}`, 'get', 'json');
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const couponResponse = await getCoupon(context);
-  if (couponResponse.status === 404) {
+  const couponSellingResponse = await getCouponSelling(context);
+  if (couponSellingResponse.status === 404) {
     return {
       notFound: true
     }
   }
   return {
-    props: { lng, lngDict, selfUser, coupon: couponResponse.data }
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      couponSelling: couponSellingResponse.data
+    }
   }
 })
 
-function Completed({ lng, lngDict, selfUser, coupon }) {
+function Completed({ lng, lngDict, selfUser, couponSelling }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -34,31 +39,31 @@ function Completed({ lng, lngDict, selfUser, coupon }) {
       lng={lng}
       lngDict={lngDict}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('couponScanned')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('tradeConfirmed')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('couponScanned')}
+        title={i18n.t('tradeConfirmed')}
       >
-        <AlertBox content={i18n.t('_couponScannedAndUsed')} variant='success' />
+        <AlertBox content={i18n.t('_couponTradeConfirmed')} variant='success' />
         <Box marginY={1}>
           <Button
             color='primary'
             fullWidth
             variant='contained'
-            onClick={() => router.push(`/products/${coupon.product.id}/`)}
+            onClick={() => {router.back()}}
           >
-            {i18n.t('goToProduct')}
+            {i18n.t('goBack')}
           </Button>
         </Box>
         <Box marginY={1}>
           <Button
-            color='primary'
+            color='default'
             fullWidth
             variant='contained'
-            onClick={() => router.back()}
+            onClick={() => {router.push(`/products/${couponSelling.coupon.product.id}/`)}}
           >
-            {i18n.t('goBack')}
+            {i18n.t('goToProduct')}
           </Button>
         </Box>
         <Box marginY={1}>

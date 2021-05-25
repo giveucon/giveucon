@@ -55,7 +55,7 @@ function Delete({ lng, lngDict, selfUser }) {
               const response = await deleteSelfUser(selfUser);
               if (response.status === 204) {
                 router.push('/session/logout');
-                toast.success(i18n.t('_myAccountSuccessfullyDeleted'));
+                toast.success(i18n.t('_myAccountDeleted'));
               }
             }}
           >

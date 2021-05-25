@@ -117,11 +117,8 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
           </Box>
           <Box marginTop={1}>
             <Typography variant='h5'>
-{i18n.t('stock')}
-:
-{' '}
-{couponListResponse.data.count}
-</Typography>
+              {`${i18n.t('stock')}: ${couponListResponse.data.count}`}
+            </Typography>
           </Box>
           <Box marginY={1}>
             <Button
@@ -143,7 +140,7 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
                       fullWidth
                       variant='contained'
                       onClick={() => router.push({
-                        pathname: '/coupons/buy/',
+                        pathname: '/coupon-sellings/buy/',
                         query: { coupon: couponListResponse.data.results[0].id },
                       })}
                     >
@@ -156,7 +153,7 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
                       fullWidth
                       variant='contained'
                       onClick={() => router.push({
-                        pathname: '/coupons/give/',
+                        pathname: '/coupon-sellings/give/',
                         query: { coupon: couponListResponse.data.results[0].id },
                       })}
                     >

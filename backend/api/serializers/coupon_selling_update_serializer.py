@@ -30,7 +30,7 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
         elif next_status.status == 'pre_pending':
             instance.buyer = user
         elif next_status.status == 'closed':
-            instance.coupon.user = instance.buyer
+            instance.coupon.user.id = instance.buyer
             instance.coupon.save()
 
         instance.status = next_status

@@ -68,7 +68,7 @@ function Completed({ lng, lngDict, selfUser, product }) {
       title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
     >
       <Section
-        title={i18n.t('_couponSuccessfullyIssued')}
+        title={i18n.t('_couponIssued')}
         titlePrefix={<IconButton><CheckIcon /></IconButton>}
       >
         <Box display='flex' alignItems='center' justifyContent='flex-start'>

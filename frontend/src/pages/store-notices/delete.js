@@ -73,7 +73,7 @@ function Delete({ lng, lngDict, selfUser, storeNotice }) {
               const response = await deleteStoreNotice(storeNotice);
               if (response.status === 204) {
                 router.push(`/stores/${storeNotice.store}/`);
-                toast.success(i18n.t('_noticeSuccessfullyDeleted'));
+                toast.success(i18n.t('_noticeDeleted'));
               }
             }}
           >

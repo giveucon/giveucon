@@ -224,7 +224,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             const response = await postProduct(product, imageList);
             if (response.status === 201) {
               router.push(`/products/${response.data.id}/`);
-              toast.success(i18n.t('_productSuccessfullyAdded'));
+              toast.success(i18n.t('_productAdded'));
             } else if (response.status === 400) {
               setProductError(prevProductError => ({...prevProductError, name: !!response.data.name}));
               setProductError(prevProductError => ({...prevProductError, description: !!response.data.description}));

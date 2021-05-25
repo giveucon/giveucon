@@ -54,7 +54,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainTransactionList })
                   amount={item.vout.map(element => element.value).reduce((lhs, rhs) => lhs + rhs)}
                   fee={item.fee}
                   timestamp={item.status.block_time}
-                  unit='BTC'
+                  unit={i18n.t('_currencyBTC')}
                   onClick={() => router.push(`https://www.blockchain.com/${'btc'}/tx/${item.txid}/`)}
                 />
               </Grid>

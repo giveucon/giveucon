@@ -16,6 +16,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import InfoIcon from '@material-ui/icons/Info';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -123,6 +124,16 @@ function Index({ lng, lngDict, selfUser }) {
           icon={<ShoppingBasketIcon />}
           onClick={() => router.push({
             pathname: '/favorite-products/list/',
+            query: { user: selfUser.id },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('myTransactions')}
+          icon={<LocalAtmIcon />}
+          onClick={() => router.push({
+            pathname: '/my-wallet/transactions/',
             query: { user: selfUser.id },
           })}
         />

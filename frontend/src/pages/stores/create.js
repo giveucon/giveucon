@@ -272,7 +272,7 @@ function Create({ lng, lngDict, selfUser, tagList }) {
               const postStoreLocationResponse = await postStoreLocation(postStoreResponse.data, location);
               if (postStoreLocationResponse.status === 201) {
                 router.push(`/stores/${postStoreResponse.data.id}/`);
-                toast.success(i18n.t('_storeSuccessfullyAdded'));
+                toast.success(i18n.t('_storeAdded'));
               } else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
               }

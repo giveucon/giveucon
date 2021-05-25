@@ -317,7 +317,7 @@ function Update({ lng, lngDict, selfUser, prevStore, tagList }) {
               const putStoreLocationResponse = await putStoreLocation(store, getStoreLocationResponse.data[0], location);
               if (putStoreLocationResponse.status === 200) {
                 router.push(`/stores/${putStoreResponse.data.id}/`);
-                toast.success(i18n.t('_storeSuccessfullyEdited'));
+                toast.success(i18n.t('_storeEdited'));
               } else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
               }

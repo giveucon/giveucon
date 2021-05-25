@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
@@ -12,19 +11,11 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const useStyles = makeStyles((theme) => ({
-  errorButton: {
-    background: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
-    '&:hover': {
-       background: theme.palette.error.dark,
-    },
-  },
-}));
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
-
-const deleteCouponSelling = async (couponSelling) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'delete', 'json');
+const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}`, 'get', 'json', {
+  status: {"status": status}
+}, null)
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);
@@ -34,47 +25,57 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   return {
-    props: { lng, lngDict, selfUser, couponSelling: couponSellingResponse.data }
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      couponSelling: couponSellingResponse.data
+    }
   }
 })
 
-function Delete({ lng, lngDict, selfUser, couponSelling }) {
+function Index({ lng, lngDict, selfUser, couponSelling }) {
 
   const i18n = useI18n();
   const router = useRouter();
-  const classes = useStyles();
 
   return (
     <Layout
       lng={lng}
       lngDict={lngDict}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('deleteCouponTrade')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('remittanceCheck')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('deleteCouponTrade')}
+        title={i18n.t('remittanceCheck')}
       >
-        <AlertBox content={i18n.t('_cannotBeUndoneWarning')} variant='warning' />
+        <AlertBox content={i18n.t('_areYouSureToFinishRemittance')} variant='question' />
         <Box marginY={1}>
           <Button
-            className={classes.errorButton}
+            color='primary'
             fullWidth
             variant='contained'
             onClick={async () => {
-              const response = await deleteCouponSelling(couponSelling);
-              if (response.status === 204) {
-                router.push(`/coupons/${couponSelling.coupon.id}/`);
-                toast.success(i18n.t('_couponTradeDeleted'));
+              const putCouponSellingResponse = await putCouponSelling(couponSelling, 'pending');
+              if (putCouponSellingResponse.status === 200) {
+                toast.success(i18n.t('_couponTradeConfirmationRequested'));
+                router.push({
+                  pathname: '/coupon-sellings/remit/completed/',
+                  query: { coupon_selling: couponSelling.id },
+                });
+              }
+              else {
+                toast.error(i18n.t('_errorOccurredProcessingRequest'));
               }
             }}
           >
-            {i18n.t('deleteCouponTrade')}
+            {i18n.t('finish')}
           </Button>
         </Box>
         <Box marginY={1}>
           <Button
-            color='primary'
+            color='default'
             fullWidth
             variant='contained'
             onClick={() => {router.back()}}
@@ -87,4 +88,4 @@ function Delete({ lng, lngDict, selfUser, couponSelling }) {
   );
 }
 
-export default Delete;
+export default Index;

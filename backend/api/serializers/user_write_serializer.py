@@ -23,11 +23,14 @@ class UserWriteSerializer(serializers.ModelSerializer):
                         'verification_code': 'Invalid verification code'
                     })
                 wallet = validated_data['wallet']
+                
+                '''
                 balance = WalletService.get_address_balance(wallet)
                 if balance['status'] != 'success':
                     raise serializers.ValidationError({
                         'wallet': 'Invalid BTC wallet address'
                     })
+                '''
 
             account = validated_data.pop('account')
             user = User.objects.create(**validated_data)

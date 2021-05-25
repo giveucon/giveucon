@@ -73,7 +73,7 @@ function Delete({ lng, lngDict, selfUser, coupon }) {
               const response = await deleteCoupon(coupon);
               if (response.status === 204) {
                 router.push(`/coupons/`);
-                toast.success(i18n.t('_couponSuccessfullyDeleted'));
+                toast.success(i18n.t('_couponDeleted'));
               }
             }}
           >

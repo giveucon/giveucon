@@ -213,7 +213,7 @@ function Update({ lng, lngDict, selfUser, prevStoreNotice }) {
             const response = await putStoreNotice(storeNotice, imageList);
             if (response.status === 200) {
               router.push(`/store-notices/${response.data.id}/`);
-              toast.success(i18n.t('_noticeSuccessfullyEdited'));
+              toast.success(i18n.t('_noticeEdited'));
             } else if (response.status === 400) {
               setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, title: !!response.data.title}));
               setStoreNoticeError(prevStoreNoticeError => ({...prevStoreNoticeError, content: !!response.data.content}));

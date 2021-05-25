@@ -200,7 +200,7 @@ function Create ({ lng, lngDict, selfUser, product }) {
             const response = await postProductReview(productReview, imageList);
             if (response.status === 201) {
               router.push(`/product-reviews/${response.data.id}/`);
-              toast.success(i18n.t('_reviewSuccessfullyAdded'));
+              toast.success(i18n.t('_reviewAdded'));
             }
             else if (response.status === 400) {
               setProductReviewError(prevProductReviewError => ({...prevProductReviewError, title: !!response.data.title}));

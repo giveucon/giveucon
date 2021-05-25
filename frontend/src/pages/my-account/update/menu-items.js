@@ -148,7 +148,7 @@ function MenuItems({ lng, lngDict, selfUser }) {
             const response = await putSelfUser(selfUser);
             if (response.status === 200) {
               router.push('/my-account/update/');
-              toast.success(i18n.t('_myAccountSuccessfullyEdited'));
+              toast.success(i18n.t('_myAccountEdited'));
             }
           }}
         >

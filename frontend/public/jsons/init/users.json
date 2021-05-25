@@ -6,6 +6,7 @@
     "last_name": "김",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000000",
     "phone_number": "+821010000000"
   },
   {
@@ -15,6 +16,7 @@
     "last_name": "권",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000001",
     "phone_number": "+821010000001"
   },
   {
@@ -24,6 +26,7 @@
     "last_name": "남",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000002",
     "phone_number": "+821010000002"
   },
   {
@@ -33,6 +36,7 @@
     "last_name": "백",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000003",
     "phone_number": "+821010000003"
   },
   {
@@ -42,6 +46,7 @@
     "last_name": "설",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000004",
     "phone_number": "+821010000004"
   },
   {
@@ -51,6 +56,7 @@
     "last_name": "성",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000005",
     "phone_number": "+821010000005"
   },
   {
@@ -60,6 +66,7 @@
     "last_name": "송",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000006",
     "phone_number": "+821010000006"
   },
   {
@@ -69,6 +76,7 @@
     "last_name": "은",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000007",
     "phone_number": "+821010000007"
   },
   {
@@ -78,6 +86,7 @@
     "last_name": "이",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000008",
     "phone_number": "+821010000008"
   },
   {
@@ -87,6 +96,7 @@
     "last_name": "한",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000009",
     "phone_number": "+821010000009"
   },
   {
@@ -96,6 +106,7 @@
     "last_name": "한",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000010",
     "phone_number": "+821010000010"
   },
   {
@@ -105,6 +116,7 @@
     "last_name": "한",
     "locale": "ko",
     "dark_mode": false,
+    "wallet": "1000000000000000000000000000000011",
     "phone_number": "+821010000011"
   }
 ]

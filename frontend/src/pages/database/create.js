@@ -257,7 +257,7 @@ function Create({ lng, lngDict, selfUser }) {
     };
 
     setRequestedCount(allRequestCount);
-    setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));
+    setStatePhrase(i18n.t('_databaseCreated'));
     setSourcePhrase('');
   }
 

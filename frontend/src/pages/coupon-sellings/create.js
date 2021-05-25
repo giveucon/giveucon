@@ -124,7 +124,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               const postCouponSellingResponse = await postCouponSelling(couponSelling);
               if (postCouponSellingResponse.status === 201) {
                 router.push(`/coupon-sellings/${postCouponSellingResponse.data.id}/`);
-                toast.success(i18n.t('_couponTradeSuccessfullyAdded'));
+                toast.success(i18n.t('_couponTradeAdded'));
               }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));
@@ -217,7 +217,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               const postCouponSellingResponse = await postCouponSelling(couponSelling);
               if (postCouponSellingResponse.status === 201) {
                 router.push(`/coupon-sellings/${postCouponSellingResponse.data.id}/`);
-                toast.success(i18n.t('_couponTradeSuccessfullyAdded'));
+                toast.success(i18n.t('_couponTradeAdded'));
               }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));

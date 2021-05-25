@@ -201,7 +201,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             const response = await postStoreReview(storeReview, imageList);
             if (response.status === 201) {
               router.push(`/store-reviews/${response.data.id}/`);
-              toast.success(i18n.t('_reviewSuccessfullyAdded'));
+              toast.success(i18n.t('_reviewAdded'));
             }
             else if (response.status === 400) {
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));

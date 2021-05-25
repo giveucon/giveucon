@@ -246,7 +246,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             const response = await putProduct(product, imageList);
             if (response.status === 200) {
               router.push(`/products/${response.data.id}/`);
-              toast.success(i18n.t('_productSuccessfullyEdited'));
+              toast.success(i18n.t('_productEdited'));
             } else if (response.status === 400) {
               setProductError(prevProductError => ({...prevProductError, name: !!response.data.name}));
               setProductError(prevProductError => ({...prevProductError, description: !!response.data.description}));

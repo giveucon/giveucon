@@ -73,7 +73,7 @@ function Id({ lng, lngDict, selfUser, coupon }) {
           {i18n.t('goToProduct')}
         </Button>
       </Box>
-      {selfUser.id === coupon.user && (
+      {selfUser.id === coupon.user.id && (
         <>
           <Box marginY={1}>
             <Button

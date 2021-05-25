@@ -14,12 +14,15 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
-const putCouponBuy = async (coupon) => await requestToBackend(null, `api/coupons/${coupon.id}/buy/`, 'put', 'json');
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
+
+const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'put', 'json', {
+  status: {"status": status}
+}, null)
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const couponResponse = await getCoupon(context);
-  if (couponResponse.status === 404) {
+  const couponSellingResponse = await getCouponSelling(context);
+  if (couponSellingResponse.status === 404) {
     return {
       notFound: true
     }
@@ -29,12 +32,12 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lng,
       lngDict,
       selfUser,
-      coupon: couponResponse.data
+      couponSelling: couponSellingResponse.data
     }
   }
 })
 
-function Buy({ lng, lngDict, selfUser, coupon }) {
+function Index({ lng, lngDict, selfUser, couponSelling }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -55,9 +58,9 @@ function Buy({ lng, lngDict, selfUser, coupon }) {
         titlePrefix={<IconButton><PaymentIcon /></IconButton>}
       >
         <CouponBox
-          name={coupon.product.name}
-          price={coupon.product.price}
-          image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
+          name={couponSelling.coupon.product.name}
+          price={couponSelling.price}
+          image={couponSelling.coupon.product.images.length > 0 ? couponSelling.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
           lng={lng}
           lngDict={lngDict}
         />
@@ -69,13 +72,17 @@ function Buy({ lng, lngDict, selfUser, coupon }) {
           fullWidth
           variant='contained'
           onClick={async () => {
-            const putCouponBuyResponse = await putCouponBuy(coupon);
-            if (putCouponBuyResponse.status === 201) {
-              router.push(`/coupons/${putCouponBuyResponse.data.id}/`);
-              toast.success(i18n.t('_couponSuccessfullyPurchased'));
+            const putCouponSellingResponse = await putCouponSelling(couponSelling, 'pre_pending');
+            if (putCouponSellingResponse.status === 200) {
+              toast.success(i18n.t('_couponTradeRequested'));
+              router.push({
+                pathname: '/coupon-sellings/buy/completed/',
+                query: { coupon_selling: couponSelling.id },
+              });
             }
             else {
               toast.error(i18n.t('_errorOccurredProcessingRequest'));
+              console.log(putCouponSellingResponse)
             }
           }}
         >
@@ -96,4 +103,4 @@ function Buy({ lng, lngDict, selfUser, coupon }) {
   );
 }
 
-export default Buy;
+export default Index;

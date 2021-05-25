@@ -54,7 +54,7 @@ export default function AmountInputBox({
           InputProps={{
             startAdornment:
               (variant==='money')
-              ? <InputAdornment position="start">{i18n.t('_localeCurrencyKRW')}</InputAdornment>
+              ? <InputAdornment position="start">{i18n.t('_currencyKRW')}</InputAdornment>
               : null,
             endAdornment:
               (variant==='date')

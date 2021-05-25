@@ -122,7 +122,7 @@ function Index({ lng, lngDict, selfUser, product }) {
                 pathname: '/coupons/issue/completed/',
                 query: { product: product.id },
               });
-              toast.success(i18n.t('_couponSuccessfullyIssued'));
+              toast.success(i18n.t('_couponIssued'));
             } else {
               toast.success(i18n.t('_errorOccurredProcessingRequest'));
             }

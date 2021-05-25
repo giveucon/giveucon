@@ -17,7 +17,7 @@ class CouponBuyView(views.APIView):
                 coupon_selling.delete()
                 coupon = Coupon.objects.get(pk=kwargs['pk'])
                 user = UserService.get_current_user(request)
-                if coupon.user == user:
+                if coupon.user.id == user:
                     return Response({'ok': False, 'err': 'Same seller and buyer'})
                 coupon.save()
             except ObjectDoesNotExist:

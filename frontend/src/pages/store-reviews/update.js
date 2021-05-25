@@ -227,7 +227,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
             const response = await putStoreReview(storeReview, imageList);
             if (response.status === 200) {
               router.push(`/store-reviews/${response.data.id}/`);
-              toast.success(i18n.t('_reviewSuccessfullyEdited'));
+              toast.success(i18n.t('_reviewEdited'));
             } else if (response.status === 400) {
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, title: !!response.data.title}));
               setStoreReviewError(prevStoreReviewError => ({...prevStoreReviewError, content: !!response.data.content}));
