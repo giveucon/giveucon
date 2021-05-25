@@ -14,7 +14,7 @@ export default function AccordionSection({ backButton=false, children=null, defa
 
   const router = useRouter();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const handleAccordionChange = () => {
+  const handleAccordionChange = () => () => {
     setExpanded(!expanded);
   };
 

@@ -183,8 +183,7 @@ export default function Components({ lng, lngDict, selfUser }) {
         titlePrefix={<IconButton><MenuIcon /></IconButton>}
         titleSuffix={<Button>Edit</Button>}
       >
-        <KakaoMapBox skeleton />
-        <KakaoMapBox latitude={37.506502} longitude={127.053617}/>
+        <KakaoMapBox location={{latitude: 37.506502, longitude: 127.053617}}/>
       </Section>
 
       <Section
