@@ -119,7 +119,11 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
                 }
                 onClick={() => router.push(`/coupons/${item.id}/`)}
                 actions={[
-                  <IconButton><DirectionsIcon /></IconButton>,
+                  <IconButton
+                    onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
+                  >
+                    <DirectionsIcon/>
+                  </IconButton>,
                   <IconButton>
                     <CropFreeIcon
                       onClick={() => router.push({

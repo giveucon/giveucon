@@ -153,7 +153,6 @@ function Id({
             store.images.map((item) => <Tile
                 key={item.id}
                 image={item.image}
-                onClick={() => router.push(`/images/${item.id}/`)}
               />)
             ) : (
               <Tile image={constants.NO_IMAGE_PATH} />

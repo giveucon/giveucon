@@ -23,7 +23,7 @@ export default function WalletBox({ amount=null, onClick=null, skeleton=false, u
           <CardActionArea onClick={onClick}>
             <Box paddingLeft={2}>
             </Box>
-            <Box display='flex' alignItems='flex-end'>
+            <Box display='flex' alignItems='flex-end' justifyContent='center'>
               <Typography variant='h5'>{amount / 100000000}</Typography>
               <Typography variant='h5'>{unit}</Typography>
             </Box>

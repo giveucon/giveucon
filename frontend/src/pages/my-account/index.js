@@ -1,7 +1,6 @@
 import React from 'react';
 import gravatar from 'gravatar';
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
@@ -10,7 +9,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import CodeIcon from '@material-ui/icons/Code';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
@@ -250,13 +248,6 @@ function Index({ lng, lngDict, selfUser }) {
           title={i18n.t('components')}
           icon={<DashboardIcon />}
           onClick={() => {router.push('/sandbox/components/')}}
-        />
-        <Divider />
-        <ListItem
-          variant='default'
-          title='React-Hot-Toast 테스트'
-          icon={<CodeIcon />}
-          onClick={() => toast.success('Hello World')}
         />
       </Section>
     </Layout>
