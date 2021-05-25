@@ -16,6 +16,9 @@ import convertImageToFile from 'utils/convertImageToFile';
 import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
+import usersJson from '../../../public/jsons/init/users';
+import storesJson from '../../../public/jsons/init/stores';
+import centralNoticesJson from '../../../public/jsons/init/central_notices';
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
 /*
@@ -42,38 +45,23 @@ function Create({ lng, lngDict, selfUser }) {
   const [statePhrase, setStatePhrase] = useState(i18n.t('_waitingUserInput'));
   const [sourcePhrase, setSourcePhrase] = useState(i18n.t(''));
 
-  const tagIdList = [];
   const userIdList = [];
   const storeIdList = [];
   const productIdList = [];
   const centralNoticeIdList = [];
   const storeNoticeIdList = [];
-  const storeReviewIdList = [];
-  const productReviewIdList = [];
 
-  const tagNumber = 10;
-  const userNumber = 10;
-  const storeNumber = 5;
-  const productNumber = 25;
-  const centralNoticeNumber = 5;
-  const storeNoticeNumber = 10;
-  const storeReviewNumber = 0;
-  const productReviewNumber = 0;
-
-  const tagMaxAmount = 3;
   const imageMaxAmount = 3;
-  if (tagMaxAmount > tagNumber) throw new Error();
+  
+  let allRequestCount = 0;
 
-  const allRequestCount = [
-    tagNumber,
-    userNumber,
-    storeNumber,
-    productNumber,
-    centralNoticeNumber,
-    storeNoticeNumber,
-    storeReviewNumber,
-    productReviewNumber
-  ].reduce((lhs, rhs) => lhs + rhs, 0);
+  allRequestCount = allRequestCount + usersJson.length;
+  allRequestCount = allRequestCount + storesJson.length;
+  storesJson.map((item) => {
+    allRequestCount = allRequestCount + item.products.length;
+    allRequestCount = allRequestCount + item.notices.length;
+  })
+  allRequestCount = allRequestCount + centralNoticesJson.length;
 
   const increaseRequestedCount = () => {
     setRequestedCount(prevRequestedCount => prevRequestedCount + 1);
@@ -93,8 +81,6 @@ function Create({ lng, lngDict, selfUser }) {
     }
     return imageList;
   };
-
-  const postTag = async (user) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
 
   const postUser = async (user) => await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
 
@@ -145,237 +131,131 @@ function Create({ lng, lngDict, selfUser }) {
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
   };
 
-  const postStoreReview = async (storeReview, imageList) => {
-    const processedStoreReview = {
-      review: {
-        article: {
-          ...storeReview.review.article,
-          images: imageList.map(image => image.file),
-        },
-        score: storeReview.review.score
-      },
-      store: storeReview.store
-    }
-    return await requestToBackend(null, 'api/dummy-store-reviews/', 'post', 'multipart', convertJsonToFormData(processedStoreReview), null);
-  };
-
-  const postProductReview = async (productReview, imageList) => {
-    const processedProductReview = {
-      review: {
-        article: {
-          ...productReview.review.article,
-          images: imageList.map(image => image.file),
-        },
-        score: productReview.review.score
-      },
-      product: productReview.product
-    }
-    return await requestToBackend(null, 'api/dummy-product-reviews/', 'post', 'multipart', convertJsonToFormData(processedProductReview), null);
-  };
-
-  const createTag = async () => {
-    const tag = {
-      name: `${faker.commerce.productAdjective()}${Math.floor(Math.random() * 10000)}`
-    };
-    setSourcePhrase(`(${tag.name})`);
-    const tagResult = await postTag(tag);
-    if (tagResult.status === 201) {
-      tagIdList.push(tagResult.data.id);
+  const createUser = async (user) => {
+    const postUserResponse = await postUser(user);
+    if (postUserResponse.status === 201) {
+      userIdList.push(postUserResponse.data.id);
       increaseRequestedCount();
-      // await postTimeout();
+      return postUserResponse.data;
     }
+    console.error(postUserResponse);
+    return null;
   };
 
-  const createUser = async () => {
-    const firstName = faker.name.firstName();
-    const lastName = faker.name.lastName();
-    const user = {
-      email: `${firstName}.${lastName}@giveucon.com`,
-      user_name: `${firstName} ${lastName}`,
-      first_name: firstName,
-      last_name: lastName,
-      locale: 'ko',
-      dark_mode: false,
-      phone_number: `+8210${Math.floor(Math.random() * 100000000)}`
-    };
-    setSourcePhrase(`(${user.user_name})`);
-    const userResult = await postUser(user);
-    if (userResult.status === 201) {
-      userIdList.push(userResult.data.id);
+  const createStore = async (store, imageList) => {
+    const postStoreResponse = await postStore(store, imageList);
+    if (postStoreResponse.status === 201) {
+      const postStoreLocationResponse = await postStoreLocation(postStoreResponse.data, store.location);
+      if (postStoreLocationResponse.status === 201) {
+      storeIdList.push(postStoreResponse.data.id);
       increaseRequestedCount();
-      // await postTimeout();
-    }
-  };
-
-  const createStore = async () => {
-    const pickedTagIdSet = new Set();
-    for (let i = 0; i < Math.floor(Math.random() * tagMaxAmount); i++) {
-      while (true) {
-        const pickedTagId = tagIdList[Math.floor(Math.random() * tagIdList.length)];
-        if (!pickedTagIdSet.has(pickedTagId)) {
-          pickedTagIdSet.add(pickedTagId);
-          break;
-        };
+      return postStoreResponse.data;
       }
+      console.error(postStoreLocationResponse);
+      return null;
     }
-    const store = {
-      name: faker.company.companyName(),
-      description: faker.company.catchPhrase(),
-      tags: Array.from(pickedTagIdSet),
-      user: userIdList[Math.floor(Math.random() * userIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('store');
-    const location = {
-      latitude: 37.56682420267543,
-      longitude: 126.978652258823
-    };
-    setSourcePhrase(`(${store.name})`);
-    const storeResponse = await postStore(store, imageList);
-    if (storeResponse.status === 201) {
-      const storeLocationResponse = await postStoreLocation(storeResponse.data, location);
-      if (storeLocationResponse.status === 201) {
-      storeIdList.push(storeResponse.data.id);
-      increaseRequestedCount();
-      // await postTimeout();
-      }
-    }
+    console.error(postStoreResponse);
+    return null;
   };
 
-  const createProduct = async () => {
-    const product = {
-      name: faker.commerce.productName(),
-      description: faker.commerce.productDescription(),
-      price: ((Math.floor(Math.random() * 490) + 1) * 100) + 1000,
-      duration: faker.datatype.number() % 365,
-      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('product');
-    setSourcePhrase(`(${product.name})`);
-    const productResponse = await postProduct(product, imageList);
-    if (productResponse.status === 201) {
-      productIdList.push(productResponse.data.id);
+  const createProduct = async (product, imageList) => {
+    const postProductResponse = await postProduct(product, imageList);
+    if (postProductResponse.status === 201) {
+      productIdList.push(postProductResponse.data.id);
       increaseRequestedCount();
-      // await postTimeout();
+      return postProductResponse.data;
     }
+    console.error(postProductResponse);
+    return null;
   };
 
-  const createCentralNotice = async () => {
-    const centralNotice = {
-      article: {
-        title: faker.company.bs(),
-        content: faker.hacker.phrase(),
-        // user: userIdList[Math.floor(Math.random() * userIdList.length)]
-      },
-      user: userIdList[Math.floor(Math.random() * userIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('information');
-    setSourcePhrase(`(${centralNotice.article.title})`);
-    const centralNoticeResponse = await postCentralNotice(centralNotice, imageList);
-    if (centralNoticeResponse.status === 201) {
-      centralNoticeIdList.push(centralNoticeResponse.data.id);
+  const createCentralNotice = async (centralNotice, imageList) => {
+    const postCentralNoticeResponse = await postCentralNotice(centralNotice, imageList);
+    if (postCentralNoticeResponse.status === 201) {
+      centralNoticeIdList.push(postCentralNoticeResponse.data.id);
       increaseRequestedCount();
-      // await postTimeout();
+      return postCentralNoticeResponse.data;
     }
+    console.error(postCentralNoticeResponse);
+    return null;
   };
 
-  const createStoreNotice = async () => {
-    const storeNotice = {
-      article: {
-        title: faker.company.bs(),
-        content: faker.hacker.phrase(),
-        user: userIdList[Math.floor(Math.random() * userIdList.length)]
-      },
-      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('information');
-    setSourcePhrase(`(${storeNotice.article.title})`);
-    const storeNoticeResponse = await postStoreNotice(storeNotice, imageList);
-    if (storeNoticeResponse.status === 201) {
-      storeNoticeIdList.push(storeNoticeResponse.data.id);
+  const createStoreNotice = async (storeNotice, imageList) => {
+    const postStoreNoticeResponse = await postStoreNotice(storeNotice, imageList);
+    if (postStoreNoticeResponse.status === 201) {
+      storeNoticeIdList.push(postStoreNoticeResponse.data.id);
       increaseRequestedCount();
-      // await postTimeout();
+      return postStoreNoticeResponse.data;
     }
-  };
-
-  const createStoreReview = async () => {
-    const storeReview = {
-      review: {
-        article: {
-          title: faker.company.bs(),
-          content: faker.hacker.phrase(),
-          user: userIdList[Math.floor(Math.random() * userIdList.length)]
-        },
-        score: Math.floor(Math.random() * 5) + 1
-      },
-      store: storeIdList[Math.floor(Math.random() * storeIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('store');
-    setSourcePhrase(`(${storeReview.review.article.title})`);
-    const storeReviewResponse = await postStoreReview(storeReview, imageList);
-    if (storeReviewResponse.status === 201) {
-      storeReviewIdList.push(storeReviewResponse.data.id);
-      increaseRequestedCount();
-      // await postTimeout();
-    }
-  };
-
-  const createProductReview = async () => {
-    const productReview = {
-      review: {
-        article: {
-          title: faker.company.bs(),
-          content: faker.hacker.phrase(),
-          user: userIdList[Math.floor(Math.random() * userIdList.length)]
-        },
-        score: Math.floor(Math.random() * 5) + 1
-      },
-      product: productIdList[Math.floor(Math.random() * productIdList.length)]
-    };
-    const imageList = await getImageListFromUnsplash('product');
-    setSourcePhrase(`(${productReview.review.article.title})`);
-    const productReviewResponse = await postProductReview(productReview, imageList);
-    if (productReviewResponse.status === 201) {
-      productReviewIdList.push(productReviewResponse.data.id);
-      increaseRequestedCount();
-      // await postTimeout();
-    }
+    console.error(postStoreNoticeResponse);
+    return null;
   };
 
   async function initializeDatabase() {
     setInitializing(true);
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('tag')}`);
-    for (let i = 0; i < tagNumber; i++) {
-      await createTag();
+
+    for (let i = 0; i < usersJson.length; i++) {
+      const user = { ...usersJson[i] };
+      setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
+      setSourcePhrase(`(${user.user_name})`);
+      await createUser(user);
     }
-    if (tagMaxAmount > tagIdList.length) throw new Error();
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
-    for (let i = 0; i < userNumber; i++) {
-      await createUser();
+
+    for (let i = 0; i < storesJson.length; i++) {
+      const store = {
+        ...storesJson[i],
+        user: userIdList[Math.floor(Math.random() * userIdList.length)],
+        tags: [],
+        image_keywords: null,
+        products: null,
+        notices: null
+      };
+      setStatePhrase(`${i18n.t('creating')}: ${i18n.t('store')}`);
+      setSourcePhrase(`(${store.name})`);
+      const imageList = await getImageListFromUnsplash(storesJson[i].image_keywords[0]);
+      const newStore = await createStore(store, imageList);
+
+      for (let j = 0; j < storesJson[i].products.length; j++) {
+        const product = {
+          ...storesJson[i].products[j],
+          store: newStore.id,
+          image_keywords: null
+        };
+        setStatePhrase(`${i18n.t('creating')}: ${i18n.t('product')}`);
+        setSourcePhrase(`(${product.name})`);
+        const imageList = await getImageListFromUnsplash(storesJson[i].products[j].image_keywords[0]);
+        await createProduct(product, imageList);
+      };
+
+      for (let j = 0; j < storesJson[i].notices.length; j++) {
+        const storeNotice = {
+          article: {
+            ...storesJson[i].notices[j],
+          },
+          store: newStore.id,
+          image_keywords: null
+        };
+        setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
+        setSourcePhrase(`(${storeNotice.article.title})`);
+        const imageList = await getImageListFromUnsplash(storesJson[i].notices[j].image_keywords[0]);
+        await createStoreNotice(storeNotice, imageList);
+      };
+
     }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('store')}`);
-    for (let i = 0; i < storeNumber; i++) {
-      await createStore();
-    }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('product')}`);
-    for (let i = 0; i < productNumber; i++) {
-      await createProduct();
-    }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
-    for (let i = 0; i < centralNoticeNumber; i++) {
-      await createCentralNotice();
-    }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
-    for (let i = 0; i < storeNoticeNumber; i++) {
-      await createStoreNotice();
-    }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
-    for (let i = 0; i < storeReviewNumber; i++) {
-      await createStoreReview();
-    }
-    setStatePhrase(`${i18n.t('creating')}: ${i18n.t('review')}`);
-    for (let i = 0; i < productReviewNumber; i++) {
-      await createProductReview();
-    }
+
+    for (let i = 0; i < centralNoticesJson.length; i++) {
+      const centralNotice = {
+        article: {
+          ...centralNoticesJson[i]
+        },
+        image_keywords: null
+      };
+      setStatePhrase(`${i18n.t('creating')}: ${i18n.t('notice')}`);
+      setSourcePhrase(`(${centralNotice.article.title})`);
+      const imageList = await getImageListFromUnsplash(centralNoticesJson[i].image_keywords[0]);
+      await createCentralNotice(centralNotice, imageList);
+    };
+
     setRequestedCount(allRequestCount);
     setStatePhrase(i18n.t('_databaseSuccessfullyCreated'));
     setSourcePhrase('');

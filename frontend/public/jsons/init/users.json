@@ -1,0 +1,110 @@
+[
+  {
+    "user_name": "김갑환",
+    "email": "king_gabhwan@giveucon.com",
+    "first_name": "갑환",
+    "last_name": "김",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000000"
+  },
+  {
+    "user_name": "권진선",
+    "email": "fear_jinseon@giveucon.com",
+    "first_name": "진선",
+    "last_name": "권",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000001"
+  },
+  {
+    "user_name": "남은혜",
+    "email": "rainbow_eunhye@giveucon.com",
+    "first_name": "은혜",
+    "last_name": "남",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000002"
+  },
+  {
+    "user_name": "백두산",
+    "email": "iron_doosan@giveucon.com",
+    "first_name": "두산",
+    "last_name": "백",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000003"
+  },
+  {
+    "user_name": "설이화",
+    "email": "voyage_yihwa@giveucon.com",
+    "first_name": "이화",
+    "last_name": "설",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000004"
+  },
+  {
+    "user_name": "성아리",
+    "email": "legend_ahri@giveucon.com",
+    "first_name": "아리",
+    "last_name": "성",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000005"
+  },
+  {
+    "user_name": "송하나",
+    "email": "watch_hana@giveucon.com",
+    "first_name": "하나",
+    "last_name": "송",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000006"
+  },
+  {
+    "user_name": "은태준",
+    "email": "apex_taejun@giveucon.com",
+    "first_name": "태준",
+    "last_name": "은",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000007"
+  },
+  {
+    "user_name": "이윤진",
+    "email": "daylight_yunjin@giveucon.com",
+    "first_name": "윤진",
+    "last_name": "이",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000008"
+  },
+  {
+    "user_name": "한미라",
+    "email": "star_mira@giveucon.com",
+    "first_name": "미라",
+    "last_name": "한",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000009"
+  },
+  {
+    "user_name": "한재문",
+    "email": "civ_jaemoon@giveucon.com",
+    "first_name": "재문",
+    "last_name": "한",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000010"
+  },
+  {
+    "user_name": "한주리",
+    "email": "fighter_juri@giveucon.com",
+    "first_name": "주리",
+    "last_name": "한",
+    "locale": "ko",
+    "dark_mode": false,
+    "phone_number": "+821010000011"
+  }
+]
