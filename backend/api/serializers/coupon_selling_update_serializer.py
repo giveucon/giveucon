@@ -11,24 +11,18 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
         read_only_fields=('price', 'coupon')
 
     def validate_status(self, value):
-        print('validate status', value)
-        return CouponSellingStatus.objects.get(status=value).status
-
-    def validate(self, data):
-        print('validate')
-        return data
+        return CouponSellingStatus.objects.get(status=value['status'])
 
     def update(self, instance, validated_data):
-        print('here is update serializer')
         prev_status = instance.status.status
         next_status = validated_data.pop('status')
-        if ((prev_status == 'open' and next_status == 'pre_pending')
-             or (prev_status == 'pre_pending' and next_status == 'open')
-             or (prev_status == 'pre_pending' and next_status == 'pending')
-             or (prev_status == 'pending' and next_status == 'closed')):
-            instance.status.status = next_status
+        if ((prev_status == 'open' and next_status.status == 'pre_pending')
+             or (prev_status == 'pre_pending' and next_status.status == 'open')
+             or (prev_status == 'pre_pending' and next_status.status == 'pending')
+             or (prev_status == 'pending' and next_status.status == 'closed')):
+            instance.status = next_status
             instance.save()
-        else:
-            raise serializers.ValidationError({
-                'verification_code': 'Invalid verification code'
-            })
+            return instance
+        raise serializers.ValidationError({
+           'status': 'Invalid status'
+        })
