@@ -14,7 +14,7 @@ class UserListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_read = UserReadSerializer
     serializer_class_write = UserWriteSerializer
     pagination_class = UserPagination
-    filterset_fields = ['user_name', 'email']
+    filterset_fields = ['user_name', 'email', 'wallet']
 
     def perform_create(self, serializer):
         user = serializer.save(account=self.request.user)
