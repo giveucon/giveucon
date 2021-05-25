@@ -67,6 +67,7 @@
   "addTag": "Add tag",
   "allStores": "All stores",
   "allNotices": "All notices",
+  "balance": "Balance",
   "basicInfo": "Basic info",
   "categories": "Categories",
   "createAccount": "Create account",
@@ -96,6 +97,7 @@
   "deleteNotice": "Delete notice",
   "deleteStore": "Delete store",
   "deleteTag": "Delete tag",
+  "deposit": "Deposit",
   "description": "Description",
   "developerTools": "Developer tools",
   "duration": "Duration",
@@ -117,6 +119,7 @@
   "favorites": "Favorites",
   "favoriteStoreList": "Favorite store list",
   "favoriteStores": "Favorite stores",
+  "fee": "Fee",
   "findCurrentLocation": "Find current location",
   "findPath": "Find path",
   "firstName": "First name",
@@ -159,8 +162,9 @@
   "myFavoriteStores": "My favorite stores",
   "myFriends": "My friends",
   "myInfo": "My info",
-  "myStores": "My stores",
   "myProducts": "My products",
+  "myStores": "My stores",
+  "myTransactions": "My transactions",
   "myWallet": "My wallet",
   "name": "Name",
   "nearby": "Nearby",
@@ -225,5 +229,6 @@
   "verificationCode": "Verification code",
   "version": "Version",
   "wallet": "Wallet",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "withdraw": "Withdraw"
 }

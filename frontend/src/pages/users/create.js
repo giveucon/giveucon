@@ -15,7 +15,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import InfoIcon from '@material-ui/icons/Info';
 import PhoneIcon from '@material-ui/icons/Phone';
 
 import Layout from 'components/Layout'
@@ -66,6 +67,7 @@ function Create({ lng, lngDict, selfAccount }) {
     last_name: null,
     locale: lng,
     dark_mode: false,
+    wallet: null,
     phone_number: null,
     verification_code: null,
   });
@@ -74,6 +76,7 @@ function Create({ lng, lngDict, selfAccount }) {
     user_name: false,
     first_name: false,
     last_name: false,
+    wallet: false,
     phone_number: false,
     verification_code: false,
   });
@@ -108,7 +111,7 @@ function Create({ lng, lngDict, selfAccount }) {
        />
       <Section
         title={i18n.t('basicInfo')}
-        titlePrefix={<IconButton><InfoOutlinedIcon /></IconButton>}
+        titlePrefix={<IconButton><InfoIcon /></IconButton>}
       >
         <Box paddingY={1}>
           <TextField
@@ -216,6 +219,29 @@ function Create({ lng, lngDict, selfAccount }) {
 
 
       <Section
+        title={i18n.t('wallet')}
+        titlePrefix={<IconButton><AccountBalanceWalletIcon /></IconButton>}
+      >
+        <Box paddingY={1}>
+          <TextField
+            name='wallet'
+            value={selfUser.wallet}
+            error={selfUserError.wallet}
+            fullWidth
+            label={i18n.t('wallet')}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(event) => {
+              setSelfUser(prevSelfUser => ({ ...prevSelfUser, wallet: event.target.value }));
+            }}
+            required
+          />
+        </Box>
+      </Section>
+
+
+      <Section
         title={i18n.t('phoneVerification')}
         titlePrefix={<IconButton><PhoneIcon /></IconButton>}
       >
@@ -282,7 +308,6 @@ function Create({ lng, lngDict, selfAccount }) {
         </Box>
       </Section>
 
-
       <Box marginY={1}>
         <Button
           color='primary'
@@ -299,6 +324,7 @@ function Create({ lng, lngDict, selfAccount }) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, user_name: !!postSelfUserResponse.data.user_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, first_name: !!postSelfUserResponse.data.first_name}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, last_name: !!postSelfUserResponse.data.last_name}));
+              setSelfUserError(prevSelfUserError => ({...prevSelfUserError, wallet: !!postSelfUserResponse.data.wallet}));
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!postSelfUserResponse.data.phone_number}));
               toast.error(i18n.t('_checkInputFields'));
             }

@@ -8,10 +8,10 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import * as constants from '../constants';
 import I18n from 'lib/i18n'
 import lightTheme from 'styles/lightTheme';
 import darkTheme from 'styles/darkTheme';
+import * as constants from '../constants';
 
 function RootApp({ Component, pageProps }) {
   const router = useRouter();
