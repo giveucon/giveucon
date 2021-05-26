@@ -100,7 +100,7 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
 
       <Section
         title={i18n.t('myCoupons')}
-        titlePrefix={<IconButton><StoreIcon /></IconButton>}
+        titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
         titleSuffix={
           <IconButton>
             <ArrowForwardIcon
@@ -121,7 +121,11 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
                   title={item.product.name}
                   image={item.product.images.length > 0 ? item.product.images[0].image : constants.NO_IMAGE_PATH}
                   actions={[
-                    <IconButton><DirectionsIcon /></IconButton>,
+                    <IconButton
+                      onClick={() => router.push(`https://map.kakao.com/link/to/${item.product.store.name},${item.product.store.location.latitude},${item.product.store.location.longitude}`)}
+                    >
+                      <DirectionsIcon/>
+                    </IconButton>,
                     <IconButton
                       onClick={() => router.push({
                         pathname: '/coupons/use/',
@@ -143,7 +147,7 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
 
       <Section
         title={i18n.t('myFavoriteStores')}
-        titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
         titleSuffix={
           <IconButton>
             <ArrowForwardIcon

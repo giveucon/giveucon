@@ -130,7 +130,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
         )}
       </Section>
 
-      
+
       <Section
         title={i18n.t('myCoupons')}
         titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}

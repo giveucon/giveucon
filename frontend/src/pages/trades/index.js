@@ -87,6 +87,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
+                subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
                   ? item.coupon.product.images[0].image
@@ -120,6 +121,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
+                subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
                   ? item.coupon.product.images[0].image

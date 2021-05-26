@@ -319,7 +319,7 @@ function Id({
                 margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
                 innerRadius={0.5}
                 enableArcLinkLabels={false}
-                arcLabel={(e) => {return `${e.id  } (${  e.value  })`}}
+                arcLabel={(e) => `${e.id  } (${  e.value  })`}
                 colors={{ scheme: 'accent' }}
               />
             </Box>

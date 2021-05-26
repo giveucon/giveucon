@@ -132,6 +132,7 @@ function Search({ lng, lngDict, selfUser }) {
                 <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.coupon.product.name}
+                    subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
                     image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
                     onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
                   />
