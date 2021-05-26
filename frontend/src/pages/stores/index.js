@@ -140,9 +140,9 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList, s
           <SwipeableTileList half>
             {selfFavoriteStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
-                title={item.name}
-                image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
-                onClick={() => router.push(`/stores/${item.id}/` )}
+                title={item.store.name}
+                image={item.store.images.length > 0 ? item.store.images[0].image : constants.NO_IMAGE_PATH}
+                onClick={() => router.push(`/stores/${item.store.id}/`)}
               />
             ))}
           </SwipeableTileList>
