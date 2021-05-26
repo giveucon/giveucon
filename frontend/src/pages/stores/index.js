@@ -37,10 +37,16 @@ const getSelfStoreList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/stores/', 'get', 'json', null, params);
 };
 
-const getFavoriteStore = async (context, selfUser, store) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
-    user: selfUser.id,
-    store: store.id
+const getStoreFavorite = async (context, selfUser, store) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+  user: selfUser.id,
+  store: store.id
+});
+
+const getSelfFavoriteStoreList = async (context, selfUser) => {
+  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+    user: selfUser.id
   });
+};
 
 const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
@@ -56,11 +62,17 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   for (const store of storeListResponse.data.results) {
-    const favoriteStoreResponse = await getFavoriteStore(context, selfUser, store);
+    const favoriteStoreResponse = await getStoreFavorite(context, selfUser, store);
     store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
   }
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
   if (selfStoreListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  const selfFavoriteStoreListResponse = await getSelfFavoriteStoreList(context, selfUser);
+  if (selfFavoriteStoreListResponse.status === 404) {
     return {
       notFound: true
     }
@@ -71,12 +83,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       storeList: storeListResponse.data.results,
-      selfStoreList: selfStoreListResponse.data.results
+      selfStoreList: selfStoreListResponse.data.results,
+      selfFavoriteStoreList: selfFavoriteStoreListResponse.data.results
     },
   };
 })
 
-function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList }) {
+function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList, selfFavoriteStoreList }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -113,6 +126,36 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList })
         {selfStoreList.length > 0 ? (
           <SwipeableTileList half>
             {selfStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
+              <Tile
+                title={item.name}
+                image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
+                onClick={() => router.push(`/stores/${item.id}/` )}
+              />
+            ))}
+          </SwipeableTileList>
+        ) : (
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+        )}
+      </Section>
+
+
+      <Section
+        title={i18n.t('myFavoriteStores')}
+        titlePrefix={<IconButton><StoreIcon /></IconButton>}
+        titleSuffix={
+          <IconButton
+            onClick={() => router.push({
+              pathname: '/favorite-stores/list/',
+              query: { user: selfUser.id },
+            })}>
+            <ArrowForwardIcon />
+          </IconButton>
+        }
+        padding={false}
+      >
+        {selfFavoriteStoreList.length > 0 ? (
+          <SwipeableTileList half>
+            {selfFavoriteStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 title={item.name}
                 image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
