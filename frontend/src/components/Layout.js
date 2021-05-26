@@ -17,7 +17,6 @@ const useStyles = makeStyles(() => ({
 export default function Layout({
   menuItemList,
   children,
-  locale,
   title
 }) {
   const classes = useStyles();
@@ -25,7 +24,6 @@ export default function Layout({
     <>
       <Head>
         <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <Container maxWidth='xs'>
@@ -37,7 +35,7 @@ export default function Layout({
         </Box>
         {
           menuItemList && (menuItemList.length > 0) && (
-            <BottomNavBar menuItemList={menuItemList} locale={locale} />
+            <BottomNavBar menuItemList={menuItemList} />
           )
         }
       </Container>

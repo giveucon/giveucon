@@ -80,7 +80,7 @@ function Index({ lng, lngDict, selfUser }) {
             className={classes.errorButton}
             fullWidth
             variant='contained'
-            onClick={() => {router.push('/oauth/kakao/logout/')}}
+            onClick={() => router.push('/oauth/kakao/logout/')}
           >
             {i18n.t('logout')}
           </Button>

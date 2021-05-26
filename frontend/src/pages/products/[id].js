@@ -5,11 +5,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { ResponsivePie } from '@nivo/pie'
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
@@ -37,6 +39,7 @@ const getProduct = async (context) => await requestToBackend(context, `api/produ
 const getProductReviewList = async (context) => await requestToBackend(context, `api/product-reviews/`, 'get', 'json', null, {
   product: context.query.id
 });
+
 const getCouponList = async (context, product) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
   user: product.store.user,
   used: false
@@ -45,6 +48,24 @@ const getCouponList = async (context, product) => await requestToBackend(context
 const getFavoriteProduct = async (context, selfUser) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
   user: selfUser.id,
   product: context.query.id
+});
+
+const getOpenCouponSellingList = async (context, selfUser, product) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  coupon__product__id: product.id,
+  status__status: 'open'
+});
+
+const getPrePendingCouponSellingList = async (context, selfUser, product) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  coupon__product__id: product.id,
+  status__status: 'pre_pending'
+});
+
+const getPendingCouponSellingList = async (context, selfUser, product) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  coupon__product__id: product.id,
+  status__status: 'pending'
 });
 
 const postFavoriteProduct = async (product) => await requestToBackend(null, 'api/favorite-products/', 'post', 'json', {
@@ -63,6 +84,9 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   const couponListResponse = await getCouponList(context, productResponse.data);
   const productReviewListResponse = await getProductReviewList(context);
   const initialFavoriteProductResponse = await getFavoriteProduct(context, selfUser);
+  const openCouponSellingResponse = await getOpenCouponSellingList(context, selfUser, productResponse.data);
+  const prePendingCouponSellingResponse = await getPrePendingCouponSellingList(context, selfUser, productResponse.data);
+  const pendingCouponSellingResponse = await getPendingCouponSellingList(context, selfUser, productResponse.data);
   return {
     props: {
       lng,
@@ -71,17 +95,54 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       product: productResponse.data,
       couponListResponse,
       productReviewList: productReviewListResponse.data.results,
-      initialFavoriteProduct: (initialFavoriteProductResponse.data.results.length === 1) ? initialFavoriteProductResponse.data.results[0] : null
+      initialFavoriteProduct: (initialFavoriteProductResponse.data.results.length === 1) ? initialFavoriteProductResponse.data.results[0] : null,
+      openCouponSellingResponse,
+      prePendingCouponSellingResponse,
+      pendingCouponSellingResponse
     }
   }
 })
 
-function Id({ lng, lngDict, selfUser, product, couponListResponse, productReviewList, initialFavoriteProduct }) {
+function Id({
+  lng,
+  lngDict,
+  selfUser,
+  product,
+  couponListResponse,
+  productReviewList,
+  initialFavoriteProduct,
+  openCouponSellingResponse,
+  prePendingCouponSellingResponse,
+  pendingCouponSellingResponse
+}) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
   const [favoriteProduct, setFavoriteProduct] = useState(initialFavoriteProduct)
+
+  let activeCouponSellingData = [];
+  if (openCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('onSale'),
+      label: i18n.t('onSale'),
+      value: openCouponSellingResponse.data.count
+    }
+  );
+  if (prePendingCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('tradeRequested'),
+      label: i18n.t('tradeRequested'),
+      value: prePendingCouponSellingResponse.data.count
+    }
+  );
+  if (pendingCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('remitted'),
+      label: i18n.t('remitted'),
+      value: pendingCouponSellingResponse.data.count
+    }
+  );
 
   return (
     <Layout
@@ -251,6 +312,23 @@ function Id({ lng, lngDict, selfUser, product, couponListResponse, productReview
           title={i18n.t('managements')}
           titlePrefix={<IconButton><SettingsIcon /></IconButton>}
         >
+          <Box display='flex' alignItems='center' justifyContent='flex-start'>
+            <Box style={{height: '10rem', width: '50%'}}>
+              <ResponsivePie
+                data={activeCouponSellingData}
+                margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
+                innerRadius={0.5}
+                enableArcLinkLabels={false}
+                arcLabel={function(e){return e.id + ' (' + e.value + ')'}}
+                colors={{ scheme: 'accent' }}
+              />
+            </Box>
+            <Box>
+              <Typography variant='h6'>{`${i18n.t('onSale')}: ${openCouponSellingResponse.data.count}`}</Typography>
+              <Typography variant='h6'>{`${i18n.t('tradeRequested')}: ${prePendingCouponSellingResponse.data.count}`}</Typography>
+              <Typography variant='h6'>{`${i18n.t('remitted')}: ${pendingCouponSellingResponse.data.count}`}</Typography>
+            </Box>
+          </Box>
           <Box marginY={1}>
             <Button
               color='default'
