@@ -209,7 +209,7 @@ function Id({
                       variant='contained'
                       onClick={() => router.push({
                         pathname: '/coupon-sellings/buy/',
-                        query: { coupon: couponSellingListResponse.data.results[0].id },
+                        query: { coupon_selling: couponSellingListResponse.data.results[0].id },
                       })}
                     >
                       {i18n.t('buyCoupon')}

@@ -19,10 +19,9 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json');
 
 const getSelfCouponSellingList = async (context, selfUser) => {
-  const params = {
+  return await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
     user: selfUser.id
-  };
-  return await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, params);
+  });
 };
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
