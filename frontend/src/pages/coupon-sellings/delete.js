@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json');
+const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
 
-const deleteCouponSelling = async (couponSelling) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'delete', 'json');
+const deleteCouponSelling = async (couponSelling) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.coupon_selling}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);

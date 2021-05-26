@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+import Radio from '@material-ui/core/Radio';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import PaymentIcon from '@material-ui/icons/Payment';
 
@@ -21,19 +21,19 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
+const getCoupon = async (context) => await requestToBackend(context, `api/coupons/${context.query.coupon}/`, 'get', 'json');
 
-const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}`, 'get', 'json', {
-  status: {'status': status}
+const putGiveCoupon = async (coupon, user) => await requestToBackend(null, `api/coupons/${coupon.id}/give/`, 'put', 'json', {
+  user
 }, null)
 
 const getSelfFriendList = async (context, selfUser) => await requestToBackend(context, `api/friends/`, 'get', 'json', null, {
-    from_user: selfUser.id
-  });
+  from_user: selfUser.id
+});
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const couponSellingResponse = await getCouponSelling(context);
-  if (couponSellingResponse.status === 404) {
+  const couponResponse = await getCoupon(context);
+  if (couponResponse.status === 404) {
     return {
       notFound: true
     }
@@ -44,13 +44,13 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lng,
       lngDict,
       selfUser,
-      couponSelling: couponSellingResponse.data,
+      coupon: couponResponse.data,
       initialSelfFriendListResponse
     }
   }
 })
 
-function Index({ lng, lngDict, selfUser, couponSelling, initialSelfFriendListResponse }) {
+function Index({ lng, lngDict, selfUser, coupon, initialSelfFriendListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -67,28 +67,28 @@ function Index({ lng, lngDict, selfUser, couponSelling, initialSelfFriendListRes
     setSelfFriendListpage(prevSelfFriendListpage => prevSelfFriendListpage + 1);
     if (selfFriendListResponse.data.next === null) setHasMoreSelfFriendList(false);
   }
-  const [selectedFriendList, setSelectedFriendList] = useState([]);
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   return (
     <>
       <Layout
         lng={lng}
-      lngDict={lngDict}
+        lngDict={lngDict}
         menuItemList={selfUser.menu_items}
-        title={`${i18n.t('giveCoupons')} - ${i18n.t('_appName')}`}
+        title={`${i18n.t('giveCoupon')} - ${i18n.t('_appName')}`}
       >
         <Section
           backButton
-          title={i18n.t('giveCoupons')}
+          title={i18n.t('giveCoupon')}
          />
         <Section
           title={i18n.t('paymentInfo')}
           titlePrefix={<IconButton><PaymentIcon /></IconButton>}
         >
           <CouponBox
-            name={couponSelling.coupon.product.name}
-            price={couponSelling.price}
-            image={couponSelling.coupon.product.images.length > 0 ? couponSelling.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
+            name={coupon.product.name}
+            price={coupon.product.price}
+            image={coupon.product.images.length > 0 ? coupon.product.images[0].image : constants.NO_IMAGE_PATH}
             lng={lng}
             lngDict={lngDict}
           />
@@ -115,16 +115,12 @@ function Index({ lng, lngDict, selfUser, couponSelling, initialSelfFriendListRes
                   title={item.to_user.user_name}
                   image={gravatar.url(item.to_user.email, {default: 'identicon'})}
                   prefix={
-                    <Checkbox
-                      checked={selectedFriendList.includes(item.id)}
-                      onChange={() => {
-                        if (selectedFriendList.includes(item.id)) setSelectedFriendList(selectedFriendList.filter(element => element !== item.id));
-                        else setSelectedFriendList(selectedFriendList.concat(item.id));
-                        selectedFriendList.sort((lhs, rhs) => lhs - rhs);
-                      }}
+                    <Radio
+                      checked={selectedFriend === item.id}
+                      onChange={() => setSelectedFriend(item.id)}
                     />
                   }
-                  onClick={() => router.push(`/users/${item.to_user.id}/`)}
+                  onClick={() => setSelectedFriend(item.id)}
                 />
               ))}
             </InfiniteScroll>
@@ -139,12 +135,12 @@ function Index({ lng, lngDict, selfUser, couponSelling, initialSelfFriendListRes
             fullWidth
             variant='contained'
             onClick={async () => {
-              const putCouponSellingResponse = await putCouponSelling(couponSelling, 'pre_pending');
-              if (putCouponSellingResponse.status === 200) {
-                toast.success(i18n.t('_couponTradeRequested'));
+              const putGiveCouponResponse = await putGiveCoupon(coupon, selectedFriend);
+              if (putGiveCouponResponse.status === 200) {
+                toast.success(i18n.t('_couponGived'));
                 router.push({
-                  pathname: '/coupon-sellings/give/completed/',
-                  query: { coupon_selling: couponSelling.id },
+                  pathname: '/coupons/give/completed/',
+                  query: { coupon: coupon.id },
                 });
               }
               else {
@@ -152,7 +148,7 @@ function Index({ lng, lngDict, selfUser, couponSelling, initialSelfFriendListRes
               }
             }}
           >
-            {i18n.t('issueCoupon')}
+            {i18n.t('giveCoupon')}
           </Button>
         </Box>
 

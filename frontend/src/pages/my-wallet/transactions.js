@@ -115,15 +115,16 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
             axisTop={null}
             axisRight={null}
             axisBottom={{
-                orient: 'bottom',
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0
+              orient: 'bottom',
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0
             }}
             axisLeft={null}
-            enableGridY
-            offsetType='none'
             colors={{ scheme: 'accent' }}
+            enableGridY
+            isInteractive={false}
+            offsetType='none'
           />
         </Box>
 

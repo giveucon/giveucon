@@ -317,10 +317,11 @@ function Id({
               <ResponsivePie
                 data={activeCouponSellingData}
                 margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
-                innerRadius={0.5}
-                enableArcLinkLabels={false}
                 arcLabel={(e) => `${e.id  } (${  e.value  })`}
                 colors={{ scheme: 'accent' }}
+                enableArcLinkLabels={false}
+                innerRadius={0.5}
+                isInteractive={false}
               />
             </Box>
             <Box>
