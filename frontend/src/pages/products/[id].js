@@ -45,6 +45,10 @@ const getCouponList = async (context, product) => await requestToBackend(context
   used: false
 });
 
+const getCouponSellingList = async (context, coupon) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__id: coupon.id
+});
+
 const getFavoriteProduct = async (context, selfUser) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
   user: selfUser.id,
   product: context.query.id
@@ -82,6 +86,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const couponListResponse = await getCouponList(context, productResponse.data);
+  const couponSellingListResponse = couponListResponse.data.count > 0 ? await getCouponSellingList(context, couponListResponse.data.results[0]) : null;
   const productReviewListResponse = await getProductReviewList(context);
   const initialFavoriteProductResponse = await getFavoriteProduct(context, selfUser);
   const openCouponSellingResponse = await getOpenCouponSellingList(context, selfUser, productResponse.data);
@@ -94,6 +99,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       selfUser,
       product: productResponse.data,
       couponListResponse,
+      couponSellingListResponse,
       productReviewList: productReviewListResponse.data.results,
       initialFavoriteProduct: (initialFavoriteProductResponse.data.results.length === 1) ? initialFavoriteProductResponse.data.results[0] : null,
       openCouponSellingResponse,
@@ -109,6 +115,7 @@ function Id({
   selfUser,
   product,
   couponListResponse,
+  couponSellingListResponse,
   productReviewList,
   initialFavoriteProduct,
   openCouponSellingResponse,
@@ -193,7 +200,7 @@ function Id({
           </Box>
           {(selfUser.id !== product.store.user) && (
             <>
-              {couponListResponse.data.count > 0 && (
+              {couponSellingListResponse && couponSellingListResponse.data.count > 0 && (
                 <>
                   <Box marginY={1}>
                     <Button
@@ -202,23 +209,10 @@ function Id({
                       variant='contained'
                       onClick={() => router.push({
                         pathname: '/coupon-sellings/buy/',
-                        query: { coupon: couponListResponse.data.results[0].id },
+                        query: { coupon: couponSellingListResponse.data.results[0].id },
                       })}
                     >
                       {i18n.t('buyCoupon')}
-                    </Button>
-                  </Box>
-                  <Box marginY={1}>
-                    <Button
-                      color='default'
-                      fullWidth
-                      variant='contained'
-                      onClick={() => router.push({
-                        pathname: '/coupon-sellings/give/',
-                        query: { coupon: couponListResponse.data.results[0].id },
-                      })}
-                    >
-                      {i18n.t('giveCoupon')}
                     </Button>
                   </Box>
                 </>
