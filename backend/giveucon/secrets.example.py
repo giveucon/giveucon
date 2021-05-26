@@ -1,6 +1,7 @@
 DJANGO_ADMIN_USERNAME = 'admin'
 DJANGO_ADMIN_EMAIL = 'admin@giveucon.com'
 DJANGO_ADMIN_PASSWORD = 'your_admin_password_here'
+DJANGO_ALLOWED_HOSTS = ['your_hosts_here']
 DJANGO_BASE_URL = 'http://127.0.0.1:8000'
 DJANGO_DEBUG = True
 DJANGO_FRONTEND_BASE_URL = 'http://127.0.0.1:3000'

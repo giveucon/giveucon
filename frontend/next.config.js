@@ -1,6 +1,4 @@
-const withOffline = require('next-offline');
-
-const nextConfig = {
+module.exports = {
   /*
     future: {
         webpack5: true
@@ -25,5 +23,3 @@ const nextConfig = {
     ]
   },
 }
-
-module.exports = withOffline(nextConfig);

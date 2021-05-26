@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = DJANGO_SECRET_KEY
 DEBUG = DJANGO_DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS
 
 # Application definition
 
