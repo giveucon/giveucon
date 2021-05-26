@@ -28,12 +28,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getProductList = async (context) => {
-  return await requestToBackend(context, 'api/products', 'get', 'json', null, {
+const getProductList = async (context) => await requestToBackend(context, 'api/products', 'get', 'json', null, {
     store__user: context.query.user || null,
     store: context.query.store || null,
   });
-};
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 
