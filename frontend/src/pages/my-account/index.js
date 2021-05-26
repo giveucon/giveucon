@@ -183,7 +183,7 @@ function Index({ lng, lngDict, selfUser }) {
           icon={<AssistantIcon />}
           onClick={() => router.push({
             pathname: '/coupon-sellings/list/',
-            query: { user: selfUser.id, status__status: 'pending' },
+            query: { user: selfUser.id, status: 'pending' },
           })}
         />
         <Divider />
