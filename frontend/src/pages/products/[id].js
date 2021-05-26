@@ -5,10 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ResponsivePie } from '@nivo/pie'
@@ -308,55 +308,62 @@ function Id({
 
 
       {(selfUser.id === product.store.user) && (
-        <Section
-          title={i18n.t('managements')}
-          titlePrefix={<IconButton><SettingsIcon /></IconButton>}
-        >
-          <Box display='flex' alignItems='center' justifyContent='flex-start'>
-            <Box style={{height: '10rem', width: '50%'}}>
-              <ResponsivePie
-                data={activeCouponSellingData}
-                margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
-                arcLabel={(e) => `${e.id  } (${  e.value  })`}
-                colors={{ scheme: 'accent' }}
-                enableArcLinkLabels={false}
-                innerRadius={0.5}
-                isInteractive={false}
-              />
+        <>
+          <Section
+            title={i18n.t('summary')}
+            titlePrefix={<IconButton><AssessmentIcon /></IconButton>}
+          >
+            <Box display='flex' alignItems='center' justifyContent='flex-start'>
+              <Box style={{height: '10rem', width: '50%'}}>
+                <ResponsivePie
+                  data={activeCouponSellingData}
+                  margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
+                  arcLabel={(e) => `${e.id  } (${  e.value  })`}
+                  colors={{ scheme: 'accent' }}
+                  enableArcLinkLabels={false}
+                  innerRadius={0.5}
+                  isInteractive={false}
+                />
+              </Box>
+              <Box>
+                <Typography variant='h6'>{`${i18n.t('onSale')}: ${openCouponSellingResponse.data.count}`}</Typography>
+                <Typography variant='h6'>{`${i18n.t('tradeRequested')}: ${prePendingCouponSellingResponse.data.count}`}</Typography>
+                <Typography variant='h6'>{`${i18n.t('remitted')}: ${pendingCouponSellingResponse.data.count}`}</Typography>
+              </Box>
             </Box>
-            <Box>
-              <Typography variant='h6'>{`${i18n.t('onSale')}: ${openCouponSellingResponse.data.count}`}</Typography>
-              <Typography variant='h6'>{`${i18n.t('tradeRequested')}: ${prePendingCouponSellingResponse.data.count}`}</Typography>
-              <Typography variant='h6'>{`${i18n.t('remitted')}: ${pendingCouponSellingResponse.data.count}`}</Typography>
+          </Section>
+          <Section
+            title={i18n.t('managements')}
+            titlePrefix={<IconButton><SettingsIcon /></IconButton>}
+          >
+            <Box marginY={1}>
+              <Button
+                color='default'
+                fullWidth
+                variant='contained'
+                onClick={() => router.push({
+                  pathname: '/products/update/',
+                  query: { product: product.id },
+                })}
+              >
+                {i18n.t('editProduct')}
+              </Button>
             </Box>
-          </Box>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/products/update/',
-                query: { product: product.id },
-              })}
-            >
-              {i18n.t('editProduct')}
-            </Button>
-          </Box>
-          <Box marginY={1}>
-            <Button
-              color='primary'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/coupons/issue/',
-                query: { product: product.id },
-              })}
-            >
-              {i18n.t('issueCoupon')}
-            </Button>
-          </Box>
-        </Section>
+            <Box marginY={1}>
+              <Button
+                color='primary'
+                fullWidth
+                variant='contained'
+                onClick={() => router.push({
+                  pathname: '/coupons/issue/',
+                  query: { product: product.id },
+                })}
+              >
+                {i18n.t('issueCoupon')}
+              </Button>
+            </Box>
+          </Section>
+        </>
       )}
 
 

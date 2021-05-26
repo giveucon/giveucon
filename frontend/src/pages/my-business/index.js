@@ -3,9 +3,12 @@ import { useRouter } from 'next/router';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import StoreIcon from '@material-ui/icons/Store';
+import { ResponsivePie } from '@nivo/pie'
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
@@ -31,9 +34,27 @@ const getSelfProductList = async (context, selfUser) => {
   return await requestToBackend(context, 'api/products/', 'get', 'json', null, params);
 };
 
+const getOpenCouponSellingList = async (context, selfUser) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  status__status: 'open'
+});
+
+const getPrePendingCouponSellingList = async (context, selfUser) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  status__status: 'pre_pending'
+});
+
+const getPendingCouponSellingList = async (context, selfUser) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  status__status: 'pending'
+});
+
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
   const selfProductListResponse = await getSelfProductList(context, selfUser);
+  const openCouponSellingResponse = await getOpenCouponSellingList(context, selfUser);
+  const prePendingCouponSellingResponse = await getPrePendingCouponSellingList(context, selfUser);
+  const pendingCouponSellingResponse = await getPendingCouponSellingList(context, selfUser);
   return {
     props: {
       lng,
@@ -41,14 +62,49 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       selfUser,
       selfStoreList: selfStoreListResponse.data.results,
       selfProductList: selfProductListResponse.data.results,
+      openCouponSellingResponse,
+      prePendingCouponSellingResponse,
+      pendingCouponSellingResponse
     }
   }
 })
 
-function Index({ lng, lngDict, selfUser, selfStoreList, selfProductList }) {
+function Index({
+  lng,
+  lngDict,
+  selfUser,
+  selfStoreList,
+  selfProductList,
+  openCouponSellingResponse,
+  prePendingCouponSellingResponse,
+  pendingCouponSellingResponse
+}) {
 
   const i18n = useI18n();
   const router = useRouter();
+
+  const activeCouponSellingData = [];
+  if (openCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('onSale'),
+      label: i18n.t('onSale'),
+      value: openCouponSellingResponse.data.count
+    }
+  );
+  if (prePendingCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('tradeRequested'),
+      label: i18n.t('tradeRequested'),
+      value: prePendingCouponSellingResponse.data.count
+    }
+  );
+  if (pendingCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
+    {
+      id: i18n.t('remitted'),
+      label: i18n.t('remitted'),
+      value: pendingCouponSellingResponse.data.count
+    }
+  );
 
   return (
     <Layout
@@ -61,6 +117,30 @@ function Index({ lng, lngDict, selfUser, selfStoreList, selfProductList }) {
         backButton
         title={i18n.t('myBusiness')}
        />
+
+      <Section
+        title={i18n.t('summary')}
+        titlePrefix={<IconButton><AssessmentIcon /></IconButton>}
+      >
+        <Box display='flex' alignItems='center' justifyContent='flex-start'>
+          <Box style={{height: '10rem', width: '50%'}}>
+            <ResponsivePie
+              data={activeCouponSellingData}
+              margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
+              arcLabel={(e) => `${e.id  } (${  e.value  })`}
+              colors={{ scheme: 'accent' }}
+              enableArcLinkLabels={false}
+              innerRadius={0.5}
+              isInteractive={false}
+            />
+          </Box>
+          <Box>
+            <Typography variant='h6'>{`${i18n.t('onSale')}: ${openCouponSellingResponse.data.count}`}</Typography>
+            <Typography variant='h6'>{`${i18n.t('tradeRequested')}: ${prePendingCouponSellingResponse.data.count}`}</Typography>
+            <Typography variant='h6'>{`${i18n.t('remitted')}: ${pendingCouponSellingResponse.data.count}`}</Typography>
+          </Box>
+        </Box>
+      </Section>
 
 
       <Section
