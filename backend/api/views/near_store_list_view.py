@@ -4,6 +4,7 @@ from sklearn.neighbors import BallTree
 from ..mixins import SerializerMixin
 from ..models import Store
 from ..models import StoreLocation
+from ..models import User
 from ..models import UserLocation
 from ..paginations import StorePagination
 from ..serializers import StoreReadSerializer
@@ -15,7 +16,11 @@ class NearStoreListView(SerializerMixin, generics.ListAPIView):
     serializer_class_read = StoreReadSerializer
     pagination_class = StorePagination
     def get_queryset(self):
-        user = UserService.get_current_user(self.request)
+        user_pk = self.request.query_params.get('user', None)
+        if user_pk:
+            user = User.objects.get(pk=user_pk)
+        else:
+            user = UserService.get_current_user(self.request)
         try:
             user_location = UserLocation.objects.get(user=user.pk).location
             user_location = [[user_location.latitude, user_location.longitude]]
