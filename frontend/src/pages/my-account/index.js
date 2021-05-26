@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import AssistantIcon from '@material-ui/icons/Assistant';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
@@ -179,7 +180,7 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('tradeConfirmationRequests')}
-          icon={<InsertCommentIcon />}
+          icon={<AssistantIcon />}
           onClick={() => router.push({
             pathname: '/coupon-sellings/list/',
             query: { user: selfUser.id, status__status: 'pending' },

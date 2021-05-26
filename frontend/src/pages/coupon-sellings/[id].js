@@ -149,7 +149,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupon-sellings/update/',
-              query: { id: couponSelling.id },
+              query: { coupon_selling: couponSelling.id },
             })}
           >
             {i18n.t('editCouponTrade')}
@@ -164,7 +164,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupon-sellings/remit/',
-              query: { id: couponSelling.id },
+              query: { coupon_selling: couponSelling.id },
             })}
           >
             {i18n.t('finishRemittance')}
