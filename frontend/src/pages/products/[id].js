@@ -45,8 +45,9 @@ const getCouponList = async (context, product) => await requestToBackend(context
   used: false
 });
 
-const getCouponSellingList = async (context, coupon) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
-  coupon__id: coupon.id,
+const getCouponSellingList = async (context, product) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__user__id: product.store.id,
+  coupon__product__id: product.id,
   status__status: 'open'
 });
 
@@ -87,7 +88,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const couponListResponse = await getCouponList(context, productResponse.data);
-  const couponSellingListResponse = couponListResponse.data.count > 0 ? await getCouponSellingList(context, couponListResponse.data.results[0]) : null;
+  const couponSellingListResponse = await getCouponSellingList(context, productResponse.data);
   const productReviewListResponse = await getProductReviewList(context);
   const initialFavoriteProductResponse = await getFavoriteProduct(context, selfUser);
   const openCouponSellingResponse = await getOpenCouponSellingList(context, selfUser, productResponse.data);
