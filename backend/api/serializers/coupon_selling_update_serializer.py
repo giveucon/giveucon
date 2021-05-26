@@ -28,7 +28,8 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
             })
         elif next_status.status == 'open':
             instance.buyer = None
-            instance.price = validated_data.pop('price', instance.price)
+            if prev_status == 'closed':
+                instance.price = validated_data.pop('price', instance.price)
         elif next_status.status == 'pre_pending':
             instance.buyer = user
         elif next_status.status == 'closed':
