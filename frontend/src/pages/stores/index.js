@@ -54,12 +54,27 @@ const deleteFavoriteStore = async (favoriteStore) => await requestToBackend(null
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const storeListResponse = await getStoreList(context);
+  if (storeListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   for (const store of storeListResponse.data.results) {
     const favoriteStoreResponse = await getStoreFavorite(context, selfUser, store);
     store.favorite = (favoriteStoreResponse.data.count === 1) ? favoriteStoreResponse.data.results[0] : null
   }
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
+  if (selfStoreListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   const selfFavoriteStoreListResponse = await getSelfFavoriteStoreList(context, selfUser);
+  if (selfFavoriteStoreListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
   return {
     props: {
       lng,
