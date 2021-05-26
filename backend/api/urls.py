@@ -21,6 +21,7 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailView.as_view()),
 
     path('stores/', StoreListView.as_view()),
+    path('stores/near/', NearStoreListView.as_view()),
     path('stores/<int:pk>/', StoreDetailView.as_view()),
 
     path('store-notices/', StoreNoticeListView.as_view()),

@@ -32,6 +32,7 @@ from .friend_detail_view import FriendDetailView
 from .phone_verification_code_view import PhoneVerificationCodeView
 from .location_list_view import LocationListView
 from .location_detail_view import LocationDetailView
+from .near_store_list_view import NearStoreListView
 from .notification_list_view import NotificationListView
 from .notification_detail_view import NotificationDetailView
 from .report_detail_view import ReportDetailView
