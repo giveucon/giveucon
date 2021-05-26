@@ -10,10 +10,10 @@ export default function CouponListItem({ title=null, onClick=null, prefix=null, 
       {
         skeleton ? (
           <Box display='flex' alignItems='center' justifyContent='flex-start' margin='1rem'>
-            <Skeleton animation="wave" variant="circle" width='2rem' height='2rem'/>
+            <Skeleton animation='wave' variant='circle' width='2rem' height='2rem'/>
             <Box flexGrow={1} margin='1rem'>
-              <Skeleton animation="wave" width='100%' height='1rem'/>
-              <Skeleton animation="wave" width='80%' height='1rem'/>
+              <Skeleton animation='wave' width='100%' height='1rem'/>
+              <Skeleton animation='wave' width='80%' height='1rem'/>
             </Box>
           </Box>
         ) : (

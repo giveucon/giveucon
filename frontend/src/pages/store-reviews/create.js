@@ -99,7 +99,7 @@ function Create({ lng, lngDict, selfUser, store }) {
               setStoreReview(prevStoreReview => ({ ...prevStoreReview, score: newValue }));
             }}
             defaultValue={storeReview.score}
-            size="large"
+            size='large'
           />
         </Box>
         <Box paddingY={1}>

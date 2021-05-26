@@ -46,7 +46,7 @@ export const getServerSideProps = withoutAuthServerSideProps(async (context, lng
     return {
       redirect: {
         permanent: false,
-        destination: "/login/"
+        destination: '/login/'
       }
     }
   }

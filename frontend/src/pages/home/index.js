@@ -68,7 +68,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
               }}
               color='error'
               badgeContent=''
-              variant="dot"
+              variant='dot'
             >
               <NotificationsIcon
                 onClick={() => router.push({

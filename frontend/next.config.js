@@ -1,4 +1,4 @@
-const withOffline = require("next-offline");
+const withOffline = require('next-offline');
 
 const nextConfig = {
   /*
@@ -12,7 +12,7 @@ const nextConfig = {
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
+      use: ['@svgr/webpack']
     });
     return config;
   },

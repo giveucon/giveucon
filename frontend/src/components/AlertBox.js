@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
     },
   }));
 
-export default function AlertBox({ content=null, skeleton=false, variant="information" }) {
+export default function AlertBox({ content=null, skeleton=false, variant='information' }) {
   const classes = useStyles();
   return (
     <Box className={classes.root} padding={2}>
@@ -37,11 +37,11 @@ export default function AlertBox({ content=null, skeleton=false, variant="inform
       {!skeleton && (
         <Box className={classes.alertArea}>
           <Box display='flex' alignItems='center' justifyContent='center'>
-            { variant === 'information' && (<FontAwesomeIcon icon={faInfoCircle} color="grey" size="5x" />)}
-            { variant === 'success' && (<FontAwesomeIcon icon={faCheckCircle} color="grey" size="5x" />)}
-            { variant === 'question' && (<FontAwesomeIcon icon={faQuestionCircle} color="grey" size="5x" />)}
-            { variant === 'warning' && (<FontAwesomeIcon icon={faExclamationCircle} color="grey" size="5x" />)}
-            { variant === 'error' && (<FontAwesomeIcon icon={faTimesCircle} color="grey" size="5x" />)}
+            { variant === 'information' && (<FontAwesomeIcon icon={faInfoCircle} color='grey' size='5x' />)}
+            { variant === 'success' && (<FontAwesomeIcon icon={faCheckCircle} color='grey' size='5x' />)}
+            { variant === 'question' && (<FontAwesomeIcon icon={faQuestionCircle} color='grey' size='5x' />)}
+            { variant === 'warning' && (<FontAwesomeIcon icon={faExclamationCircle} color='grey' size='5x' />)}
+            { variant === 'error' && (<FontAwesomeIcon icon={faTimesCircle} color='grey' size='5x' />)}
           </Box>
           <Box paddingTop='1rem'>
             <Typography align='center'>{content}</Typography>

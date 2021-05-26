@@ -25,7 +25,7 @@ const getCouponSelling = async (context) => await requestToBackend(context, `api
 const getBuyer = async (context, couponSelling) => await requestToBackend(context, `api/users/${couponSelling.buyer.id}/`, 'get', 'json', null)
 
 const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'put', 'json', {
-  status: {"status": status}
+  status: {'status': status}
 }, null)
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
@@ -177,17 +177,12 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const putCouponSellingResponse = await putCouponSelling(couponSelling, 'pending');
-              if (putCouponSellingResponse.status === 200) {
-                toast.success(i18n.t('_couponTradeConfirmationRequested'));
-              }
-              else {
-                toast.error(i18n.t('_errorOccurredProcessingRequest'));
-              }
-            }}
+            onClick={() => router.push({
+              pathname: '/coupon-sellings/remit/',
+              query: { id: couponSelling.id },
+            })}
           >
-            {i18n.t('editCouponTrade')}
+            {i18n.t('finishRemittance')}
           </Button>
         </Box>
       )}
@@ -197,17 +192,12 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
             color='primary'
             fullWidth
             variant='contained'
-            onClick={async () => {
-              const putCouponSellingResponse = await putCouponSelling(couponSelling, 'closed');
-              if (putCouponSellingResponse.status === 200) {
-                toast.success(i18n.t('_couponTradeConfirmed'));
-              }
-              else {
-                toast.error(i18n.t('_errorOccurredProcessingRequest'));
-              }
-            }}
+            onClick={() => router.push({
+              pathname: '/coupon-sellings/confirm/',
+              query: { id: couponSelling.id },
+            })}
           >
-            {i18n.t('editCouponTrade')}
+            {i18n.t('confirmTrade')}
           </Button>
         </Box>
       )}

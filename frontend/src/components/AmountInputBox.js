@@ -55,11 +55,11 @@ export default function AmountInputBox({
           InputProps={{
             startAdornment:
               (variant==='money')
-              ? <InputAdornment position="start">{unit}</InputAdornment>
+              ? <InputAdornment position='start'>{unit}</InputAdornment>
               : null,
             endAdornment:
               (variant==='date')
-              ? <InputAdornment position="end">{i18n.t('days')}</InputAdornment>
+              ? <InputAdornment position='end'>{i18n.t('days')}</InputAdornment>
               : null,
           }}
         />
@@ -72,7 +72,7 @@ export default function AmountInputBox({
           fullWidth
         />
       </Box>
-      <Box display='flex' flexWrap="wrap" paddingY={1}>
+      <Box display='flex' flexWrap='wrap' paddingY={1}>
         {addAmountList.map((addAmount) =>
           <Box padding={0.5}>
             <Button

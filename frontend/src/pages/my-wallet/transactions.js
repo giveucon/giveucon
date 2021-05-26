@@ -122,7 +122,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
             }}
             axisLeft={null}
             enableGridY
-            offsetType="none"
+            offsetType='none'
             colors={{ scheme: 'accent' }}
           />
         </Box>

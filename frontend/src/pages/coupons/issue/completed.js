@@ -89,7 +89,7 @@ function Completed({ lng, lngDict, selfUser, product }) {
             </Box>
             <Divider />
             <Box marginTop='0.5rem'>
-              <Typography variant='h6'>{`${product.price.toLocaleString('ko-KR')  }원`}</Typography>
+              <Typography variant='h6'>{`${product.price}${i18n.t('_currencyBTC')}`}</Typography>
             </Box>
           </Box>
         </Box>

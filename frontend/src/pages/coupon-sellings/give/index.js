@@ -24,7 +24,7 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
 
 const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}`, 'get', 'json', {
-  status: {"status": status}
+  status: {'status': status}
 }, null)
 
 const getSelfFriendList = async (context, selfUser) => await requestToBackend(context, `api/friends/`, 'get', 'json', null, {

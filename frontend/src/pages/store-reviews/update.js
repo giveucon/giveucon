@@ -125,7 +125,7 @@ function Update({ lng, lngDict, selfUser, prevStoreReview }) {
               setStoreReview(prevStoreReview => ({ ...prevStoreReview, score: newValue }));
             }}
             defaultValue={storeReview.score}
-            size="large"
+            size='large'
           />
         </Box>
         <Box paddingY={1}>
