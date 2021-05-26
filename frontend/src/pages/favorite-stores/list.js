@@ -13,11 +13,9 @@ import useI18n from 'hooks/useI18n';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
-const getFavoriteStoreList = async (context) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getFavoriteStoreList = async (context) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: context.query.user || null,
   });
-};
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 

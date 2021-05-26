@@ -245,6 +245,7 @@
   "tags": "태그",
   "title": "제목",
   "tradeConfirmation": "거래 승인",
+  "tradeConfirmationRequests": "거래 승인 요청",
   "tradeConfirmed": "거래 승인됨",
   "tradeRequested": "거래 요청됨",
   "trades": "거래",

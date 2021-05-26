@@ -42,11 +42,9 @@ const getStoreFavorite = async (context, selfUser, store) => await requestToBack
   store: store.id
 });
 
-const getSelfFavoriteStoreList = async (context, selfUser) => {
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
+const getSelfFavoriteStoreList = async (context, selfUser) => await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: selfUser.id
   });
-};
 
 const postFavoriteStore = async (store) => await requestToBackend(null, 'api/favorite-stores/', 'post', 'json', {
     store: store.id
@@ -63,7 +61,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   }
   for (const store of storeListResponse.data.results) {
     const favoriteStoreResponse = await getStoreFavorite(context, selfUser, store);
-    store.favorite = (favoriteStoreResponse.data.results.length === 1) ? favoriteStoreResponse.data.results[0] : null
+    store.favorite = (favoriteStoreResponse.data.count === 1) ? favoriteStoreResponse.data.results[0] : null
   }
   const selfStoreListResponse = await getSelfStoreList(context, selfUser);
   if (selfStoreListResponse.status === 404) {
@@ -153,7 +151,7 @@ function Index({ lng, lngDict, selfUser, storeList: _storeList, selfStoreList, s
         }
         padding={false}
       >
-        {selfFavoriteStoreList.length > 0 ? (
+        {selfFavoriteStoreList && selfFavoriteStoreList.length > 0 ? (
           <SwipeableTileList half>
             {selfFavoriteStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
