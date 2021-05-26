@@ -9,7 +9,8 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CouponSelling
         fields = '__all__'
-        read_only_fields=('price', 'coupon', 'buyer')
+        read_only_fields=('coupon', 'buyer')
+        extra_kwargs = {'price': {'required': False}}
 
     def validate_status(self, value):
         return CouponSellingStatus.objects.get(status=value['status'])
@@ -27,6 +28,7 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
             })
         elif next_status.status == 'open':
             instance.buyer = None
+            instance.price = validated_data.pop('price', instance.price)
         elif next_status.status == 'pre_pending':
             instance.buyer = user
         elif next_status.status == 'closed':
