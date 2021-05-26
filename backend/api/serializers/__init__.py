@@ -13,6 +13,7 @@ from .coupon_read_serializer import CouponReadSerializer
 from .coupon_qr_read_serializer import CouponQrReadSerializer
 from .coupon_scan_update_serializer import CouponScanUpdateSerializer
 from .coupon_create_serializer import CouponCreateSerializer
+from .coupon_give_serializer import CouponGiveSerializer
 from .coupon_multi_create_serializer import CouponMultiCreateSerializer
 from .coupon_update_serializer import CouponUpdateSerializer
 from .coupon_selling_read_serializer import CouponSellingReadSerializer
