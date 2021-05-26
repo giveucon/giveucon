@@ -37,6 +37,7 @@
         "no-await-in-loop": "off",
         "no-multi-assign": "warn",
         "no-plusplus": "off",
+        "no-restricted-globals": "off",
         "no-restricted-syntax": "off",
         "no-return-await": "off",
         "no-shadow": "off",
