@@ -46,7 +46,8 @@ const getCouponList = async (context, product) => await requestToBackend(context
 });
 
 const getCouponSellingList = async (context, coupon) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
-  coupon__id: coupon.id
+  coupon__id: coupon.id,
+  status__status: 'open'
 });
 
 const getFavoriteProduct = async (context, selfUser) => await requestToBackend(context, 'api/favorite-products/', 'get', 'json', null, {
