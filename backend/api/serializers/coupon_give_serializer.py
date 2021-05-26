@@ -15,6 +15,12 @@ class CouponGiveSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             try:
                 coupon_selling = CouponSelling.objects.get(coupon=instance.id)
+                # prepending or pending
+                status = coupon_selling.status.status
+                if status == 'pre_pending' or status == 'pending':
+                    raise serializers.ValidationError({
+                        'coupon_selling.status': 'coupon selling in transaction'
+                    })
                 coupon_selling.status = CouponSellingStatus.objects.get(status='closed')
                 coupon_selling.save()
             except CouponSelling.DoesNotExist:
