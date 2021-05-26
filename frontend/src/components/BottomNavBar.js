@@ -21,15 +21,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BottomNavBar({ menuItemList, lng, lngDict }) {
+export default function BottomNavBar({ menuItemList }) {
 
   const i18n = useI18n();
   const router = useRouter();
   const classes = useStyles();
-
-  useEffect(() => {
-    i18n.locale(lng, lngDict);
-  }, [])
 
   let key = 0;
   const menuItemListAdapter = [];

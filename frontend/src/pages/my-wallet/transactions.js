@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router'
-import { ResponsiveStream } from '@nivo/stream'
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import { ResponsiveStream } from '@nivo/stream'
 
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
@@ -94,9 +94,6 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
   }).map(element => element.value)
   .reverse();
 
-  console.log(depositWithdrawalData);
-  console.log(balanceData);
-
 
   return (
     <Layout
@@ -110,7 +107,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
         title={i18n.t('myTransactions')}
       >
 
-        <Box style={{height: 200}}>
+        <Box style={{height: '10rem'}}>
           <ResponsiveStream
             data={balanceData}
             keys={[ 'value' ]}

@@ -19,6 +19,7 @@
     "@material-ui/styles": "^4.11.3",
     "@material-ui/system": "^4.11.3",
     "@nivo/core": "^0.70.0",
+    "@nivo/pie": "^0.70.0",
     "@nivo/stream": "^0.70.0",
     "@svgr/webpack": "^5.5.0",
     "array-move": "^3.0.1",
