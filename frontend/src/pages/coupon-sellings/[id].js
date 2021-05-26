@@ -179,7 +179,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
             variant='contained'
             onClick={() => router.push({
               pathname: '/coupon-sellings/confirm/',
-              query: { id: couponSelling.id },
+              query: { coupon_selling: couponSelling.id },
             })}
           >
             {i18n.t('confirmTrade')}
