@@ -14,10 +14,9 @@ import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getFavoriteStoreList = async (context) => {
-  const params = {
+  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, {
     user: context.query.user || null,
-  };
-  return await requestToBackend(context, 'api/favorite-stores/', 'get', 'json', null, params);
+  });
 };
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
