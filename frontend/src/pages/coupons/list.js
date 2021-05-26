@@ -80,7 +80,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
     return (
       <Layout
         lng={lng}
-      lngDict={lngDict}
+        lngDict={lngDict}
         menuItemList={selfUser.menu_items}
         title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
       >
@@ -161,7 +161,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
   return (
     <Layout
       lng={lng}
-    lngDict={lngDict}
+      lngDict={lngDict}
       menuItemList={selfUser.menu_items}
       title={`${i18n.t('couponList')} - ${i18n.t('_appName')}`}
     >
@@ -200,7 +200,7 @@ function List({ lng, lngDict, selfUser, initialCouponListResponse, user, store, 
                           />
                         </IconButton>
                       ]}
-                      onClick={item.user === selfUser.id
+                      onClick={item.user.id === selfUser.id
                         ? (() => router.push(`/coupons/${item.id}/`))
                         : null
                       }

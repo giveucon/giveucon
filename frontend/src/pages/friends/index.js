@@ -78,7 +78,7 @@ function Index({ lng, lngDict, selfUser, selfFriendList }) {
               <ListItem
                 key={item.id}
                 variant='user'
-                name={item.to_user.user_name}
+                title={item.to_user.user_name}
                 onClick={() => router.push(`/users/${item.to_user.id}/` )}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}
               />

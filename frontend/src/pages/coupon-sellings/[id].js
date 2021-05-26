@@ -127,34 +127,19 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
       </Box>
 
       {(couponSelling.status === 'open') && (selfUser.id !== couponSelling.coupon.user.id) && (
-        <>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/coupons/buy/',
-                query: { coupon: couponSelling.coupon.id },
-              })}
-            >
-              {i18n.t('purchaseCoupons')}
-            </Button>
-          </Box>
-          <Box marginY={1}>
-            <Button
-              color='default'
-              fullWidth
-              variant='contained'
-              onClick={() => router.push({
-                pathname: '/coupons/give/',
-                query: { coupon: couponSelling.coupon.id },
-              })}
-            >
-              {i18n.t('giveCoupons')}
-            </Button>
-          </Box>
-        </>
+        <Box marginY={1}>
+          <Button
+            color='default'
+            fullWidth
+            variant='contained'
+            onClick={() => router.push({
+              pathname: '/coupon-sellings/buy/',
+              query: { coupon_selling: couponSelling.id },
+            })}
+          >
+            {i18n.t('purchaseCoupons')}
+          </Button>
+        </Box>
       )}
       {(couponSelling.status === 'open') && (selfUser.id === couponSelling.coupon.user.id) && (
         <Box marginY={1}>
