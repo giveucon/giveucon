@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+import useI18n from 'hooks/useI18n'
 import * as constants from 'constants';
 
 const useStyles = makeStyles(() => ({
@@ -25,7 +26,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function CouponBox({ image, name, onClick, price }) {
+
+  const i18n = useI18n();
   const classes = useStyles();
+
   return (
     <Box display='flex' alignItems='center' justifyContent='flex-start'>
       <Box className={classes.imageArea}>
@@ -45,7 +49,7 @@ export default function CouponBox({ image, name, onClick, price }) {
         </Box>
         <Divider />
         <Box marginTop='0.5rem'>
-          <Typography variant='h6'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+          <Typography variant='h6'>{`${price}${i18n.t('_currencyBTC')}`}</Typography>
         </Box>
       </Box>
     </Box>

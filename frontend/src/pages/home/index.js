@@ -9,6 +9,7 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import * as constants from 'constants';
 import AlertBox from 'components/AlertBox';
@@ -21,26 +22,29 @@ import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
 
 const getCentralNoticeList = async (context) => await requestToBackend(context, 'api/central-notices/', 'get', 'json');
-const getNearbyCouponList = async (context, selfUser) => await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
+const getNearStoreList = async (context) => await requestToBackend(context, 'api/stores/near/', 'get', 'json');
+const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, 'api/coupons/', 'get', 'json', null, {
     user: selfUser.id,
     used: false
   });
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const centralNoticeListResponse = await getCentralNoticeList(context);
-  const nearbyCouponListResponse = await getNearbyCouponList(context, selfUser);
+  const nearStoreListResponse = await getNearStoreList(context);
+  const selfCouponListResponse = await getSelfCouponList(context, selfUser);
   return {
     props: {
       lng,
       lngDict,
       selfUser,
       centralNoticeList: centralNoticeListResponse.data.results,
-      nearbyCouponList: nearbyCouponListResponse.data.results
+      nearStoreList: nearStoreListResponse.data.results,
+      selfCouponList: selfCouponListResponse.data.results
     }
   }
 })
 
-function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) {
+function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfCouponList }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -102,13 +106,39 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
       </Section>
 
       <Section
-        title={i18n.t('nearby')}
+        title={i18n.t('nearbyStores')}
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
-        {nearbyCouponList.length > 0 ? (
+        {nearStoreList.length > 0 ? (
           <SwipeableTileList half>
-            {nearbyCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
+            {nearStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
+              <Tile
+                key={item.id}
+                title={item.name}
+                image={
+                  item.images && (item.images.length > 0)
+                  ? item.images[0].image
+                  : constants.NO_IMAGE_PATH
+                }
+                onClick={() => router.push(`/stores/${item.id}/`)}
+              />
+            ))}
+          </SwipeableTileList>
+        ) : (
+          <AlertBox content={i18n.t('_isEmpty')} variant='information' />
+        )}
+      </Section>
+
+      
+      <Section
+        title={i18n.t('myCoupons')}
+        titlePrefix={<IconButton><LoyaltyIcon /></IconButton>}
+        padding={false}
+      >
+        {selfCouponList.length > 0 ? (
+          <SwipeableTileList half>
+            {selfCouponList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.product.name}
@@ -140,7 +170,6 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearbyCouponList }) 
           <AlertBox content={i18n.t('_isEmpty')} variant='information' />
         )}
       </Section>
-
     </Layout>
   );
 }

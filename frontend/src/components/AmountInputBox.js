@@ -31,6 +31,7 @@ export default function AmountInputBox({
   label,
   onChangeAmount,
   onChangeInfinite=()=>{},
+  unit,
   variant='default'
 }) {
 
@@ -54,7 +55,7 @@ export default function AmountInputBox({
           InputProps={{
             startAdornment:
               (variant==='money')
-              ? <InputAdornment position="start">{i18n.t('_currencyKRW')}</InputAdornment>
+              ? <InputAdornment position="start">{unit}</InputAdornment>
               : null,
             endAdornment:
               (variant==='date')
@@ -86,7 +87,7 @@ export default function AmountInputBox({
             >
               {variant==='default' && `+ ${addAmount}`}
               {variant==='date' && `+ ${addAmount}${i18n.t('days')}`}
-              {variant==='money' && `${addAmount >= 0 ? '+' : '-'} ${Math.abs(addAmount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+              {variant==='money' && `${addAmount >= 0 ? '+' : '-'} ${Math.abs(addAmount)}${unit}`}
             </Button>
           </Box>
         )}

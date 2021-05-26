@@ -107,6 +107,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               lng={lng}
               lngDict={lngDict}
               addAmountList={constants.MONEY_DISCOUNT_LIST}
+              unit={i18n.t('_currencyBTC')}
               onChangeAmount={(amount) => {
                 setCouponSelling(prevCouponSelling => ({ ...prevCouponSelling, price: amount }));
               }}
@@ -200,6 +201,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
               lng={lng}
               lngDict={lngDict}
               addAmountList={constants.MONEY_AMOUNT_LIST}
+              unit={i18n.t('_currencyBTC')}
               onChangeAmount={(amount) => {
                 setCouponSelling(prevCouponSelling => ({ ...prevCouponSelling, price: amount }));
               }}

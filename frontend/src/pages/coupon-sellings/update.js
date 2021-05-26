@@ -89,6 +89,7 @@ function Update ({ lng, lngDict, selfUser, couponSelling: prevCouponSelling }) {
             lng={lng}
             lngDict={lngDict}
             addAmountList={constants.MONEY_DISCOUNT_LIST}
+            unit={i18n.t('_currencyBTC')}
             onChangeAmount={(amount) => {
               setCouponSelling(prevCouponSelling => ({ ...prevCouponSelling, price: amount }));
             }}

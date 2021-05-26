@@ -120,7 +120,7 @@ function List({ lng, lngDict, selfUser, initialProductListResponse, user, store 
                 <Grid item xs={6} key={item.id}>
                   <Tile
                     title={item.name}
-                    subtitle={`${item.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
                     image={item.images.length > 0 ? item.images[0].image : constants.NO_IMAGE_PATH}
                     onClick={() => router.push(`/products/${item.id}/`)}
                     actions={[

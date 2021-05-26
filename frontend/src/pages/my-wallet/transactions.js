@@ -53,7 +53,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
       timestamp: null,
       fee: null
     };
-    else return {
+    return {
       vin: element.vin,
       vout: element.vout,
       variant: element.vout.map(lhs => lhs.scriptpubkey_address).includes(selfUser.wallet) ? 'deposit' : 'withdraw',
@@ -68,14 +68,14 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
       timestamp: element.timestamp,
       fee: element.fee
     };
-    else if (element.variant === 'withdraw') return {
+    if (element.variant === 'withdraw') return {
       value: element.vin.find(lhs => lhs.prevout.scriptpubkey_address === selfUser.wallet).prevout.value,
       variant: element.variant,
       timestamp: element.timestamp,
       fee: element.fee
     };
-    else return {
-      value: element.vout.reduce((lhs, rhs) => {return lhs.value + rhs.value}).value,
+    return {
+      value: element.vout.reduce((lhs, rhs) => lhs.value + rhs.value).value,
       variant: element.variant,
       timestamp: element.timestamp,
       fee: element.fee
@@ -84,7 +84,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
 
   const balanceData = depositWithdrawalData.map((element, index, array) => {
     if (element.variant === 'current') return {value: element};
-    else return {
+    return {
       ...element,
       value: array.slice(0, index + 1).reduce((lhs, rhs) => {
         console.log(lhs);
@@ -121,7 +121,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
                 tickRotation: 0
             }}
             axisLeft={null}
-            enableGridY={true}
+            enableGridY
             offsetType="none"
             colors={{ scheme: 'accent' }}
           />

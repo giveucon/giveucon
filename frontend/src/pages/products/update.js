@@ -163,6 +163,7 @@ function Update({ lng, lngDict, selfUser, prevProduct }) {
             lng={lng}
             lngDict={lngDict}
             addAmountList={constants.MONEY_AMOUNT_LIST}
+            unit={i18n.t('_currencyBTC')}
             onChangeAmount={(amount) => {
               setProduct(prevProduct => ({ ...prevProduct, price: amount }));
             }}

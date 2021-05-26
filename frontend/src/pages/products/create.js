@@ -141,6 +141,7 @@ function Create({ lng, lngDict, selfUser, store }) {
             lng={lng}
             lngDict={lngDict}
             addAmountList={constants.MONEY_AMOUNT_LIST}
+            unit={i18n.t('_currencyBTC')}
             onChangeAmount={(amount) => {
               setProduct(prevProduct => ({ ...prevProduct, price: amount }));
             }}

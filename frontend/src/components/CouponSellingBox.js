@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+import useI18n from 'hooks/useI18n'
 import * as constants from 'constants';
 
 const useStyles = makeStyles(() => ({
@@ -25,7 +26,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function CouponBox({ image, name, onClick, price, productPrice }) {
+
+  const i18n = useI18n();
   const classes = useStyles();
+
   return (
     <Box display='flex' alignItems='center' justifyContent='flex-start'>
       <Box className={classes.imageArea}>
@@ -46,16 +50,16 @@ export default function CouponBox({ image, name, onClick, price, productPrice })
         <Divider />
         {(!productPrice) || (price === productPrice) && (
           <Box marginTop='0.5rem'>
-            <Typography variant='h6'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+            <Typography variant='h6'>{`${price}${i18n.t('_currencyBTC')}`}</Typography>
           </Box>
         )}
         {productPrice && (price !== productPrice) && (
           <>
             <Box marginTop='0.5rem'>
-              <Typography variant='body2' style={{textDecoration: 'line-through'}}>{productPrice.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+              <Typography variant='body2' style={{textDecoration: 'line-through'}}>{`${productPrice}${i18n.t('_currencyBTC')}`}</Typography>
             </Box>
             <Box>
-              <Typography variant='h6'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+              <Typography variant='h6'>{`${price}${i18n.t('_currencyBTC')}`}</Typography>
             </Box>
           </>
         )}

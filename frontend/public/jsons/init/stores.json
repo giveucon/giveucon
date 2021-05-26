@@ -13,28 +13,28 @@
       {
         "name": "우유식빵(small)",
         "description": "국내산 우유를 넣어 더욱 맛있는 우유식빵",
-        "price": "2500",
+        "price": "0.0000625",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "우유식빵(large)",
         "description": "국내산 우유를 넣어 더욱 맛있는 우유식빵",
-        "price": "4500",
+        "price": "0.0001125",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "슈크림빵",
         "description": "달콤한 크림이 매력적인 슈크림빵",
-        "price": "1000",
+        "price": "0.000025",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "단팥빵",
         "description": "달콤한 팥앙금이 매력적인 단팥빵",
-        "price": "1000",
+        "price": "0.000025",
         "duration": "30",
         "image_keywords": []
       }
@@ -63,21 +63,21 @@
       {
         "name": "도서상품권 1만원권",
         "description": "도서상품권 1만원권",
-        "price": "10000",
+        "price": "0.00025",
         "duration": "365",
         "image_keywords": []
       },
       {
         "name": "도서상품권 2만원권",
         "description": "도서상품권 2만원권",
-        "price": "20000",
+        "price": "0.0005",
         "duration": "365",
         "image_keywords": []
       },
       {
         "name": "도서상품권 5만원권",
         "description": "도서상품권 5만원권",
-        "price": "50000",
+        "price": "0.00125",
         "duration": "365",
         "image_keywords": []
       }
@@ -106,7 +106,7 @@
       {
         "name": "오메가문구 금1만원권",
         "description": "오메가문구 금1만원권",
-        "price": "10000",
+        "price": "0.00025",
         "duration": "365",
         "image_keywords": []
       }
@@ -127,42 +127,42 @@
       {
         "name": "후라이드치킨",
         "description": "바삭함이 넘치는 후라이드치킨",
-        "price": "9000",
+        "price": "0.000225",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "양념치킨",
         "description": "새콤달콤한 양념에 푸짐하게 버무린 양념치킨",
-        "price": "10000",
+        "price": "0.00025",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "간장치킨",
         "description": "달콤짭짤한 간장 소스를 뿌린 간장치킨",
-        "price": "10000",
+        "price": "0.00025",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "갈릭치킨",
         "description": "알싸한 마늘맛이 침샘을 자극하는 갈릭치킨",
-        "price": "10000",
+        "price": "0.00025",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "체다치즈치킨",
         "description": "고소한 체다치즈 소스를 입힌 체다치즈치킨",
-        "price": "12000",
+        "price": "0.0003",
         "duration": "30",
         "image_keywords": []
       },
       {
         "name": "불닭치킨",
         "description": "※매운맛주의※ 화끈한 매운맛, 짜릿한 한입",
-        "price": "12000",
+        "price": "0.0003",
         "duration": "30",
         "image_keywords": []
       }
@@ -191,28 +191,28 @@
       {
         "name": "아메리카노",
         "description": "남녀노소 누구나 즐길 수 있는 아메리카노 / Hot,Cold 선택가능",
-        "price": "2000",
+        "price": "0.00005",
         "duration": "180",
         "image_keywords": []
       },
       {
         "name": "연유라떼",
         "description": "레트로 감성이 물씬 풍겨오는 연유라떼",
-        "price": "3500",
+        "price": "0.0000875",
         "duration": "180",
         "image_keywords": []
       },
       {
         "name": "카라멜 마끼아또",
         "description": "달짝지근한 카라멜 향이 일품인 카라멜 마끼아또",
-        "price": "4000",
+        "price": "0.0001",
         "duration": "180",
         "image_keywords": []
       },
       {
         "name": "민트 핫초코",
         "description": "민초단을 위해 준비한 특별한 한 잔, 민트 핫초코",
-        "price": "4500",
+        "price": "0.0001125",
         "duration": "180",
         "image_keywords": []
       }
@@ -241,21 +241,21 @@
       {
         "name": "슈팅VR 1시간 이용권",
         "description": "슈팅VR 1시간 이용권",
-        "price": "15000",
+        "price": "0.000375",
         "duration": "365",
         "image_keywords": []
       },
       {
         "name": "슈팅VR 3시간 이용권",
         "description": "슈팅VR 3시간 이용권",
-        "price": "40000",
+        "price": "0.001",
         "duration": "365",
         "image_keywords": []
       },
       {
         "name": "슈팅VR 6시간 이용권",
         "description": "슈팅VR 6시간 이용권",
-        "price": "80000",
+        "price": "0.0015",
         "duration": "365",
         "image_keywords": []
       }

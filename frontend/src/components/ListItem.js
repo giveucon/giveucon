@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import useI18n from 'hooks/useI18n'
+
 const useStyles = makeStyles(() => ({
   root: {
     maxWidth: '100%',
@@ -28,7 +30,10 @@ export default function ListItem({
   title=null,
   variant='default'
 }) {
+
+  const i18n = useI18n();
   const classes = useStyles();
+
   return (
     <Box className={classes.root}>
       {
@@ -73,7 +78,7 @@ export default function ListItem({
                     <Box display='flex' alignItems='center'>
                       {price && (
                         <Box marginRight={1}>
-                          <Typography variant='subtitle2'>{price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+                          <Typography variant='subtitle2'>{`${price}${i18n.t('_currencyBTC')}`}</Typography>
                         </Box>
                       )}
                       <Box display={price && score ? 'block' : 'none'} marginRight={1}>

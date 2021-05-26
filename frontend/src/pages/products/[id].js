@@ -121,7 +121,7 @@ function Id({
   const classes = useStyles();
   const [favoriteProduct, setFavoriteProduct] = useState(initialFavoriteProduct)
 
-  let activeCouponSellingData = [];
+  const activeCouponSellingData = [];
   if (openCouponSellingResponse.data.count > 0) activeCouponSellingData.push(
     {
       id: i18n.t('onSale'),
@@ -170,7 +170,7 @@ function Id({
         <Box padding={1}>
           <Box marginBottom={1}>
             <Typography variant='h5'>{product.name}</Typography>
-            <Typography variant='h6'>{product.price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</Typography>
+            <Typography variant='h6'>{`${product.price}${i18n.t('_currencyBTC')}`}</Typography>
           </Box>
           <Divider />
           <Box marginTop={1}>
@@ -319,7 +319,7 @@ function Id({
                 margin={{ top: 25, right: 25, bottom: 25, left: 25 }}
                 innerRadius={0.5}
                 enableArcLinkLabels={false}
-                arcLabel={function(e){return e.id + ' (' + e.value + ')'}}
+                arcLabel={(e) => {return `${e.id  } (${  e.value  })`}}
                 colors={{ scheme: 'accent' }}
               />
             </Box>
