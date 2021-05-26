@@ -205,7 +205,7 @@ function Id({
                         query: { coupon: couponListResponse.data.results[0].id },
                       })}
                     >
-                      {i18n.t('purchaseCoupons')}
+                      {i18n.t('buyCoupon')}
                     </Button>
                   </Box>
                   <Box marginY={1}>
@@ -218,7 +218,7 @@ function Id({
                         query: { coupon: couponListResponse.data.results[0].id },
                       })}
                     >
-                      {i18n.t('giveCoupons')}
+                      {i18n.t('giveCoupon')}
                     </Button>
                   </Box>
                 </>
