@@ -303,7 +303,7 @@ function Id({
       </Section>
 
 
-      {(selfUser.id === product.store.user) && (
+      {(selfUser.id === product.store.user.id) && (
         <>
           <Section
             title={i18n.t('summary')}
