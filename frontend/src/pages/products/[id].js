@@ -200,7 +200,7 @@ function Id({
               {i18n.t('goToStore')}
             </Button>
           </Box>
-          {(selfUser.id !== product.store.user) && (
+          {(selfUser.id !== product.store.user.id) && (
             <>
               {couponSellingListResponse && couponSellingListResponse.data.count > 0 && (
                 <>
