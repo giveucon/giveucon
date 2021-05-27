@@ -83,7 +83,7 @@ function List({ lng, lngDict, selfUser, initialFavoriteStoreListResponse, user }
                   <Tile
                     title={item.store.name}
                     image={item.store.images.length > 0 ? item.store.images[0].image : constants.NO_IMAGE_PATH}
-                    onClick={() => router.push(`/stores/${item.id}/`)}
+                    onClick={() => router.push(`/stores/${item.store.id}/`)}
                   />
                 </Grid>
               ))}
