@@ -31,8 +31,8 @@ export const NO_IMAGE_PATH = '/images/no_image.png';
 
 export const AMOUNT_LIST = [1, 5, 10, 50, 100, 1000, 10000];
 export const DATE_AMOUNT_LIST = [1, 7, 15, 30, 90, 180, 365];
-export const MONEY_AMOUNT_LIST = [100, 500, 1000, 5000, 10000, 50000];
-export const MONEY_DISCOUNT_LIST = [-100, -500, -1000, -5000, -10000, -50000];
+export const MONEY_AMOUNT_LIST = [0.00001, 0.0005, 0.0001, 0.0005, 0.001, 0.005];
+export const MONEY_DISCOUNT_LIST = [-0.00001, -0.0005, -0.0001, -0.0005, -0.001, -0.005];
 
 export const HALF_TILE_LIST_SLICE_NUMBER = 5;
 export const LIST_SLICE_NUMBER = 3;
