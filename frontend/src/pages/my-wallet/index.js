@@ -113,7 +113,7 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
         }
         padding={false}
       >
-        {(selfCouponList.length > 0) ? (
+        {(selfCouponList && selfCouponList.length > 0) ? (
           <SwipeableTileList half>
             {selfCouponList.map((item) => (
                 <Tile
