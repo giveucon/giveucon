@@ -18,8 +18,8 @@ cd giveucon
 ```
 
 then refer to these README.md files:
-- [Backend](https://github.com/giveucon/giveucon/backend/README.md)
-- [Frontend](https://github.com/giveucon/giveucon/frontend/README.md)
+- [Backend](backend/README.md)
+- [Frontend](frontend/README.md)
 
 
 ## Development Stack
@@ -31,13 +31,15 @@ then refer to these README.md files:
 ### Front-end frameworks
 
 - [React](https://reactjs.org/)
-- [Redux](https://redux.js.org/)
 - [Next.JS](https://nextjs.org/)
 - [Material UI](https://material-ui.com/)
 
-### Application
 
-- [Android](https://developer.android.com/)
+## Issue
+
+### Pages which uses camera cannot be loaded
+
+Media devices can be loaded with https URL only.
 
 
 ## License
