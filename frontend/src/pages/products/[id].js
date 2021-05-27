@@ -46,7 +46,7 @@ const getCouponList = async (context, product) => await requestToBackend(context
 });
 
 const getCouponSellingList = async (context, product) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
-  coupon__user__id: product.store.user.id,
+  coupon__user__id: product.store.user,
   coupon__product__id: product.id,
   status__status: 'open'
 });
@@ -200,7 +200,7 @@ function Id({
               {i18n.t('goToStore')}
             </Button>
           </Box>
-          {(selfUser.id !== product.store.user.id) && (
+          {(selfUser.id !== product.store.user) && (
             <>
               {couponSellingListResponse && couponSellingListResponse.data.count > 0 && (
                 <>
@@ -303,7 +303,7 @@ function Id({
       </Section>
 
 
-      {(selfUser.id === product.store.user.id) && (
+      {(selfUser.id === product.store.user) && (
         <>
           <Section
             title={i18n.t('summary')}
