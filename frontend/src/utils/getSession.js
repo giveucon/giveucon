@@ -5,6 +5,7 @@ import getCookies from 'utils/getCookies'
 import setCookie from 'utils/setCookie'
 import * as constants from '../constants';
 
+/*
 const requestVerifyTokens = async (session) => {
   try {
     const response = await axios({
@@ -43,6 +44,7 @@ const requestVerifyTokens = async (session) => {
 
   }
 };
+*/
 
 const requestRefreshTokens = async (session) => {
   try {
@@ -88,8 +90,7 @@ export default async function getSession(context) {
   if (cookies.giveucon_session) {
     const session = JSON.parse(cookies.giveucon_session);
     const needToVerify = new Date(session.tokens.access_token_expiry).getTime() < new Date().getTime();
-    const verifyTokensResponse = needToVerify ? await requestVerifyTokens(session) : null;
-    if (!needToVerify || verifyTokensResponse.status === 200) return session;
+    if (!needToVerify) return session;
       const refreshTokenResponse = await requestRefreshTokens(session);
       if (refreshTokenResponse.status === 200) {
         const refreshedSession = {
