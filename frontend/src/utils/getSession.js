@@ -87,9 +87,9 @@ export default async function getSession(context) {
   const cookies = getCookies(context);
   if (cookies.giveucon_session) {
     const session = JSON.parse(cookies.giveucon_session);
-    const verifyTokensResponse = await requestVerifyTokens(session);
-    if (verifyTokensResponse.status === 200) return session;
-
+    const needToVerify = new Date(session.tokens.access_token_expiry).getTime() < new Date().getTime();
+    const verifyTokensResponse = needToVerify ? await requestVerifyTokens(session) : null;
+    if (!needToVerify || verifyTokensResponse.status === 200) return session;
       const refreshTokenResponse = await requestRefreshTokens(session);
       if (refreshTokenResponse.status === 200) {
         const refreshedSession = {
@@ -114,9 +114,6 @@ export default async function getSession(context) {
           path: process.env.NEXT_PUBLIC_COOKIE_PATH,
         });
         return null;
-
-
-  }
-    return null;
-
+    }
+  return null;
 }

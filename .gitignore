@@ -156,6 +156,3 @@ Thumbs.db #thumbnail cache on Windows
 .vscode/
 
 migrations/
-
-git-heatmap.dat
-git-heatmap.png
