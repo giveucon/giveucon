@@ -187,7 +187,7 @@ function Id({
           </Box>
           <Box marginTop={1}>
             <Typography variant='h5'>
-              {`${i18n.t('stock')}: ${couponListResponse.data.count}`}
+              {`${i18n.t('stock')}: ${couponSellingListResponse.data.count}`}
             </Typography>
           </Box>
           <Box marginY={1}>
