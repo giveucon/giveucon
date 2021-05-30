@@ -89,32 +89,33 @@ export default async function getSession(context) {
   const cookies = getCookies(context);
   if (cookies.giveucon_session) {
     const session = JSON.parse(cookies.giveucon_session);
-    const needToVerify = new Date(session.tokens.access_token_expiry).getTime() + 60000 < new Date().getTime();
+    const needToVerify = new Date(session.tokens.access_token_expiry).getTime() < new Date().getTime() + 60000;
     if (!needToVerify) return session;
-      const refreshTokenResponse = await requestRefreshTokens(session);
-      if (refreshTokenResponse.status === 200) {
-        const refreshedSession = {
-          ...session,
-          tokens: {
-            'access_token': refreshTokenResponse.data.access,
-            'refresh_token': refreshTokenResponse.data.refresh,
-            'access_token_lifetime': refreshTokenResponse.data.access_lifetime,
-            'refresh_token_lifetime': refreshTokenResponse.data.refresh_lifetime,
-            'access_token_expiry': refreshTokenResponse.data.access_expiry,
-            'refresh_token_expiry': refreshTokenResponse.data.refresh_expiry,
-          }
-        };
-        setCookie(context, 'giveucon_session', JSON.stringify(refreshedSession), {
-          maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-          path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-        })
-        return refreshedSession;
-      }
-        destroyCookie(context, 'giveucon_session', {
-          maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
-          path: process.env.NEXT_PUBLIC_COOKIE_PATH,
-        });
-        return null;
+
+    const refreshTokenResponse = await requestRefreshTokens(session);
+    if (refreshTokenResponse.status === 200) {
+      const refreshedSession = {
+        ...session,
+        tokens: {
+          'access_token': refreshTokenResponse.data.access,
+          'refresh_token': refreshTokenResponse.data.refresh,
+          'access_token_lifetime': refreshTokenResponse.data.access_lifetime,
+          'refresh_token_lifetime': refreshTokenResponse.data.refresh_lifetime,
+          'access_token_expiry': refreshTokenResponse.data.access_expiry,
+          'refresh_token_expiry': refreshTokenResponse.data.refresh_expiry,
+        }
+      };
+      setCookie(context, 'giveucon_session', JSON.stringify(refreshedSession), {
+        maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+        path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+      })
+      return refreshedSession;
     }
+    destroyCookie(context, 'giveucon_session', {
+      maxAge: process.env.NEXT_PUBLIC_COOKIE_MAX_AGE,
+      path: process.env.NEXT_PUBLIC_COOKIE_PATH,
+    });
+    return null;
+  }
   return null;
 }

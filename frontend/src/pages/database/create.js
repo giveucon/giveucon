@@ -16,13 +16,14 @@ import convertImageToFile from 'utils/convertImageToFile';
 import convertJsonToFormData from 'utils/convertJsonToFormData';
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps';
+import tagsJson from '../../../public/jsons/init/tags.json';
 import usersJson from '../../../public/jsons/init/users.json';
 import storesJson from '../../../public/jsons/init/stores.json';
 import centralNoticesJson from '../../../public/jsons/init/central_notices.json';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
 /*
-  if (!selfUser.staff){
+  if (!selfUser.staff) {
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -31,10 +32,10 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
 */
-   ({
+  return {
     props: { lng, lngDict, selfUser }
-  })
-)
+  }
+})
 
 function Create({ lng, lngDict, selfUser }) {
 
@@ -44,6 +45,8 @@ function Create({ lng, lngDict, selfUser }) {
   const [requestedCount, setRequestedCount] = useState(0);
   const [statePhrase, setStatePhrase] = useState(i18n.t('_waitingUserInput'));
   const [sourcePhrase, setSourcePhrase] = useState(i18n.t(''));
+
+  const tagList = [];
 
   const userIdList = [];
   const storeIdList = [];
@@ -55,6 +58,7 @@ function Create({ lng, lngDict, selfUser }) {
 
   let allRequestCount = 0;
 
+  allRequestCount += tagsJson.length;
   allRequestCount += usersJson.length;
   allRequestCount += storesJson.length;
   for (let i = 0; i < storesJson.length; i++) {
@@ -69,7 +73,7 @@ function Create({ lng, lngDict, selfUser }) {
 
   const getImageListFromUnsplash = async (keyword) => {
     const imageList = [];
-    for (let i = 0; i < faker.datatype.number() % imageMaxAmount; i++) {
+    for (let i = 0; i < Math.floor(Math.random() * imageMaxAmount) + 1; i++) {
       await convertImageToFile(
         `/unsplash/1600x900/?${keyword}`,
         faker.datatype.uuid(),
@@ -81,6 +85,8 @@ function Create({ lng, lngDict, selfUser }) {
     }
     return imageList;
   };
+
+  const postTag = async (tag) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', tag, null);
 
   const postUser = async (user) => await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
 
@@ -97,7 +103,7 @@ function Create({ lng, lngDict, selfUser }) {
       store: store.id,
       location
     };
-    return await requestToBackend(null, '/api/store-locations/', 'post', 'json', data, null);
+    return await requestToBackend(null, 'api/store-locations/', 'post', 'json', data, null);
   };
 
   const postProduct = async (product, imageList) => {
@@ -129,6 +135,17 @@ function Create({ lng, lngDict, selfUser }) {
       store: storeNotice.store
     }
     return await requestToBackend(null, 'api/dummy-store-notices/', 'post', 'multipart', convertJsonToFormData(processedStoreNotice), null);
+  };
+
+  const createTag = async (tag) => {
+    const postTagResponse = await postTag(tag);
+    if (postTagResponse.status === 201) {
+      tagList.push(postTagResponse.data);
+      increaseRequestedCount();
+      return postTagResponse.data;
+    }
+    console.error(postTagResponse);
+    return null;
   };
 
   const createUser = async (user) => {
@@ -194,6 +211,13 @@ function Create({ lng, lngDict, selfUser }) {
   async function initializeDatabase() {
     setInitializing(true);
 
+    for (let i = 0; i < tagsJson.length; i++) {
+      const tag = { ...tagsJson[i] };
+      setStatePhrase(`${i18n.t('creating')}: ${i18n.t('tag')}`);
+      setSourcePhrase(`(${tag.name})`);
+      await createTag(tag);
+    }
+
     for (let i = 0; i < usersJson.length; i++) {
       const user = { ...usersJson[i] };
       setStatePhrase(`${i18n.t('creating')}: ${i18n.t('account')}`);
@@ -202,10 +226,16 @@ function Create({ lng, lngDict, selfUser }) {
     }
 
     for (let i = 0; i < storesJson.length; i++) {
+      let storeTagIdList = [];
+      for (let j = 0; j < storesJson[i].tag_keywords.length; j++) {
+        const newTag = tagList.find(element => element.name === storesJson[i].tag_keywords[j]);
+        if (newTag) storeTagIdList.push(newTag.id);
+      }
       const store = {
         ...storesJson[i],
         user: userIdList[Math.floor(Math.random() * userIdList.length)],
-        tags: [],
+        tags: storeTagIdList,
+        tag_keywords: null,
         image_keywords: null,
         products: null,
         notices: null
@@ -231,6 +261,7 @@ function Create({ lng, lngDict, selfUser }) {
         const storeNotice = {
           article: {
             ...storesJson[i].notices[j],
+            user: newStore.user
           },
           store: newStore.id,
           image_keywords: null

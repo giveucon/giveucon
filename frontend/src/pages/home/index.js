@@ -38,7 +38,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       centralNoticeList: centralNoticeListResponse.data.results,
-      nearStoreList: nearStoreListResponse.data.results,
+      nearStoreList: nearStoreListResponse.data.results || null,
       selfCouponList: selfCouponListResponse.data.results
     }
   }
@@ -110,7 +110,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
-        {nearStoreList.length > 0 ? (
+        {nearStoreList && nearStoreList.length > 0 ? (
           <SwipeableTileList half>
             {nearStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
