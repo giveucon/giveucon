@@ -14,10 +14,10 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
-    coupon__user__id: context.query.user || null,
-    coupon__product__id: context.query.product || null,
-    status__status: context.query.status || null,
-  });
+  coupon__user__id: context.query.user || null,
+  coupon__product__id: context.query.product || null,
+  status__status: context.query.status || null,
+});
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');

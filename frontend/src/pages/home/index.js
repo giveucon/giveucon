@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -61,22 +60,12 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton>
-            <Badge
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              color='error'
-              badgeContent=''
-              variant='dot'
-            >
-              <NotificationsIcon
-                onClick={() => router.push({
-                  pathname: '/notifications/list/',
-                  query: { to_user: selfUser.id },
-                })}
-              />
-            </Badge>
+            <NotificationsIcon
+              onClick={() => router.push({
+                pathname: '/notifications/list/',
+                query: { to_user: selfUser.id },
+              })}
+            />
           </IconButton>,
           <IconButton onClick={() => router.push('/central-notices/')}>
             <AnnouncementIcon />

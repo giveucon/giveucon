@@ -27,6 +27,7 @@ import ListItem from 'components/ListItem'
 import Section from 'components/Section'
 import UserProfileBox from 'components/UserProfileBox'
 import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,11 +40,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
-    props: { lng, lngDict, selfUser }
-  }))
+const getSelfPendingCouponSellingList = async (context, selfUser) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  status__status: 'pending',
+});
 
-function Index({ lng, lngDict, selfUser }) {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+  const selfPendingCouponSellingListResponse = await getSelfPendingCouponSellingList(context, selfUser);
+  if (selfPendingCouponSellingListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  return {
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      selfPendingCouponSellingListResponse
+    }
+  }
+})
+
+function Index({ lng, lngDict, selfUser, selfPendingCouponSellingListResponse }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -180,7 +199,18 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('tradeConfirmationRequests')}
-          icon={<AssistantIcon />}
+          icon={
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent={selfPendingCouponSellingListResponse.data.count}
+            >
+              <AssistantIcon />
+            </Badge>
+          }
           onClick={() => router.push({
             pathname: '/coupon-sellings/list/',
             query: { user: selfUser.id, status: 'pending' },
@@ -202,19 +232,7 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('notifications')}
-          icon={
-            <Badge
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              color='error'
-              badgeContent=''
-              variant='dot'
-            >
-              <NotificationsIcon />
-            </Badge>
-          }
+          icon={<NotificationsIcon />}
           onClick={() => router.push({
             pathname: '/notifications/list/',
             query: { to_user: selfUser.id },
