@@ -260,22 +260,22 @@ function Id({ lng, lngDict, selfUser, user, storeList: _storeList, favoriteProdu
                       <FavoriteIcon
                         onClick={async () => {
                           if (!item.favorite) {
-                            const postFavoriteStoreResult = await postSelfFavoriteProduct(item);
+                            const postFavoriteStoreResult = await postSelfFavoriteProduct(item.product);
                             if (postFavoriteStoreResult.status === 201) {
-                              setFavoriteProductList(favoriteProductList.map(product =>
-                                product.id === item.product.id
-                                ? {...product, favorite: postFavoriteStoreResult.data}
-                                : product
+                              setFavoriteProductList(favoriteProductList.map(favoriteProduct =>
+                                favoriteProduct.id === item.id
+                                ? {...favoriteProduct, favorite: postFavoriteStoreResult.data}
+                                : favoriteProduct
                               ));
                             }
                             else toast.error(i18n.t('_errorOccurredProcessingRequest'));
                           } else {
                             const deleteFavoriteStoreResult = await deleteSelfFavoriteProduct(item.favorite);
                             if (deleteFavoriteStoreResult.status === 204) {
-                              setFavoriteProductList(favoriteProductList.map(product =>
-                                product.id === item.product.id
-                                ? {...product, favorite: null}
-                                : product
+                              setFavoriteProductList(favoriteProductList.map(favoriteProduct =>
+                                favoriteProduct.id === item.id
+                                ? {...favoriteProduct, favorite: null}
+                                : favoriteProduct
                               ));
                             }
                             else toast.error(i18n.t('_errorOccurredProcessingRequest'));
