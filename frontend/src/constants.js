@@ -10,7 +10,7 @@ import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirector
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 
-export const APP_VERSION = '0.2.0-alpha';
+export const APP_VERSION = '0.2.1-beta';
 export const LANGUAGE_LIST = [
   { name: 'English', lng: 'en', lngDict: EN },
   { name: '한국어', lng: 'ko', lngDict: KO }

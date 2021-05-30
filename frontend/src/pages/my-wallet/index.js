@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import DirectionsIcon from '@material-ui/icons/Directions';
@@ -25,6 +26,13 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 const getSelfBlockchainAccount = async (selfUser) => await request(
   {
     url: `https://blockstream.info/api/address/${selfUser.wallet}`,
+    method: 'get'
+  }
+);
+
+const getCurrency = async () => await request(
+  {
+    url: 'coinone/ticker?currency=BTC&format=json',
     method: 'get'
   }
 );
@@ -70,6 +78,19 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
 
   const i18n = useI18n();
   const router = useRouter();
+  const [currency, setCurrency] = useState(1);
+
+  useEffect(() => {
+    const refreshCurrency = async () => {
+      const getCurrencyResponse = await getCurrency();
+      setCurrency(getCurrencyResponse.data);
+    }
+    refreshCurrency();
+    const interval = setInterval(() => refreshCurrency(), 5000)
+    return () => {
+      clearInterval(interval);
+    }
+  }, [])
 
   return (
     <Layout
@@ -85,7 +106,10 @@ function Index({ lng, lngDict, selfUser, selfBlockchainAccount, selfCouponList, 
         <WalletBox
           amount={selfBlockchainAccount.chain_stats.funded_txo_sum - selfBlockchainAccount.chain_stats.spent_txo_sum}
           unit={i18n.t('_currencyBTC')}
+          exchangeRate={currency.last}
+          exchangeUnit={i18n.t('_currencyKRW')}
         />
+        <Typography>{}</Typography>
         <Box marginY={1}>
           <Button
             color='default'
