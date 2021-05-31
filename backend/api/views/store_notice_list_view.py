@@ -15,6 +15,7 @@ class StoreNoticeListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_write = StoreNoticeWriteSerializer
     pagination_class = StoreNoticePagination
     filterset_fields = ['store']
+    ordering_fields = ['article__created_at']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)
