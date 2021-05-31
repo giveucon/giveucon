@@ -47,6 +47,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
     ...selfBlockchainTransactionList
   ].map((element, index) => {
     if (index === 0) return {
+      txid: element.txid,
       vin: element.vin,
       vout: element.vout,
       variant: 'current',
@@ -54,6 +55,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
       fee: null
     };
     return {
+      txid: element.txid,
       vin: element.vin,
       vout: element.vout,
       variant: element.vout.map(lhs => lhs.scriptpubkey_address).includes(selfUser.wallet) ? 'deposit' : 'withdraw',
@@ -63,18 +65,21 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
   })
   .map(element => {
     if (element.variant === 'deposit') return {
+      txid: element.txid,
       value: element.vout.find(lhs => lhs.scriptpubkey_address === selfUser.wallet).value,
       variant: element.variant,
       timestamp: element.timestamp,
       fee: element.fee
     };
     if (element.variant === 'withdraw') return {
+      txid: element.txid,
       value: element.vin.find(lhs => lhs.prevout.scriptpubkey_address === selfUser.wallet).prevout.value,
       variant: element.variant,
       timestamp: element.timestamp,
       fee: element.fee
     };
     return {
+      txid: element.txid,
       value: element.vout.reduce((lhs, rhs) => lhs.value + rhs.value).value,
       variant: element.variant,
       timestamp: element.timestamp,
