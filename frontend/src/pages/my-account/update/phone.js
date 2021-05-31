@@ -149,7 +149,7 @@ function Phone({ lng, lngDict, selfUser: prevSelfUser }) {
             const putSelfUserResponse = await putSelfUser(selfUser, phoneUtil);
             if (putSelfUserResponse.status === 200) {
               router.push('/my-account/');
-              toast.success(i18n.t('_myAccountCreated'));
+              toast.success(i18n.t('_myAccountEdited'));
             }
             else if (putSelfUserResponse.status === 400) {
               setSelfUserError(prevSelfUserError => ({...prevSelfUserError, phone_number: !!putSelfUserResponse.data.phone_number}));

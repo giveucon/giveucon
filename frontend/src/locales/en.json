@@ -20,6 +20,7 @@
   "_currencyKRW": "KRW",
   "_databaseCreated": "Database is created.",
   "_doNotHavePermissionToAccess": "You do not have permission to access.",
+  "_enterYourBitcoinWalletAddress": "Enter your Bitcoin wallet address.",
   "_errorOccurredProcessingRequest": "An error occurred while processing your request.",
   "_holdOnAMomentPlease": "Hold on a moment please.",
   "_isEmpty": "Empty",
@@ -258,6 +259,7 @@
   "verificationCode": "Verification code",
   "version": "Version",
   "wallet": "Wallet",
+  "walletAddress": "Wallet address",
   "welcome": "Welcome",
   "withdraw": "Withdraw"
 }

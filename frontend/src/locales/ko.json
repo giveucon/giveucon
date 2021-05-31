@@ -20,6 +20,7 @@
   "_currencyKRW": "원",
   "_databaseCreated": "데이터베이스가 생성되었습니다.",
   "_doNotHavePermissionToAccess": "접근할 수 있는 권한이 없습니다.",
+  "_enterYourBitcoinWalletAddress": "비트코인 지갑 주소를 입력해주세요.",
   "_errorOccurredProcessingRequest": "요청을 처리하는 중 오류가 발생했습니다.",
   "_holdOnAMomentPlease": "잠시만 기다려주세요.",
   "_isEmpty": "비어 있음",
@@ -258,6 +259,7 @@
   "verificationCode": "인증 코드",
   "version": "버전",
   "wallet": "지갑",
+  "walletAddress": "지갑 주소",
   "welcome": "환영합니다",
   "withdraw": "출금"
 }
