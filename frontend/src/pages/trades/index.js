@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 
-import * as constants from 'constants';
+import * as constants from '../../constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -61,8 +61,6 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         backButton
         title={i18n.t('trades')}
        />
-
-
       <Section
         title={i18n.t('myCouponTrades')}
         titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
@@ -118,7 +116,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
-                subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
+                subtitle={`${item.price}${i18n.t('_currencyBTC')} · ${i18n.t(constants.COUPON_SELLING_STATUS_LIST.find(element => element.value === item.status).name)}`}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
                   ? item.coupon.product.images[0].image

@@ -83,3 +83,22 @@ export const MENU_ITEM_LIST = [
     link: () => {Router.push('/trades/')}
   }
 ];
+
+export const COUPON_SELLING_STATUS_LIST = [
+  {
+    value: 'open',
+    name: 'onSale'
+  },
+  {
+    value: 'pre_pending',
+    name: 'tradeRequested'
+  },
+  {
+    value: 'pending',
+    name: 'remitted'
+  },
+  {
+    value: 'closed',
+    name: 'completed'
+  }
+];

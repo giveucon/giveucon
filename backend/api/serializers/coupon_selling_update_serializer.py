@@ -22,7 +22,8 @@ class CouponSellingUpdateSerializer(serializers.ModelSerializer):
         if not ((prev_status == 'open' and next_status.status == 'pre_pending')
              or (prev_status == 'pre_pending' and next_status.status == 'open')
              or (prev_status == 'pre_pending' and next_status.status == 'pending')
-             or (prev_status == 'pending' and next_status.status == 'closed')):
+             or (prev_status == 'pending' and next_status.status == 'closed')
+             or (prev_status == 'pending' and next_status.status == 'open')):
             raise serializers.ValidationError({
                'status': 'Invalid status'
             })

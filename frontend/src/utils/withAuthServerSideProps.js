@@ -43,8 +43,6 @@ export default function withAuthServerSideProps (getServerSidePropsFunction) {
       }
     }
 
-    console.log(selfUserResponse);
-
     const selfUser = selfUserResponse.data;
     selfUser.menu_items = [ 'home', 'myWallet', 'stores', 'trades', 'myAccount' ];
     const { default: lngDict = {} } = await import(`locales/${selfUser.locale}.json`);

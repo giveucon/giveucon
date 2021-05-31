@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
 
-import * as constants from 'constants';
+import * as constants from '../../constants';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
@@ -92,7 +92,7 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
                   <Grid item xs={6} key={item.id}>
                     <Tile
                       title={item.coupon.product.name}
-                      subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
+                      subtitle={`${item.price}${i18n.t('_currencyBTC')} · ${i18n.t(constants.COUPON_SELLING_STATUS_LIST.find(element => element.value === item.status).name)}`}
                       image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
                       onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
                     />
