@@ -58,10 +58,7 @@ function Index({ lng, lngDict, selfUser, couponSelling }) {
               const deleteCouponSellingResponse = await deleteCouponSelling(couponSelling);
               if (deleteCouponSellingResponse.status === 204) {
                 toast.success(i18n.t('_couponTradeConfirmationRequested'));
-                router.push({
-                  pathname: '/coupon-sellings/confirm/completed/',
-                  query: { coupon_selling: couponSelling.id },
-                });
+                router.push('/coupon-sellings/confirm/completed/');
               }
               else {
                 toast.error(i18n.t('_errorOccurredProcessingRequest'));

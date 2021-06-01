@@ -10,26 +10,15 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
-
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
-  const couponSellingResponse = await getCouponSelling(context);
-  if (couponSellingResponse.status === 404) {
-    return {
-      notFound: true
-    }
-  }
-  return {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
     props: {
       lng,
       lngDict,
       selfUser,
-      couponSelling: couponSellingResponse.data
     }
-  }
-})
+  }))
 
-function Completed({ lng, lngDict, selfUser, couponSelling }) {
+function Completed({ lng, lngDict, selfUser }) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -54,16 +43,6 @@ function Completed({ lng, lngDict, selfUser, couponSelling }) {
             onClick={() => {router.back()}}
           >
             {i18n.t('goBack')}
-          </Button>
-        </Box>
-        <Box marginY={1}>
-          <Button
-            color='default'
-            fullWidth
-            variant='contained'
-            onClick={() => {router.push(`/products/${couponSelling.coupon.product.id}/`)}}
-          >
-            {i18n.t('goToProduct')}
           </Button>
         </Box>
         <Box marginY={1}>
