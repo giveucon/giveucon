@@ -47,7 +47,7 @@ http://localhost:3000/oauth/kakao/logout/callback/
 
 ## Create Twilio account
 
-Go to Twilio page and create account:
+Go to Twilio page and create trial account:
 ```
 https://www.twilio.com/
 ```
@@ -57,6 +57,11 @@ Create you trial number, then get these codes:
 Account SID
 Auth Token
 Trial Number
+```
+
+Go to Verified Calle IDs page and register phone number you want to use in this project:
+```
+https://www.twilio.com/console/phone-numbers/verified
 ```
 
 

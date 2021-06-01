@@ -256,7 +256,7 @@ function Id({
               <ListItem
                 variant='notice'
                 title={item.article.title}
-                subtitle={item.article.created_at}
+                date={new Date(item.article.created_at)}
                 onClick={() => router.push(`/store-notices/${item.id}/`)}
               />
               {index < storeNoticeList.slice(0, constants.LIST_SLICE_NUMBER).length - 1 && (<Divider />)}
