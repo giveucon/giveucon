@@ -45,7 +45,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
   const initialSelfCouponListResponse = await getSelfCouponList(context, selfUser);
   for (const coupon of initialSelfCouponListResponse.data.results) {
     const getSelfCouponSellingResponse = await getSelfCouponSelling(context, coupon);
-    if (getSelfCouponSellingResponse.data.count === 1) initialSelfCouponListResponse.data.results = initialSelfCouponListResponse.data.results.splice(initialSelfCouponListResponse.data.results.findIndex(element => getSelfCouponSellingResponse.data.results[0].coupon.id === element.id), 1);
+    initialSelfCouponListResponse.data.results = initialSelfCouponListResponse.data.results.filter(element => element.id !== getSelfCouponSellingResponse.data.results[0].coupon.id);
   }
   return {
     props: {
@@ -76,7 +76,7 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
     });
     for (const coupon of selfCouponListResponse.data.results) {
       const getSelfCouponSellingResponse = await getSelfCouponSelling(null, coupon);
-      if (getSelfCouponSellingResponse.data.count === 1) selfCouponListResponse.data.results = selfCouponListResponse.data.results.splice(selfCouponListResponse.data.results.findIndex(element => getSelfCouponSellingResponse.data.results[0].coupon.id === element.id), 1);
+      selfCouponListResponse.data.results = selfCouponListResponse.data.results.filter(element => element.id !== getSelfCouponSellingResponse.data.results[0].coupon.id);
     }
     setSelfCouponList(prevSelfCouponList => (prevSelfCouponList || []).concat(selfCouponListResponse.data.results));
     setSelfCouponListpage(prevSelfCouponListpage => prevSelfCouponListpage + 1);
