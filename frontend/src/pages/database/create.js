@@ -21,7 +21,7 @@ import usersJson from '../../../public/jsons/init/users.json';
 import storesJson from '../../../public/jsons/init/stores.json';
 import centralNoticesJson from '../../../public/jsons/init/central_notices.json';
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) =>
 /*
   if (!selfUser.staff) {
     return {
@@ -32,10 +32,10 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
 */
-  return {
+   ({
     props: { lng, lngDict, selfUser }
-  }
-})
+  })
+)
 
 function Create({ lng, lngDict, selfUser }) {
 
@@ -226,7 +226,7 @@ function Create({ lng, lngDict, selfUser }) {
     }
 
     for (let i = 0; i < storesJson.length; i++) {
-      let storeTagIdList = [];
+      const storeTagIdList = [];
       for (let j = 0; j < storesJson[i].tag_keywords.length; j++) {
         const newTag = tagList.find(element => element.name === storesJson[i].tag_keywords[j]);
         if (newTag) storeTagIdList.push(newTag.id);

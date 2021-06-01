@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
 
-import * as constants from '../../constants';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
@@ -12,6 +11,7 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from '../../constants';
 
 const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
   buyer__id: context.query.buyer || null,

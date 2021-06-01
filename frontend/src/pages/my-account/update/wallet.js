@@ -13,9 +13,7 @@ import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
-const putSelfUser = async (selfUser) => {
-  return await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', selfUser, null);
-};
+const putSelfUser = async (selfUser) => await requestToBackend(null, `/api/users/${selfUser.id}/`, 'put', 'json', selfUser, null);
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
   props: { lng, lngDict, selfUser }

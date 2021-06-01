@@ -91,9 +91,7 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
     if (element.variant === 'current') return {value: element};
     return {
       ...element,
-      value: array.slice(0, index + 1).reduce((lhs, rhs) => {
-        return rhs.variant === 'deposit' ? {value: lhs.value - rhs.value} : {value: lhs.value + rhs.value}
-      })
+      value: array.slice(0, index + 1).reduce((lhs, rhs) => rhs.variant === 'deposit' ? {value: lhs.value - rhs.value} : {value: lhs.value + rhs.value})
     }
   }).map(element => element.value)
   .reverse();
