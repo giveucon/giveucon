@@ -23,11 +23,11 @@ import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponList = async (context) => await requestToBackend(context, 'api/coupons', 'get', 'json', null, {
-    user: context.query.user || null,
-    store: context.query.store || null,
-    product: context.query.product || null,
-    used: false
-  });
+  user: context.query.user || null,
+  store: context.query.store || null,
+  product: context.query.product || null,
+  used: false
+});
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
