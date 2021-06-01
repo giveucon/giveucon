@@ -141,7 +141,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
       {(couponSelling.status === 'open') && (selfUser.id !== couponSelling.coupon.user.id) && (
         <Box marginY={1}>
           <Button
-            color='default'
+            color='primary'
             fullWidth
             variant='contained'
             onClick={() => router.push({

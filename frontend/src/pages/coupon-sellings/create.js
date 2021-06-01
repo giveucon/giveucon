@@ -26,8 +26,12 @@ const getCoupon = async (context) => await requestToBackend(context, `api/coupon
 });
 
 const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
-    user_name: selfUser.id
-  });
+  user_name: selfUser.id
+});
+
+const getSelfCouponSellingList = async (context, coupon) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__id: coupon.id
+});
 
 const postCouponSelling = async (couponSelling) => await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
 
@@ -39,6 +43,10 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const initialSelfCouponListResponse = await getSelfCouponList(context, selfUser);
+  for (const coupon of initialSelfCouponListResponse.data.results) {
+    const getSelfCouponSellingListResponse = await getSelfCouponSellingList(context, coupon);
+    if (getSelfCouponSellingListResponse.data.count === 1) initialSelfCouponListResponse.data.results.splice(initialSelfCouponListResponse.data.results.findIndex(({element}) => getSelfCouponSellingListResponse.data.results[0].coupon.id === element.id), 1);
+  }
   return {
     props: {
       lng,
