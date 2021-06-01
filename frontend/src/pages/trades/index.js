@@ -76,7 +76,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         }
         padding={false}
       >
-        {selfCouponSellingList.length > 0 ? (
+        {selfCouponSellingList && selfCouponSellingList.length > 0 ? (
           <SwipeableTileList half>
             {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
@@ -110,7 +110,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         }
         padding={false}
       >
-        {couponSellingList.length > 0 ? (
+        {couponSellingList && couponSellingList.length > 0 ? (
           <SwipeableTileList half>
             {couponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
