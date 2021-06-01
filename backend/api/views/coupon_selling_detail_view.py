@@ -17,3 +17,4 @@ class CouponSellingDetailView(SerializerMixin, generics.RetrieveUpdateDestroyAPI
     def perform_destroy(self, instance):
         instance.coupon.user = instance.buyer
         instance.coupon.save()
+        instance.delete()
