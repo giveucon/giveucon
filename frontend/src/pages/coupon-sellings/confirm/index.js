@@ -13,9 +13,7 @@ import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.coupon_selling}/`, 'get', 'json');
 
-const putCouponSelling = async (couponSelling, status) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'put', 'json', {
-  status: {"status": status}
-}, null)
+const deleteCouponSelling = async (couponSelling) => await requestToBackend(null, `api/coupon-sellings/${couponSelling.id}/`, 'delete', 'json');
 
 export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
   const couponSellingResponse = await getCouponSelling(context);
@@ -57,7 +55,7 @@ function Index({ lng, lngDict, selfUser, couponSelling }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const putCouponSellingResponse = await putCouponSelling(couponSelling, 'closed');
+              const putCouponSellingResponse = await deleteCouponSelling(couponSelling);
               if (putCouponSellingResponse.status === 200) {
                 toast.success(i18n.t('_couponTradeConfirmationRequested'));
                 router.push({
