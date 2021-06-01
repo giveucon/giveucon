@@ -99,7 +99,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
 
 
       <Section
-        title={i18n.t('couponTrades')}
+        title={i18n.t('allCouponTrades')}
         titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
         titleSuffix={
           <IconButton>
