@@ -56,8 +56,8 @@ function Use({ lng, lngDict, selfUser, coupon }) {
 
   useEffect(() => {
     const getCouponQR = async (coupon) => {
-      const newCouponQr = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
-      setCouponQr(newCouponQr);
+      const newCouponQrResponse = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
+      setCouponQr(newCouponQrResponse.data);
     };
     const timestampId = setTimeout(() => {
       const newTimestamp = new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL;
