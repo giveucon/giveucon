@@ -21,7 +21,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user)){
+  if (!selfUser.staff && (selfUser.id !== couponResponse.data.user.id)){
     return {
       redirect: {
         destination: '/unauthorized/',
@@ -48,16 +48,16 @@ function Use({ lng, lngDict, selfUser, coupon }) {
 
   useEffect(() => {
     const getCouponQR = async (coupon) => {
-      const newCouponQr = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
-      setCouponQr(newCouponQr);
+      const newCouponQrResponse = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
+      setCouponQr(newCouponQrResponse.data);
     };
     getCouponQR(coupon);
   }, [coupon])
 
   useEffect(() => {
     const getCouponQR = async (coupon) => {
-      const newCouponQr = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
-      setCouponQr(newCouponQr);
+      const newCouponQrResponse = await requestToBackend(null, `api/coupons/${coupon.id}/qr/`, 'get', 'json');
+      setCouponQr(newCouponQrResponse.data);
     };
     const timestampId = setTimeout(() => {
       const newTimestamp = new Date().getTime() % constants.COUPON_OTP_REFRESH_INTERVAL;

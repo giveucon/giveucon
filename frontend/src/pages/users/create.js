@@ -179,9 +179,9 @@ function Create({ lng, lngDict, selfAccount }) {
         </Box>
         <Box paddingY={1}>
           <FormControl>
-            <FormLabel>{i18n.t('language')}</FormLabel>
+            <FormLabel>{i18n.t('locale')}</FormLabel>
             <RadioGroup
-              name='language'
+              name='locale'
               value={selfUser.locale}
               onChange={(event) => {
                 i18n.locale('ko', constants.LANGUAGE_LIST.find(item => item.lng === event.target.value).lngDict);
@@ -223,12 +223,15 @@ function Create({ lng, lngDict, selfAccount }) {
         titlePrefix={<IconButton><AccountBalanceWalletIcon /></IconButton>}
       >
         <Box paddingY={1}>
+          <Box paddingBottom='1rem'>
+            <Typography>{i18n.t('_enterYourBitcoinWalletAddress')}</Typography>
+          </Box>
           <TextField
             name='wallet'
             value={selfUser.wallet}
             error={selfUserError.wallet}
             fullWidth
-            label={i18n.t('wallet')}
+            label={i18n.t('walletAddress')}
             InputLabelProps={{
               shrink: true,
             }}

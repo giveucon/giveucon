@@ -26,8 +26,12 @@ const getCoupon = async (context) => await requestToBackend(context, `api/coupon
 });
 
 const getSelfCouponList = async (context, selfUser) => await requestToBackend(context, `api/coupons/`, 'get', 'json', null, {
-    user_name: selfUser.id
-  });
+  user_name: selfUser.id
+});
+
+const getSelfCouponSelling = async (context, coupon) => await requestToBackend(context, `api/coupon-sellings/`, 'get', 'json', null, {
+  coupon__id: coupon.id
+});
 
 const postCouponSelling = async (couponSelling) => await requestToBackend(null, 'api/coupon-sellings/', 'post', 'json', couponSelling, null);
 
@@ -39,6 +43,10 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
     }
   }
   const initialSelfCouponListResponse = await getSelfCouponList(context, selfUser);
+  for (const coupon of initialSelfCouponListResponse.data.results) {
+    const getSelfCouponSellingResponse = await getSelfCouponSelling(context, coupon);
+    if (getSelfCouponSellingResponse.data.count === 1) initialSelfCouponListResponse.data.results = initialSelfCouponListResponse.data.results.filter(element => element.id !== getSelfCouponSellingResponse.data.results[0].coupon.id);
+  }
   return {
     props: {
       lng,
@@ -66,6 +74,10 @@ function Create ({ lng, lngDict, selfUser, coupon, initialSelfCouponListResponse
       from_user: selfUser.id,
       page: selfCouponListpage + 1
     });
+    for (const coupon of selfCouponListResponse.data.results) {
+      const getSelfCouponSellingResponse = await getSelfCouponSelling(null, coupon);
+      if (getSelfCouponSellingResponse.data.count === 1) selfCouponListResponse.data.results = selfCouponListResponse.data.results.filter(element => element.id !== getSelfCouponSellingResponse.data.results[0].coupon.id);
+    }
     setSelfCouponList(prevSelfCouponList => (prevSelfCouponList || []).concat(selfCouponListResponse.data.results));
     setSelfCouponListpage(prevSelfCouponListpage => prevSelfCouponListpage + 1);
     if (selfCouponListpage.data.next === null) setHasMoreSelfCouponList(false);

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast';
 import Divider from '@material-ui/core/Divider';
 import Switch from '@material-ui/core/Switch';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AppsIcon from '@material-ui/icons/Apps';
 import BrightnessMediumIcon from '@material-ui/icons/BrightnessMedium';
@@ -67,6 +68,13 @@ function Index({ lng, lngDict, selfUser }) {
           title={i18n.t('location')}
           icon={<LocationOnIcon />}
           onClick={() => router.push('/my-account/update/location/')}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
+          title={i18n.t('wallet')}
+          icon={<AccountBalanceWalletIcon />}
+          onClick={() => router.push('/my-account/update/wallet/')}
         />
       </Section>
 

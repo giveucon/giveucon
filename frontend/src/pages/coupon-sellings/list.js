@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@material-ui/core/Grid';
 
-import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader';
 import Layout from 'components/Layout'
@@ -12,12 +11,14 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from '../../constants';
 
 const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
-    coupon__user__id: context.query.user || null,
-    coupon__product__id: context.query.product || null,
-    status__status: context.query.status || null,
-  });
+  buyer__id: context.query.buyer || null,
+  coupon__user__id: context.query.user || null,
+  coupon__product__id: context.query.product || null,
+  status__status: context.query.status || null
+});
 
 const getUser = async (context) => await requestToBackend(context, `api/users/${context.query.user}/`, 'get', 'json');
 const getStore = async (context) => await requestToBackend(context, `api/stores/${context.query.store}/`, 'get', 'json');
@@ -92,7 +93,7 @@ function List({ lng, lngDict, selfUser, initialCouponSellingListResponse, user, 
                   <Grid item xs={6} key={item.id}>
                     <Tile
                       title={item.coupon.product.name}
-                      subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
+                      subtitle={`${item.price}${i18n.t('_currencyBTC')} · ${i18n.t(constants.COUPON_SELLING_STATUS_LIST.find(element => element.value === item.status).name)}`}
                       image={item.coupon.product.images.length > 0 ? item.coupon.product.images[0].image : constants.NO_IMAGE_PATH}
                       onClick={() => router.push(`/coupon-sellings/${item.id}/`)}
                     />

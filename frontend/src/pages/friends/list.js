@@ -83,7 +83,7 @@ function List({ lng, lngDict, selfUser, initialFriendListResponse }) {
               <ListItem
                 key={item.id}
                 variant='user'
-                name={item.to_user.user_name}
+                title={item.to_user.user_name}
                 image={gravatar.url(item.to_user.email, {default: 'identicon'})}
                 onClick={() => router.push(`/users/${item.to_user.id}/`)}
               />

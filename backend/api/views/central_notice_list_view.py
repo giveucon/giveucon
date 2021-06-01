@@ -15,6 +15,7 @@ class CentralNoticeListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_write = CentralNoticeWriteSerializer
     pagination_class = CentralNoticePagination
     filterset_fields = ['article__user']
+    ordering_fields = ['article__created_at']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

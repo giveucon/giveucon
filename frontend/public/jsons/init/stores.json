@@ -2,12 +2,15 @@
   {
     "name": "호호빵집",
     "description": "언제나 행복이 가득한 호호빵집입니다. 매주 월요일은 쉽니다.",
+    "tag_keywords": [
+      "빵/디저트", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
       "bread", "bakery"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.566824",
+      "longitude": "126.978652"
     },
     "products": [
       {
@@ -15,28 +18,28 @@
         "description": "국내산 우유를 넣어 더욱 맛있는 우유식빵",
         "price": "0.0000625",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["bread"]
       },
       {
         "name": "우유식빵(large)",
         "description": "국내산 우유를 넣어 더욱 맛있는 우유식빵",
         "price": "0.0001125",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["bread"]
       },
       {
         "name": "슈크림빵",
         "description": "달콤한 크림이 매력적인 슈크림빵",
         "price": "0.000025",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["bread"]
       },
       {
         "name": "단팥빵",
         "description": "달콤한 팥앙금이 매력적인 단팥빵",
         "price": "0.000025",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["bread"]
       }
     ],
     "notices": [
@@ -52,12 +55,15 @@
   {
     "name": "나무서점",
     "description": "여러분과 함께하는 나무서점입니다.",
+    "tag_keywords": [
+      "도서", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
       "book", "library"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.455904",
+      "longitude": "126.705528"
     },
     "products": [
       {
@@ -65,21 +71,21 @@
         "description": "도서상품권 1만원권",
         "price": "0.00025",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["book"]
       },
       {
         "name": "도서상품권 2만원권",
         "description": "도서상품권 2만원권",
         "price": "0.0005",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["book"]
       },
       {
         "name": "도서상품권 5만원권",
         "description": "도서상품권 5만원권",
         "price": "0.00125",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["book"]
       }
     ],
     "notices": [
@@ -95,12 +101,15 @@
   {
     "name": "오메가문구",
     "description": "각종 문구류 판매 / 문서 인쇄 및 제본",
+    "tag_keywords": [
+      "문구류", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
-      "pencil", "document"
+      "pencil"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.263403",
+      "longitude": "127.028583"
     },
     "products": [
       {
@@ -108,7 +117,7 @@
         "description": "오메가문구 금1만원권",
         "price": "0.00025",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["pencil"]
       }
     ],
     "notices": []
@@ -116,12 +125,15 @@
   {
     "name": "치네상스",
     "description": "닭 요리의 르네상스를 열다! 치네상스",
+    "tag_keywords": [
+      "치킨/피자", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
       "chicken"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.420025",
+      "longitude": "127.126642"
     },
     "products": [
       {
@@ -129,42 +141,42 @@
         "description": "바삭함이 넘치는 후라이드치킨",
         "price": "0.000225",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       },
       {
         "name": "양념치킨",
         "description": "새콤달콤한 양념에 푸짐하게 버무린 양념치킨",
         "price": "0.00025",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       },
       {
         "name": "간장치킨",
         "description": "달콤짭짤한 간장 소스를 뿌린 간장치킨",
         "price": "0.00025",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       },
       {
         "name": "갈릭치킨",
         "description": "알싸한 마늘맛이 침샘을 자극하는 갈릭치킨",
         "price": "0.00025",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       },
       {
         "name": "체다치즈치킨",
         "description": "고소한 체다치즈 소스를 입힌 체다치즈치킨",
         "price": "0.0003",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       },
       {
         "name": "불닭치킨",
         "description": "※매운맛주의※ 화끈한 매운맛, 짜릿한 한입",
         "price": "0.0003",
         "duration": "30",
-        "image_keywords": []
+        "image_keywords": ["chicken"]
       }
     ],
     "notices": [
@@ -180,12 +192,15 @@
   {
     "name": "Latte and Latte",
     "description": "라떼에 자신있는 Latte and Latte입니다.",
+    "tag_keywords": [
+      "카페", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
       "coffee"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.503491",
+      "longitude": "126.766047"
     },
     "products": [
       {
@@ -193,28 +208,28 @@
         "description": "남녀노소 누구나 즐길 수 있는 아메리카노 / Hot,Cold 선택가능",
         "price": "0.00005",
         "duration": "180",
-        "image_keywords": []
+        "image_keywords": ["coffee"]
       },
       {
         "name": "연유라떼",
         "description": "레트로 감성이 물씬 풍겨오는 연유라떼",
         "price": "0.0000875",
         "duration": "180",
-        "image_keywords": []
+        "image_keywords": ["latte"]
       },
       {
         "name": "카라멜 마끼아또",
         "description": "달짝지근한 카라멜 향이 일품인 카라멜 마끼아또",
         "price": "0.0001",
         "duration": "180",
-        "image_keywords": []
+        "image_keywords": ["coffee"]
       },
       {
         "name": "민트 핫초코",
         "description": "민초단을 위해 준비한 특별한 한 잔, 민트 핫초코",
         "price": "0.0001125",
         "duration": "180",
-        "image_keywords": []
+        "image_keywords": ["hot-chocolate"]
       }
     ],
     "notices": [
@@ -222,7 +237,7 @@
         "title": "평일 오전 10% 할인 이벤트",
         "content": "매주 평일 오전 11시 이전에 오시는 분에게는 10% 할인을 해드립니다.",
         "image_keywords": [
-          "coupon"
+          "discount"
         ]
       }
     ]
@@ -230,12 +245,15 @@
   {
     "name": "슈팅VR",
     "description": "♚♚슈팅V☆R♚♚ 회원등록시$$서비스1시간※ ￥각종과자및음료￥제공※ ♜최신VR게임♜완비※ 커플데이트장소§§우정게임§§인기만점※",
+    "tag_keywords": [
+      "게임/오락", "지역화폐 사용 가능"
+    ],
     "image_keywords": [
-      "vr"
+      "virtual-reality"
     ],
     "location": {
-      "latitude": "37.56682420267543",
-      "longitude": "126.978652258823"
+      "latitude": "37.738108",
+      "longitude": "127.033692"
     },
     "products": [
       {
@@ -243,21 +261,21 @@
         "description": "슈팅VR 1시간 이용권",
         "price": "0.000375",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["virtual-reality"]
       },
       {
         "name": "슈팅VR 3시간 이용권",
         "description": "슈팅VR 3시간 이용권",
         "price": "0.001",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["virtual-reality"]
       },
       {
         "name": "슈팅VR 6시간 이용권",
         "description": "슈팅VR 6시간 이용권",
         "price": "0.0015",
         "duration": "365",
-        "image_keywords": []
+        "image_keywords": ["virtual-reality"]
       }
     ],
     "notices": []

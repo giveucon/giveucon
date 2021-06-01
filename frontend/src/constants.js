@@ -10,7 +10,7 @@ import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirector
 import EN from 'locales/en.json'
 import KO from 'locales/ko.json'
 
-export const APP_VERSION = '0.2.0-alpha';
+export const APP_VERSION = '0.2.1-beta';
 export const LANGUAGE_LIST = [
   { name: 'English', lng: 'en', lngDict: EN },
   { name: '한국어', lng: 'ko', lngDict: KO }
@@ -81,5 +81,24 @@ export const MENU_ITEM_LIST = [
     icon: <LocalMallOutlinedIcon />,
     label: 'trades',
     link: () => {Router.push('/trades/')}
+  }
+];
+
+export const COUPON_SELLING_STATUS_LIST = [
+  {
+    value: 'open',
+    name: 'onSale'
+  },
+  {
+    value: 'pre_pending',
+    name: 'tradeRequested'
+  },
+  {
+    value: 'pending',
+    name: 'remitted'
+  },
+  {
+    value: 'closed',
+    name: 'completed'
   }
 ];

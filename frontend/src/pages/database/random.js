@@ -94,7 +94,7 @@ function Create({ lng, lngDict, selfUser }) {
     return imageList;
   };
 
-  const postTag = async (user) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', user, null);
+  const postTag = async (tag) => await requestToBackend(null, 'api/dummy-tags/', 'post', 'json', tag, null);
 
   const postUser = async (user) => await requestToBackend(null, 'api/dummy-users/', 'post', 'json', user, null);
 

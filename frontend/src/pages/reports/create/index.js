@@ -66,7 +66,6 @@ function Index({ lng, lngDict, selfUser, user }) {
   const router = useRouter();
   const classes = useStyles();
   const [report, setReport] = useState({
-    category: null,
     title: null,
     content: null,
     user: user.id
@@ -76,16 +75,6 @@ function Index({ lng, lngDict, selfUser, user }) {
     content: false,
   });
   const [imageList, setImageList] = useState([]);
-
-  const dummyCategoryList = [
-    {
-      id: 1,
-      name: 'Hi'
-    },{
-      id: 2,
-      name: 'Hello'
-    }
-  ]
 
   return (
     <Layout
@@ -102,32 +91,6 @@ function Index({ lng, lngDict, selfUser, user }) {
         title={i18n.t('reportForm')}
         titlePrefix={<IconButton><ReportIcon /></IconButton>}
       >
-        <Box paddingY={1}>
-          <Autocomplete
-            // multiple
-            options={dummyCategoryList}
-            disableCloseOnSelect
-            getOptionLabel={(option) => option.name}
-            onChange={(event, value) => {
-              setReport(prevReport => ({...prevReport, category: value}));
-            }}
-            renderOption={(option, { selected }) => (
-              <>
-                <Checkbox
-                  icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
-                  checkedIcon={<CheckBoxIcon fontSize='small' />}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.name}
-              </>
-            )}
-            style={{ minWidth: '2rem' }}
-            renderInput={(params) => (
-              <TextField {...params} label={i18n.t('categories')} placeholder={i18n.t('categories')} />
-            )}
-          />
-        </Box>
         <Box paddingY={1}>
           <TextField
             name='title'

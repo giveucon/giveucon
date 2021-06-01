@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -38,7 +37,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       lngDict,
       selfUser,
       centralNoticeList: centralNoticeListResponse.data.results,
-      nearStoreList: nearStoreListResponse.data.results,
+      nearStoreList: nearStoreListResponse.data.results || null,
       selfCouponList: selfCouponListResponse.data.results
     }
   }
@@ -61,22 +60,12 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
         titlePrefix={<IconButton><HomeIcon /></IconButton>}
         titleSuffix={[
           <IconButton>
-            <Badge
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              color='error'
-              badgeContent=''
-              variant='dot'
-            >
-              <NotificationsIcon
-                onClick={() => router.push({
-                  pathname: '/notifications/list/',
-                  query: { to_user: selfUser.id },
-                })}
-              />
-            </Badge>
+            <NotificationsIcon
+              onClick={() => router.push({
+                pathname: '/notifications/list/',
+                query: { to_user: selfUser.id },
+              })}
+            />
           </IconButton>,
           <IconButton onClick={() => router.push('/central-notices/')}>
             <AnnouncementIcon />
@@ -110,7 +99,7 @@ function Index({ lng, lngDict, selfUser, centralNoticeList, nearStoreList, selfC
         titlePrefix={<IconButton><LocationOnIcon /></IconButton>}
         padding={false}
       >
-        {nearStoreList.length > 0 ? (
+        {nearStoreList && nearStoreList.length > 0 ? (
           <SwipeableTileList half>
             {nearStoreList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile

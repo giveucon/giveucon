@@ -1,11 +1,12 @@
-# Give-U-Con
+# giveUcon
 
 ![Release](https://img.shields.io/github/v/release/giveucon/giveucon?include_prereleases)
+![Repository Size](https://img.shields.io/github/repo-size/giveucon/giveucon)
 ![License](https://img.shields.io/github/license/giveucon/giveucon)
 
-![logo](https://user-images.githubusercontent.com/48160211/118128912-7a6b0600-b436-11eb-94c0-3e5a0800e0c8.png)
+![Logo](https://user-images.githubusercontent.com/48160211/118128912-7a6b0600-b436-11eb-94c0-3e5a0800e0c8.png)
 
-Give-U-Con is a service which can let users create and manage their own coupons or stamps easily and swiftly.
+giveUcon is a service which can let users create and manage their own coupons or stamps easily and swiftly.
 
 
 ## Installation and Setting Up

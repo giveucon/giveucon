@@ -124,7 +124,7 @@ function Index({ lng, lngDict, selfUser, product }) {
               });
               toast.success(i18n.t('_couponIssued'));
             } else {
-              toast.success(i18n.t('_errorOccurredProcessingRequest'));
+              toast.error(i18n.t('_errorOccurredProcessingRequest'));
             }
           }}
         >

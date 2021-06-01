@@ -63,7 +63,7 @@ function Index({ lng, lngDict, selfUser }) {
             )
             video.srcObject = null;
             router.push({
-              pathname: '/coupons/scan/complete/',
+              pathname: '/coupons/scan/completed/',
               query: { coupon: qrData.coupon }
             });
           }

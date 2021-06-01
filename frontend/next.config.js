@@ -20,6 +20,10 @@ module.exports = {
         source: '/unsplash/:path*',
         destination: 'https://source.unsplash.com/:path*',
       },
+      {
+        source: '/coinone/:path*',
+        destination: 'https://api.coinone.co.kr/:path*',
+      },
     ]
   },
 }

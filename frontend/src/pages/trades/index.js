@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 
-import * as constants from 'constants';
 import AlertBox from 'components/AlertBox'
 import Layout from 'components/Layout'
 import Section from 'components/Section'
@@ -15,6 +14,7 @@ import Tile from 'components/Tile';
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend';
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+import * as constants from '../../constants';
 
 const getCouponSellingList = async (context) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json');
 
@@ -61,8 +61,6 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         backButton
         title={i18n.t('trades')}
        />
-
-
       <Section
         title={i18n.t('myCouponTrades')}
         titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
@@ -78,13 +76,13 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         }
         padding={false}
       >
-        {selfCouponSellingList.length > 0 ? (
+        {selfCouponSellingList && selfCouponSellingList.length > 0 ? (
           <SwipeableTileList half>
             {selfCouponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
-                subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
+                subtitle={`${item.price}${i18n.t('_currencyBTC')} · ${i18n.t(constants.COUPON_SELLING_STATUS_LIST.find(element => element.value === item.status).name)}`}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
                   ? item.coupon.product.images[0].image
@@ -101,7 +99,7 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
 
 
       <Section
-        title={i18n.t('couponTrades')}
+        title={i18n.t('allCouponTrades')}
         titlePrefix={<IconButton><InsertCommentIcon /></IconButton>}
         titleSuffix={
           <IconButton>
@@ -112,13 +110,13 @@ function Index({ lng, lngDict, selfUser, couponSellingList, selfCouponSellingLis
         }
         padding={false}
       >
-        {couponSellingList.length > 0 ? (
+        {couponSellingList && couponSellingList.length > 0 ? (
           <SwipeableTileList half>
             {couponSellingList.slice(0, constants.HALF_TILE_LIST_SLICE_NUMBER).map((item) => (
               <Tile
                 key={item.id}
                 title={item.coupon.product.name}
-                subtitle={`${item.price}${i18n.t('_currencyBTC')}`}
+                subtitle={`${item.price}${i18n.t('_currencyBTC')} · ${i18n.t(constants.COUPON_SELLING_STATUS_LIST.find(element => element.value === item.status).name)}`}
                 image={
                   item.coupon.product.images && (item.coupon.product.images.length > 0)
                   ? item.coupon.product.images[0].image

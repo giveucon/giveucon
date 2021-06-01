@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,6 +18,16 @@ import Section from 'components/Section'
 import useI18n from 'hooks/useI18n'
 import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
+
+const useStyles = makeStyles((theme) => ({
+  errorButton: {
+    background: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    '&:hover': {
+       background: theme.palette.error.dark,
+    },
+  },
+}));
 
 const getCouponSelling = async (context) => await requestToBackend(context, `api/coupon-sellings/${context.query.id}/`, 'get', 'json', null, {
   used: false
@@ -51,6 +62,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
 
   const i18n = useI18n();
   const router = useRouter();
+  const classes = useStyles();
 
   return (
     <Layout
@@ -129,7 +141,7 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
       {(couponSelling.status === 'open') && (selfUser.id !== couponSelling.coupon.user.id) && (
         <Box marginY={1}>
           <Button
-            color='default'
+            color='primary'
             fullWidth
             variant='contained'
             onClick={() => router.push({
@@ -157,34 +169,64 @@ function Id({ lng, lngDict, selfUser, couponSelling, buyer }) {
         </Box>
       )}
       {(couponSelling.status === 'pre_pending') && (selfUser.id === couponSelling.buyer.id) && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/coupon-sellings/remit/',
-              query: { coupon_selling: couponSelling.id },
-            })}
-          >
-            {i18n.t('finishRemittance')}
-          </Button>
-        </Box>
+        <>
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/coupon-sellings/remit/',
+                query: { coupon_selling: couponSelling.id },
+              })}
+            >
+              {i18n.t('finishRemittance')}
+            </Button>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              className={classes.errorButton}
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/coupon-sellings/buy/cancel/',
+                query: { coupon_selling: couponSelling.id },
+              })}
+            >
+              {i18n.t('cancelPurchase')}
+            </Button>
+          </Box>
+        </>
       )}
       {(couponSelling.status === 'pending') && (selfUser.id === couponSelling.coupon.user.id) && (
-        <Box marginY={1}>
-          <Button
-            color='primary'
-            fullWidth
-            variant='contained'
-            onClick={() => router.push({
-              pathname: '/coupon-sellings/confirm/',
-              query: { coupon_selling: couponSelling.id },
-            })}
-          >
-            {i18n.t('confirmTrade')}
-          </Button>
-        </Box>
+        <>
+          <Box marginY={1}>
+            <Button
+              color='primary'
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/coupon-sellings/confirm/',
+                query: { coupon_selling: couponSelling.id },
+              })}
+            >
+              {i18n.t('confirmTrade')}
+            </Button>
+          </Box>
+          <Box marginY={1}>
+            <Button
+              className={classes.errorButton}
+              fullWidth
+              variant='contained'
+              onClick={() => router.push({
+                pathname: '/coupon-sellings/refuse/',
+                query: { coupon_selling: couponSelling.id },
+              })}
+            >
+              {i18n.t('refuseTrade')}
+            </Button>
+          </Box>
+        </>
       )}
     </Layout>
   );

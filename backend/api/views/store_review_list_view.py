@@ -15,6 +15,7 @@ class StoreReviewListView(SerializerMixin, generics.ListCreateAPIView):
     serializer_class_read = StoreReviewReadSerializer
     serializer_class_create = StoreReviewCreateSerializer
     filterset_fields = ['store', 'review__article__user']
+    ordering_fields = ['review__article__created_at']
 
     def perform_create(self, serializer):
         user = UserService.get_current_user(self.request)

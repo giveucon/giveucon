@@ -14,7 +14,6 @@ import CropFreeIcon from '@material-ui/icons/CropFree';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import InfoIcon from '@material-ui/icons/Info';
-import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -27,6 +26,7 @@ import ListItem from 'components/ListItem'
 import Section from 'components/Section'
 import UserProfileBox from 'components/UserProfileBox'
 import useI18n from 'hooks/useI18n'
+import requestToBackend from 'utils/requestToBackend'
 import withAuthServerSideProps from 'utils/withAuthServerSideProps'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,11 +39,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => ({
-    props: { lng, lngDict, selfUser }
-  }))
+const getSelfPrePendingCouponSellingList = async (context, selfUser) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
+  buyer__id: selfUser.id,
+  status__status: 'pre_pending',
+});
 
-function Index({ lng, lngDict, selfUser }) {
+const getSelfPendingCouponSellingList = async (context, selfUser) => await requestToBackend(context, 'api/coupon-sellings', 'get', 'json', null, {
+  coupon__user__id: selfUser.id,
+  status__status: 'pending',
+});
+
+export const getServerSideProps = withAuthServerSideProps (async (context, lng, lngDict, selfUser) => {
+  const selfPrePendingCouponSellingListResponse = await getSelfPrePendingCouponSellingList(context, selfUser);
+  if (selfPrePendingCouponSellingListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  const selfPendingCouponSellingListResponse = await getSelfPendingCouponSellingList(context, selfUser);
+  if (selfPendingCouponSellingListResponse.status === 404) {
+    return {
+      notFound: true
+    }
+  }
+  return {
+    props: {
+      lng,
+      lngDict,
+      selfUser,
+      selfPrePendingCouponSellingListResponse,
+      selfPendingCouponSellingListResponse
+    }
+  }
+})
+
+function Index({
+  lng,
+  lngDict,
+  selfUser,
+  selfPrePendingCouponSellingListResponse,
+  selfPendingCouponSellingListResponse
+}) {
 
   const i18n = useI18n();
   const router = useRouter();
@@ -129,6 +165,27 @@ function Index({ lng, lngDict, selfUser }) {
         <Divider />
         <ListItem
           variant='default'
+          title={i18n.t('tradesNeedToRemit')}
+          icon={
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent={selfPrePendingCouponSellingListResponse.data.count}
+            >
+              <AssistantIcon />
+            </Badge>
+          }
+          onClick={() => router.push({
+            pathname: '/coupon-sellings/list/',
+            query: { buyer: selfUser.id, status: 'pre_pending' },
+          })}
+        />
+        <Divider />
+        <ListItem
+          variant='default'
           title={i18n.t('myTransactions')}
           icon={<LocalAtmIcon />}
           onClick={() => router.push({
@@ -169,11 +226,22 @@ function Index({ lng, lngDict, selfUser }) {
         <Divider />
         <ListItem
           variant='default'
-          title={i18n.t('myCouponTrades')}
-          icon={<InsertCommentIcon />}
+          title={i18n.t('tradeConfirmationRequests')}
+          icon={
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color='error'
+              badgeContent={selfPendingCouponSellingListResponse.data.count}
+            >
+              <AssistantIcon />
+            </Badge>
+          }
           onClick={() => router.push({
             pathname: '/coupon-sellings/list/',
-            query: { user: selfUser.id },
+            query: { user: selfUser.id, status: 'pending' },
           })}
         />
         <Divider />
@@ -202,19 +270,7 @@ function Index({ lng, lngDict, selfUser }) {
         <ListItem
           variant='default'
           title={i18n.t('notifications')}
-          icon={
-            <Badge
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              color='error'
-              badgeContent=''
-              variant='dot'
-            >
-              <NotificationsIcon />
-            </Badge>
-          }
+          icon={<NotificationsIcon />}
           onClick={() => router.push({
             pathname: '/notifications/list/',
             query: { to_user: selfUser.id },
