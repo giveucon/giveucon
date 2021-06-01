@@ -92,7 +92,6 @@ function Transactions({ lng, lngDict, selfUser, selfBlockchainAccount, selfBlock
     return {
       ...element,
       value: array.slice(0, index + 1).reduce((lhs, rhs) => {
-        console.log(lhs);
         return rhs.variant === 'deposit' ? {value: lhs.value - rhs.value} : {value: lhs.value + rhs.value}
       })
     }
