@@ -55,8 +55,8 @@ function Index({ lng, lngDict, selfUser, couponSelling }) {
             fullWidth
             variant='contained'
             onClick={async () => {
-              const putCouponSellingResponse = await deleteCouponSelling(couponSelling);
-              if (putCouponSellingResponse.status === 200) {
+              const deleteCouponSellingResponse = await deleteCouponSelling(couponSelling);
+              if (deleteCouponSellingResponse.status === 204) {
                 toast.success(i18n.t('_couponTradeConfirmationRequested'));
                 router.push({
                   pathname: '/coupon-sellings/confirm/completed/',
