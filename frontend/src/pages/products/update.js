@@ -36,8 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
 const getProduct = async (context) => await requestToBackend(context, `api/products/${context.query.product}/`, 'get', 'json');
 
-const getStore = async (context, product) => await requestToBackend(context, `api/stores/${product.store}/`, 'get', 'json');
-
 const putProduct = async (product, imageList) => {
   const processedProduct = {
     name: product.name,
@@ -57,8 +55,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  const storeResponse = await getStore(context, prevProductResponse.data);
-  if (!selfUser.staff && (selfUser.id !== storeResponse.data.user.id)){
+  if (!selfUser.staff && (selfUser.id !== prevProductResponse.data.store.id)){
     return {
       redirect: {
         destination: '/unauthorized/',
