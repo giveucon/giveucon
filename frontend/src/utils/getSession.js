@@ -89,7 +89,7 @@ export default async function getSession(context) {
   const cookies = getCookies(context);
   if (cookies.giveucon_session) {
     const session = JSON.parse(cookies.giveucon_session);
-    const needToVerify = new Date(session.tokens.access_token_expiry).getTime() < new Date().getTime() + 60000;
+    const needToVerify = new Date(session.tokens.access_token_expiry).getTime() < new Date().getTime();
     if (!needToVerify) return session;
 
     const refreshTokenResponse = await requestRefreshTokens(session);
