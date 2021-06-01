@@ -55,7 +55,7 @@ export const getServerSideProps = withAuthServerSideProps (async (context, lng, 
       notFound: true
     }
   }
-  if (!selfUser.staff && (selfUser.id !== prevProductResponse.data.store.id)){
+  if (!selfUser.staff && (selfUser.id !== prevProductResponse.data.store.user)){
     return {
       redirect: {
         destination: '/unauthorized/',
