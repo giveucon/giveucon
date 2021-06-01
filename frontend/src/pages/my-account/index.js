@@ -247,16 +247,6 @@ function Index({
         <Divider />
         <ListItem
           variant='default'
-          title={i18n.t('tradeConfirmationRequests')}
-          icon={<AssistantIcon />}
-          onClick={() => router.push({
-            pathname: '/coupon-sellings/list/',
-            query: { user: selfUser.id, status: 'pending' },
-          })}
-        />
-        <Divider />
-        <ListItem
-          variant='default'
           title={i18n.t('scanCoupon')}
           icon={<CropFreeIcon />}
           onClick={() => router.push('/coupons/scan/')}
