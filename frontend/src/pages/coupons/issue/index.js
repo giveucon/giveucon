@@ -63,11 +63,11 @@ function Index({ lng, lngDict, selfUser, product }) {
       lng={lng}
       lngDict={lngDict}
       menuItemList={selfUser.menu_items}
-      title={`${i18n.t('issueCoupon')} - ${i18n.t('_appName')}`}
+      title={`${i18n.t('issueCoupons')} - ${i18n.t('_appName')}`}
     >
       <Section
         backButton
-        title={i18n.t('issueCoupon')}
+        title={i18n.t('issueCoupons')}
        />
       <Section
         title={i18n.t('issueInfo')}
@@ -128,7 +128,7 @@ function Index({ lng, lngDict, selfUser, product }) {
             }
           }}
         >
-          {i18n.t('issueCoupon')}
+          {i18n.t('issueCoupons')}
         </Button>
       </Box>
 
