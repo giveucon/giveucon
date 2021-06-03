@@ -70,7 +70,7 @@ function Index({ lng, lngDict, selfUser, product }) {
         title={i18n.t('issueCoupon')}
        />
       <Section
-        title={i18n.t('paymentInfo')}
+        title={i18n.t('issueInfo')}
         titlePrefix={<IconButton><PaymentIcon /></IconButton>}
       >
         <ProductBox
