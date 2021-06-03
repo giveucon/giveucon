@@ -358,7 +358,7 @@ function Id({
                 query: { product: product.id },
               })}
             >
-              {i18n.t('issueCoupon')}
+              {i18n.t('issueCoupons')}
             </Button>
           </Box>
         </Section>
