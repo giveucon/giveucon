@@ -42,7 +42,7 @@ function Search({ lng, lngDict, selfUser }) {
 
   const getUserList = async () => {
     const params = {
-      user: keywords.user_name || null,
+      user_name: keywords.user_name || null,
       email: keywords.email || null
     };
     const getUserListResponse = await requestToBackend(null, 'api/users/', 'get', 'json', null, params);
@@ -56,7 +56,7 @@ function Search({ lng, lngDict, selfUser }) {
 
   const getMoreUserList = async () => {
     const params = {
-      user: keywords.user_name || null,
+      user_name: keywords.user_name || null,
       email: keywords.email || null,
       page: userListpage + 1,
     };
