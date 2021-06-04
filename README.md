@@ -25,11 +25,11 @@ then refer to these README.md files:
 
 ## Development Stack
 
-### Back-end frameworks
+### Backend Frameworks
 
 - [Django REST Framework](https://www.django-rest-framework.org/)
 
-### Front-end frameworks
+### Frontend Frameworks
 
 - [React](https://reactjs.org/)
 - [Next.JS](https://nextjs.org/)
@@ -45,4 +45,4 @@ Media devices can be loaded with https URL only.
 
 ## License
 
-Give-U-Con is licensed under the terms of the Mozilla Public License, v. 2.0.
+giveUcon is licensed under the terms of the Mozilla Public License, v. 2.0.

@@ -1,4 +1,4 @@
-# Give-U-Con Frontend
+# giveUcon Frontend
 
 
 ## Installation

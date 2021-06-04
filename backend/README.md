@@ -1,4 +1,4 @@
-# Give-U-Con Backend
+# giveUcon Backend
 
 
 ## Create Kakao Application
