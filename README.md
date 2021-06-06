@@ -6,7 +6,7 @@
 
 ![Logo](https://user-images.githubusercontent.com/48160211/118128912-7a6b0600-b436-11eb-94c0-3e5a0800e0c8.png)
 
-giveUcon is a service which can let users create and manage their own coupons or stamps easily and swiftly.
+giveUcon is a service that allows people to issue and trade their coupons easily and quickly.
 
 
 ## Installation and Setting Up
