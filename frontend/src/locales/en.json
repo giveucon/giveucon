@@ -29,7 +29,7 @@
   "_holdOnAMomentPlease": "Hold on a moment please.",
   "_isEmpty": "Empty",
   "_internalServerError": "Internal server error.",
-  "_localeDateTimeSecond": "Second(s)",
+  "_localeDateTimeSecond": "sec(s)",
   "_localeNameEnglish": "English",
   "_localeNameKorean": "한국어",
   "_maxMenuItemNumberReached": "Maximum number of menu item reached.",
